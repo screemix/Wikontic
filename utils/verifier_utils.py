@@ -25,9 +25,9 @@ class TripletFilter:
         self.cached_hirerachy = {}
         with open('logs/hierarchy_cache.jsonl', 'r') as f:
             for line in f:
-                hirerachy_map = eval(line)
+                hirerachy_map = json.loads(line)
                 item = list(hirerachy_map.keys())[0]
-                hirerachy = list(hirerachy_map.values())
+                hirerachy = list(hirerachy_map.values())[0]
                 self.cached_hirerachy[item] = hirerachy
 
         # self.constraint_id2rel = {"Q21514624": ["P279"], "Q21503252": ["P31"], "Q30208840": ["P279", "P31"]}
@@ -93,10 +93,13 @@ class TripletFilter:
             self.cached_hirerachy[entity] = res.copy()
         
         # res = self.get_subclass_hierarchy(entity)
-        if len(set(constraint_entities) & set(res)) > 0:
-            return True
-        else:
-            return False
+        try:
+            if len(set(constraint_entities) & set(res)) > 0:
+                return True
+            else:
+                return False
+        except Exception as e:
+            print(e, '\n', res)
 
 
     # def filter_triplet_combination(self, rel, head_mapping, tail_mapping):
