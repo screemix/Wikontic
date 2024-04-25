@@ -22,13 +22,13 @@ class TripletFilter:
         with open(constrained_dict_path, 'r') as f:
             self.constrained_dict = json.load(f)
 
-        # self.cached_hirerachy = {}
-        # with open('hierarchy_cache.jsonl', 'r') as f:
-        #     for line in f:
-        #         hirerachy_map = eval(line)
-        #         item = list(hirerachy_map.keys())[0]
-        #         hirerachy = list(hirerachy_map.values())[0]
-        #         self.cached_hirerachy[item] = hirerachy
+        self.cached_hirerachy = {}
+        with open('logs/hierarchy_cache.jsonl', 'r') as f:
+            for line in f:
+                hirerachy_map = eval(line)
+                item = list(hirerachy_map.keys())[0]
+                hirerachy = list(hirerachy_map.values())
+                self.cached_hirerachy[item] = hirerachy
 
         # self.constraint_id2rel = {"Q21514624": ["P279"], "Q21503252": ["P31"], "Q30208840": ["P279", "P31"]}
 
@@ -58,8 +58,8 @@ class TripletFilter:
             subclass_id = result["subclass"]["value"].split("/")[-1]
             subclass_hierarchy.append(subclass_id)
 
-        # with jsonlines.open('hierarchy_cache.jsonl', mode='a') as writer:
-        #     writer.write({entity_id: subclass_hierarchy})
+        with jsonlines.open('logs/hierarchy_cache.jsonl', mode='a') as writer:
+            writer.write({entity_id: subclass_hierarchy})
 
         return subclass_hierarchy
 
@@ -86,13 +86,13 @@ class TripletFilter:
 
 
     def check_entity_validity(self, entity, constraint_entities):
-        # if entity in self.cached_hirerachy:
-        #     res = self.cached_hirerachy[entity]
-        # else:
-        #     res = self.get_subclass_hierarchy(entity)
-        #     self.cached_hirerachy[entity] = res.copy()
+        if entity in self.cached_hirerachy:
+            res = self.cached_hirerachy[entity]
+        else:
+            res = self.get_subclass_hierarchy(entity)
+            self.cached_hirerachy[entity] = res.copy()
         
-        res = self.get_subclass_hierarchy(entity)
+        # res = self.get_subclass_hierarchy(entity)
         if len(set(constraint_entities) & set(res)) > 0:
             return True
         else:
