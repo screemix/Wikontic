@@ -7,9 +7,10 @@ import sys
 import json
 import re
 
-logging.basicConfig(stream=sys.stderr, level=logging.ERROR)
+logging.basicConfig(stream=sys.stderr)
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('OpenAIUtils')
+logger.setLevel(logging.ERROR)
 
 _ = load_dotenv(find_dotenv())
 
@@ -89,7 +90,7 @@ class LLMTripletExtractor:
 
         user_prompt = f"""Text:\n{text}\n\nTriplets and corresponding entity and relation mappings:\n\n{triplet2names}"""
 
-        print(user_prompt)
+        # print(user_prompt)
         
         self.messages.extend([{"role": "system", "content": self.system_prompt_2}, 
                         {

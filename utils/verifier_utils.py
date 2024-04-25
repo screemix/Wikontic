@@ -9,9 +9,11 @@ import logging
 import sys
 import jsonlines
 
-logging.basicConfig(stream=sys.stderr, level=logging.ERROR)
 
-logger = logging.getLogger(__name__)
+logging.basicConfig(stream=sys.stderr)
+
+logger = logging.getLogger('Verifier')
+logger.setLevel(logging.ERROR)
 
 
 class TripletFilter:

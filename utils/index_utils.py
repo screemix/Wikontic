@@ -9,7 +9,6 @@ class Aligner:
     def __init__(self, k=5, relation_mapping_filename="relation_mapping.json", 
                  entity_mapping_filename='constrained_entity_mapping.json', entity_index_filename='entities.index', 
                  relation_index_filename='relations.index', device='cuda:0'):
-        
         self.k = k
         self.device = device
         self.tokenizer = AutoTokenizer.from_pretrained('facebook/contriever')

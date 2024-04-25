@@ -20,10 +20,10 @@ import re
 import warnings
 warnings.filterwarnings('ignore')
 
-logging.basicConfig(stream=sys.stderr, level=logging.INFO)
+logging.basicConfig(stream=sys.stderr)
 
-logger = logging.getLogger(__name__)
-
+logger = logging.getLogger('Main')
+logger.setLevel(logging.INFO)
 
 ############## transform target triplets into tuples with labels and ids to calculate metrics properly ############## 
 def transform_targets_syntie(sample):
@@ -59,7 +59,7 @@ def align_outputs(outputs, aligner, triplet_filter, verify=True):
         try:
             outputs = json.loads(outputs)    
         except Exception as e:
-            print("Cannot convert input to dictionary: ", outputs)
+            logger.info("Cannot convert input to dictionary: ", outputs)
             return {'transformed_outputs': [], 'filtered_triplets': []}
 
     for res in outputs:
@@ -101,7 +101,7 @@ def test_triplet_extraction(dataset, random_items, verbose_step, device='cuda:2'
     num_items = len(random_items)
 
     ############## auxilary classes ##############
-    aligner = Aligner(device)
+    aligner = Aligner(device=device)
     triplet_filter = TripletFilter()
 
     extractor1 = LLMTripletExtractor()
@@ -136,21 +136,6 @@ def test_triplet_extraction(dataset, random_items, verbose_step, device='cuda:2'
 
     for idx, i in tqdm(enumerate(random_items), total=len(random_items)):
 
-        if (idx > 0) and (idx % verbose_step == 0):
-            logger.info("First step output precision: " + str(micro_precision(first_step_output_triplets, target_ids)) + 
-                "\nFirst step output recall: " + str(micro_recall(first_step_output_triplets, target_ids)) + 
-                "\nFirst plus second step output precision: " + str(micro_precision(first_plus_second_step_output_triplets, target_ids)) + 
-                "\First plus second  step output recall: " + str(micro_recall(first_plus_second_step_output_triplets, target_ids)) +
-                "\nSecond step output precision: " + str(micro_precision(second_step_output_triplets, target_ids)) +
-                "\nSecond step output recall: " + str(micro_recall(second_step_output_triplets, target_ids)))
-
-            logger.info("First step output: " + str(metadata1['first_step_output']) + 
-                "\nFirst plus second step output: " + str(metadata1['first_plus_second_step_output']) + 
-                "\nFirst plus second step output full: " + str(metadata1['first_plus_second_step_output_full']) +
-                "\nSecond step output: " + str(metadata2['second_step_output']) +
-                "\nTargets: " + str(target['text_triplets']))
-
-
         metadata1 = {}
         metadata2 = {}
 
@@ -174,7 +159,7 @@ def test_triplet_extraction(dataset, random_items, verbose_step, device='cuda:2'
         first_step_output_ids = first_step_output['transformed_outputs'].copy()
         first_step_filtered_triplets = first_step_output['filtered_triplets'].copy()
         
-        first_step_output_triplets.append(first_step_output_ids)
+        first_step_output_triplets.append(first_step_output_ids.copy())
         metadata1['first_step_output'] = [(aligner.id2entity[item[0]], aligner.id2relation[item[1]], aligner.id2entity[item[2]]) for item in first_step_output_ids]
         metadata1['first_step_filtered_triplets'] = first_step_filtered_triplets.copy()
 
@@ -220,11 +205,25 @@ def test_triplet_extraction(dataset, random_items, verbose_step, device='cuda:2'
 
         second_step_output_ids = align_outputs(second_step_output, aligner=aligner, triplet_filter=triplet_filter, verify=True)['transformed_outputs']
 
-        second_step_output_triplets.append(second_step_output_ids)
+        second_step_output_triplets.append(second_step_output_ids.copy())
         metadata2['second_step_output'] = [(aligner.id2entity[item[0]], aligner.id2relation[item[1]], aligner.id2entity[item[2]]) for item in second_step_output_ids]
 
 
         ############## logging ##############
+        if (idx > 0) and (idx % verbose_step == 0):
+            logger.info("First step output precision: " + str(micro_precision(first_step_output_triplets, target_ids)) + 
+                "\nFirst step output recall: " + str(micro_recall(first_step_output_triplets, target_ids)) + 
+                "\nFirst plus second step output precision: " + str(micro_precision(first_plus_second_step_output_triplets, target_ids)) + 
+                "\nFirst plus second  step output recall: " + str(micro_recall(first_plus_second_step_output_triplets, target_ids)) +
+                "\nSecond step output precision: " + str(micro_precision(second_step_output_triplets, target_ids)) +
+                "\nSecond step output recall: " + str(micro_recall(second_step_output_triplets, target_ids)))
+
+            logger.info("First step output: " + str(metadata1['first_step_output']) + 
+                "\nFirst plus second step output: " + str(metadata1['first_plus_second_step_output']) + 
+                "\nFirst plus second step output full: " + str(metadata1['first_plus_second_step_output_full']) +
+                "\nSecond step output: " + str(metadata2['second_step_output']) +
+                "\nTargets: " + str(target['text_triplets']))
+
         messages1 = extractor1.messages.copy()
         messages2 = extractor2.messages.copy()
         messages1.append(metadata1.copy())
@@ -248,10 +247,10 @@ def test_triplet_extraction(dataset, random_items, verbose_step, device='cuda:2'
 
 
     with jsonlines.open('logs/stat_second_prompt_with_text_and_triplets_wo_first{}_examples.json'.format(str(num_items)), mode='a') as writer:
-        writer.write({"first_step_output_recall": first_step_output_recall,
-                    "first_step_output_precision": first_step_output_precision,
-                    "second_step_output_recall": second_step_output_recall,
+        writer.write({"second_step_output_recall": second_step_output_recall,
                     "second_step_output_precision": second_step_output_precision, 
+                    "first_step_output_recall": first_step_output_recall,
+                    "first_step_output_precision": first_step_output_precision,
                     "first_plus_second_step_output_recall": first_plus_second_step_output_recall,
                     "first_plus_second_step_output_precision": first_plus_second_step_output_precision,
                     "cost_stat_1": cost1,
