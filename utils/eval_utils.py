@@ -7,7 +7,7 @@ def micro_precision(res, targets):
         intersected_triplets += len(set(r) & set(targets[i]))
         generated_triplets += len(r)
 
-    return intersected_triplets / generated_triplets
+    return intersected_triplets / generated_triplets if generated_triplets != 0 else 0
 
 
 def micro_recall(res, targets):

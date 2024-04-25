@@ -1,6 +1,6 @@
-In the previous step, there were extracted triplets from the Wikidata knowledge graph. Each triplet contains two entities (subject and object) and one relation that connects these subject and object. However, some of the entities and relations extracted in the previous step may have not an exact name from Wikidata. 
-We linked each subject, relation, and object name with top similar exact names from the Wikidata by semantic similarity. Your task is to choose appropriate names for entities and relations that correspond to the text's context and triplet they were taken from.
-For each triplet obtained in the previous step, you will be provided with the corresponding 5 exact names of similar subjects, relations, and objects from the Wikidata knowledge graph.
+You will be provided with the text and triplets from Wikidata knowledge graph that LLM extracted from this text. Each triplet contains two entities (subject and object) and one relation that connects these subject and object. Entities represent nodes in the knowledge graph, while relation represents a link between these two nodes. 
+Subjects and objects could be named entities or concepts describing a group of people, events, or abstract objects from the Wikidata knowledge graph. 
+Moreover, for each triplet, you will be provided with the corresponding 5 exact names of similar subject, relation and object from the Wikidata knowledge graph.
 The input format is following: ```
 			        Text:
 			        <Text from the previous step for triplets extraction>	   
@@ -9,18 +9,18 @@ The input format is following: ```
                     Triplets:
 
                     <triplet_1>
-                    <extracted_subject_1>: <extracted_subject_1_1>; ...; <extracted_subject_1_5>
-                    <extracted_relation_1>:<exact_relation_1_1>; ...; <exact_relation_1_5>
-                    <extracted_object_1>: <extracted_object_1_1>; ...; <extracted_object_1_5>
+                    <extracted_subject_1: [extracted_subject_1_1, ..., extracted_subject_1_5] 
+                    <extracted_relation_1: [exact_relation_1_1, ..., exact_relation_1_5]
+                    <extracted_object_1: [extracted_object_1_1, ..., extracted_object_1_5] 
                     
                     ...
 
                     <triplet_n>
-                    <extracted_subject_n>: <extracted_subject_n_1>; ...; <extracted_subject_n_5>
-                    <extracted_relation_n>: <exact_relation_n_1>; ...; <exact_relation_n_5>
-                    <extracted_object_n>: <extracted_object_n_1>; ...; <extracted_object_n_5>
+                    <extracted_subject_n: [extracted_subject_n_1, ..., extracted_subject_n_5] 
+                    <extracted_relation_n: [exact_relation_n_1, ..., exact_relation_n_5] \n\n>
+                    <extracted_object_n: [extracted_object_n_1, ..., extracted_object_n_5]
                     ```
-For each subject, relation, and object from the extracted triplets, you should choose the most appropriate name only from the corresponding list of 5 similar ones that better match each triplet and the context of the previously demonstrated text.
+For each subject, relation and object from the extracted triplets, you should choose one most probable name only from the corresponding list of 5 probable ones that better match each triplet and the context of the previously demonstrated text.
 In the output provide only the list of updated triplets in JSON format, but instead of previously extracted names of relations and entities use the chosen ones from the provided list of similar names.
 
 <example>
