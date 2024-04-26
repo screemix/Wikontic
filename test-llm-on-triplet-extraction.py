@@ -152,7 +152,6 @@ def test_triplet_extraction(dataset, random_items, verbose_step, device='cuda:2'
 
         ############## first step prompting ##############
         extracted_triplets1 = extractor1.get_completion_first_query(text)
-        extracted_triplets2 = extractor2.get_completion_first_query(text)
 
         ############## first step entity linking ##############
         first_step_output = align_outputs(extracted_triplets1, aligner=aligner, triplet_filter=triplet_filter, verify=True)
@@ -163,14 +162,33 @@ def test_triplet_extraction(dataset, random_items, verbose_step, device='cuda:2'
         metadata1['first_step_output'] = [(aligner.id2entity[item[0]], aligner.id2relation[item[1]], aligner.id2entity[item[2]]) for item in first_step_output_ids]
         metadata1['first_step_filtered_triplets'] = first_step_filtered_triplets.copy()
 
-        ############## second step for first outputs ##############
 
-        if len(first_step_filtered_triplets) > 0:
-
+        ############## second step aligning all entity and relation names ##############
+        try:
             similar_relations = aligner.top_relations_by_llm_output(llm_output=extracted_triplets1)
             similar_entities = aligner.top_entities_by_llm_output(llm_output=extracted_triplets1, entity_type='subject')
             similar_entities.update(aligner.top_entities_by_llm_output(llm_output=extracted_triplets1, entity_type='object'))
-            
+        except Exception as e:
+            print(e)
+            print(extracted_triplets1)
+
+        ############## second step prompting with all aligned entity and relation names ##############
+
+        extractor2.messages = extractor1.messages.copy()
+        second_step_output = extractor2.get_completion_second_query(similar_entities=similar_entities, 
+            similar_relations=similar_relations, text=text, triplets=extracted_triplets1)
+
+        second_step_output_ids = align_outputs(second_step_output, aligner=aligner, triplet_filter=triplet_filter, verify=True)['transformed_outputs']
+
+        second_step_output_triplets.append(second_step_output_ids.copy())
+        metadata2['second_step_output'] = [(aligner.id2entity[item[0]], aligner.id2relation[item[1]], aligner.id2entity[item[2]]) for item in second_step_output_ids]
+
+        assert extractor1.messages[:3] == extractor2.messages[:3]
+
+        ############## second step for first step with filtered triplets aligning ##############
+
+        if len(first_step_filtered_triplets) > 0:
+
             ############## second step prompting with filtered and aligned entity and relation names ##############
 
             first_plus_second_step_output = extractor1.get_completion_second_query(similar_entities=similar_entities,
@@ -180,33 +198,17 @@ def test_triplet_extraction(dataset, random_items, verbose_step, device='cuda:2'
                  triplet_filter=triplet_filter, verify=True)['transformed_outputs']
 
             first_plus_second_step_output_full_ids = first_step_output_ids + first_plus_second_step_output_ids
-            first_plus_second_step_output_triplets.append(first_plus_second_step_output_full_ids.copy())
-
-            metadata1['first_plus_second_step_output'] = [(aligner.id2entity[item[0]], aligner.id2relation[item[1]], aligner.id2entity[item[2]]) \
-                for item in first_plus_second_step_output_ids]
-            metadata1['first_plus_second_step_output_full'] = [(aligner.id2entity[item[0]], aligner.id2relation[item[1]], aligner.id2entity[item[2]]) \
-                for item in first_plus_second_step_output_full_ids]
 
         else:
-            metadata1['first_plus_second_step_output'] = []
-            metadata1['first_plus_second_step_output_full'] = first_step_output_ids
+            first_plus_second_step_output_ids = []
+            first_plus_second_step_output_full_ids = first_step_output_ids.copy()
+        
+        first_plus_second_step_output_triplets.append(first_plus_second_step_output_full_ids.copy())
 
-
-        ############## second step aligning all entity and relation names ##############
-
-        similar_relations = aligner.top_relations_by_llm_output(llm_output=extracted_triplets2)
-        similar_entities = aligner.top_entities_by_llm_output(llm_output=extracted_triplets2, entity_type='subject')
-        similar_entities.update(aligner.top_entities_by_llm_output(llm_output=extracted_triplets2, entity_type='object'))
-
-        ############## second step prompting with all aligned entity and relation names ##############
-
-        second_step_output = extractor2.get_completion_second_query(similar_entities=similar_entities, 
-            similar_relations=similar_relations, text=text, triplets=extracted_triplets2)
-
-        second_step_output_ids = align_outputs(second_step_output, aligner=aligner, triplet_filter=triplet_filter, verify=True)['transformed_outputs']
-
-        second_step_output_triplets.append(second_step_output_ids.copy())
-        metadata2['second_step_output'] = [(aligner.id2entity[item[0]], aligner.id2relation[item[1]], aligner.id2entity[item[2]]) for item in second_step_output_ids]
+        metadata1['first_plus_second_step_output'] = [(aligner.id2entity[item[0]], aligner.id2relation[item[1]], aligner.id2entity[item[2]]) \
+            for item in first_plus_second_step_output_ids]
+        metadata1['first_plus_second_step_output_full'] = [(aligner.id2entity[item[0]], aligner.id2relation[item[1]], aligner.id2entity[item[2]]) \
+            for item in first_plus_second_step_output_full_ids]
 
 
         ############## logging ##############
@@ -240,7 +242,8 @@ def test_triplet_extraction(dataset, random_items, verbose_step, device='cuda:2'
     ############## metrics ##############
     first_step_output_recall, first_step_output_precision = micro_recall(first_step_output_triplets, target_ids), micro_precision(first_step_output_triplets, target_ids)
     second_step_output_recall, second_step_output_precision = micro_recall(second_step_output_triplets, target_ids), micro_precision(second_step_output_triplets, target_ids)
-    first_plus_second_step_output_recall, first_plus_second_step_output_precision = micro_recall(first_plus_second_step_output_triplets, target_ids), micro_precision(first_plus_second_step_output_triplets, target_ids)
+    first_plus_second_step_output_recall, first_plus_second_step_output_precision = micro_recall(first_plus_second_step_output_triplets, target_ids), \
+         micro_precision(first_plus_second_step_output_triplets, target_ids)
 
     cost1 = extractor1.calculate_cost()
     cost2 = extractor2.calculate_cost()
@@ -261,13 +264,22 @@ def main():
     parser = argparse.ArgumentParser("Test")
     parser.add_argument("--dataset_name", help="synthie_code, rebel, synthie_text_pc, synthie_text, synthie_code_pc, rebel_pc", type=str, default='synthie_text')
     parser.add_argument("--split", help="train, test, test_small", type=str, default='test')
-    parser.add_argument("--num_items", type=int, default=10)
-    parser.add_argument("--verbose_step", type=int, default=5)
+    parser.add_argument("--num_items", type=int, default=150)
+    parser.add_argument("--verbose_step", type=int, default=15)
     args = parser.parse_args()
     
     dataset = datasets.load_dataset(f"martinjosifoski/SynthIE", args.dataset_name, split=args.split)
 
-    random_items = np.random.choice(list(range(0, len(dataset))), size=args.num_items, replace=False, )
+    # random_items = np.random.choice(list(range(0, len(dataset))), size=args.num_items, replace=False, )
+    idxs = []
+    
+    with open("logs/old/logs_second_prompt_with_text_and_triplets150_launch2.jsonl", 'r') as f:
+        for line in f:
+            line = json.loads(line)
+            idx = int(line[-1]["index"])
+            idxs.append(idx)
+    
+    random_items = idxs[:150]
 
     test_triplet_extraction(dataset=dataset, random_items=random_items, verbose_step=args.verbose_step)
 
