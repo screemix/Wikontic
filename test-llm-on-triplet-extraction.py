@@ -54,13 +54,12 @@ def align_outputs(outputs, aligner, triplet_filter, verify=True):
     filtered_triplets = []
 
     if isinstance(outputs, str):
-        if outputs.startswith('Output:'):
-            outputs = outputs.replace('Output:', '')
         try:
             outputs = json.loads(outputs)    
         except Exception as e:
-            logger.info("Cannot convert input to dictionary: ", outputs)
-            return {'transformed_outputs': [], 'filtered_triplets': []}
+            outputs = '\n'.join(outputs.split('\n')[1:])
+            outputs = json.loads(outputs)
+            
 
     for res in outputs:
         rel = res['relation']
@@ -249,7 +248,7 @@ def test_triplet_extraction(dataset, random_items, verbose_step, device='cuda:2'
     cost2 = extractor2.calculate_cost()
 
 
-    with jsonlines.open('logs/stat_second_prompt_with_text_and_triplets_wo_first{}_examples.json'.format(str(num_items)), mode='a') as writer:
+    with jsonlines.open('logs/stat_second_prompt_with_text_and_triplets_{}_examples.json'.format(str(num_items)), mode='a') as writer:
         writer.write({"second_step_output_recall": second_step_output_recall,
                     "second_step_output_precision": second_step_output_precision, 
                     "first_step_output_recall": first_step_output_recall,
@@ -270,16 +269,7 @@ def main():
     
     dataset = datasets.load_dataset(f"martinjosifoski/SynthIE", args.dataset_name, split=args.split)
 
-    # random_items = np.random.choice(list(range(0, len(dataset))), size=args.num_items, replace=False, )
-    idxs = []
-    
-    with open("logs/old/logs_second_prompt_with_text_and_triplets150_launch2.jsonl", 'r') as f:
-        for line in f:
-            line = json.loads(line)
-            idx = int(line[-1]["index"])
-            idxs.append(idx)
-    
-    random_items = idxs[:150]
+    random_items = np.random.choice(list(range(0, len(dataset))), size=args.num_items, replace=False, )
 
     test_triplet_extraction(dataset=dataset, random_items=random_items, verbose_step=args.verbose_step)
 
