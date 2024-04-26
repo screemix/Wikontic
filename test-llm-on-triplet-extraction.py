@@ -10,7 +10,7 @@ import os
 import sys
 import logging
 
-from utils.eval_utils import micro_precision, micro_recall
+from utils.eval_utils import micro_precision, micro_recall, f1_score
 from utils.openai_utils import LLMTripletExtractor
 from utils.index_utils import Aligner
 from utils.verifier_utils import TripletFilter
@@ -130,6 +130,7 @@ def test_triplet_extraction(dataset, random_items, verbose_step, device='cuda:2'
     ############## arrays to keep results and calculate metrics ##############
 
     first_step_output_triplets = []
+    first_step_unverified_output_triplets = []
     second_step_output_triplets = []
     first_plus_second_step_output_triplets = []
 
@@ -150,32 +151,40 @@ def test_triplet_extraction(dataset, random_items, verbose_step, device='cuda:2'
         target_ids.append(target['triplet_ids'])
 
         ############## first step prompting ##############
-        extracted_triplets1 = extractor1.get_completion_first_query(text)
+        extracted_triplets = extractor1.get_completion_first_query(text)
 
         ############## first step entity linking ##############
-        first_step_output = align_outputs(extracted_triplets1, aligner=aligner, triplet_filter=triplet_filter, verify=True)
+        first_step_output = align_outputs(extracted_triplets, aligner=aligner, triplet_filter=triplet_filter, verify=True)
         first_step_output_ids = first_step_output['transformed_outputs'].copy()
         first_step_filtered_triplets = first_step_output['filtered_triplets'].copy()
-        
+
         first_step_output_triplets.append(first_step_output_ids.copy())
         metadata1['first_step_output'] = [(aligner.id2entity[item[0]], aligner.id2relation[item[1]], aligner.id2entity[item[2]]) for item in first_step_output_ids]
         metadata1['first_step_filtered_triplets'] = first_step_filtered_triplets.copy()
 
 
+        first_step_unverified_output = align_outputs(extracted_triplets, aligner=aligner, triplet_filter=triplet_filter, verify=False)
+        first_step_unverified_output_ids = first_step_unverified_output['transformed_outputs'].copy()
+
+        first_step_unverified_output_triplets.append(first_step_unverified_output_ids.copy())
+        metadata1['first_step_unverified_output'] = [(aligner.id2entity[item[0]], aligner.id2relation[item[1]], aligner.id2entity[item[2]]) \
+            for item in first_step_unverified_output_ids]
+
+
         ############## second step aligning all entity and relation names ##############
         try:
-            similar_relations = aligner.top_relations_by_llm_output(llm_output=extracted_triplets1)
-            similar_entities = aligner.top_entities_by_llm_output(llm_output=extracted_triplets1, entity_type='subject')
-            similar_entities.update(aligner.top_entities_by_llm_output(llm_output=extracted_triplets1, entity_type='object'))
+            similar_relations = aligner.top_relations_by_llm_output(llm_output=extracted_triplets)
+            similar_entities = aligner.top_entities_by_llm_output(llm_output=extracted_triplets, entity_type='subject')
+            similar_entities.update(aligner.top_entities_by_llm_output(llm_output=extracted_triplets, entity_type='object'))
         except Exception as e:
             print(e)
-            print(extracted_triplets1)
+            print(extracted_triplets)
 
         ############## second step prompting with all aligned entity and relation names ##############
 
         extractor2.messages = extractor1.messages.copy()
         second_step_output = extractor2.get_completion_second_query(similar_entities=similar_entities, 
-            similar_relations=similar_relations, text=text, triplets=extracted_triplets1)
+            similar_relations=similar_relations, text=text, triplets=extracted_triplets)
 
         second_step_output_ids = align_outputs(second_step_output, aligner=aligner, triplet_filter=triplet_filter, verify=True)['transformed_outputs']
 
@@ -212,14 +221,43 @@ def test_triplet_extraction(dataset, random_items, verbose_step, device='cuda:2'
 
         ############## logging ##############
         if (idx > 0) and (idx % verbose_step == 0):
-            logger.info("First step output precision: " + str(micro_precision(first_step_output_triplets, target_ids)) + 
-                "\nFirst step output recall: " + str(micro_recall(first_step_output_triplets, target_ids)) + 
-                "\nFirst plus second step output precision: " + str(micro_precision(first_plus_second_step_output_triplets, target_ids)) + 
-                "\nFirst plus second  step output recall: " + str(micro_recall(first_plus_second_step_output_triplets, target_ids)) +
-                "\nSecond step output precision: " + str(micro_precision(second_step_output_triplets, target_ids)) +
-                "\nSecond step output recall: " + str(micro_recall(second_step_output_triplets, target_ids)))
 
-            logger.info("First step output: " + str(metadata1['first_step_output']) + 
+            first_step_recall, first_step_precision = micro_recall(first_step_output_triplets, target_ids), \
+                micro_precision(first_step_output_triplets, target_ids)
+
+            first_step_unverified_recall, first_step_unverified_precision = micro_recall(first_step_unverified_output_triplets, target_ids), \
+                micro_precision(first_step_unverified_output_triplets, target_ids)
+        
+            second_step_recall, second_step_precision = micro_recall(second_step_output_triplets, target_ids), \
+                 micro_precision(second_step_output_triplets, target_ids)
+
+            first_plus_second_step_recall, first_plus_second_step_precision = micro_recall(first_plus_second_step_output_triplets, target_ids), \
+                micro_precision(first_plus_second_step_output_triplets, target_ids)
+            
+            first_step_f1 = f1_score(first_step_precision, first_step_recall)
+            first_step_unverified_f1 = f1_score(first_step_unverified_precision, first_step_unverified_recall)
+            second_step_f1 = f1_score(second_step_precision, second_step_recall)
+            first_plus_second_step_f1 = f1_score(first_plus_second_step_precision, first_plus_second_step_recall)
+
+            logger.info("\nFirst step precision: " + str(first_step_precision) + 
+                "\nFirst step recall: " + str(first_step_recall) + 
+                "\nFirst step f1: " + str(first_step_f1) + 
+                "\n"+
+                "\nFirst step unverified precision: " + str(first_step_unverified_precision) + 
+                "\nFirst step unverified recall: " + str(first_step_unverified_recall) + 
+                "\nFirst step unverified f1: " + str(first_step_unverified_f1) + 
+                "\n"+
+                "\nFirst plus second step precision: " + str(first_plus_second_step_precision) + 
+                "\nFirst plus second  step recall: " + str(first_plus_second_step_recall) +
+                "\nFirst plus second  step f1: " + str(first_plus_second_step_f1) +
+                "\n"+
+                "\nSecond step precision: " + str(second_step_precision) +
+                "\nSecond step recall: " + str(first_plus_second_step_recall) + 
+                "\nSecond step f1: " + str(second_step_f1))
+
+            logger.info("\nText: " + text +
+                "\nFirst step unverified output: " + str(metadata1['first_step_unverified_output']) + 
+                "\nFirst step output: " + str(metadata1['first_step_output']) + 
                 "\nFirst plus second step output: " + str(metadata1['first_plus_second_step_output']) + 
                 "\nFirst plus second step output full: " + str(metadata1['first_plus_second_step_output_full']) +
                 "\nSecond step output: " + str(metadata2['second_step_output']) +
@@ -230,33 +268,56 @@ def test_triplet_extraction(dataset, random_items, verbose_step, device='cuda:2'
         messages1.append(metadata1.copy())
         messages2.append(metadata2.copy())
         
-        with jsonlines.open('logs/logs_with_1st_step_filtering_{}.jsonl'.format(str(num_items)), mode='a') as writer:
+        with jsonlines.open('logs/logs_with_1st_step_{}.jsonl'.format(str(num_items)), mode='a') as writer:
             writer.write(messages1)
 
-        with jsonlines.open('logs/logs_without_1st_step_filtering_{}.jsonl'.format(str(num_items)), mode='a') as writer:
+        with jsonlines.open('logs/logs_without_1st_step_{}.jsonl'.format(str(num_items)), mode='a') as writer:
             writer.write(messages2)
         
         # time.sleep(0.5)
 
     ############## metrics ##############
-    first_step_output_recall, first_step_output_precision = micro_recall(first_step_output_triplets, target_ids), micro_precision(first_step_output_triplets, target_ids)
-    second_step_output_recall, second_step_output_precision = micro_recall(second_step_output_triplets, target_ids), micro_precision(second_step_output_triplets, target_ids)
-    first_plus_second_step_output_recall, first_plus_second_step_output_precision = micro_recall(first_plus_second_step_output_triplets, target_ids), \
+    first_step_recall, first_step_precision = micro_recall(first_step_output_triplets, target_ids), \
+        micro_precision(first_step_output_triplets, target_ids)
+    first_step_f1 = f1_score(first_step_precision, first_step_recall)
+
+    first_step_unverified_recall, first_step_unverified_precision = micro_recall(first_step_unverified_output_triplets, target_ids), \
+        micro_precision(first_step_unverified_output_triplets, target_ids)
+    first_step_unverified_f1 = f1_score(first_step_unverified_precision, first_step_unverified_recall)
+    
+    second_step_recall, second_step_precision = micro_recall(second_step_output_triplets, target_ids), \
+        micro_precision(second_step_output_triplets, target_ids)
+    second_step_f1 = f1_score(second_step_precision, second_step_recall)
+
+    first_plus_second_step_recall, first_plus_second_step_precision = micro_recall(first_plus_second_step_output_triplets, target_ids), \
          micro_precision(first_plus_second_step_output_triplets, target_ids)
+    first_plus_second_step_f1 = f1_score(first_plus_second_step_precision, first_plus_second_step_recall)
 
     cost1 = extractor1.calculate_cost()
     cost2 = extractor2.calculate_cost()
 
 
-    with jsonlines.open('logs/stat_second_prompt_with_text_and_triplets_{}_examples.json'.format(str(num_items)), mode='a') as writer:
-        writer.write({"second_step_output_recall": second_step_output_recall,
-                    "second_step_output_precision": second_step_output_precision, 
-                    "first_step_output_recall": first_step_output_recall,
-                    "first_step_output_precision": first_step_output_precision,
-                    "first_plus_second_step_output_recall": first_plus_second_step_output_recall,
-                    "first_plus_second_step_output_precision": first_plus_second_step_output_precision,
-                    "cost_stat_1": cost1,
-                    "cost_stat_2": cost2})
+    with jsonlines.open('logs/stat_{}_examples.json'.format(str(num_items)), mode='a') as writer:
+        writer.write({                    
+                        "first_step_unverified_recall": first_step_unverified_recall,
+                        "first_step_unverified_precision": first_step_unverified_precision,
+                        "first_step_unverified_f1": first_step_unverified_f1,
+
+                        "first_step_recall": first_step_recall,
+                        "first_step_precision": first_step_precision,
+                        "first_step_f1": first_step_f1,
+
+                        "first_plus_second_step_recall": first_plus_second_step_recall,
+                        "first_plus_second_step_precision": first_plus_second_step_precision,
+                        "first_plus_second_step_f1": first_plus_second_step_f1,
+
+                        "second_step_recall": second_step_recall,
+                        "second_step_precision": second_step_precision, 
+                        "second_step_f1": second_step_f1,
+
+                        "cost_stat_1": cost1,
+                        "cost_stat_2": cost2
+                    })
 
 
 def main():
