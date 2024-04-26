@@ -20,6 +20,8 @@ def micro_recall(res, targets):
 
     return intersected_triplets / target_triplets        
 
+def f1_score(precision, recall):
+    return 2 * precision * recall / (precision + recall)
 
 def macro_recall(res, targets):
     pass
