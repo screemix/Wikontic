@@ -95,7 +95,7 @@ def align_outputs(outputs, aligner, triplet_filter, verify=True):
     
 
 
-def test_triplet_extraction(dataset, random_items, verbose_step, device='cuda:2'):
+def test_triplet_extraction(dataset, dataset_name, split_name, random_items, verbose_step, device='cuda:2'):
 
     num_items = len(random_items)
 
@@ -268,10 +268,10 @@ def test_triplet_extraction(dataset, random_items, verbose_step, device='cuda:2'
         messages1.append(metadata1.copy())
         messages2.append(metadata2.copy())
         
-        with jsonlines.open('logs/logs_with_1st_step_{}.jsonl'.format(str(num_items)), mode='a') as writer:
+        with jsonlines.open(f'logs/logs_{dataset_name}_{split_name}_with_1st_step_{str(num_items)}.jsonl', mode='a') as writer:
             writer.write(messages1)
 
-        with jsonlines.open('logs/logs_without_1st_step_{}.jsonl'.format(str(num_items)), mode='a') as writer:
+        with jsonlines.open(f'logs/logs_{dataset_name}_{split_name}_without_1st_step_{str(num_items)}.jsonl', mode='a') as writer:
             writer.write(messages2)
         
         # time.sleep(0.5)
@@ -297,7 +297,7 @@ def test_triplet_extraction(dataset, random_items, verbose_step, device='cuda:2'
     cost2 = extractor2.calculate_cost()
 
 
-    with jsonlines.open('logs/stat_{}_examples.json'.format(str(num_items)), mode='a') as writer:
+    with jsonlines.open(f'logs/stat_{dataset_name}_{split_name}_{str(num_items)}_examples.json', mode='a') as writer:
         writer.write({                    
                         "first_step_unverified_recall": first_step_unverified_recall,
                         "first_step_unverified_precision": first_step_unverified_precision,
@@ -332,7 +332,7 @@ def main():
 
     random_items = np.random.choice(list(range(0, len(dataset))), size=args.num_items, replace=False, )
 
-    test_triplet_extraction(dataset=dataset, random_items=random_items, verbose_step=args.verbose_step)
+    test_triplet_extraction(dataset=dataset, dataset_name=args.dataset_name, split_name=args.split, random_items=random_items, verbose_step=args.verbose_step)
 
 
 if __name__ == "__main__":
