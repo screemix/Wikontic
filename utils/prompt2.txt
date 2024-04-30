@@ -1,60 +1,230 @@
 In the previous step, there were extracted triplets from the Wikidata knowledge graph. Each triplet contains two entities (subject and object) and one relation that connects these subject and object. However, some of the entities and relations extracted in the previous step may have not an exact name from Wikidata. 
 We linked each subject, relation, and object name with top similar exact names from the Wikidata by semantic similarity. Your task is to choose appropriate names for entities and relations that correspond to the text's context and triplet they were taken from.
 For each triplet obtained in the previous step, you will be provided with the corresponding 5 exact names of similar subjects, relations, and objects from the Wikidata knowledge graph.
-The input format is following: ```
-			        Text:
-			        <Text from the previous step for triplets extraction>	   
-                    
+The input format is following: 
+```
+    Text:
+    <Text from the previous step for triplets extraction>
 
-                    Triplets:
 
-                    <triplet_1>
-                    <extracted_subject_1>: <extracted_subject_1_1>; ...; <extracted_subject_1_5>
-                    <extracted_relation_1>:<exact_relation_1_1>; ...; <exact_relation_1_5>
-                    <extracted_object_1>: <extracted_object_1_1>; ...; <extracted_object_1_5>
-                    
-                    ...
+    Triplets:
 
-                    <triplet_n>
-                    <extracted_subject_n>: <extracted_subject_n_1>; ...; <extracted_subject_n_5>
-                    <extracted_relation_n>: <exact_relation_n_1>; ...; <exact_relation_n_5>
-                    <extracted_object_n>: <extracted_object_n_1>; ...; <extracted_object_n_5>
-                    ```
+    <triplet_1>
+    <extracted_subject_1>: <exact_subject_1_1>; ...; <exact_subject_1_5>
+    <extracted_relation_1>: <exact_relation_1_1>; ...; <exact_relation_1_5>
+    <extracted_object_1>: <exact_object_1_1>; ...; <exact_object_1_5>
+
+    ...
+
+    <triplet_n>
+    <extracted_subject_n>: <exact_subject_n_1>; ...; <exact_subject_n_5>
+    <extracted_relation_n>: <exact_relation_n_1>; ...; <exact_relation_n_5>
+    <extracted_object_n>: <exact_object_n_1>; ...; exact_object_n_5>
+```
+
 For each subject, relation, and object from the extracted triplets, you should choose the most appropriate name only from the corresponding list of 5 similar ones that better match each triplet and the context of the previously demonstrated text.
-In the output provide only the list of updated triplets in JSON format, but instead of previously extracted names of relations and entities use the chosen ones from the provided list of similar names.
+In the output provide only the list of updated triplets in JSON format. For each relation and entity in the triplets use chosen names from the provided list of corresponding similar names. If the original name is already on the list and fits the context of the text and extracted triplet better than other options, you can keep it unchanged.
+Here are some examples of previously extracted triplets with imprecise names and corresponding corrected outputs:
 
 <example>
-
 Input:
-
-Text: 
-Albert Einstein, born in Germany, is known for developing the relativity theory
+    Text: Albert Einstein, born in Germany, is known for developing the relativity theory
 
 
-Triplets:
-    {"subject": "Albert Einstein", "relation": "born in", "object": "Germany"}
-    Albert Einstein: Albert Einstein, Alfred Einstein, Hans Einstein, Albert Einstein Israelite Hospital, Albert Einstein Medal
-    born in: place of birth, elected in, birthday, introduced in, birth name
-    Germany: Germany, West Germany, Germans, German Empire, Weimar Republic 
+    Triplets:
+        {"subject": "Albert Einstein", "relation": "born in", "object": "Germany"}
+        Albert Einstein: Albert Einstein, Alfred Einstein, Hans Einstein, Albert Einstein Israelite Hospital, Albert Einstein Medal
+        born in: place of birth, elected in, birthday, introduced in, birth name
+        Germany: Germany, West Germany, Germans, German Empire, Weimar Republic 
 
 
-    {"subject": "Albert Einstein", "relation": "work", "object": "relativity theory"}
-    Albert Einstein: Albert Einstein, Alfred Einstein, Hans Einstein, Albert Einstein Israelite Hospital, Albert Einstein Medal
-    work: in work, for work, present in work, notable work, applies to work
-    relativity theory: Relativity Theory of Protons and Electrons, theory of relativity, special relativity, Physical Interpretation of Relativity Theory
+        {"subject": "Albert Einstein", "relation": "work", "object": "relativity theory"}
+        Albert Einstein: Albert Einstein, Alfred Einstein, Hans Einstein, Albert Einstein Israelite Hospital, Albert Einstein Medal
+        work: in work, for work, present in work, notable work, applies to work
+        relativity theory: Relativity Theory of Protons and Electrons, Theory of relativity, special relativity, Physical Interpretation of Relativity Theory
+
 
 Output:
-[
-    {
-        "subject": "Albert Einstein",
-        "relation": "place of birth",
-        "object": "Germany"
-    },
-    {
-        "subject": "Albert Einstein",
-        "relation": "notable work",
-        "object": "Theory of relativity"
-    }
-]
+    [{
+            "subject": "Albert Einstein",
+            "relation": "place of birth",
+            "object": "Germany"
+        },
+        {
+            "subject": "Albert Einstein",
+            "relation": "notable work",
+            "object": "Theory of relativity"
+        }
+    ]
+</example>
 
-<example>'''
+<example>
+Input:
+    Text: Józef Skrobiński was a Polish film director and member of the Association of Polish Artists and Designers, located in Warsaw, Poland.
+
+
+    Triplets: 
+        {"subject": "Józef Skrobiński", "relation": "spoken language", "object": "Polish"}
+        Józef Skrobiński: Józef Skrobiński; Józef Żabiński; Antoni Czubiński; Jan Żabiński; Bezek Dębiński
+        spoken language: official language; native language; language used; languages spoken, written or signed; dialect of
+        Polish: Polish language; Dialects of Polish; Polish alphabet; Warsaw dialect; Polish manual alphabet
+
+        {"subject": "Józef Skrobiński", "relation": "occupation", "object": "film director"}
+        Józef Skrobiński: Józef Skrobiński; Józef Żabiński; Antoni Czubiński; Jan Żabiński; Bezek Dębiński
+        occupation: occupation; field of this occupation; enclave within; territory claimed by; residence
+        film director: Film director; Film producer; Bi Gan (film director); Madan (film director); Television director
+
+        {"subject": "Józef Skrobiński", "relation": "member", "object": "Association of Polish Artists and Designers"}
+        Józef Skrobiński: Józef Skrobiński; Józef Żabiński; Antoni Czubiński; Jan Żabiński; Bezek Dębiński
+        member: member of; member of sports team; member of military unit; member count; member of the crew of
+        Association of Polish Artists and Designers: Association of Polish Artists and Designers; Association of Polish Architects; Polish Association of Artists – "The Capitol"; Polish pavilion; Polish Social and Cultural Association
+
+        {"subject": "Józef Skrobiński", "relation": "citizenship", "object": "Poland"}
+        Józef Skrobiński: Józef Skrobiński; Józef Żabiński; Antoni Czubiński; Jan Żabiński; Bezek Dębiński
+        citizenship: country of citizenship; country of origin; country of registry; place of birth; place of origin
+        Poland: Poland; Ł; Polesia; Poland Together; Poland Railroad Station
+
+        {"subject": "Józef Skrobiński", "relation": "instance of", "object": "human"}
+        Józef Skrobiński: Józef Skrobiński; Józef Żabiński; Antoni Czubiński; Jan Żabiński; Bezek Dębiński
+        instance of: instance of; part of; follower of; part of the series; member of
+        human: Human; Humanos; Human Is; Human Entertainment; Humanin
+
+        {"subject": "Association of Polish Artists and Designers", "relation": "location", "object": "Warsaw"}
+        Association of Polish Artists and Designers: Association of Polish Artists and Designers; Association of Polish Architects; Polish Association of Artists – "The Capitol"; Polish pavilion; Polish Social and Cultural Association
+        location: location; work location; coordinate location; headquarters location; terminus location
+        Warsaw: Warsaw; Warsaw Confederation; Tiger Warsaw; Warsaw Derby; Warsaw Arsenal
+        
+        {"subject": "Association of Polish Artists and Designers", "relation": "country", "object": "Poland"}
+        Association of Polish Artists and Designers: Association of Polish Artists and Designers; Association of Polish Architects; Polish Association of Artists – "The Capitol"; Polish pavilion; Polish Social and Cultural Association
+        country: country; country for sport; basin country; country of citizenship; head of state
+        Poland: Poland; Ł; Polesia; Poland Together; Poland Railroad Station
+
+Output:
+    [
+		{
+			"subject": "Józef Skrobiński",
+			"relation": "languages spoken, written or signed", 
+			"object": "Polish language"
+		},
+		{
+			"subject": "Józef Skrobiński",
+			"relation": "occupation", 
+			"object": "Film director"
+		},
+		{
+			"subject": "Józef Skrobiński",
+			"relation": "member of", 
+			"object": "Association of Polish Artists and Designers"
+		},
+		{
+			"subject": "Józef Skrobiński",
+			"relation": "country of citizenship", 
+			"object": "Poland"
+		},
+		{
+			"subject": "Józef Skrobiński",
+			"relation": "instance of", 
+			"object": "Human"
+		},
+		{
+			"subject": "Association of Polish Artists and Designers",
+			"relation": "located in the administrative territorial entity", 
+			"object": "Warsaw"
+		},
+		{
+			"subject": "Association of Polish Artists and Designers",
+			"relation": "country", 
+			"object": "Poland"
+		},
+	]
+</example>
+
+<example>
+Input
+    Text: Jorge Merino is a Spanish footballer who plays as a midfielder for Marino de Luanco.
+
+    Triplets: 
+        {"subject": "Jorge Merino", "relation": "spoken language", "object": "Spanish"}
+        Jorge Merino: Jorge Merino; Luis Merino; Juan Merino; Roberto Merino; Pedro Merino
+        spoken language: official language; native language; language used; languages spoken, written or signed; dialect of
+        Spanish: Spanish language; Standard Spanish; Spanish language in the United States; Mexican Spanish; UN Spanish Language Day
+
+        {"subject": "Jorge Merino", "relation": "sport", "object": "football"}
+        Jorge Merino: Jorge Merino; Luis Merino; Juan Merino; Roberto Merino; Pedro Merino
+        sport: sport; sport number; country for sport; sports league level; sports season of league or competition
+        football: Association football; Football association; The Football Association; Football; Association football positions
+        
+        {"subject": "Jorge Merino", "relation": "occupation", "object": "footballer"}
+        Jorge Merino: Jorge Merino; Luis Merino; Juan Merino; Roberto Merino; Pedro Merino
+        occupation: occupation; field of this occupation; enclave within; territory claimed by; residence
+        footballer: Football player; Football; Football on 5; Football at the Summer Olympics; American football
+
+        {"subject": "Jorge Merino", "relation": "position", "object": "midfielder"}
+        Jorge Merino: Jorge Merino; Luis Merino; Juan Merino; Roberto Merino; Pedro Merino
+        position: position held; position played on team / speciality; direction; academic appointment; military rank
+        midfielder: Midfielder; Liga Forward; Tó (footballer); FC Copa; Defender 2000
+
+        {"subject": "Jorge Merino", "relation": "member of team", "object": "Marino de Luanco"}
+        Jorge Merino: Jorge Merino; Luis Merino; Juan Merino; Roberto Merino; Pedro Merino
+        member of team: member of sports team; member of the crew of; member of military unit; member of; part of
+        Marino de Luanco: Marino de Luanco; Luanco; Luan Cândido; Luan Gabriel; Luan Sérgio
+
+        {"subject": "Jorge Merino", "relation": "citizenship", "object": "Spain"}
+        Jorge Merino: Jorge Merino; Luis Merino; Juan Merino; Roberto Merino; Pedro Merino
+        citizenship: country of citizenship; member of military unit; official residence; place of birth; member of the crew of
+        Spain: Spain; Spain Rodriguez; Spanish City; Madrid; María, Spain
+
+        {"subject": "midfielder", "relation": "subclass", "object": "footballer"}
+        midfielder: Midfielder; Liga Forward; Tó (footballer); FC Copa; Defender 2000
+        subclass: subclass of; is metaclass for; has parts of the class; social classification; competition class
+        footballer: Football player; Football; Football on 5; Football at the Summer Olympics; American football
+
+        {"subject": "midfielder", "relation": "instance of", "object": "football position"}
+        midfielder: Midfielder; Liga Forward; Tó (footballer); FC Copa; Defender 2000
+        instance of: instance of; part of; follower of; part of the series; member of
+        football position: Association football positions; American football positions; Australian rules football positions; Basketball positions; Baseball positions
+
+    Output:
+        [
+            {
+                "subject": "Jorge Merino",
+                "relation": "languages spoken, written or signed", 
+                "object": "Spanish language"
+            },
+            {
+                "subject": "Jorge Merino",
+                "relation": "sport", 
+                "object": "Association football"
+            },
+            {
+                "subject": "Jorge Merino",
+                "relation": "occupation", 
+                "object": "Football player"
+            },
+            {
+                "subject": "Jorge Merino",
+                "relation": "position played on team / speciality", 
+                "object": "Midfielder"
+            },
+            {
+                "subject": "Jorge Merino",
+                "relation": "member of sports team", 
+                "object": "Marino de Luanco"
+            },
+            {
+                "subject": "Jorge Merino",
+                "relation": "country of citizenship", 
+                "object": "Spain"
+            },
+            {
+                "subject": "Midfielder",
+                "relation": "subclass of", 
+                "object": "Football player"
+            },
+            {
+                "subject": "Midfielder",
+                "relation": "instance of", 
+                "object": "Association football positions"
+            },
+        ]
+</example>
