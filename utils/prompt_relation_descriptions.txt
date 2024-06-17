@@ -1,0 +1,1 @@
+You are given text and relations extracted from this text to form knowledge graph like Wikidata. Your task is to generate text descriptions that correspond to the definition of each relation in a context of provided text. Generate output as json with relations as keys and descriptions as values.

@@ -1,5 +1,5 @@
 In the previous step, there were extracted triplets from the Wikidata knowledge graph. Each triplet contains two entities (subject and object) and one relation that connects these subject and object. However, some of the entities and relations extracted in the previous step may have not an exact name from Wikidata. 
-We linked each subject, relation, and object name with top similar exact names from the Wikidata by semantic similarity. Your task is to choose appropriate names for entities and relations that correspond to the text's context and triplet they were taken from.
+We linked each subject, relation, and object name with top similar exact names from the Wikidata by semantic similarity. Your task is to choose appropriate names for entities and relations that correspond to the text"s context and triplet they were taken from.
 
 The input format is following: 
     Text: <Text from the previous step for triplets extraction>
@@ -25,48 +25,6 @@ For each relation and entity in the triplets use chosen names only from the prov
 In the output provide only the list of updated triplets in JSON format. Each triplet should have fields "subject", "relation", and "object" for updated subject, relation, and object correspondingly. 
 
 Here are some examples of previously extracted triplets with imprecise names, a list of linked exact names, and corresponding corrected outputs:
-
-<example>
-Input:
-    Text: "Tahiti Honey" is an English-language film written by Frederick Kohner.
-
-    Triplets and corresponding entity and relation mappings:
-
-        {"subject": "Tahiti Honey", "relation": "language of film", "object": "English language"}
-        {"Tahiti Honey": ["Tahiti Honey", "Honey", "Honey Chile", "Celtic Honey", "Tahitipresse"]}
-        {"language of film": ["original language of film or TV show", "language regulatory body", "language used", "native language", "dialect of"]}
-        {"English language": ["English language", "English Hours", "English International School", "British English", "Business English"]}
-
-        {"subject": "Tahiti Honey", "relation": "is", "object": "film"}
-        {"Tahiti Honey": ["Tahiti Honey", "Honey", "Honey Chile", "Celtic Honey", "Tahitipresse"]}
-        {"is": ["represents", "instance of", "replaces", "contains", "is a list of"]}
-        {"film": ["Film", "The Film", "Dance film", "Film award", "Romance Film"]}
-
-        {"subject": "Tahiti Honey", "relation": "written by", "object": "Frederick Kohner"}
-        {"Tahiti Honey": ["Tahiti Honey", "Honey", "Honey Chile", "Celtic Honey", "Tahitipresse"]}
-        {"written by": ["lyrics by", "has lyrics", "produced by", "adapted by", "screenwriter"]}
-        {"Frederick Kohner": ["Frederick Kohner", "Paul Kohner", "Adolf Kohner", "Susan Kohner", "Henry Rohner"]}
-
-
-Output:
-	[
-		{
-			"subject": "Tahiti Honey",
-			"relation": "original language of film or TV show", 
-			"object": "English language"
-		},
-		{
-			"subject": "Tahiti Honey",
-			"relation": "instance of", 
-			"object": "Film"
-		},
-		{
-			"subject": "Tahiti Honey",
-			"relation": "screenwriter", 
-			"object": "Frederick Kohner"
-		}
-	]
-</example>
 
 <example>
 Input:
@@ -109,6 +67,7 @@ Input:
         {"country": ["country", "country for sport", "basin country", "country of citizenship", "head of state"]}
         {"Poland": ["Poland", "Ł", "Polesia", "Poland Together", "Poland Railroad Station"]}
 
+
 Output:
     [
         {
@@ -150,92 +109,125 @@ Output:
 </example>
 
 <example>
-Input
-    Text: Jorge Merino is a Spanish footballer who plays as a midfielder for Marino de Luanco.
+Input: 
+	Text: Lexington Avenue is a thoroughfare in New York City, parallel to Park Avenue and Third Avenue.
 
     Triplets and corresponding entity and relation mappings:
 
-        {"subject": "Jorge Merino", "relation": "spoken language", "object": "Spanish"}
-        {"Jorge Merino": ["Jorge Merino", "Luis Merino", "Juan Merino", "Roberto Merino", "Pedro Merino"]}
-        {"spoken language": ["official language", "native language", "language used", "languages spoken", "written or signed", "dialect of"]}
-        {"Spanish": ["Spanish language", "Standard Spanish", "Spanish language in the United States", "Mexican Spanish", "UN Spanish Language Day"]}
+        {"subject": "Lexington Avenue", "relation": "is", "object": "thoroughfare"}
+        {"Lexington Avenue": ["Lexington Avenue", "450 Lexington Avenue", "599 Lexington Avenue", "731 Lexington Avenue", "Lexington Park"]}
+        {"is": ["represents", "instance of", "replaces", "contains", "is a list of"]}
+        {"thoroughfare": ["Thoroughfare", "No Thoroughfare", "Thoroughfare Gap", "Parisian Thoroughfare", "Central Arc Thoroughfare"]}
 
-        {"subject": "Jorge Merino", "relation": "sport", "object": "football"}
-        {"Jorge Merino": ["Jorge Merino", "Luis Merino", "Juan Merino", "Roberto Merino", "Pedro Merino"]}
+        {"subject": "Lexington Avenue", "relation": "parallel to", "object": "Park Avenue"}
+        {"Lexington Avenue": ["Lexington Avenue", "450 Lexington Avenue", "599 Lexington Avenue", "731 Lexington Avenue", "Lexington Park"]}
+        {"parallel to": ["parallel street", "direction", "crosses", "adjacent station", "relative"]}
+        {"Park Avenue": ["Park Avenue", "79 Park Avenue", "7 Park Avenue", "Park Avenue Plaza", "245 Park Avenue"]}
+
+        {"subject": "Lexington Avenue", "relation": "parallel to", "object": "Third Avenue"}
+        {"Lexington Avenue": ["Lexington Avenue", "450 Lexington Avenue", "599 Lexington Avenue", "731 Lexington Avenue", "Lexington Park"]}
+        {"parallel to": ["parallel street", "direction", "crosses", "adjacent station", "relative"]}
+        {"Third Avenue": ["Third Avenue", "Third Avenue Railway", "T Third Street", "Third Street Promenade", "1111 Third Avenue"]}
+
+
+Output: 
+	[
+		{
+			"subject": "Lexington Avenue",
+			"relation": "instance of", 
+			"object": "Thoroughfare"
+		},
+		{
+			"subject": "Lexington Avenue",
+			"relation": "parallel street", 
+			"object": "Park Avenue"
+		},
+		{
+			"subject": "Lexington Avenue",
+			"relation": "parallel street", 
+			"object": "Third Avenue"
+		},
+	]
+</example>
+
+<example>
+Input:
+    Text: Mario Griguol is an Argentine football player born in Córdoba, Argentina. He speaks Spanish and plays for Club Atlético Atlanta.
+
+    Triplets and corresponding entity and relation mappings:
+
+        {"subject": "Mario Griguol", "relation": "sport", "object": "football"}
+        {"Mario Griguol": ["Mario Griguol", "Carlos Timoteo Griguol", "Roberto Grigis", "M\u00e1rio Grman", "Mario Gromo"]}
         {"sport": ["sport", "sport number", "country for sport", "sports league level", "sports season of league or competition"]}
         {"football": ["Association football", "Football association", "The Football Association", "Football", "Association football positions"]}
-        
-        {"subject": "Jorge Merino", "relation": "occupation", "object": "footballer"}
-        {"Jorge Merino": ["Jorge Merino", "Luis Merino", "Juan Merino", "Roberto Merino", "Pedro Merino"]}
+
+        {"subject": "Mario Griguol", "relation": "occupation", "object": "footballer"}
+        {"Mario Griguol": ["Mario Griguol", "Carlos Timoteo Griguol", "Roberto Grigis", "M\u00e1rio Grman", "Mario Gromo"]}
         {"occupation": ["occupation", "field of this occupation", "enclave within", "territory claimed by", "residence"]}
         {"footballer": ["Football player", "Football", "Football on 5", "Football at the Summer Olympics", "American football"]}
 
-        {"subject": "Jorge Merino", "relation": "position", "object": "midfielder"}
-        {"Jorge Merino": ["Jorge Merino", "Luis Merino", "Juan Merino", "Roberto Merino", "Pedro Merino"]}
-        {"position": ["position held", "position played on team / speciality", "direction", "academic appointment", "military rank"]}
-        {"midfielder": ["Midfielder", "Liga Forward", "Tó (footballer)", "FC Copa", "Defender 2000"]}
+        {"subject": "Mario Griguol", "relation": "born in", "object": "Córdoba, Argentina"}
+        {"Mario Griguol": ["Mario Griguol", "Carlos Timoteo Griguol", "Roberto Grigis", "M\u00e1rio Grman", "Mario Gromo"]}
+        {"born in": ["place of birth", "family", "birth name", "family name", "presenter"]}
+        {"Córdoba, Argentina": ["C\u00f3rdoba, Argentina", "C\u00f3rdoba F.C.", "C\u00f3rdoba, Spain", "C\u00f3rdoba Province, Argentina", "C\u00f3rdoba Department"]}
 
-        {"subject": "Jorge Merino", "relation": "member of team", "object": "Marino de Luanco"}
-        {"Jorge Merino": ["Jorge Merino", "Luis Merino", "Juan Merino", "Roberto Merino", "Pedro Merino"]}
+        {"subject": "Mario Griguol", "relation": "citizenship", "object": "Argentina"}
+        {"Mario Griguol": ["Mario Griguol", "Carlos Timoteo Griguol", "Roberto Grigis", "M\u00e1rio Grman", "Mario Gromo"]}
+        {"citizenship": ["country of citizenship", "allegiance", "diaspora", "country of origin", "flag"]}
+        {"Argentina": ["Argentina", "Norma Argentina", "Argentine Northwest", "Argentina Classic", "Argentine Islands"]}
+
+        {"subject": "Mario Griguol", "relation": "spoken language", "object": "Spanish language"}
+        {"Mario Griguol": ["Mario Griguol", "Carlos Timoteo Griguol", "Roberto Grigis", "M\u00e1rio Grman", "Mario Gromo"]}
+        {"spoken language": ["official language", "native language", "language used", "languages spoken, written or signed", "dialect of"]}
+        {"Spanish language": ["Spanish language", "Standard Spanish", "Spanish language in the United States", "Mexican Spanish", "UN Spanish Language Day"]}
+
+        {"subject": "Mario Griguol", "relation": "member of team", "object": "Club Atlético Atlanta"}
+        {"Mario Griguol": ["Mario Griguol", "Carlos Timoteo Griguol", "Roberto Grigis", "M\u00e1rio Grman", "Mario Gromo"]}
         {"member of team": ["member of sports team", "member of the crew of", "member of military unit", "member of", "part of"]}
-        {"Marino de Luanco": ["Marino de Luanco", "Luanco", "Luan Cândido", "Luan Gabriel", "Luan Sérgio"]}
+        {"Club Atlético Atlanta": ["Club Atl\u00e9tico Atlanta", "Club Atl\u00e9tico Palermo", "Club Atl\u00e9tico Nueva Chicago", "Atl\u00e9tico Boca del R\u00edo", "Club Atl\u00e9tico Del Plata"]}
 
-        {"subject": "Jorge Merino", "relation": "citizenship", "object": "Spain"}
-        {"Jorge Merino": ["Jorge Merino", "Luis Merino", "Juan Merino", "Roberto Merino", "Pedro Merino"]}
-        {"citizenship": ["country of citizenship", "member of military unit", "official residence", "place of birth", "member of the crew of"]}
-        {"Spain": ["Spain", "Spain Rodriguez", "Spanish City", "Madrid", "María", "Spain"]}
+        {"subject": "Mario Griguol", "relation": "is", "object": "Human"}
+        {"Mario Griguol": ["Mario Griguol", "Carlos Timoteo Griguol", "Roberto Grigis", "M\u00e1rio Grman", "Mario Gromo"]}
+        {"is": ["represents", "instance of", "replaces", "contains", "is a list of"]}
+        {"Human": ["Human", "Humanos", "Human Is", "Human Entertainment", "Humanin"]}
 
-        {"subject": "midfielder", "relation": "subclass", "object": "footballer"}
-        {"midfielder": ["Midfielder", "Liga Forward", "Tó (footballer)", "FC Copa", "Defender 2000"]}
-        {"subclass": ["subclass of", "is metaclass for", "has parts of the class", "social classification", "competition class"]}
-        {"footballer": ["Football player", "Football", "Football on 5", "Football at the Summer Olympics", "American football"]}
-
-        {"subject": "midfielder", "relation": "instance of", "object": "football position"}
-        {"midfielder": ["Midfielder", "Liga Forward", "Tó (footballer)", "FC Copa", "Defender 2000"]}
-        {"instance of": ["instance of", "part of", "follower of", "part of the series", "member of"]}
-        {"football position": ["Association football positions", "American football positions", "Australian rules football positions", "Basketball positions", "Baseball positions"]}
 
 Output:
-    [
-        {
-            "subject": "Jorge Merino",
-            "relation": "languages spoken, written or signed", 
-            "object": "Spanish language"
-        },
-        {
-            "subject": "Jorge Merino",
-            "relation": "sport", 
-            "object": "Association football"
-        },
-        {
-            "subject": "Jorge Merino",
-            "relation": "occupation", 
-            "object": "Football player"
-        },
-        {
-            "subject": "Jorge Merino",
-            "relation": "position played on team / speciality", 
-            "object": "Midfielder"
-        },
-        {
-            "subject": "Jorge Merino",
-            "relation": "member of sports team", 
-            "object": "Marino de Luanco"
-        },
-        {
-            "subject": "Jorge Merino",
-            "relation": "country of citizenship", 
-            "object": "Spain"
-        },
-        {
-            "subject": "Midfielder",
-            "relation": "subclass of", 
-            "object": "Football player"
-        },
-        {
-            "subject": "Midfielder",
-            "relation": "instance of", 
-            "object": "Association football positions"
-        },
-    ]
+	[
+		{
+			"subject": "Mario Griguol",
+			"relation": "sport", 
+			"object": "Association football"
+		},
+		{
+			"subject": "Mario Griguol",
+			"relation": "occupation", 
+			"object": "Football player"
+		},
+		{
+			"subject": "Mario Griguol",
+			"relation": "place of birth", 
+			"object": "Córdoba, Argentina"
+		},
+		{
+			"subject": "Mario Griguol",
+			"relation": "country of citizenship", 
+			"object": "Argentina"
+		},
+		{
+			"subject": "Mario Griguol",
+			"relation": "languages spoken, written or signed", 
+			"object": "Spanish language"
+		},
+		{
+			"subject": "Mario Griguol",
+			"relation": "member of sports team", 
+			"object": "Club Atlético Atlanta"
+		},
+		{
+			"subject": "Mario Griguol",
+			"relation": "instance of", 
+			"object": "Human"
+		},
+	]
 </example>

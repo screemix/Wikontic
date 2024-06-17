@@ -1,0 +1,1 @@
+You are given text and entities extracted from this text to form knowledge graph like Wikidata. Your task is to generate text descriptions for each entity that correspond to their meaning in a context of the text. In case of not named entities, generate general description, but it should correspond to the meaning used in the text to distinguish it from synonymous entities. 

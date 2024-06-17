@@ -6,31 +6,6 @@ Here are a few examples of input texts and expected output for each of them:
 
 <example>
 Input: 
-	Text: "Tahiti Honey" is an English-language film written by Frederick Kohner.
-
-Output: 
-	[
-		{
-			"subject": "Tahiti Honey",
-			"relation": "original language of film or TV show", 
-			"object": "English language"
-		},
-		{
-			"subject": "Tahiti Honey",
-			"relation": "instance of", 
-			"object": "Film"
-		},
-		{
-			"subject": "Tahiti Honey",
-			"relation": "screenwriter", 
-			"object": "Frederick Kohner"
-		}
-	]
-</example>
-
-
-<example>
-Input: 
 	Text: Józef Skrobiński was a Polish film director and member of the Association of Polish Artists and Designers, located in Warsaw, Poland.
 
 Output: 
@@ -75,49 +50,69 @@ Output:
 
 <example>
 Input: 
-	Text: Jorge Merino is a Spanish footballer who plays as a midfielder for Marino de Luanco.
+	Text: Lexington Avenue is a thoroughfare in New York City, parallel to Park Avenue and Third Avenue.
 
 Output: 
 	[
 		{
-			"subject": "Jorge Merino",
-			"relation": "languages spoken, written or signed", 
-			"object": "Spanish language"
+			"subject": "Lexington Avenue",
+			"relation": "instance of", 
+			"object": "Thoroughfare"
 		},
 		{
-			"subject": "Jorge Merino",
+			"subject": "Lexington Avenue",
+			"relation": "parallel street", 
+			"object": "Park Avenue"
+		},
+		{
+			"subject": "Lexington Avenue",
+			"relation": "parallel street", 
+			"object": "Third Avenue"
+		},
+	]
+</example>
+
+
+<example>
+Input: 
+	Text: Mario Griguol is an Argentine football player born in Córdoba, Argentina. He speaks Spanish and plays for Club Atlético Atlanta.
+
+Output: 
+	[
+		{
+			"subject": "Mario Griguol",
 			"relation": "sport", 
 			"object": "Association football"
 		},
 		{
-			"subject": "Jorge Merino",
+			"subject": "Mario Griguol",
 			"relation": "occupation", 
 			"object": "Football player"
 		},
 		{
-			"subject": "Jorge Merino",
-			"relation": "position played on team / speciality", 
-			"object": "Midfielder"
+			"subject": "Mario Griguol",
+			"relation": "place of birth", 
+			"object": "Córdoba, Argentina"
 		},
 		{
-			"subject": "Jorge Merino",
-			"relation": "member of sports team", 
-			"object": "Marino de Luanco"
-		},
-		{
-			"subject": "Jorge Merino",
+			"subject": "Mario Griguol",
 			"relation": "country of citizenship", 
-			"object": "Spain"
+			"object": "Argentina"
 		},
 		{
-			"subject": "Midfielder",
-			"relation": "subclass of", 
-			"object": "Football player"
+			"subject": "Mario Griguol",
+			"relation": "languages spoken, written or signed", 
+			"object": "Spanish language"
 		},
 		{
-			"subject": "Midfielder",
+			"subject": "Mario Griguol",
+			"relation": "member of sports team", 
+			"object": "Club Atlético Atlanta"
+		},
+		{
+			"subject": "Mario Griguol",
 			"relation": "instance of", 
-			"object": "Association football positions"
-		}
+			"object": "Human"
+		},
 	]
 </example>

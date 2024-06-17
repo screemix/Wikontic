@@ -1,60 +1,181 @@
-You will be provided with the text and triplets from Wikidata knowledge graph that LLM extracted from this text. Each triplet contains two entities (subject and object) and one relation that connects these subject and object. Entities represent nodes in the knowledge graph, while relation represents a link between these two nodes. 
-Subjects and objects could be named entities or concepts describing a group of people, events, or abstract objects from the Wikidata knowledge graph. 
-Moreover, for each triplet, you will be provided with the corresponding 5 exact names of similar subject, relation and object from the Wikidata knowledge graph.
-The input format is following: ```
-			        Text:
-			        <Text from the previous step for triplets extraction>	   
-                    
+In the previous step, there were extracted triplets from the Wikidata knowledge graph. Each triplet contains two entities (subject and object) and one relation that connects these subject and object. However, some of the entities and relations extracted in the previous step may have not an exact name from Wikidata. 
+We linked each subject, relation, and object name with top similar exact names from the Wikidata by semantic similarity. Your task is to choose appropriate names for entities and relations that correspond to the text"s context and triplet they were taken from.
 
-                    Triplets:
+The input format is following: 
+    Text: <Text from the previous step for triplets extraction>
 
-                    <triplet_1>
-                    <extracted_subject_1: [extracted_subject_1_1, ..., extracted_subject_1_5] 
-                    <extracted_relation_1: [exact_relation_1_1, ..., exact_relation_1_5]
-                    <extracted_object_1: [extracted_object_1_1, ..., extracted_object_1_5] 
-                    
-                    ...
+    Triplets and corresponding entity and relation mappings:
 
-                    <triplet_n>
-                    <extracted_subject_n: [extracted_subject_n_1, ..., extracted_subject_n_5] 
-                    <extracted_relation_n: [exact_relation_n_1, ..., exact_relation_n_5] \n\n>
-                    <extracted_object_n: [extracted_object_n_1, ..., extracted_object_n_5]
-                    ```
-For each subject, relation and object from the extracted triplets, you should choose one most probable name only from the corresponding list of 5 probable ones that better match each triplet and the context of the previously demonstrated text.
-In the output provide only the list of updated triplets in JSON format, but instead of previously extracted names of relations and entities use the chosen ones from the provided list of similar names.
+        <triplet_1>
+        {<extracted_subject_1>: <list of 5 exact names similar to subject_1>}
+        {<extracted_relation_1>: <list of 5 exact names similar to relation_1>}
+        {<extracted_object_1>: <list of 5 exact names similar to object_1>}
+
+        ...
+
+        <triplet_n>
+        {<extracted_subject_n>: <list of 5 exact names similar to subject_n>}
+        {<extracted_relation_n>: <list of 5 exact names similar to relation_n>}
+        {<extracted_object_n>: <list of 5 exact names similar to object_n>}
+
+
+For each triplet obtained in the previous step, you will be provided with the corresponding 5 exact names of similar subjects, relations, and objects from the Wikidata knowledge graph.
+For each subject, relation, and object from the extracted triplets, you should choose the most appropriate name only from the corresponding list of 5 exact ones that better match each triplet and the context of the previously demonstrated text.
+For each relation and entity in the triplets use chosen names only from the provided list of exact similar names. You can keep the original name unchanged only in case it is already in the list and fits the context of the text and extracted triplet better than other options.
+In the output provide only the list of updated triplets in JSON format. Each triplet should have fields "subject", "relation", and "object" for updated subject, relation, and object correspondingly. 
+
+Here are some examples of previously extracted triplets with imprecise names, a list of linked exact names, and corresponding corrected outputs:
 
 <example>
-
 Input:
+    Text: Mario Griguol is an Argentine football player born in Córdoba, Argentina. He speaks Spanish and plays for Club Atlético Atlanta.
 
-Text: 
-Albert Einstein, born in Germany, is known for developing the relativity theory
+    Triplets and corresponding entity and relation mappings:
 
+        {"subject": "Mario Griguol", "relation": "sport", "object": "football"}
+        {"Mario Griguol": ["Mario Griguol", "Carlos Timoteo Griguol", "Roberto Grigis", "M\u00e1rio Grman", "Mario Gromo"]}
+        {"sport": ["sport", "sport number", "country for sport", "sports league level", "sports season of league or competition"]}
+        {"football": ["Association football", "Football association", "The Football Association", "Football", "Association football positions"]}
 
-Triplets:
-    {"subject": "Albert Einstein", "relation": "born in", "object": "Germany"}
-    Albert Einstein: Albert Einstein, Alfred Einstein, Hans Einstein, Albert Einstein Israelite Hospital, Albert Einstein Medal
-    born in: place of birth, elected in, birthday, introduced in, birth name
-    Germany: Germany, West Germany, Germans, German Empire, Weimar Republic 
+        {"subject": "Mario Griguol", "relation": "occupation", "object": "footballer"}
+        {"Mario Griguol": ["Mario Griguol", "Carlos Timoteo Griguol", "Roberto Grigis", "M\u00e1rio Grman", "Mario Gromo"]}
+        {"occupation": ["occupation", "field of this occupation", "enclave within", "territory claimed by", "residence"]}
+        {"footballer": ["Football player", "Football", "Football on 5", "Football at the Summer Olympics", "American football"]}
 
+        {"subject": "Mario Griguol", "relation": "born in", "object": "Córdoba, Argentina"}
+        {"Mario Griguol": ["Mario Griguol", "Carlos Timoteo Griguol", "Roberto Grigis", "M\u00e1rio Grman", "Mario Gromo"]}
+        {"born in": ["place of birth", "family", "birth name", "family name", "presenter"]}
+        {"Córdoba, Argentina": ["C\u00f3rdoba, Argentina", "C\u00f3rdoba F.C.", "C\u00f3rdoba, Spain", "C\u00f3rdoba Province, Argentina", "C\u00f3rdoba Department"]}
 
-    {"subject": "Albert Einstein", "relation": "work", "object": "relativity theory"}
-    Albert Einstein: Albert Einstein, Alfred Einstein, Hans Einstein, Albert Einstein Israelite Hospital, Albert Einstein Medal
-    work: in work, for work, present in work, notable work, applies to work
-    relativity theory: Relativity Theory of Protons and Electrons, theory of relativity, special relativity, Physical Interpretation of Relativity Theory
+        {"subject": "Mario Griguol", "relation": "citizenship", "object": "Argentina"}
+        {"Mario Griguol": ["Mario Griguol", "Carlos Timoteo Griguol", "Roberto Grigis", "M\u00e1rio Grman", "Mario Gromo"]}
+        {"citizenship": ["country of citizenship", "allegiance", "diaspora", "country of origin", "flag"]}
+        {"Argentina": ["Argentina", "Norma Argentina", "Argentine Northwest", "Argentina Classic", "Argentine Islands"]}
+
+        {"subject": "Mario Griguol", "relation": "spoken language", "object": "Spanish language"}
+        {"Mario Griguol": ["Mario Griguol", "Carlos Timoteo Griguol", "Roberto Grigis", "M\u00e1rio Grman", "Mario Gromo"]}
+        {"spoken language": ["official language", "native language", "language used", "languages spoken, written or signed", "dialect of"]}
+        {"Spanish language": ["Spanish language", "Standard Spanish", "Spanish language in the United States", "Mexican Spanish", "UN Spanish Language Day"]}
+
+        {"subject": "Mario Griguol", "relation": "member of team", "object": "Club Atlético Atlanta"}
+        {"Mario Griguol": ["Mario Griguol", "Carlos Timoteo Griguol", "Roberto Grigis", "M\u00e1rio Grman", "Mario Gromo"]}
+        {"member of team": ["member of sports team", "member of the crew of", "member of military unit", "member of", "part of"]}
+        {"Club Atlético Atlanta": ["Club Atl\u00e9tico Atlanta", "Club Atl\u00e9tico Palermo", "Club Atl\u00e9tico Nueva Chicago", "Atl\u00e9tico Boca del R\u00edo", "Club Atl\u00e9tico Del Plata"]}
+
+        {"subject": "Mario Griguol", "relation": "is", "object": "Human"}
+        {"Mario Griguol": ["Mario Griguol", "Carlos Timoteo Griguol", "Roberto Grigis", "M\u00e1rio Grman", "Mario Gromo"]}
+        {"is": ["represents", "instance of", "replaces", "contains", "is a list of"]}
+        {"Human": ["Human", "Humanos", "Human Is", "Human Entertainment", "Humanin"]}
+
 
 Output:
-[
-    {
-        "subject": "Albert Einstein",
-        "relation": "place of birth",
-        "object": "Germany"
-    },
-    {
-        "subject": "Albert Einstein",
-        "relation": "notable work",
-        "object": "Theory of relativity"
-    }
-]
+	[
+		{
+			"subject": "Mario Griguol",
+			"relation": "sport", 
+			"object": "Association football"
+		},
+		{
+			"subject": "Mario Griguol",
+			"relation": "occupation", 
+			"object": "Football player"
+		},
+		{
+			"subject": "Mario Griguol",
+			"relation": "place of birth", 
+			"object": "Córdoba, Argentina"
+		},
+		{
+			"subject": "Mario Griguol",
+			"relation": "country of citizenship", 
+			"object": "Argentina"
+		},
+		{
+			"subject": "Mario Griguol",
+			"relation": "languages spoken, written or signed", 
+			"object": "Spanish language"
+		},
+		{
+			"subject": "Mario Griguol",
+			"relation": "member of sports team", 
+			"object": "Club Atlético Atlanta"
+		},
+		{
+			"subject": "Mario Griguol",
+			"relation": "instance of", 
+			"object": "Human"
+		},
+	]
+</example>
 
-<example>'''
+<example>
+Input: 
+	Text: ArXiv is funded by Los Alamos National Laboratory and Nagoya University.
+
+    Triplets and corresponding entity and relation mappings:
+    {"subject": "ArXiv", "relation": "funded by", "object": "Los Alamos National Laboratory"}
+    {"ArXiv": ["ArXiv", "EngrXiv", "Physics arXiv Blog", "SocArXiv", "PsyArXiv"]}
+    {"funded by": ["supervised by", "grants", "donated by", "endorsed by", "funder"]}
+    {"Los Alamos National Laboratory": ["Los Alamos National Laboratory", "Los \u00c1lamos", "Los Alamos Technical Associates", "Los Alamos, California", "Los Alamos Neutron Science Center"]}
+
+    {"subject": "ArXiv", "relation": "funded by", "object": "Nagoya University"}
+    {"ArXiv": ["ArXiv", "EngrXiv", "Physics arXiv Blog", "SocArXiv", "PsyArXiv"]}
+    {"funded by": ["supervised by", "grants", "donated by", "endorsed by", "funder"]}
+    {"Nagoya University": ["Nagoya University", "Nagoya City University", "Nagoya Gakuin University", "Nagoya Institute of Technology", "Nagoya International School"]}
+
+Output: 
+	[
+		{
+			"subject": "ArXiv",
+			"relation": "funder", 
+			"object": "Los Alamos National Laboratory"
+		},
+		{
+			"subject": "ArXiv",
+			"relation": "funder", 
+			"object": "Nagoya University"
+		},
+	]
+</example>
+
+<example>
+Input:
+    Text: "Tahiti Honey" is an English-language film written by Frederick Kohner.
+
+    Triplets and corresponding entity and relation mappings:
+
+        {"subject": "Tahiti Honey", "relation": "language of film", "object": "English language"}
+        {"Tahiti Honey": ["Tahiti Honey", "Honey", "Honey Chile", "Celtic Honey", "Tahitipresse"]}
+        {"language of film": ["original language of film or TV show", "language regulatory body", "language used", "native language", "dialect of"]}
+        {"English language": ["English language", "English Hours", "English International School", "British English", "Business English"]}
+
+        {"subject": "Tahiti Honey", "relation": "is", "object": "film"}
+        {"Tahiti Honey": ["Tahiti Honey", "Honey", "Honey Chile", "Celtic Honey", "Tahitipresse"]}
+        {"is": ["represents", "instance of", "replaces", "contains", "is a list of"]}
+        {"film": ["Film", "The Film", "Dance film", "Film award", "Romance Film"]}
+
+        {"subject": "Tahiti Honey", "relation": "written by", "object": "Frederick Kohner"}
+        {"Tahiti Honey": ["Tahiti Honey", "Honey", "Honey Chile", "Celtic Honey", "Tahitipresse"]}
+        {"written by": ["lyrics by", "has lyrics", "produced by", "adapted by", "screenwriter"]}
+        {"Frederick Kohner": ["Frederick Kohner", "Paul Kohner", "Adolf Kohner", "Susan Kohner", "Henry Rohner"]}
+
+
+Output:
+	[
+		{
+			"subject": "Tahiti Honey",
+			"relation": "original language of film or TV show", 
+			"object": "English language"
+		},
+		{
+			"subject": "Tahiti Honey",
+			"relation": "instance of", 
+			"object": "Film"
+		},
+		{
+			"subject": "Tahiti Honey",
+			"relation": "screenwriter", 
+			"object": "Frederick Kohner"
+		}
+	]
+</example>
