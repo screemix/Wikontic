@@ -57,3 +57,4 @@ zipp
 jsonlines
 networkx
 plotly
+nbformat
