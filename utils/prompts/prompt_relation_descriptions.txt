@@ -1,0 +1,7 @@
+You are given text and triplet extracted from this text to form a triplet from Wikidata knowledge graph.
+In knowledge graph each triplet contains two entities (subject and object) and one relation that connects these subject and object.
+
+Your task is to generate a definition for the relation from the provided triplet that was used in the provided text.
+
+The input text, triplet and relation are entitled as "Text:", "Triplet:", and "Relation:" correspondingly.
+Generate output in JSON format with relation as a key and definition as a value.

@@ -39,8 +39,14 @@ class TripletFilter:
 
         # SPARQL query to get all subclasses (direct and indirect) of the given entity
         query = f"""
-        SELECT ?subclass ?subclassLabel WHERE {{
-            wd:{entity_id} p:P31/ps:P31/wdt:P279* ?subclass.
+        SELECT DISTINCT ?subclass ?subclassLabel WHERE {{
+            {{
+                wd:{entity_id} p:P31/ps:P31/wdt:P279* ?subclass.
+            }}
+              UNION
+            {{
+                wd:{entity_id} p:P279/ps:P279/wdt:P279* ?subclass.
+            }}
             SERVICE wikibase:label {{ bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }}
         }}
         """
@@ -92,7 +98,6 @@ class TripletFilter:
             res = self.get_subclass_hierarchy(entity)
             self.cached_hirerachy[entity] = res.copy()
         
-        # res = self.get_subclass_hierarchy(entity)
         try:
             if len(set(constraint_entities) & set(res)) > 0:
                 return True
@@ -101,69 +106,6 @@ class TripletFilter:
         except Exception as e:
             print(e, '\n', res)
 
-
-    # def filter_triplet_combination(self, rel, head_mapping, tail_mapping):
-    #     valid_triplets = []
-
-    #     constraint_objects = []
-    #     constraint_subjects = []
-
-    #     if rel in self.constrained_dict:
-
-    #         constraints = self.constrained_dict[rel]
-
-    #         if 'subject type constraint' in constraints: 
-    #             constraint_subjects = constraints['subject type constraint']['P2308']                
-
-    #         if 'value-type constraint' in constraints:
-    #             constraint_objects = constraints['value-type constraint']['P2308']
-                
-
-    #     subjects = head_mapping.keys()
-    #     objects = tail_mapping.keys()
-
-    #     for pair in product(subjects, objects):
-    #         head = pair[0]
-    #         tail = pair[1]
-            
-    #         subject_validity = False
-    #         if len(constraint_subjects) < 0 or len(set(constraint_subjects) & head_mapping[head]) > 0:
-    #             subject_validity = True
-
-    #         object_validity = False
-    #         if len(constraint_objects) < 0 or len(set(constraint_objects) & tail_mapping[tail]) > 0:
-    #             object_validity = True
-            
-    #         if subject_validity and object_validity:
-    #             valid_triplets.append((head, rel, tail))
-
-        
-    #     return valid_triplets
-
-
-    # def triplet_constructor(self, relations, subjects, objects):
-        
-    #     head_mapping = {}
-    #     tail_mapping = {}
-
-    #     for head in subjects:
-    #         head_mapping[head] = set(self.get_subclass_hierarchy(head))
-        
-    #     for tail in objects:
-    #         tail_mapping[tail] = set(self.get_subclass_hierarchy(tail))
-
-    #     valid_triplets = []
-
-    #     for rel in relations:
-    #         valid_triplets.extend(self.filter_triplet_combination(rel, head_mapping, tail_mapping))
-    #         valid_triplets.extend(self.filter_triplet_combination(rel, tail_mapping, head_mapping))
-        
-    #     return valid_triplets
-
-        
-
-            
-            
 
 
             
