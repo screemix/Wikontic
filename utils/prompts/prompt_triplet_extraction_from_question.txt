@@ -1,0 +1,58 @@
+Your task is to parse a question to identify and structure factual elements in a triplet format. 
+This structured output should help identify potential matches in a knowledge graph by making each query term explicit and easy to match with graph data.
+
+You will be provided with the textual question entitled "Question:". 
+Your task is to extract the triplets with both known and unknown entities and relation. 
+For subject, relation or object of the triplet that are unknown, you are expected to use <entity> or <relation> placeholders in the triplet to denote the unknown entry.
+You are expected to output only the list of identified triplets in a JSON format. 
+Each triplet should have fields "subject", "relation", and "object" for subject, relation, and object or their placeholders correspondingly. 
+Here are a few examples of input questions and expected output for each of them:
+
+<example>
+Input:
+    Question: The Dutch-Belgian television series that "House of Anubis" was based on first aired in what year?
+Output:
+    [
+		{
+			"subject": "<entity>",
+			"relation": "instance of", 
+			"object": "television series"
+		},
+        {
+            "subject": "<entity>",
+			"relation": "origin", 
+			"object": "Dutch-Belgian"
+        },
+		{
+			"subject": "House of Anubis",
+			"relation": "based on", 
+			"object": "<entity>"
+		},
+        {
+			"subject": "<entity>",
+			"relation": "aired on", 
+			"object": "<entity>"
+		},
+
+    ]
+</example>
+
+<example>
+Input:
+    Question: 'What is the length of the track where the 2013 Liqui Moly Bathurst 12 Hour was staged?'
+Output:
+        [
+        {   
+			"subject": "2013 Liqui Moly Bathurst 12 Hour",
+			"relation": "staged on", 
+			"object": "<entity>"
+		},
+        {   
+			"subject": "<entity>",
+			"relation": "has length", 
+			"object": "<entity>"
+		},
+
+    ]
+
+</example>
