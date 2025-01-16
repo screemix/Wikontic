@@ -26,6 +26,7 @@ class LLMTripletExtractor:
             triplet_from_question_extraction_prompt_path='utils/prompts/prompt_triplet_extraction_from_question.txt',
             relation_description_from_question_prompt_path='utils/prompts/prompt_relation_description_from_question.txt',
             entity_description_from_question_prompt_path='utils/prompts/prompt_entity_description_from_question.txt',
+            entity_from_question_prompt_path='utils/prompts/prompt_entity_extraction_from_question.txt',
             model="gpt-3.5-turbo", input_price=5, output_price=15):
 
 
@@ -35,14 +36,20 @@ class LLMTripletExtractor:
         with open(prompt2_path, 'r') as f:
             self.system_prompt_2 = f.read()
 
+        # for individual triplet refinement
+
         with open(prompt2_individual_triplets_path, 'r') as f:
             self.prompt2_individual_triplets = f.read()
+
+        # for description generation
 
         with open(entity_description_prompt_path, 'r') as f:
             self.entity_description_prompt = f.read()
         
         with open(relation_description_prompt_path, 'r') as f:
             self.relation_description_prompt = f.read()
+
+        # for questions
 
         with open(triplet_from_question_extraction_prompt_path, 'r') as f:
             self.triplet_from_question_extraction_prompt = f.read()
@@ -52,6 +59,10 @@ class LLMTripletExtractor:
         
         with open(relation_description_from_question_prompt_path, 'r') as f:
             self.relation_description_from_question_prompt = f.read()
+
+        with open(entity_from_question_prompt_path, 'r') as f:
+            self.entity_from_question_prompt = f.read()
+
 
         self.model = model
         self.messages = []
@@ -86,7 +97,7 @@ class LLMTripletExtractor:
 
     @retry(wait=wait_random_exponential(multiplier=1, max=60), before_sleep=before_sleep_log(logger, logging.ERROR))
     def get_completion(self, user_prompt, system_prompt):
-        
+
         messages = [
                         {
                             "role": "system", 
@@ -112,7 +123,6 @@ class LLMTripletExtractor:
             output = json.loads(response.choices[0].message.content.strip())
         except Exception as e:
             output = self.parse_output(response.choices[0].message.content.strip())
-
 
         self.messages = messages
         self.messages.append({'role': 'assistant', 'content': output})
@@ -162,6 +172,7 @@ class LLMTripletExtractor:
         user_prompt = f"""Text: {text}\n\nTriplets and corresponding entity and relation mappings:\n\n{triplet2names}"""
 
         return self.get_completion(user_prompt=user_prompt, system_prompt=self.system_prompt_2)
+    
 
     def get_completion_second_query_by_single_triplet(self, similar_entities, similar_relations, text, triplet):
 
@@ -181,12 +192,20 @@ class LLMTripletExtractor:
         user_prompt = f"""Text: {text}\n\nTriplet:\n{text_triplet}\n\nEntity and relation mappings:\n{text_mapping}"""
         
         return self.get_completion(user_prompt=user_prompt, system_prompt=self.prompt2_individual_triplets)
+    
 
     def extract_triplets_from_question(self, question):
         
         user_prompt = f"""Question: {question}"""
 
         return self.get_completion(user_prompt=user_prompt, system_prompt=self.triplet_from_question_extraction_prompt)
+    
+
+    def extract_entities_from_question(self, question):
+        
+        user_prompt = f"""Question: {question}"""
+
+        return self.get_completion(user_prompt=user_prompt, system_prompt=self.entity_from_question_prompt)
 
 
     def generate_description_for_entity_from_question(self, text, triplet, entity):
