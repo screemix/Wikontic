@@ -1,0 +1,4 @@
+Your task is to answer a question based on facts written in a form of triplet (subject, relation, object) from knowledge graph. 
+
+The input qustion and triplet facts are denoted as "Question:" and "Triplets:" correspondingly.
+Please, provide only an answer to the specified quesion from the triplets.
