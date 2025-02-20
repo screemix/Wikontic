@@ -136,7 +136,6 @@ class LLMTripletExtractor:
         self.completion_tokens_num += response.usage.completion_tokens
         self.prompt_tokens_num += response.usage.prompt_tokens
 
-        print(response.choices[0].message.content.strip())
         if transform_to_json:
             try:
                 output = json.loads(response.choices[0].message.content.strip())
