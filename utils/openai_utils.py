@@ -6,6 +6,9 @@ import logging
 import sys
 import json
 import re
+from pydantic import BaseModel
+from typing import List
+from dataclasses import asdict, dataclass
 
 logging.basicConfig(stream=sys.stderr)
 
@@ -17,6 +20,25 @@ _ = load_dotenv(find_dotenv())
 openai.api_key  = os.getenv('KEY')
 client = openai.OpenAI(api_key=openai.api_key)
 
+@dataclass
+class Qualifier(BaseModel):
+    relation: str
+    object_: str
+
+@dataclass
+class Triplet(BaseModel):
+    subject: str
+    relation: str
+    object_: str
+    qualifiers: List[Qualifier]
+    subject_type: str
+    object_type: str
+
+
+@dataclass
+class Triplets(BaseModel):
+    triplets: List[Triplet]
+
 
 class LLMTripletExtractor:
     def __init__(self, prompt1_path='utils/prompts/prompt1.txt', prompt2_path='utils/prompts/prompt2.txt', 
@@ -27,6 +49,7 @@ class LLMTripletExtractor:
             relation_description_from_question_prompt_path='utils/prompts/prompt_relation_description_from_question.txt',
             entity_description_from_question_prompt_path='utils/prompts/prompt_entity_description_from_question.txt',
             entity_from_question_prompt_path='utils/prompts/prompt_entity_extraction_from_question.txt',
+            qa_prompt_path='utils/prompts/qa_prompt.txt',
             model="gpt-3.5-turbo", input_price=5, output_price=15):
 
 
@@ -63,6 +86,9 @@ class LLMTripletExtractor:
         with open(entity_from_question_prompt_path, 'r') as f:
             self.entity_from_question_prompt = f.read()
 
+        with open(qa_prompt_path, 'r') as f:
+            self.qa_prompt= f.read()
+
 
         self.model = model
         self.messages = []
@@ -74,29 +100,18 @@ class LLMTripletExtractor:
 
 
     def parse_output(self, output):
-    
-        # for multi-choice second prompt
-        # try:
-        #     output = re.findall("\[([\s\S]*?)\]", output)
-        #     output = "[" + output[0] + "]"
-        #     return json.loads(output)
-
         try:
-            output = re.findall("\{([\s\S]*?)\}", output)
-            if len(output) == 1:
-                output = "{" + output[0] + "}"
-            else:
-                output = ["{" + triplet + "}" for triplet in output]
-                output = "[" + ", ".join(output) + "]"
-
-            return json.loads(output)
+            pattern = r'(\{.*\})'
+            match = re.search(pattern, output, re.DOTALL)
+            match = match.group(1)
+            return json.loads(match)
 
         except Exception as e:
-            print(e, output)
+            return output
 
 
-    @retry(wait=wait_random_exponential(multiplier=1, max=60), before_sleep=before_sleep_log(logger, logging.ERROR))
-    def get_completion(self, user_prompt, system_prompt):
+    # @retry(wait=wait_random_exponential(multiplier=1, max=60), before_sleep=before_sleep_log(logger, logging.ERROR))
+    def get_completion(self, user_prompt, system_prompt, transform_to_json=True):
 
         messages = [
                         {
@@ -107,22 +122,29 @@ class LLMTripletExtractor:
                         {
                             "role": "user",
                             "content": user_prompt
-                        }
+                        },
                     ]
 
+        # response = client.beta.chat.completions.parse(
         response = client.chat.completions.create(
             model=self.model,
             messages=messages,
-            temperature=0
+            temperature=0,
+            # response_format=Triplets
         )
 
         self.completion_tokens_num += response.usage.completion_tokens
         self.prompt_tokens_num += response.usage.prompt_tokens
 
-        try:
-            output = json.loads(response.choices[0].message.content.strip())
-        except Exception as e:
-            output = self.parse_output(response.choices[0].message.content.strip())
+        print(response.choices[0].message.content.strip())
+        if transform_to_json:
+            try:
+                output = json.loads(response.choices[0].message.content.strip())
+            except Exception as e:
+                output = self.parse_output(response.choices[0].message.content.strip())
+                # output = response.choices[0].message.content.strip()
+        else:
+            output = response.choices[0].message.content.strip()
 
         self.messages = messages
         self.messages.append({'role': 'assistant', 'content': output})
@@ -132,7 +154,7 @@ class LLMTripletExtractor:
 
     def get_completion_first_query(self, text):
 
-        user_prompt = f"""Text: {text}"""
+        user_prompt = f'''"Text: "{text}"'''
         return self.get_completion(user_prompt=user_prompt, system_prompt=self.system_prompt_1)
         
 
@@ -220,6 +242,10 @@ class LLMTripletExtractor:
         user_prompt = f"""Text: {text}\n"Triplet: "{triplet}\n\nRelation: "{relation}"""
 
         return self.get_completion(user_prompt=user_prompt, system_prompt=self.relation_description_from_question_prompt)
+
+    def answer_question(self, question, triplets):
+        user_prompt = f"""Question: {question}\n\n"Triplets: "{triplets}"""
+        return self.get_completion(user_prompt=user_prompt, system_prompt=self.qa_prompt, transform_to_json=False)
 
 
     def calculate_cost(self):
