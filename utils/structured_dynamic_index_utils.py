@@ -33,6 +33,12 @@ class Aligner:
         with open('utils/ontology_mappings/ontology_entity2label.json', 'r') as f:
             self.entity2label = json.load(f)
 
+        with open('utils/ontology_mappings/entity_hierarchy.json', 'r') as f:
+            self.entity2hierarchy = json.load(f)
+
+        with open('utils/ontology_mappings/subject_object_constraints.json', 'r') as f:
+            self.prop2constraint = json.load(f)
+
         # entity type index
         self.entity_type_index = faiss.read_index("utils/ontology_mappings/wikidata_ontology_entities.index")
 
@@ -51,18 +57,15 @@ class Aligner:
         return np.array(embeddings.detach().cpu().numpy())
 
 
-    def rank_strings_by_similarity(self, candidates, target, k=10):
-        candidate_embeddings = self.embed_batch(candidates)
-        target_embedding = self.embed_batch([target])
+    def rank_relations_by_similarity(self, candidates_labels, target_relation):
 
+        candidate_embeddings = self.embed_batch(candidates_labels)
+        target_embedding = self.embed_batch([target_relation])
         similarities = cosine_similarity(candidate_embeddings, target_embedding).flatten()
-
-        ranked_candidates = sorted(zip(candidates, similarities), key=lambda x: x[1], reverse=True)
-
-        return ranked_candidates[:k]
+        return similarities
 
 
-    def retrieve_similar_entity_types(self, triplet, k=20):
+    def retrieve_similar_entity_types(self, triplet, k=10):
         # retrieve k most similar entity types to the given triplet
         # using the entity type index
         # return the wikidata ids of the most similar entity types
@@ -72,45 +75,108 @@ class Aligner:
         _, sim_object_type_idxs =  self.entity_type_index.search(self.embed_batch([subject_type]), k)
         _, sim_subject_type_idxs = self.entity_type_index.search(self.embed_batch([object_type]), k)
 
+        # print([self.entity2label["Q"+str(i)] for i in sim_object_type_idxs[0]])
+        # print([self.entity2label["Q"+str(i)] for i in sim_subject_type_idxs[0]])
+
         sim_object_type_ids = ["Q"+str(i) for i in sim_object_type_idxs[0]]
         sim_subject_type_ids = ["Q"+str(i) for i in sim_subject_type_idxs[0]]
        
         return sim_object_type_ids, sim_subject_type_ids
 
+
     def retrieve_properties_for_entity_type(self, target_relation, object_types, subject_types, k=10):
-        props = []
-
-        obj_props = []
-        subj_props = []
-
-        for entity in object_types:
-            if entity in self.obj2prop:
-                obj_props.extend(self.obj2prop[entity])
+        # dicionaries to preserve constraints of the ranked properties
+        prop2obj = {}
+        prop2subj = {}
         
-        for entity in subject_types:
-            if entity in self.subj2prop:
-                subj_props.extend(self.subj2prop[entity])
+        direct_properties = {"subject_properties": set(), 
+                             "object_properties": set(),
+                             "property_to_subject_types": {},
+                             "property_to_object_types": {}
+                             }
         
-        props.extend(list(set(obj_props) & set(subj_props)))
+        inverse_properties = {"subject_properties": set(), 
+                              "object_properties": set(),
+                              "property_to_subject_types": {},
+                              "property_to_object_types": {}
+                              }
 
-        obj_props = []
-        subj_props = []
-        for entity in object_types:
-            if entity in self.subj2prop:
-                subj_props.extend(self.subj2prop[entity])
+        for object_type in object_types:
+            # extending the object type with its supertypes
+            object_super_types = [object_type]
+            if object_type in self.entity2hierarchy:
+                object_super_types.extend(self.entity2hierarchy[object_type])
+
+            for entity in object_super_types:
+                if entity in self.obj2prop:
+                    properties = self.obj2prop[entity]
+                    direct_properties["object_properties"].update(properties)
+                    for prop in properties:
+                        if prop not in direct_properties["property_to_object_types"]:
+                            direct_properties["property_to_object_types"][prop] = set()
+                        direct_properties["property_to_object_types"][prop].add(object_type)
+                
+                if entity in self.subj2prop:
+                    properties = self.subj2prop[entity]
+                    inverse_properties["subject_properties"].update(properties)
+                    for prop in properties:
+                        if prop not in inverse_properties["property_to_subject_types"]:
+                            inverse_properties["property_to_subject_types"][prop] = set()
+                        inverse_properties["property_to_subject_types"][prop].add(object_type)
+
         
-        for entity in subject_types:
-            if entity in self.obj2prop:
-                obj_props.extend(self.obj2prop[entity])
+        for subject_type in subject_types:
+            # extending the subject type with its supertypes
+            subject_super_types = [subject_type]
+            if subject_type in self.entity2hierarchy:
+                subject_super_types.extend(self.entity2hierarchy[subject_type])
 
-        props.extend(list(set(obj_props) & set(subj_props)))
+            for entity in subject_super_types:
+                if entity in self.subj2prop:
+                    properties = self.subj2prop[entity]
+                    direct_properties["subject_properties"].update(properties)
+                    for prop in properties:
+                        if prop not in direct_properties["property_to_subject_types"]:
+                            direct_properties["property_to_subject_types"][prop] = set()
+                        direct_properties["property_to_subject_types"][prop].add(subject_type)
+                
+                if entity in self.obj2prop:
+                    properties = self.obj2prop[entity]
+                    inverse_properties["object_properties"].update(properties)
+                    for prop in properties:
+                        if prop not in inverse_properties["property_to_object_types"]:
+                            inverse_properties["property_to_object_types"][prop] = set()
+                        inverse_properties["property_to_object_types"][prop].add(subject_type)
+        
+        direct_props = list(direct_properties["subject_properties"] & direct_properties["object_properties"])
+        inverse_props = list(inverse_properties["subject_properties"] & inverse_properties["object_properties"])
 
-        prop_labels = [self.prop2label[prop] for prop in props]
+        props = [(prop, self.prop2label[prop], "direct") for prop in direct_props] + \
+                [(prop, self.prop2label[prop], "inverse") for prop in inverse_props]
+        props = list(set(props))
+
         ranked_props = []
 
-        if len(prop_labels) > 0:
+        if len(props) > 0:
 
-            ranked_props = self.rank_strings_by_similarity(candidates=prop_labels, target=target_relation, k=k)
+            similarities = self.rank_relations_by_similarity(candidates_labels=[prop[1] for prop in props], \
+                                                              target_relation=target_relation)
+            ranked_props = sorted(zip(props, similarities), key=lambda x: x[1], reverse=True)
+            ranked_props = [ranked_prop[0] for ranked_prop in ranked_props[:k]]
         
-        return [prop[0] for prop in ranked_props]
+        resulted_props = []
+        for prop in ranked_props:
+
+            resulted_prop = {"id": prop[0], "label": prop[1], "type": prop[2]}
+
+            if prop[2] == "direct":
+                resulted_prop['object_types'] = list(direct_properties["property_to_object_types"][prop[0]])
+                resulted_prop['subject_types'] = list(direct_properties["property_to_subject_types"][prop[0]])
+            else:
+                resulted_prop['object_types'] = list(inverse_properties["property_to_object_types"][prop[0]])
+                resulted_prop['subject_types'] = list(inverse_properties["property_to_subject_types"][prop[0]])
+            
+            resulted_props.append(resulted_prop)
+
+        return resulted_props
     
