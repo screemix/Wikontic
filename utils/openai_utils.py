@@ -23,7 +23,9 @@ class LLMTripletExtractor:
     
     MODEL_PRICES = {
         "gpt-4o": {"input": 2.5, "output": 10},
-        "gpt-4o-mini": {"input": 0.15, "output": 0.6}
+        "gpt-4o-mini": {"input": 0.15, "output": 0.6},
+        "gpt-4.1-mini": {"input": 0.4, "output": 1.6},
+        "gpt-4.1": {"input": 2.0, "output": 8.0}
     }
 
     def __init__(self, 
@@ -40,7 +42,7 @@ class LLMTripletExtractor:
         """
         if system_prompt_paths is None:
             system_prompt_paths = {
-                'triplet_extraction': 'prompt1.txt',
+                'triplet_extraction': 'propmt_1_types_qualifiers.txt',
                 'relation_ranker': 'prompt_choose_relation_and_types.txt', 
                 'subject_ranker': 'rank_subject_names.txt',
                 'object_ranker': 'rank_object_names.txt',
@@ -73,6 +75,13 @@ class LLMTripletExtractor:
             r"```json\s*(\{.*?\}|\[.*?\])\s*```",  # JSON in code blocks
             r"(\{.*?\}|\[.*?\])"  # Inline JSON
         ]
+
+        # print(text)
+
+        try:
+            return json.loads(text)
+        except json.JSONDecodeError:
+            pass
         
         for pattern in patterns:
             match = re.search(pattern, text, re.DOTALL)
@@ -111,6 +120,8 @@ class LLMTripletExtractor:
 
     def extract_triplets_from_text(self, text: str) -> dict:
         """Extract knowledge graph triplets from text."""
+        # return {"system_prompt": self.prompts['triplet_extraction'],
+        #     "user_prompt": f'Text: "{text}"'}
         return self.get_completion(
             system_prompt=self.prompts['triplet_extraction'],
             user_prompt=f'Text: "{text}"'
@@ -123,7 +134,10 @@ class LLMTripletExtractor:
                           ['subject', 'relation', 'object', 'subject_type', 'object_type']}
         
         candidates_str = "".join(f"{json.dumps(c)}\n" for c in candidate_triplets)
-        
+
+        # return {"system_prompt": self.prompts['relation_ranker'],
+        #         "user_prompt": f'Text: "{text}\nExtracted Triplet: {json.dumps(triplet_filtered)}\n'}
+        #                f'Candidate Triplets: {candidates_str}"'
         return self.get_completion(
             system_prompt=self.prompts['relation_ranker'],
             user_prompt=f'Text: "{text}\nExtracted Triplet: {json.dumps(triplet_filtered)}\n'
@@ -138,6 +152,11 @@ class LLMTripletExtractor:
         
         prompt_key = 'object_ranker' if is_object else 'subject_ranker'
         entity_type = 'Object' if is_object else 'Subject'
+
+        # return {"system_prompt": self.prompts[prompt_key],
+        #     "user_prompt": f'Text: "{text}\nExtracted Triplet: {json.dumps(triplet_filtered)}\n'
+        #                f'Original {entity_type}: {original_name}\n'
+        #                f'Candidate {entity_type}s: {json.dumps(candidates)}"'}
         
         return self.get_completion(
             system_prompt=self.prompts[prompt_key],
@@ -172,3 +191,7 @@ class LLMTripletExtractor:
         """Calculate the total cost of API usage."""
         return (self.prompt_tokens_num * self.input_price + 
                 self.completion_tokens_num * self.output_price) / 1e6
+    
+    def calculate_used_tokens(self) -> int:
+        """Calculate the total # of used tokens for generation"""
+        return self.prompt_tokens_num, self.completion_tokens_num

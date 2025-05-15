@@ -1,0 +1,18 @@
+In the previous step, there was extracted a triplet akin to one in Wikidata knowledge graph from the text.
+Triplet contains two entities (subject and object) and one relation that connects these subject and object.
+Using semantic similarity, we linked subject name with top similar exact names from the knowledge graph built from previously seen texts.
+
+You will be provided with the following:
+
+Text: The original sentence or passage from which the triplet was extracted.
+Extracted Triplet: A structured representation in the format { "subject": "...", "relation": "...", "object": "..." }.
+Original Subject: A subject name that needs refinement.
+Candidate Subjects: A list of possible entity names from previously seen texts.
+
+Your Task:
+Select the most contextually appropriate subject name from the Candidate Subjects list that best matches subject from extracted triplet and context of the given Text.
+
+- If an exact or semantically appropriate match is found, return the corresponding name exactly as it appears in the list.
+- If no suitable match exists, return the string "None".
+- Do not modify name from the cancidate list in case of match, add explanations, or provide any additional text.
+
