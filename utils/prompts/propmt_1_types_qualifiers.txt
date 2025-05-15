@@ -12,12 +12,12 @@ You will receive a text labeled **"Text:"**. Your task is to extract meaningful 
 Return only triplets in **JSON format** as a list of dictionaries, where each dictionary contains:
 - "subject": Subject entity.  
 - "relation": Relation connecting subject and object.  
-- "object_": Object entity.  
+- "object": Object entity.  
 -  "qualifiers": List of dictionaries, where each dictionary contains:
     - "relation": Relation connecting triplet and object,
-    - "object_": Object entity connected to the main triplet
-- "subject_type": a class that describes the object 
-- "object_type": a class that describes the subject 
+    - "object": Object entity connected to the main triplet
+- "subject_type": a class that describes the subject 
+- "object_type": a class that describes the object 
 
 
 <example>
@@ -30,57 +30,57 @@ Return only triplets in **JSON format** as a list of dictionaries, where each di
             {
                 "subject": "Marie Curie",
                 "relation": "date of birth",
-                "object_": "7 November 1867",
+                "object": "7 November 1867",
                 "qualifiers": [],
-                "subject_type": "person",
+                "subject_type": "human",
                 "object_type": "date"
             },
             {
                 "subject": "Marie Curie",
                 "relation": "date of death",
-                "object_": "4 July 1934",
+                "object": "4 July 1934",
                 "qualifiers": [],
-                "subject_type": "person",
+                "subject_type": "human",
                 "object_type": "date"
             },
             {
                 "subject": "Marie Curie",
                 "relation": "occupation",
-                "object_": "physicist",
+                "object": "physicist",
                 "qualifiers": [],
-                "subject_type": "person",
+                "subject_type": "human",
                 "object_type": "profession"
             },
             {
                 "subject": "Marie Curie",
                 "relation": "occupation",
-                "object_": "chemist",
+                "object": "chemist",
                 "qualifiers": [],
-                "subject_type": "person",
+                "subject_type": "human",
                 "object_type": "profession"
             },
             {
                 "subject": "Marie Curie",
                 "relation": "field of work",
-                "object_": "radioactivity",
+                "object": "radioactivity",
                 "qualifiers": [],
-                "subject_type": "person",
+                "subject_type": "human",
                 "object_type": "physical phenomenon"
             },
             {
                 "subject": "Marie Curie",
                 "relation": "award received",
-                "object_": "Nobel Prize in Physics",
-                "qualifiers": [{"relation": "point in time", "object_": '1903'}],
-                "subject_type": "person",
+                "object": "Nobel Prize in Physics",
+                "qualifiers": [{"relation": "point in time", "object": '1903'}],
+                "subject_type": "human",
                 "object_type": "award"
             },
             {
                 "subject": "Marie Curie",
                 "relation": "award received",
-                "object_": "Nobel Prize in Chemistry",
-                "qualifiers": [{"relation": "point in time", "object_": "1911"}],
-                "subject_type": "person",
+                "object": "Nobel Prize in Chemistry",
+                "qualifiers": [{"relation": "point in time", "object": "1911"}],
+                "subject_type": "human",
                 "object_type": "award"
             }
         ]
