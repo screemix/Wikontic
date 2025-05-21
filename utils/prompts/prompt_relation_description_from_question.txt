@@ -1,9 +1,0 @@
-You are given question and triplet extracted from this question to form the triplet from Wikidata knowledge graph.
-In knowledge graph each triplet contains two entities (subject and object) and one relation that connects these subject and object.
-However, as the the triplet was extracted from question, some parts of it can be missed as the information was unidentifieable from the question's context.
-In the provided triplet, unknown entities denoted as <entity>.
-
-Your task is to generate defition for the identified relation from the provided triplet that was used in the provided text.
-
-The input text, triplet and identified entity from this triplet are entitled as "Text:", "Triplet:", and "Entity:" correspondingly.
-Generate output in JSON format with relation as a key and definition as a value.

@@ -1,7 +1,0 @@
-Your task is to parse a question to identify factual elements in form of entities akin ones from Wikidata knowledge graph that can be useful for answering that question.
-Entities could be named entities or concepts describing a group of people, events, or abstract objects like in the Wikidata knowledge graph. 
-Additionally, you shold generate descriptiona that correspond to the essence and meaning of each entity used in the question. 
-
-You will be provided with the question entitled "Question:". 
-
-Please, provide output as a json with extracted entities as keys and their corresponding descriptions as values. 
