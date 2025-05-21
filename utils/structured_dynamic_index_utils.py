@@ -239,9 +239,12 @@ class Aligner:
             unique_ranked_props = set([p[1] for p in ranked_props]) # getting unique names
             if len(unique_ranked_props) >= k:
                 return ranked_props[:len(set(unique_ranked_props))]
+
+            # print(sorted(prop_matches, key=lambda x: x[1]))
                 
             query_k *= 2
             attempts += 1
+        
             
         unique_ranked_props = set([p[1] for p in ranked_props]) # getting unique names
         return ranked_props[:len(set(unique_ranked_props))] if ranked_props else []

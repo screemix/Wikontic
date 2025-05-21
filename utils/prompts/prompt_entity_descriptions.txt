@@ -1,8 +1,0 @@
-You are given text and triplet extracted from this text to form the triplet from Wikidata knowledge graph.
-In knowledge graph each triplet contains two entities (subject and object) and one relation that connects these subject and object.
-
-Your task is to generate defition for the entity from the provided triplet that was used in the provided text.
-Generate general definition, but it should correspond to the meaning used in the text to distinguish it from synonymous entities.
-
-The input text, triplet and entity are entitled as "Text:", "Triplet:", and "Entity:" correspondingly.
-Provide output in JSON format with entity as a key and its definition as a value.
