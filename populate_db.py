@@ -1,5 +1,6 @@
 from pymongo.mongo_client import MongoClient
 from pymongo.operations import SearchIndexModel
+import pymongo
 
 from typing import List
 from pydantic import BaseModel, ValidationError
@@ -31,21 +32,21 @@ class EntityType(BaseModel):
 
 class Property(BaseModel):
     _id: int
-    label: str
     property_id: str
+    label: str 
     valid_subject_type_ids: List[str]
     valid_object_type_ids: List[str]
 
 class EntityTypeAlias(BaseModel):
     _id: int
-    alias_label: str
     entity_type_id: str
+    alias_label: str    
     alias_text_embedding: List[float]
 
 class PropertyAlias(BaseModel):
     _id: int
-    alias_label: str
     relation_id: str
+    alias_label: str
     alias_text_embedding: List[float]
 
 
@@ -105,7 +106,6 @@ def populate_entity_types(ENTITY_2_LABEL, ENTITY_2_HIERARCHY, SUBJ_2_PROP_CONSTR
         logger.error(f"Validation error while populating {collection_name}: {e}")
 
     collection = db.get_collection(collection_name)
-    # collection.delete_many({})
     collection.insert_many(records)
     logger.info(f"Successfully populated {collection_name} with {len(records)} records")
 
@@ -130,7 +130,6 @@ def populate_entity_type_aliases(ENTITY_2_LABEL, ENTITY_2_ALIASES, db, collectio
         logger.error(f"Validation error while populating {collection_name}: {e}")
 
     collection = db.get_collection(collection_name)
-    # collection.delete_many({})
     collection.insert_many(records)
     logger.info(f"Successfully populated {collection_name} with {len(records)} records")
 
@@ -150,7 +149,6 @@ def populate_properties(PROP_2_LABEL, PROP_2_CONSTRAINT, db, collection_name="pr
         logger.error(f"Validation error while populating {collection_name}: {e}")
 
     collection = db.get_collection(collection_name)
-    # collection.delete_many({})
     collection.insert_many(records)
     logger.info(f"Successfully populated {collection_name} with {len(records)} records")
 
@@ -175,7 +173,6 @@ def populate_property_aliases(PROP_2_LABEL, PROP_2_ALIASES, db, collection_name=
         logger.error(f"Validation error while populating {collection_name}: {e}")
     
     collection = db.get_collection(collection_name)
-    # collection.delete_many({})
     collection.insert_many(records)
     logger.info(f"Successfully populated {collection_name} with {len(records)} records")
 
@@ -206,8 +203,9 @@ def create_index_for_entity_types(db, collection_name='entity_type_aliases', emb
         logger.info(f"New index {index_name} created successfully: {result}")
     except Exception as e:
         logger.error(f"Error creating new vector search index {index_name}: {str(e)}")
+        
 
-def create_index_for_entities(db, collection_name='entities', embedding_field_name="alias_text_embedding", entity_type_id_field_name='entity_type', index_name='entities'):
+def create_index_for_entities(db, collection_name='entity_aliases', embedding_field_name="alias_text_embedding", entity_type_id_field_name='entity_type', index_name='entities'):
     logger.info(f"Starting to create index {index_name} for {collection_name}")
     collection = db.get_collection(collection_name)
     vector_search_index_model = SearchIndexModel(
@@ -223,6 +221,11 @@ def create_index_for_entities(db, collection_name='entities', embedding_field_na
                     entity_type_id_field_name: {
                         "type": "token"
                     },
+                    "sample_id": {
+                        # "type": "number"
+                        "type": "token"
+
+                    }
                 },
             }
         },
@@ -272,32 +275,32 @@ def create_index_for_properties(db, collection_name='property_aliases', embeddin
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Populate MongoDB with Wikidata ontology data')
     
-    parser.add_argument('--mappings-dir', type=str, default="utils/ontology_mappings/",
+    parser.add_argument('--mappings_dir', type=str, default="utils/ontology_mappings/",
                         help='Directory containing ontology mapping files')
-    parser.add_argument('--mongo-uri', type=str, default="mongodb://localhost:27018/?directConnection=true",
+    parser.add_argument('--mongo_uri', type=str, default="mongodb://localhost:27018/?directConnection=true",
                         help='MongoDB connection URI')
     parser.add_argument('--database', type=str, default="wikidata_ontology",
                         help='MongoDB database name')
     
     # Collection names
-    parser.add_argument('--entity-types-collection', type=str, default="entity_types",
+    parser.add_argument('--entity_types_collection', type=str, default="entity_types",
                         help='Collection name for entity types')
-    parser.add_argument('--entity-aliases-collection', type=str, default="entity_type_aliases",
+    parser.add_argument('--entity_type_aliases_collection', type=str, default="entity_type_aliases",
                         help='Collection name for entity type aliases')
-    parser.add_argument('--properties-collection', type=str, default="properties",
+    parser.add_argument('--properties_collection', type=str, default="properties",
                         help='Collection name for properties')
-    parser.add_argument('--property-aliases-collection', type=str, default="property_aliases",
+    parser.add_argument('--property_aliases_collection', type=str, default="property_aliases",
                         help='Collection name for property aliases')
-    parser.add_argument('--entities-entity_collection', type=str, default="entities",
+    parser.add_argument('--entity_collection', type=str, default="entity_aliases",
                         help='Collection name for entities')
     
     # Index names
-    parser.add_argument('--entity-types-index', type=str, default="entity_type_aliases",
+    parser.add_argument('--entity_types_index', type=str, default="entity_type_aliases",
                         help='Index name for entity types')
-    parser.add_argument('--property-aliases-index', type=str, default="property_aliases_ids",
+    parser.add_argument('--property_aliases_index', type=str, default="property_aliases_ids",
                         help='Index name for property aliases')
     parser.add_argument('--entity_index', type=str, default="entities",
-                        help='Index name for property aliases')
+                        help='Index name for entities')
     
     
     args = parser.parse_args()
@@ -349,7 +352,7 @@ if __name__ == "__main__":
                          db, collection_name=args.entity_types_collection)
     
     populate_entity_type_aliases(ENTITY_2_LABEL, ENTITY_2_ALIASES, db, 
-                               collection_name=args.entity_aliases_collection)
+                               collection_name=args.entity_type_aliases_collection)
     
     populate_properties(PROP_2_LABEL, PROP_2_CONSTRAINT, db,
                        collection_name=args.properties_collection)
@@ -357,8 +360,10 @@ if __name__ == "__main__":
     populate_property_aliases(PROP_2_LABEL, PROP_2_ALIASES, db,
                             collection_name=args.property_aliases_collection)
     
+    db.create_collection(args.entity_collection)
+    
     # Create indexes
-    create_index_for_entity_types(db, collection_name=args.entity_aliases_collection, 
+    create_index_for_entity_types(db, collection_name=args.entity_type_aliases_collection, 
                                 index_name=args.entity_types_index)
     create_index_for_properties(db, collection_name=args.property_aliases_collection, 
                               index_name=args.property_aliases_index)
