@@ -15,24 +15,26 @@ def get_mongo_client(mongo_uri):
 
 def create_indexes(db):
     logger.info("Creating indexes for entity_types collection...")
-    db.entity_types.create_index("entity_type_id")
-    db.entity_types.create_index("label")
+    db.entity_types.create_index([("entity_type_id", 1)])
+    db.entity_types.create_index([("label", 1)])
 
     logger.info("Creating indexes for entity_type_aliases collection...")
-    db.entity_type_aliases.create_index("entity_type_id")
+    db.entity_type_aliases.create_index([("entity_type_id", 1)])
+    db.entity_type_aliases.create_index([("alias_label", 1)])
 
     logger.info("Creating indexes for properties collection...")
-    db.properties.create_index("property_id")
+    db.properties.create_index([("property_id", 1)])
 
-    logger.info("Creating indexes for property_aliases collection...")
-    db.property_aliases.create_index("relation_id")
+    # logger.info("Creating indexes for property_aliases collection...")
+    # db.property_aliases.create_index("relation_id")
 
     logger.info("Creating indexes for entity_aliases collection...")
     db.entity_aliases.create_index([("entity_type", 1), ("sample_id", 1)])
-    db.entity_aliases.create_index("label")
-
+    db.entity_aliases.create_index([("label", 1)])
+    
+    db.create_collection("triplets")
     logger.info("Creating indexes for triplets collection...")
-    db.triplets.create_index("sample_id")
+    db.triplets.create_index([("sample_id", 1)])
 
     logger.info("All indexes created successfully")
 
