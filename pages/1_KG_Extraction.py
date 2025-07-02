@@ -5,7 +5,7 @@ from pyvis.network import Network
 import tempfile
 import os
 from dotenv import load_dotenv, find_dotenv
-from neo4j import GraphDatabase
+# from neo4j import GraphDatabase
 from utils.structured_inference_with_db import extract_triplets
 from utils.structured_dynamic_index_utils_with_db import Aligner
 from utils.openai_utils import LLMTripletExtractor
