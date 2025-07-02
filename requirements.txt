@@ -1,14 +1,11 @@
 streamlit
 numpy
 pyvis
-tempfile
 python-dotenv
 pymongo
 openai
 tenacity
 logging
-re
-json
 pathlib
 typing
 unidecode
