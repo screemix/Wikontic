@@ -10,6 +10,9 @@ import json
 import time
 import argparse
 import logging
+import os 
+
+os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 
 
 # Configure logging

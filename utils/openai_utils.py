@@ -9,6 +9,17 @@ import re
 from pathlib import Path
 from typing import Dict, List, Union, Optional
 
+import httpx
+
+# proxy_url = "socks5://localhost:1080"
+
+# proxies = {
+#     "http://": proxy_url,
+#     "https://": proxy_url,
+# }
+
+# http_client = httpx.Client(proxy=proxy_url)
+
 # Configure logging
 logging.basicConfig(stream=sys.stderr)
 logger = logging.getLogger('OpenAIUtils')
@@ -16,7 +27,10 @@ logger.setLevel(logging.ERROR)
 
 # Initialize OpenAI client
 _ = load_dotenv(find_dotenv())
-client = openai.OpenAI(api_key=os.getenv('KEY'))
+client = openai.OpenAI(
+    api_key=os.getenv("KEY"),
+    # http_client=http_client
+)
 
 class LLMTripletExtractor:
     """A class for extracting and processing knowledge graph triplets using OpenAI's LLMs."""
@@ -48,6 +62,7 @@ class LLMTripletExtractor:
                 'object_ranker': 'rank_object_names.txt',
                 'question_entity_extractor': 'prompt_entity_relation_extraction_from_question.txt',
                 'question_entity_ranker': 'prompt_choose_relevant_entities_for_question.txt',
+                # 'qa': 'qa_prompt_hotpot.txt'
                 'qa': 'qa_prompt.txt'
             }
 
@@ -108,7 +123,6 @@ class LLMTripletExtractor:
             messages=messages,
             temperature=0
         )
-
         self.completion_tokens_num += response.usage.completion_tokens
         self.prompt_tokens_num += response.usage.prompt_tokens
         
@@ -138,6 +152,8 @@ class LLMTripletExtractor:
         # return {"system_prompt": self.prompts['relation_ranker'],
         #         "user_prompt": f'Text: "{text}\nExtracted Triplet: {json.dumps(triplet_filtered)}\n'}
         #                f'Candidate Triplets: {candidates_str}"'
+        # print(f'Text: "{text}\nExtracted Triplet: {json.dumps(triplet_filtered)}\nCandidate Triplets: {candidates_str}')
+        # print(f'Text: {text}\nExtracted Triplet: {json.dumps(triplet_filtered)}\nCandidate Triplets: {candidates_str}')
         return self.get_completion(
             system_prompt=self.prompts['relation_ranker'],
             user_prompt=f'Text: "{text}\nExtracted Triplet: {json.dumps(triplet_filtered)}\n'
