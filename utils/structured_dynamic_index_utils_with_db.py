@@ -3,10 +3,11 @@ from transformers import AutoTokenizer, AutoModel
 from dataclasses import dataclass
 from pydantic import BaseModel, ValidationError
 from pymongo import MongoClient, UpdateOne
+import torch
 
 import os 
 
-os.environ["CUDA_VISIBLE_DEVICES"] = "1"
+# os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 
 @dataclass
 class PropertyConstraints:
@@ -39,8 +40,9 @@ class Aligner:
         self.triplets_collection_name = 'triplets'
         self.filtered_triplets_collection_name = 'filtered_triplets'
 
+        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.tokenizer = AutoTokenizer.from_pretrained('facebook/contriever')
-        self.model = AutoModel.from_pretrained('facebook/contriever').to("cuda")
+        self.model = AutoModel.from_pretrained('facebook/contriever').to(self.device)
 
 
     def get_embedding(self, text):
@@ -55,7 +57,7 @@ class Aligner:
 
         try:
             inputs = self.tokenizer([text], padding=True, truncation=True, return_tensors='pt')
-            outputs = self.model(**inputs.to('cuda'))
+            outputs = self.model(**inputs.to(self.device))
             embeddings = mean_pooling(outputs[0], inputs['attention_mask'])
             return embeddings.detach().cpu().tolist()[0]
         
