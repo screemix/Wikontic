@@ -153,14 +153,3 @@ if trigger:
             # with expanded_kg_container:
                 st.subheader("Expanded KG Subgraph")
                 visualize_knowledge_graph(subgraph, highlight_entities=new_entities)
-
-with st.expander("🗑 Drop Knowledge Graph", expanded=True):
-    st.markdown("""⚠️ This action button will drop the knowledge graph built in current session.""")
-    confirm = st.checkbox("Confirm Drop")
-    drop_button = st.button("Drop")
-    if confirm and drop_button:
-        collection = db.get_collection('triplets')
-        collection.delete_many({"sample_id": user_id})
-        st.success("Knowledge Graph dropped.")
-        logger.info(f"Knowledge Graph dropped for user {user_id}")
-        st.stop()
