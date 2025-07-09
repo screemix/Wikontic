@@ -200,19 +200,19 @@ def extract_triplets(text, sample_id, extractor, aligner):
         except Exception as e:
             filtered_triplets.append(triplet)
         
-        for triple in final_triplets:
-            triple["source_text_id"] = 0
-            triple["prompt_token_nums"] = 0
-            triple["completion_token_num"] = 0
-        for triple in filtered_triplets:
-            triple["source_text_id"] = 0
-            triple["prompt_token_nums"] = 0
-            triple["completion_token_num"] = 0
-        
-        if len(final_triplets) > 0:
-            aligner.add_triplets(final_triplets, sample_id=sample_id)
-        if len(filtered_triplets) > 0:
-            aligner.add_filtered_triplets(filtered_triplets, sample_id=sample_id)
+    for triple in final_triplets:
+        triple["source_text_id"] = 0
+        triple["prompt_token_nums"] = 0
+        triple["completion_token_num"] = 0
+    for triple in filtered_triplets:
+        triple["source_text_id"] = 0
+        triple["prompt_token_nums"] = 0
+        triple["completion_token_num"] = 0
+    
+    if len(final_triplets) > 0:
+        aligner.add_triplets(final_triplets, sample_id=sample_id)
+    if len(filtered_triplets) > 0:
+        aligner.add_filtered_triplets(filtered_triplets, sample_id=sample_id)
         # print("2nd resulted triplet: ", final_triplet)
     return initial_triplets, final_triplets, filtered_triplets
 

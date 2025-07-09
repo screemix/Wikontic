@@ -451,7 +451,8 @@ class Aligner:
         operations = []
         for triple in triplets_list:
             triple['sample_id'] = sample_id
-            filter_query = {"subject": triple["subject"], "relation": triple["relation"], "object": triple["object"], "subject_type": triple["subject_type"], "object_type": triple["object_type"]}
+            filter_query = {"subject": triple["subject"], "relation": triple["relation"], 
+                            "object": triple["object"], "subject_type": triple["subject_type"], "object_type": triple["object_type"], "sample_id": triple["sample_id"]}
             operations.append(
                 UpdateOne(filter_query, {"$setOnInsert": triple}, upsert=True)
             )
@@ -466,7 +467,8 @@ class Aligner:
         operations = []
         for triple in triplets_list:
             triple['sample_id'] = sample_id
-            filter_query = {"subject": triple["subject"], "relation": triple["relation"], "object": triple["object"], "subject_type": triple["subject_type"], "object_type": triple["object_type"]}
+            filter_query = {"subject": triple["subject"], "relation": triple["relation"], 
+                            "object": triple["object"], "subject_type": triple["subject_type"], "object_type": triple["object_type"], "sample_id": triple["sample_id"]}
             operations.append(
                 UpdateOne(filter_query, {"$setOnInsert": triple}, upsert=True)
             )
