@@ -125,7 +125,12 @@ if trigger:
         st.warning("Please select a model for KG extraction.")
     else:
         extractor = LLMTripletExtractor(model=selected_model)
-        initial_triplets, refined_triplets, _ = extract_triplets(input_text, sample_id=user_id, aligner=aligner, extractor=extractor)
+        initial_triplets, refined_triplets, filtered_triplets = extract_triplets(input_text, sample_id=user_id, aligner=aligner, extractor=extractor)
+        print("Initial triplets: ", initial_triplets)
+        print()
+        print("Refined triplets: ", refined_triplets)
+        print()
+        print("filtered_triplets: ", filtered_triplets)
         # insert_triplets_to_neo4j(refined_triplets)
         new_entities = {t["subject"] for t in refined_triplets} | {t["object"] for t in refined_triplets}
         subgraph = fetch_related_triplets(list(new_entities))

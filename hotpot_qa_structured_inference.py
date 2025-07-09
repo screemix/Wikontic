@@ -38,64 +38,67 @@ def extract_triplets(text):
     filtered_triplets = []
 
     for triplet in extracted_triplets['triplets']:
-        # print("1st step triplet: ", triplet)
-        
-        # Get candidate entity types
-        subj_type_ids, obj_type_ids = aligner.retrieve_similar_entity_types(triplet=triplet)
-        
-        # Get candidate properties/relations
-        properties = aligner.retrieve_properties_for_entity_type(
-            target_relation=triplet['relation'],
-            object_types=obj_type_ids, 
-            subject_types=subj_type_ids,
-            k=5
-        )
+        try:
+            # print("1st step triplet: ", triplet)
+            
+            # Get candidate entity types
+            subj_type_ids, obj_type_ids = aligner.retrieve_similar_entity_types(triplet=triplet)
+            
+            # Get candidate properties/relations
+            properties = aligner.retrieve_properties_for_entity_type(
+                target_relation=triplet['relation'],
+                object_types=obj_type_ids, 
+                subject_types=subj_type_ids,
+                k=5
+            )
 
-        # Build candidate triplet backbones
-        # print(properties)
-        candidates = []
-        for prop_id, prop_label, prop_direction in properties:
-            if prop_direction == 'direct':
-                subject_types = set(subj_type_ids) & set(aligner.prop2constraints[prop_id]['Subject type constraint'])
-                object_types = set(obj_type_ids) & set(aligner.prop2constraints[prop_id]['Value-type constraint'])
-            else:
-                object_types = set(subj_type_ids) & set(aligner.prop2constraints[prop_id]['Value-type constraint']) 
-                subject_types = set(obj_type_ids) & set(aligner.prop2constraints[prop_id]['Subject type constraint'])
+            # Build candidate triplet backbones
+            # print(properties)
+            candidates = []
+            for prop_id, prop_label, prop_direction in properties:
+                if prop_direction == 'direct':
+                    subject_types = set(subj_type_ids) & set(aligner.prop2constraints[prop_id]['Subject type constraint'])
+                    object_types = set(obj_type_ids) & set(aligner.prop2constraints[prop_id]['Value-type constraint'])
+                else:
+                    object_types = set(subj_type_ids) & set(aligner.prop2constraints[prop_id]['Value-type constraint']) 
+                    subject_types = set(obj_type_ids) & set(aligner.prop2constraints[prop_id]['Subject type constraint'])
 
-            # Use original type sets if no constraints matched
-            subject_types = subj_type_ids if len(subject_types) == 0 else subject_types
-            object_types = obj_type_ids if len(object_types) == 0 else object_types
+                # Use original type sets if no constraints matched
+                subject_types = subj_type_ids if len(subject_types) == 0 else subject_types
+                object_types = obj_type_ids if len(object_types) == 0 else object_types
 
-            candidates.append({
-                "subject": triplet['subject'] if prop_direction == 'direct' else triplet['object'],
-                "relation": prop_label,
-                'object': triplet['object'] if prop_direction == 'direct' else triplet['subject'],
-                "subject_types": [aligner.entity_type2label[t] for t in subject_types],
-                "object_types": [aligner.entity_type2label[t] for t in object_types]
-            })
+                candidates.append({
+                    "subject": triplet['subject'] if prop_direction == 'direct' else triplet['object'],
+                    "relation": prop_label,
+                    'object': triplet['object'] if prop_direction == 'direct' else triplet['subject'],
+                    "subject_types": [aligner.entity_type2label[t] for t in subject_types],
+                    "object_types": [aligner.entity_type2label[t] for t in object_types]
+                })
 
-            # print({
-            #     "subject": triplet['subject'] if prop_direction == 'direct' else triplet['object'],
-            #     "relation": prop_label,
-            #     'object': triplet['object'] if prop_direction == 'direct' else triplet['subject'],
-            #     "subject_types": [aligner.entity_type2label[t] for t in subject_types],
-            #     "object_types": [aligner.entity_type2label[t] for t in object_types]
-            # })
+                # print({
+                #     "subject": triplet['subject'] if prop_direction == 'direct' else triplet['object'],
+                #     "relation": prop_label,
+                #     'object': triplet['object'] if prop_direction == 'direct' else triplet['subject'],
+                #     "subject_types": [aligner.entity_type2label[t] for t in subject_types],
+                #     "object_types": [aligner.entity_type2label[t] for t in object_types]
+                # })
 
 
-        # Refine relation and entity types using LLM - choose among valid backbones for triplet
-        backbone_triplet = extractor.refine_relation_and_entity_types(
-            text=text, 
-            triplet=triplet,
-            candidate_triplets=candidates
-        )
-        backbone_triplet['qualifiers'] = triplet['qualifiers']
+            # Refine relation and entity types using LLM - choose among valid backbones for triplet
+            backbone_triplet = extractor.refine_relation_and_entity_types(
+                text=text, 
+                triplet=triplet,
+                candidate_triplets=candidates
+            )
+            backbone_triplet['qualifiers'] = triplet['qualifiers']
 
-        # Refine entity names
-        final_triplet = refine_entities(text, backbone_triplet, aligner)
-        
-        final_triplets.append(final_triplet)
-        # print("2nd resulted triplet: ", final_triplet)
+            # Refine entity names
+            final_triplet = refine_entities(text, backbone_triplet, aligner)
+            
+            final_triplets.append(final_triplet)
+            # print("2nd resulted triplet: ", final_triplet)
+        except Exception as e:
+            filtered_triplets.append(triplet)
 
     # print("-"*100)
     return final_triplets, filtered_triplets
@@ -166,8 +169,8 @@ if __name__ == "__main__":
     for elem in ds:
         id2sample[elem['_id']] = elem
 
-    sampled_ids = list(id2sample.keys())
-    model_name = 'gpt-4.1'
+    sampled_ids = list(id2sample.keys())[19:]
+    model_name = 'gpt-4o-mini'
     extractor = LLMTripletExtractor(model=model_name)
     current_prompt_token_num, current_completion_token_num = 0, 0
 
@@ -208,8 +211,8 @@ if __name__ == "__main__":
         df['source_text_ids'] = final_triplets_source_text_ids
         df['prompt_token_num'] = prompt_token_nums
         df['completion_token_num'] = completion_token_nums
-        df.to_csv(f"hotpot_gpt_4.1/final_triplets_{str(sample_id)}.csv")
+        df.to_csv(f"hotpot_gpt-4o-mini/final_triplets_{str(sample_id)}.csv")
 
         df_filtered = pd.DataFrame(faulty_triplets)
         df_filtered['source_text_ids'] = filtered_triplets_source_text_ids
-        df_filtered.to_csv(f"hotpot_gpt_4.1/faulty_triplets_{str(sample_id)}.csv")
+        df_filtered.to_csv(f"hotpot_gpt-4o-mini/faulty_triplets_{str(sample_id)}.csv")

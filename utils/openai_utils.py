@@ -9,7 +9,7 @@ import re
 from pathlib import Path
 from typing import Dict, List, Union, Optional
 
-import httpx
+# import httpx
 
 # proxy_url = "socks5://localhost:1080"
 

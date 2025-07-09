@@ -15,7 +15,7 @@ class PropertyConstraints:
 
 
 class Aligner:
-    def __init__(self, mappings_path='utils/ontology_mappings', device='cuda:2'):
+    def __init__(self, mappings_path='utils/ontology_mappings', device='cuda:1'):
         self.device = device
         self.dim = 768
         self.metric = faiss.METRIC_INNER_PRODUCT
