@@ -13,6 +13,7 @@ from pymongo import MongoClient
 import uuid
 import logging
 import sys
+from PIL import Image
 
 # Configure logging
 logging.basicConfig(stream=sys.stderr)
@@ -97,7 +98,20 @@ def visualize_initial_knowledge_graph(initial_triplets):
     os.remove(html_path)
 
 # --- UI ---
-st.title("KG Extraction + Visualization")
+
+# logo = Image.open("media/wikontic.png")
+# st.image(logo, width=150)
+# st.title("KG Extraction + Visualization")
+st.markdown(
+    """
+    <div style="display: flex; align-items: center;">
+        <img src="wikontic.png" alt="Logo" width="50" style="margin-right: 15px;">
+        <h1 style="margin: 0;">KG Extraction + Visualization</h1>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
 model_options = ["gpt-4o-mini", "gpt-4.1-mini", "gpt-4.1"]
 selected_model = st.selectbox("Choose a model for KG extraction:", model_options, index=0)
 
