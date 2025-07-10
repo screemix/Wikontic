@@ -27,7 +27,11 @@ if "user_id" not in st.session_state:
 user_id = st.session_state.user_id
 logger.info(f"User ID: {user_id}")
 
-st.set_page_config(layout="wide")
+st.set_page_config(
+    page_title="Wikontic",
+    page_icon="media/wikotic-wo-text.png",
+    layout="wide"
+)
 
 # --- Mongo Setup ---
 _ = load_dotenv(find_dotenv())
