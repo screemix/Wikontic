@@ -4,7 +4,6 @@ import logging
 import sys
 import base64
 
-
 # Configure logging
 logging.basicConfig(stream=sys.stderr)
 logger = logging.getLogger('App')
@@ -17,6 +16,12 @@ if "user_id" not in st.session_state:
 user_id = st.session_state.user_id
 
 logger.info(f"User ID: {user_id}")
+
+st.set_page_config(
+    page_title="Wikontic",
+    page_icon="media/wikontic.png",
+    layout="wide"
+)
 
 with open("media/wikontic.png", "rb") as f:
     img_bytes = f.read()
