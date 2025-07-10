@@ -2,6 +2,8 @@ import streamlit as st
 import uuid
 import logging
 import sys
+import base64
+
 
 # Configure logging
 logging.basicConfig(stream=sys.stderr)
@@ -16,17 +18,16 @@ user_id = st.session_state.user_id
 
 logger.info(f"User ID: {user_id}")
 
-# st.set_page_config(
-#     page_title="Knowledge Graph Demo",
-#     page_icon="🧠",
-# )
+with open("media/wikontic.png", "rb") as f:
+    img_bytes = f.read()
+encoded = base64.b64encode(img_bytes).decode()
 
-# st.title("🧠 Knowledge Graph Demo")
+# Embed in header using HTML + Markdown
 st.markdown(
-    """
+    f"""
     <div style="display: flex; align-items: center;">
-        <img src="wikontic.png" alt="Logo" width="50" style="margin-right: 15px;">
-        <h1 style="margin: 0;">Knowledge Graph Demo</h1>
+        <img src="data:image/png;base64,{encoded}" width="50" style="margin-right: 15px;">
+        <h1 style="margin: 0;">Wikontic</h1>
     </div>
     """,
     unsafe_allow_html=True,

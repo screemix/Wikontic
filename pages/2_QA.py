@@ -12,6 +12,7 @@ from utils.structured_inference_with_db import identify_relevant_entities, answe
 import uuid
 import logging
 import sys
+import base64
 
 # Configure logging
 logging.basicConfig(stream=sys.stderr)
@@ -63,7 +64,21 @@ def query_kg(question_text):
     supporting_triplets, ans = answer_question(question_text, identified_entities, extractor=extractor, aligner=aligner, db=db, sample_id=user_id)
     return identified_entities_names, supporting_triplets, ans
 
-st.title("🔍 Question Answering with KG")
+with open("media/wikontic.png", "rb") as f:
+    img_bytes = f.read()
+encoded = base64.b64encode(img_bytes).decode()
+
+# Embed in header using HTML + Markdown
+st.markdown(
+    f"""
+    <div style="display: flex; align-items: center;">
+        <img src="data:image/png;base64,{encoded}" width="50" style="margin-right: 15px;">
+        <h1 style="margin: 0;">Question Answering with KG</h1>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
 
 model_options = ["gpt-4o-mini", "gpt-4.1-mini", "gpt-4.1"]
 selected_model = st.selectbox("Choose a model for QA:", model_options, index=0)
