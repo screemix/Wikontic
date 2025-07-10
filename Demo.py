@@ -19,7 +19,7 @@ logger.info(f"User ID: {user_id}")
 
 st.set_page_config(
     page_title="Wikontic",
-    page_icon="media/wikontic.png",
+    page_icon="media/wikotic-wo-text.png",
     layout="wide"
 )
 
