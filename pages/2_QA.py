@@ -34,7 +34,11 @@ mongo_client = MongoClient(os.getenv("MONGO_URI"))
 db = mongo_client.get_database("wikidata_ontology")
 aligner = Aligner(db)
 
-st.set_page_config(layout="wide")
+st.set_page_config(
+    page_title="Wikontic",
+    page_icon="media/wikotic-wo-text.png",
+    layout="wide"
+)
 
 # --- Visualize ---
 def visualize_knowledge_graph(triplets, highlight_entities=None):
