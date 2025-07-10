@@ -5,7 +5,6 @@ from pyvis.network import Network
 import tempfile
 import os
 from dotenv import load_dotenv, find_dotenv
-# from neo4j import GraphDatabase
 from utils.structured_inference_with_db import extract_triplets
 from utils.structured_dynamic_index_utils_with_db import Aligner
 from utils.openai_utils import LLMTripletExtractor
@@ -13,7 +12,7 @@ from pymongo import MongoClient
 import uuid
 import logging
 import sys
-from PIL import Image
+import base64
 
 # Configure logging
 logging.basicConfig(stream=sys.stderr)
@@ -98,14 +97,15 @@ def visualize_initial_knowledge_graph(initial_triplets):
     os.remove(html_path)
 
 # --- UI ---
+with open("media/wikontic.png", "rb") as f:
+    img_bytes = f.read()
+encoded = base64.b64encode(img_bytes).decode()
 
-# logo = Image.open("media/wikontic.png")
-# st.image(logo, width=150)
-# st.title("KG Extraction + Visualization")
+# Embed in header using HTML + Markdown
 st.markdown(
-    """
+    f"""
     <div style="display: flex; align-items: center;">
-        <img src="wikontic.png" alt="Logo" width="50" style="margin-right: 15px;">
+        <img src="data:image/png;base64,{encoded}" width="50" style="margin-right: 15px;">
         <h1 style="margin: 0;">KG Extraction + Visualization</h1>
     </div>
     """,
