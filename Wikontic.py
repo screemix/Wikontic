@@ -47,6 +47,14 @@ Welcome to the **Wikontic** - an integrated tool for Knowledge
 Graph (KG) construction and question answering (QA).
 """)
 
+st.markdown("""
+            
+Use the menu on the left to switch between:
+- **KG Extraction**: Extract and visualize triples from text.
+- **QA**: Ask questions based on the current knowledge graph.
+- **Current KG**: View the KG you built
+""")
+
 st.markdown(
     f"""
     <div style="display: flex; align-items: center;">
@@ -57,12 +65,3 @@ st.markdown(
     """,
     unsafe_allow_html=True,
 )
-
-st.markdown("""
-
-            
-Use the menu on the left to switch between:
-- **KG Extraction**: Extract and visualize triples from text.
-- **QA**: Ask questions based on the current knowledge graph.
-- **Current KG**: View the KG you built
-""")
