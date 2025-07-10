@@ -53,15 +53,21 @@ Use the menu on the left to switch between:
 - **KG Extraction**: Extract and visualize triples from text.
 - **QA**: Ask questions based on the current knowledge graph.
 - **Current KG**: View the KG you built
+            
 """)
 
 st.markdown(
     f"""
-    <div style="display: flex; align-items: center;">
-        <img src="data:image/png;base64,{encoded_pipeline}" style="margin-right: 15px;">
+    <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+        <img src="data:image/png;base64,{encoded_pipeline}" style="max-width: 800px; height: auto; margin-bottom: 20px;">
+        <p style="max-width: 800px;"><small>
+            Wikontic: a tool for ontology-aware construction of a Wikidata-aligned knowledge graph.
+            First, an LLM-based triplet extractor proposes candidate (subject, relation, object) triples (center, grey).
+            Next, the LLM guided by the Wikidata ontology, assigns entity types (node colors), merges similar nodes,
+            and prunes or rewrites relations that violate ontology constraints. The resulting graph (right) is de-duplicated 
+            and fully compliant with the semantics of Wikidata, ready for downstream tasks and further usage.
+        </small></p>
     </div>
-
-    <p><small>Wikontic: a tool for ontology-aware construction of a Wikidata-aligned knowledge graphs. First, an LLM-based triplet extractor proposes candidate (subject, relation, object) triples (center, grey). Next, the LLM guided by the Wikidata ontology, assigns entity types (node colors), merges similar nodes, and prunes or rewrites relations that violate ontology constraints. The resulting graph (right) is de-duplicated and fully compliant with the semantics of Wikidata, ready for downstream tasks and further usage.</small></p>
     """,
     unsafe_allow_html=True,
 )
