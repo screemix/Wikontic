@@ -4,10 +4,11 @@ from dataclasses import dataclass
 from pydantic import BaseModel, ValidationError
 from pymongo import MongoClient, UpdateOne
 import torch
-
+from dotenv import load_dotenv, find_dotenv
 import os 
 
 # os.environ["CUDA_VISIBLE_DEVICES"] = "1"
+_ = load_dotenv(find_dotenv())
 
 @dataclass
 class PropertyConstraints:
@@ -41,8 +42,8 @@ class Aligner:
         self.filtered_triplets_collection_name = 'filtered_triplets'
 
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.tokenizer = AutoTokenizer.from_pretrained('facebook/contriever')
-        self.model = AutoModel.from_pretrained('facebook/contriever').to(self.device)
+        self.tokenizer = AutoTokenizer.from_pretrained('facebook/contriever', token=os.getenv("HF_KEY"))
+        self.model = AutoModel.from_pretrained('facebook/contriever', token=os.getenv("HF_KEY")).to(self.device)
 
 
     def get_embedding(self, text):
