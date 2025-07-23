@@ -1,3 +1,5 @@
+![Wikontic logo](/media/wikontic.png)
+
 # Wikontic - building ontology-aware, Wikidata-aligned knowledge graphs from raw text with LLMs
 
 ## Overview 
