@@ -1,4 +1,4 @@
-import openai
+from openai import OpenAI
 import os
 from dotenv import load_dotenv, find_dotenv
 from tenacity import retry, wait_random_exponential, before_sleep_log
@@ -9,43 +9,25 @@ import re
 from pathlib import Path
 from typing import Dict, List, Union, Optional
 
-# import httpx
-
-# proxy_url = "socks5://localhost:1080"
-
-# proxies = {
-#     "http://": proxy_url,
-#     "https://": proxy_url,
-# }
-
-# http_client = httpx.Client(proxy=proxy_url)
-
 # Configure logging
 logging.basicConfig(stream=sys.stderr)
 logger = logging.getLogger('OpenAIUtils')
 logger.setLevel(logging.ERROR)
 
 # Initialize OpenAI client
-_ = load_dotenv(find_dotenv())
-client = openai.OpenAI(
-    api_key=os.getenv("KEY"),
-    # http_client=http_client
-)
+# base_url = "http://192.168.24.161:30050/v1"
+base_url = 'https://openrouter.ai/api/v1'
+client = OpenAI(base_url=base_url, api_key="***REMOVED***")
+
 
 class LLMTripletExtractor:
     """A class for extracting and processing knowledge graph triplets using OpenAI's LLMs."""
-    
-    MODEL_PRICES = {
-        "gpt-4o": {"input": 2.5, "output": 10},
-        "gpt-4o-mini": {"input": 0.15, "output": 0.6},
-        "gpt-4.1-mini": {"input": 0.4, "output": 1.6},
-        "gpt-4.1": {"input": 2.0, "output": 8.0}
-    }
+
 
     def __init__(self, 
                  prompt_folder_path: str = 'utils/prompts/',
                  system_prompt_paths: Optional[Dict[str, str]] = None,
-                 model: str = "gpt-4o"):
+                 model: str = "meta-llama/Llama-3.3-70B-Instruct"):
         """
         Initialize the LLMTripletExtractor.
         
@@ -62,7 +44,6 @@ class LLMTripletExtractor:
                 'object_ranker': 'rank_object_names.txt',
                 'question_entity_extractor': 'prompt_entity_relation_extraction_from_question.txt',
                 'question_entity_ranker': 'prompt_choose_relevant_entities_for_question.txt',
-                # 'qa': 'qa_prompt_hotpot.txt'
                 'qa': 'qa_prompt.txt'
             }
 
@@ -77,12 +58,6 @@ class LLMTripletExtractor:
         self.messages = []
         self.prompt_tokens_num = 0
         self.completion_tokens_num = 0
-        
-        # Set pricing
-        if model not in self.MODEL_PRICES:
-            raise ValueError(f"Unknown model: {model}")
-        self.input_price = self.MODEL_PRICES[model]["input"]
-        self.output_price = self.MODEL_PRICES[model]["output"]
 
     def extract_json(self, text: str) -> Union[dict, list, str]:
         """Extract JSON from text, handling both code blocks and inline JSON."""
@@ -123,6 +98,7 @@ class LLMTripletExtractor:
             messages=messages,
             temperature=0
         )
+
         self.completion_tokens_num += response.usage.completion_tokens
         self.prompt_tokens_num += response.usage.prompt_tokens
         
@@ -152,8 +128,6 @@ class LLMTripletExtractor:
         # return {"system_prompt": self.prompts['relation_ranker'],
         #         "user_prompt": f'Text: "{text}\nExtracted Triplet: {json.dumps(triplet_filtered)}\n'}
         #                f'Candidate Triplets: {candidates_str}"'
-        # print(f'Text: "{text}\nExtracted Triplet: {json.dumps(triplet_filtered)}\nCandidate Triplets: {candidates_str}')
-        # print(f'Text: {text}\nExtracted Triplet: {json.dumps(triplet_filtered)}\nCandidate Triplets: {candidates_str}')
         return self.get_completion(
             system_prompt=self.prompts['relation_ranker'],
             user_prompt=f'Text: "{text}\nExtracted Triplet: {json.dumps(triplet_filtered)}\n'
@@ -202,11 +176,6 @@ class LLMTripletExtractor:
             user_prompt=f'Question: {question}\n\nTriplets: "{triplets}"',
             transform_to_json=False
         )
-
-    def calculate_cost(self) -> float:
-        """Calculate the total cost of API usage."""
-        return (self.prompt_tokens_num * self.input_price + 
-                self.completion_tokens_num * self.output_price) / 1e6
     
     def calculate_used_tokens(self) -> int:
         """Calculate the total # of used tokens for generation"""

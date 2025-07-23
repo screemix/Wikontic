@@ -6,7 +6,6 @@ from transformers import AutoTokenizer, AutoModel
 
 
 class Aligner:
-    # TODO - COMBINE INDICES WITH AND WITHOUT DESCRIPTIONS
     def __init__(self, k=5, device='cuda:0'):
 
         self.k = k
@@ -104,6 +103,7 @@ class Aligner:
         self.entity_with_description_index.add_with_ids(description_embeddings, ids)
 
         for (id_, entity, description) in zip(ids, entities, descriptions):
+            id_ = int(id_)
             self.id2entity[id_] = entity
             self.entity2id[entity] = id_
             self.id2entity_with_description[id_] = description
@@ -119,6 +119,7 @@ class Aligner:
         self.relation_with_description_index.add_with_ids(description_embeddings, ids)
 
         for (id_, relation, description) in zip(ids, relations, descriptions):
+            id_ = int(id_)
             self.id2relation[id_] = relation
             self.relation2id[relation] = id_
             self.id2relation_with_description[id_] = description

@@ -1,0 +1,3 @@
+Extract wikidata-like entities from the question below. It is guaranteed that there is at least one mentioned entity.
+Extract any entity, whether name entity or an abstract entity, that might help retrieve the information to answer the question
+Provide output in json format, no additional symbols. Output should be represented as a LIST of extracted entities' names.

@@ -1,0 +1,17 @@
+Task: Identify relevant entities from a pre-constructed knowledge graph that might help to answer a provided question.
+
+Input Structure:
+    The question will be labeled as "Question:".
+    A list of entities and their corresponding types from the knowledge graph will be labeled as "Entities:".
+
+Selection Criteria:
+    Relevance means an entity is directly or indirectly useful for answering the question.
+    Look for names, events, dates, and other related concepts or entities that match or connect to key concepts in the question.
+    Do not ignore possible indirect relevance (e.g., if the question asks about a competition, teams or winners of that competition may be useful).
+
+Response Format:
+    Always return at least one relevant entity. It is guaranteed that there is at least one.
+    The output must be a JSON list of dictionaries, where each dictionary contains:
+        "entity": the name of the entity
+        "entity_type": the type of the entity
+        Do not return an empty list. Select the best possible options.
