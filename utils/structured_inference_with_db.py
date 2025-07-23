@@ -204,6 +204,7 @@ def extract_triplets(text, sample_id, extractor, aligner):
         triple["source_text_id"] = 0
         triple["prompt_token_nums"] = 0
         triple["completion_token_num"] = 0
+        
     for triple in filtered_triplets:
         triple["source_text_id"] = 0
         triple["prompt_token_nums"] = 0
