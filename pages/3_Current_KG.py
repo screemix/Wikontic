@@ -14,6 +14,8 @@ import uuid
 import logging
 import sys
 import base64
+from transformers import AutoTokenizer, AutoModel
+import torch
 
 # Configure logging
 logging.basicConfig(stream=sys.stderr)
@@ -41,7 +43,23 @@ db = mongo_client.get_database("wikidata_ontology")
 
 # --- Extractor Setup ---
 # extractor = LLMTripletExtractor(model='gpt-4.1-mini')
-aligner = Aligner(db)
+# --- Aligner Setup ---
+@st.cache_resource(show_spinner="Loading Contriever model...")
+def load_contriever_model():
+    tokenizer = AutoTokenizer.from_pretrained('facebook/contriever', token=os.getenv("HF_KEY"))
+    model = AutoModel.from_pretrained('facebook/contriever', token=os.getenv("HF_KEY"))
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    model = AutoModel.from_pretrained(
+        'facebook/contriever',
+        token=os.getenv("HF_KEY"),
+        low_cpu_mem_usage=True,
+    )
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    model = model.to(device)
+    return model, tokenizer, device
+
+model, tokenizer, device = load_contriever_model()
+aligner = Aligner(db, model, tokenizer, device)
 
 
 def fetch_triplets():

@@ -26,8 +26,12 @@ class EntityAlias(BaseModel):
 
 
 class Aligner:
-    def __init__(self, db):
+    def __init__(self, db, model, tokenizer, device):
         self.db = db
+        self.model = model
+        self.tokenizer = tokenizer
+        self.device = device
+
         self.entity_type_vector_index_name = 'entity_type_aliases'
         self.property_vector_index_name = 'property_aliases_ids'
         self.entities_vector_index_name = 'entities'
@@ -41,9 +45,9 @@ class Aligner:
         self.triplets_collection_name = 'triplets'
         self.filtered_triplets_collection_name = 'filtered_triplets'
 
-        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.tokenizer = AutoTokenizer.from_pretrained('facebook/contriever', token=os.getenv("HF_KEY"))
-        self.model = AutoModel.from_pretrained('facebook/contriever', token=os.getenv("HF_KEY")).to(self.device)
+        # self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        # self.tokenizer = AutoTokenizer.from_pretrained('facebook/contriever', token=os.getenv("HF_KEY"))
+        # self.model = AutoModel.from_pretrained('facebook/contriever', token=os.getenv("HF_KEY")).to(self.device)
 
 
     def get_embedding(self, text):

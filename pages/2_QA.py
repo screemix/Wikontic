@@ -13,6 +13,8 @@ import uuid
 import logging
 import sys
 import base64
+from transformers import AutoTokenizer, AutoModel
+import torch
 
 # Configure logging
 logging.basicConfig(stream=sys.stderr)
@@ -25,20 +27,36 @@ if "user_id" not in st.session_state:
     st.session_state.user_id = str(uuid.uuid4())
 
 user_id = st.session_state.user_id
-
 logger.info(f"User ID: {user_id}")
-
-_ = load_dotenv(find_dotenv())
-
-mongo_client = MongoClient(os.getenv("MONGO_URI"))
-db = mongo_client.get_database("wikidata_ontology")
-aligner = Aligner(db)
 
 st.set_page_config(
     page_title="Wikontic",
     page_icon="media/wikotic-wo-text.png",
     layout="wide"
 )
+
+_ = load_dotenv(find_dotenv())
+mongo_client = MongoClient(os.getenv("MONGO_URI"))
+db = mongo_client.get_database("wikidata_ontology")
+
+# --- Aligner Setup ---
+@st.cache_resource(show_spinner="Loading Contriever model...")
+def load_contriever_model():
+    tokenizer = AutoTokenizer.from_pretrained('facebook/contriever', token=os.getenv("HF_KEY"))
+    model = AutoModel.from_pretrained('facebook/contriever', token=os.getenv("HF_KEY"))
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    model = AutoModel.from_pretrained(
+        'facebook/contriever',
+        token=os.getenv("HF_KEY"),
+        low_cpu_mem_usage=True,
+    )
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    model = model.to(device)
+    return model, tokenizer, device
+
+model, tokenizer, device = load_contriever_model()
+aligner = Aligner(db, model, tokenizer, device)
+
 
 # --- Visualize ---
 def visualize_knowledge_graph(triplets, highlight_entities=None):
