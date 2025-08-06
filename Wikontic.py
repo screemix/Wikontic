@@ -3,6 +3,7 @@ import uuid
 import logging
 import sys
 import base64
+import os
 
 # Configure logging
 logging.basicConfig(stream=sys.stderr)
@@ -16,6 +17,7 @@ if "user_id" not in st.session_state:
 user_id = st.session_state.user_id
 
 logger.info(f"User ID: {user_id}")
+
 
 st.set_page_config(
     page_title="Wikontic",
@@ -48,12 +50,8 @@ Graph (KG) construction and question answering (QA).
 """)
 
 st.markdown("""
-            
-Use the menu on the left to switch between:
-- **KG Extraction**: Extract and visualize triples from text.
-- **QA**: Ask questions based on the current knowledge graph.
-- **Current KG**: View the KG you built
-            
+    The service is currently available at https://wikontic.deeppavlov.ai            
+
 """)
 
 st.markdown(

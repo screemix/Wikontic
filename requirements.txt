@@ -8,7 +8,7 @@ tenacity
 pathlib
 typing
 unidecode
-torch
+torch>=2.6.0
 transformers
 dataclasses
 pydantic
