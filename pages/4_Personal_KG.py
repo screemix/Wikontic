@@ -105,8 +105,7 @@ selected_model = st.selectbox(
 
 
 # Initialize session state
-if "input_text" not in st.session_state:
-    st.session_state.input_text = ""
+st.session_state.input_text = ""
 
 st.subheader("Input name and surname of the person you want to extract KG for")
 input_text = st.text_area(
