@@ -119,3 +119,20 @@ with col1:
 with col2:
     st.subheader("Wikidata KG")
     visualize_knowledge_graph(wikidata_subgraph)
+
+st.markdown(
+    """
+    <div style="padding: 20px 0; margin-top: 40px; 
+                border-top: 1px solid #e0e0e0; text-align: center;">
+        <div style="display: flex; justify-content: center; gap: 40px; align-items: center; flex-wrap: wrap;">
+            <a href="https://github.com/screemix/Wikontic" target="_blank"
+                style="text-decoration: none; color: #1f77b4; font-size: 1.2em; font-weight: 500;">🔗 GitHub Repository</a>
+            <a href="https://arxiv.org/abs/2512.00590" target="_blank"
+                style="text-decoration: none; color: #1f77b4; font-size: 1.2em; font-weight: 500;">📄 ArXiv Paper</a>
+            <a href="https://github.com/screemix/Wikontic/blob/main/tutorial.ipynb" target="_blank"
+                style="text-decoration: none; color: #1f77b4; font-size: 1.2em; font-weight: 500;">🦜 Langchain Tutorial</a>
+        </div>
+    </div>
+""",
+    unsafe_allow_html=True,
+)
