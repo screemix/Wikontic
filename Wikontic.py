@@ -43,7 +43,7 @@ encoded_pipeline = base64.b64encode(img_bytes).decode()
 
 st.markdown(
     """
-<span style="font-size: 1.4em;">
+<span style="font-size: 1.2em;">
 Welcome to the <b>Wikontic</b> &mdash; an integrated tool for Knowledge
 Graph (KG) construction and question answering (QA).
 </span>
@@ -55,8 +55,8 @@ st.markdown("---")
 st.markdown(
     f"""
     <div style="display: flex; flex-direction: row; align-items: flex-start; justify-content: center; gap: 40px; text-align: left;">
-        <img src="data:image/png;base64,{encoded_pipeline}" style="max-width: 900px; height: auto; flex-shrink: 0;">
-        <div style="max-width: 520px; margin-left: 8px; font-size: 1.1em; line-height: 1.6;">
+        <img src="data:image/png;base64,{encoded_pipeline}" style="max-width: 600px; height: auto; flex-shrink: 0;">
+        <div style="max-width: 400px; margin-left: 8px; font-size: 1.1em; line-height: 1.6;">
             <p style="font-size: 1.1em; margin-bottom: 12px;">
             <b>Wikontic</b> is a tool for ontology-aware construction of a Wikidata-aligned knowledge graph.
             </p>
