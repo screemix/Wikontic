@@ -87,6 +87,25 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
+st.markdown(
+    """ 
+    The following KGs are compared:
+    - The KG extracted from first paragraphs of Wikipedia articles for 
+      [Steve Jobs](https://en.wikipedia.org/wiki/Steve_Jobs), 
+      [Steve Wozniak](https://en.wikipedia.org/wiki/Steve_Wozniak), 
+      [Apple](https://en.wikipedia.org/wiki/Apple_Inc.), 
+      [Pixar](https://en.wikipedia.org/wiki/Pixar), and 
+      [NeXT](https://en.wikipedia.org/wiki/NeXT).
+
+    - The Wikidata KG subgraphs for 
+      [Steve Jobs](https://www.wikidata.org/wiki/Q19837), 
+      [Steve Wozniak](https://www.wikidata.org/wiki/Q483382), 
+      [Apple](https://www.wikidata.org/wiki/Q312),
+      [Pixar](https://www.wikidata.org/wiki/Q127552), and
+      [NeXT](https://www.wikidata.org/wiki/Q308993) that share the same relations with the extracted KGs.
+    """
+)
+
 
 wikipedia_subgraph = fetch_triplets(sample_id="wikipedia")
 wikidata_subgraph = fetch_triplets(sample_id="wikidata")
@@ -100,3 +119,20 @@ with col1:
 with col2:
     st.subheader("Wikidata KG")
     visualize_knowledge_graph(wikidata_subgraph)
+
+st.markdown(
+    """
+    <div style="padding: 20px 0; margin-top: 40px; 
+                border-top: 1px solid #e0e0e0; text-align: center;">
+        <div style="display: flex; justify-content: center; gap: 40px; align-items: center; flex-wrap: wrap;">
+            <a href="https://github.com/screemix/Wikontic" target="_blank"
+                style="text-decoration: none; color: #1f77b4; font-size: 1.2em; font-weight: 500;">🔗 GitHub Repository</a>
+            <a href="https://arxiv.org/abs/2512.00590" target="_blank"
+                style="text-decoration: none; color: #1f77b4; font-size: 1.2em; font-weight: 500;">📄 ArXiv Paper</a>
+            <a href="https://github.com/screemix/Wikontic/blob/main/tutorial.ipynb" target="_blank"
+                style="text-decoration: none; color: #1f77b4; font-size: 1.2em; font-weight: 500;">🦜 Langchain Tutorial</a>
+        </div>
+    </div>
+""",
+    unsafe_allow_html=True,
+)
