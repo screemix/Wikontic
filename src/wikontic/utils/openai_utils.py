@@ -19,8 +19,8 @@ import httpx
 
 # Configure logging
 logger = logging.getLogger("OpenAIUtils")
-logger.setLevel(logging.ERROR)
-logging.getLogger("httpx").setLevel(logging.ERROR)
+logger.setLevel(logging.INFO)
+logging.getLogger("httpx").setLevel(logging.WARNING)
 
 # _ = load_dotenv(find_dotenv())
 # OpenAI
@@ -37,6 +37,8 @@ class LLMTripletExtractor:
         "gpt-4.1": {"input": 2.0, "output": 8.0},
         "Meta-llama/Llama-3.3-70B-Instruct": {"input": 0.04, "output": 0.12},
         "qwen/qwen3-32b": {"input": 0.05, "output": 0.2},
+        "Openai/Gpt-oss-120b": {"input": 0.05, "output": 0.2},
+        "Qwen/Qwen3-32B": {"input": 0.05, "output": 0.2},
     }
 
     def __init__(
@@ -47,12 +49,15 @@ class LLMTripletExtractor:
         model: str = "gpt-4o",
         max_attempts=MAX_ATTEMPTS,
         proxy: str = None,
+        base_url: str = "https://api.openai.com/v1",
     ):
         if proxy:
             http_client = httpx.Client(proxy=proxy)
-            self.client = openai.OpenAI(api_key=api_key, http_client=http_client)
+            self.client = openai.OpenAI(
+                api_key=api_key, http_client=http_client, base_url=base_url
+            )
         else:
-            self.client = openai.OpenAI(api_key=api_key)
+            self.client = openai.OpenAI(api_key=api_key, base_url=base_url)
 
         """
         Initialize the LLMTripletExtractor.
@@ -134,13 +139,13 @@ class LLMTripletExtractor:
     @retry(
         wait=wait_random_exponential(multiplier=1, max=60),
         before_sleep=before_sleep_log(logger, logging.ERROR),
-        stop=stop_after_attempt(5),
+        # stop=stop_after_attempt(5),
     )
     def get_completion(
         self, system_prompt: str, user_prompt: str, transform_to_json: bool = True
     ) -> Union[dict, list, str]:
         """Get completion from OpenAI API with retry logic."""
-        if self.model == "qwen/qwen3-32b":
+        if self.model == "qwen/qwen3-32b" or self.model == "Qwen/Qwen3-32B":
             user_prompt = "/no_think \n" + user_prompt
         messages = [
             {"role": "system", "content": system_prompt},

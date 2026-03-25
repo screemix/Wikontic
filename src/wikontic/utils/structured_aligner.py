@@ -28,7 +28,7 @@ class EntityAlias(BaseModel):
 
 
 class Aligner:
-    def __init__(self, ontology_db, triplets_db, device="cuda:0"):
+    def __init__(self, ontology_db, triplets_db, device="cuda"):
         self.ontology_db = ontology_db
         self.triplets_db = triplets_db
 

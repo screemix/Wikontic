@@ -37,8 +37,6 @@ model_path = model_name
 
 tokenizer = AutoTokenizer.from_pretrained(model_path)
 model = AutoModel.from_pretrained(model_path, use_safetensors=True).to(device)
-# model = AutoModel.from_pretrained(model_path).to(device)
-
 
 class EntityType(BaseModel):
     _id: int
@@ -370,7 +368,7 @@ def create_wikidata_ontology_database(
     property_aliases_collection: str = "property_aliases",
     entity_types_index: str = "entity_type_aliases",
     property_aliases_index: str = "property_aliases",
-    drop_collections: bool = True,
+    drop_collections: bool = False,
 ):
     """
     Populate MongoDB with Wikidata ontology data.
