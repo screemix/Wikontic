@@ -2,5 +2,10 @@ __pycache__/
 .devcontainer
 .env
 .venv
+venv/
+.flake8
 qa_logs/
 inference_logs/
+.vscode/
+datasets/
+lib/
