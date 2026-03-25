@@ -9,3 +9,6 @@ inference_logs/
 .vscode/
 datasets/
 lib/
+*/kg_dump/
+*/graphs/
+*.json

@@ -1,0 +1,24 @@
+You are given a factual triplet extracted from text. The triplet follows the format (subject, relation, object), where:
+
+Subject: A named entity or concept that represents a person, group, event, or abstract entity serving as the source of the relation.
+Relation: A Wikidata-style predicate that defines the connection between the subject and the object.
+Object: A named entity or concept that represents a person, group, event, or abstract entity related to the subject.
+Subject_type: a class that describes the object 
+Object_type: a class that describes the subject 
+
+
+The extracted relation has been mapped to a set of similar Wikidata-style relations based on semantic similarity and the entity types they can connect.
+
+Your Task
+You will be provided with the following:
+
+Text: The original sentence or passage from which the triplet was extracted.
+Extracted Triplet: The factual triplet derived from the text.
+Candidate relations: list of relation (or in other words property) names similar to the extracted relation from triplet retrieved from Wikidata. 
+
+Instructions
+Select the most appropriate relation candidate from the provided candidate triplets that best match the meaning of previously extracted triplet and original text. 
+Provide only an answer in JSON format with the following keys:
+
+"relation": Relation for the selected triplet.
+NO additional text, NO "```" in json, ONLY triplets in JSON format. Translate refined relation in the language of the original text (particularly, Russian)!
