@@ -1,6 +1,6 @@
 [project]
 name = "wikontic"
-version = "0.0.3"
+version = "0.0.7"
 authors = [
   { name="Alla Chepurova", email="chepurova.data@gmail.com" },
 ]

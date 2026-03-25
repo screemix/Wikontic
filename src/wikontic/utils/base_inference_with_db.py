@@ -2,7 +2,7 @@ from typing import Dict, List, Optional
 import logging
 
 logger = logging.getLogger("BaseInferenceWithDB")
-logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.ERROR)
 
 
 class BaseInferenceWithDB:
