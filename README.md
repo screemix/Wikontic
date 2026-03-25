@@ -1,4 +1,4 @@
-![Wikontic logo](/media/wikontic.png)
+![Wikontic logo](/media/wikotic-wo-text.png)
 
 # Wikontic
 
@@ -11,6 +11,8 @@
 Knowledge Graphs (KGs) provide structured, verifiable representations of knowledge, enabling fact grounding and empowering large language models (LLMs) with up-to-date, real-world information. However, creating high-quality KGs from open-domain text is challenging due to issues like redundancy, inconsistency, and lack of alignment with formal ontologies.
 
 **Wikontic** is a multi-stage pipeline for constructing ontology-aligned KGs from unstructured text using LLMs and Wikidata. It extracts candidate triples from raw text, then refines them through ontology-based typing, schema validation, and entity deduplication—resulting in compact, semantically coherent graphs.
+
+![Pipeline overview](/media/KG+LM-pipeline-with-background.png)
 
 ---
 
@@ -60,6 +62,7 @@ Knowledge Graphs (KGs) provide structured, verifiable representations of knowled
 - `Dockerfile`  
   For building a containerized web service.
 
+![Demo overview](/media/demo-with-background.png)
 
 ---
 

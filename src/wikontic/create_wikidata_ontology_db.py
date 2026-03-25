@@ -26,18 +26,17 @@ device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cp
 
 # Check for local model first, then fall back to remote
 model_name = "facebook/contriever"
-local_model_path = os.getenv("HF_MODEL_PATH") or str(
-    Path(__file__).parent.parent.parent.parent / "models" / "facebook--contriever"
-)
+# local_model_path = os.getenv("HF_MODEL_PATH") or str(
+#     Path(__file__).parent.parent.parent.parent / "models" / "facebook--contriever"
+# )
 
-if os.path.exists(local_model_path) and os.path.isdir(local_model_path):
-    model_path = local_model_path
-else:
-    model_path = model_name
+# if os.path.exists(local_model_path) and os.path.isdir(local_model_path):
+#     model_path = local_model_path
+# else:
+model_path = model_name
 
 tokenizer = AutoTokenizer.from_pretrained(model_path)
 model = AutoModel.from_pretrained(model_path, use_safetensors=True).to(device)
-
 
 class EntityType(BaseModel):
     _id: int

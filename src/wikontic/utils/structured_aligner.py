@@ -56,24 +56,22 @@ class Aligner:
         # ).to(self.device)
         # Check for local model first, then fall back to remote
         model_name = "facebook/contriever"
-        local_model_path = os.getenv("HF_MODEL_PATH") or str(
-            Path(__file__).parent.parent.parent.parent
-            / "models"
-            / "facebook--contriever"
-        )
+        # local_model_path = os.getenv("HF_MODEL_PATH") or str(
+        #     Path(__file__).parent.parent.parent.parent
+        #     / "models"
+        #     / "facebook--contriever"
+        # )
 
-        if os.path.exists(local_model_path) and os.path.isdir(local_model_path):
-            model_path = local_model_path
-        else:
-            model_path = model_name
+        # if os.path.exists(local_model_path) and os.path.isdir(local_model_path):
+        #     model_path = local_model_path
+        # else:
+        model_path = model_name
 
         self.tokenizer = AutoTokenizer.from_pretrained(model_path)
-        # self.model = AutoModel.from_pretrained(model_path, use_safetensors=True).to(
-        #     self.device
-        # )
         self.model = AutoModel.from_pretrained(model_path, use_safetensors=True).to(
             self.device
         )
+        # self.model = AutoModel.from_pretrained(model_path).to(self.device)
 
     def get_embedding(self, text):
 
