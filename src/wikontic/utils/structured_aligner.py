@@ -28,7 +28,7 @@ class EntityAlias(BaseModel):
 
 
 class Aligner:
-    def __init__(self, ontology_db, triplets_db, device="cuda:0"):
+    def __init__(self, ontology_db, triplets_db, device="cuda"):
         self.ontology_db = ontology_db
         self.triplets_db = triplets_db
 
@@ -71,7 +71,9 @@ class Aligner:
         # self.model = AutoModel.from_pretrained(model_path, use_safetensors=True).to(
         #     self.device
         # )
-        self.model = AutoModel.from_pretrained(model_path).to(self.device)
+        self.model = AutoModel.from_pretrained(model_path, use_safetensors=True).to(
+            self.device
+        )
 
     def get_embedding(self, text):
 
