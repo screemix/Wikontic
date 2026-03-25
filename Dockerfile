@@ -16,10 +16,11 @@ COPY requirements.txt .
 
 RUN pip install --upgrade pip && pip install -r requirements.txt
 
-COPY utils/openai_utils.py ./utils/
-COPY utils/structured_dynamic_index_utils_with_db.py ./utils/
-COPY utils/structured_inference_with_db.py ./utils/
-COPY utils/prompts/ ./utils/prompts/
+COPY src/wikontic/utils/ ./src/wikontic/utils/
+COPY src/wikontic/__init__.py ./src/wikontic/__init__.py
+COPY src/wikontic/create_ontological_triplets_db.py ./src/wikontic/create_ontological_triplets_db.py
+COPY src/wikontic/create_triplets_db.py ./src/wikontic/create_triplets_db.py
+COPY src/wikontic/create_wikidata_ontology_db.py ./src/wikontic/create_wikidata_ontology_db.py
 
 COPY Wikontic.py .
 COPY pages/ ./pages/
