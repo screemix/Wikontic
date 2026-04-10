@@ -19,8 +19,8 @@ import httpx
 
 # Configure logging
 logger = logging.getLogger("OpenAIUtils")
-logger.setLevel(logging.ERROR)
-logging.getLogger("httpx").setLevel(logging.ERROR)
+logger.setLevel(logging.INFO)
+logging.getLogger("httpx").setLevel(logging.WARNING)
 
 # _ = load_dotenv(find_dotenv())
 # OpenAI
@@ -37,22 +37,24 @@ class LLMTripletExtractor:
         "gpt-4.1": {"input": 2.0, "output": 8.0},
         "Meta-llama/Llama-3.3-70B-Instruct": {"input": 0.04, "output": 0.12},
         "qwen/qwen3-32b": {"input": 0.05, "output": 0.2},
+        "Openai/Gpt-oss-120b": {"input": 0.05, "output": 0.2},
+        "Qwen/Qwen3-32B": {"input": 0.05, "output": 0.2},
     }
 
     def __init__(
         self,
         api_key: str,
-        base_url: str = None,
         prompt_folder_path: str = str(Path(__file__).parent / "prompts"),
         system_prompt_paths: Optional[Dict[str, str]] = None,
         model: str = "gpt-4o",
         max_attempts=MAX_ATTEMPTS,
         proxy: str = None,
+        base_url: str = "https://api.openai.com/v1",
     ):
         if proxy:
             http_client = httpx.Client(proxy=proxy)
             self.client = openai.OpenAI(
-                api_key=api_key, base_url=base_url, http_client=http_client
+                api_key=api_key, http_client=http_client, base_url=base_url
             )
         else:
             self.client = openai.OpenAI(api_key=api_key, base_url=base_url)
@@ -61,13 +63,9 @@ class LLMTripletExtractor:
         Initialize the LLMTripletExtractor.
 
         Args:
-            api_key: API key for the LLM service
-            base_url: Base URL for the API endpoint (e.g., OpenRouter)
             prompt_folder_path: Path to folder containing prompt files
             system_prompt_paths: Dictionary mapping prompt types to file paths
-            model: Name of the model to use
-            max_attempts: Maximum number of retry attempts
-            proxy: Proxy URL if needed
+            model: Name of the OpenAI model to use
         """
         if system_prompt_paths is None:
             system_prompt_paths = {
@@ -141,13 +139,13 @@ class LLMTripletExtractor:
     @retry(
         wait=wait_random_exponential(multiplier=1, max=60),
         before_sleep=before_sleep_log(logger, logging.ERROR),
-        stop=stop_after_attempt(5),
+        # stop=stop_after_attempt(5),
     )
     def get_completion(
         self, system_prompt: str, user_prompt: str, transform_to_json: bool = True
     ) -> Union[dict, list, str]:
         """Get completion from OpenAI API with retry logic."""
-        if self.model == "qwen/qwen3-32b":
+        if self.model == "qwen/qwen3-32b" or self.model == "Qwen/Qwen3-32B":
             user_prompt = "/no_think \n" + user_prompt
         messages = [
             {"role": "system", "content": system_prompt},
@@ -185,7 +183,7 @@ class LLMTripletExtractor:
         system_prompt = self.prompts["triplet_extraction"]
         if attempt > 1:
             prev_error = self._prev_error
-            system_prompt += f"\n(Previous attempt #{attempt - 1} failed with error: {prev_error}. Please adjust your answer!)"
+            system_prompt += f"\n(Previous attempt #{attempt-1} failed with error: {prev_error}. Please adjust your answer!)"
             logger.log(logging.ERROR, "System prompt: %s", system_prompt)
 
         try:
@@ -236,7 +234,7 @@ class LLMTripletExtractor:
         system_prompt = self.prompts["entity_types_ranker"]
         if attempt > 1:
             prev_error = self._prev_error
-            system_prompt += f"\n(Previous attempt #{attempt - 1} failed with error: {prev_error}. Please adjust your answer!)"
+            system_prompt += f"\n(Previous attempt #{attempt-1} failed with error: {prev_error}. Please adjust your answer!)"
             logger.log(logging.ERROR, "System prompt: %s", system_prompt)
 
         try:
@@ -267,12 +265,12 @@ class LLMTripletExtractor:
         )
 
         try:
-            assert output["subject_type"] in candidate_subject_types, (
-                "Refined subject type is not in candidate subject types"
-            )
-            assert output["object_type"] in candidate_object_types, (
-                "Refined object type is not in candidate object types"
-            )
+            assert (
+                output["subject_type"] in candidate_subject_types
+            ), "Refined subject type is not in candidate subject types"
+            assert (
+                output["object_type"] in candidate_object_types
+            ), "Refined object type is not in candidate object types"
         except Exception as e:
             self._prev_error = e
             logger.log(logging.ERROR, str(e))
@@ -306,7 +304,7 @@ class LLMTripletExtractor:
 
         if attempt > 1:
             prev_error = self._prev_error
-            system_prompt += f"\n(Previous attempt #{attempt - 1} failed with error {prev_error}. Please adjust your answer!)"
+            system_prompt += f"\n(Previous attempt #{attempt-1} failed with error {prev_error}. Please adjust your answer!)"
             logger.log(logging.ERROR, "System prompt: %s", system_prompt)
         try:
             output = self.get_completion(
@@ -330,9 +328,9 @@ class LLMTripletExtractor:
         )
 
         try:
-            assert output["relation"] in candidate_relations, (
-                "Refined relation is not in candidate relations"
-            )
+            assert (
+                output["relation"] in candidate_relations
+            ), "Refined relation is not in candidate relations"
         except Exception as e:
             self._prev_error = e
             logger.log(logging.ERROR, str(e))
@@ -366,7 +364,7 @@ class LLMTripletExtractor:
 
         if attempt > 1:
             prev_error = self._prev_error
-            system_prompt += f"\n(Previous attempt #{attempt - 1} failed with error {prev_error}. Please adjust your answer!)"
+            system_prompt += f"\n(Previous attempt #{attempt-1} failed with error {prev_error}. Please adjust your answer!)"
             logger.log(logging.ERROR, "System prompt: %s", system_prompt)
         try:
             return self.get_completion(
@@ -424,7 +422,7 @@ class LLMTripletExtractor:
 
         if attempt > 1:
             prev_error = self._prev_error
-            system_prompt += f"\n(Previous attempt #{attempt - 1} failed with error: {prev_error}. Please adjust your answer!)"
+            system_prompt += f"\n(Previous attempt #{attempt-1} failed with error: {prev_error}. Please adjust your answer!)"
             logger.log(logging.ERROR, "System prompt: %s", system_prompt)
 
         try:

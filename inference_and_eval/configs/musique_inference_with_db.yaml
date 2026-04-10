@@ -1,0 +1,8 @@
+# Paths are resolved relative to the process working directory unless absolute.
+mongo_uri: "mongodb://localhost:27018/?directConnection=true"
+ontology_db_name: "wikidata_ontology"
+triplets_db_name: "triplets_db"
+model_name: "gpt-4o-mini"
+dataset_path: "datasets/musique_200_test.json"
+num_samples: 50
+structured_inference: false

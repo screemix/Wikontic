@@ -98,7 +98,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-model_options = ["gpt-4o-mini", "gpt-4.1-mini", "gpt-4.1"]
+model_options = ["gpt-4.1", "gpt-4o-mini", "gpt-4.1-mini"]
 selected_model = st.selectbox(
     "Choose a model for KG extraction:", model_options, index=0
 )

@@ -9,7 +9,7 @@ from .base_inference_with_db import BaseInferenceWithDB
 
 warnings.filterwarnings("ignore")
 logger = logging.getLogger("StructuredInferenceWithDB")
-logger.setLevel(logging.ERROR)
+logger.setLevel(logging.INFO)
 
 
 class StructuredInferenceWithDB(BaseInferenceWithDB):

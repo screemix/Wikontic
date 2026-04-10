@@ -104,7 +104,7 @@ st.markdown(
 )
 
 
-model_options = ["gpt-4o-mini", "gpt-4.1-mini", "gpt-4.1"]
+model_options = ["gpt-4.1", "gpt-4o-mini", "gpt-4.1-mini"]
 selected_model = st.selectbox("Choose a model for QA:", model_options, index=0)
 question = st.text_input("Ask a question about the Knowledge Graph")
 trigger = st.button("Answer question")
