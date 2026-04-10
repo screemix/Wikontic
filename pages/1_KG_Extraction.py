@@ -38,6 +38,7 @@ TRIPLETS_DB_NAME = "demo"
 _ = load_dotenv(find_dotenv())
 mongo_client = MongoClient(os.getenv("MONGO_URI"))
 api_key = os.getenv("KEY")
+base_url = os.getenv("OPENROUTER_BASE_URL")
 proxy_url = os.getenv("PROXY_URL")
 ontology_db = mongo_client.get_database(WIKIDATA_ONTOLOGY_DB_NAME)
 triplets_db = mongo_client.get_database(TRIPLETS_DB_NAME)
@@ -85,7 +86,6 @@ def visualize_knowledge_graph(triplets, highlight_entities=None):
         net.save_graph(tmp_file.name)
         html_path = tmp_file.name
     with open(html_path, "r", encoding="utf-8") as f:
-
         st.components.v1.html(f.read(), height=600, scrolling=True)
     os.remove(html_path)
 
@@ -210,7 +210,7 @@ if trigger:
         st.warning("Please select a model for KG extraction.")
     else:
         extractor = LLMTripletExtractor(
-            model=selected_model, api_key=api_key, proxy=proxy_url
+            model=selected_model, api_key=api_key, base_url=base_url, proxy=proxy_url
         )
         inference_with_db = StructuredInferenceWithDB(
             extractor=extractor, aligner=aligner, triplets_db=triplets_db
@@ -223,13 +223,13 @@ if trigger:
         ) = inference_with_db.extract_triplets_with_ontology_filtering_and_add_to_db(
             text=input_text, sample_id=user_id, source_text_id=None
         )
-        logger.info("Initial triplets: ", initial_triplets)
+        logger.info("Initial triplets: %s", initial_triplets)
         logger.info("-" * 100)
-        logger.info("Refined triplets: ", final_triplets)
+        logger.info("Refined triplets: %s", final_triplets)
         logger.info("-" * 100)
-        logger.info("filtered_triplets: ", filtered_triplets)
+        logger.info("filtered_triplets: %s", filtered_triplets)
         logger.info("-" * 100)
-        logger.info("ontology_filtered_triplets: ", ontology_filtered_triplets)
+        logger.info("ontology_filtered_triplets: %s", ontology_filtered_triplets)
         logger.info("-" * 100)
         new_entities = {t["subject"] for t in final_triplets} | {
             t["object"] for t in final_triplets
@@ -242,7 +242,6 @@ if trigger:
         col1, col2 = st.columns(2)
 
         with col1:
-
             st.subheader("Extracted Triplets")
             visualize_initial_knowledge_graph(initial_triplets)
 

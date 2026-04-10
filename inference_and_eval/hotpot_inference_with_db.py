@@ -70,6 +70,7 @@ if __name__ == "__main__":
     num_samples = args.num_samples
 
     api_key = os.getenv("OPENROUTER_KEY")
+    base_url = os.getenv("OPENROUTER_BASE_URL")
     proxy_url = os.getenv("PROXY_URL")
 
     ds = get_dataset(dataset_path)
@@ -80,7 +81,9 @@ if __name__ == "__main__":
         logger.info("Structured inference disabled, using dynamic inference")
         aligner = DynamicDBAligner(triplets_db=triplets_db)
 
-    extractor = LLMTripletExtractor(model=model_name, api_key=api_key, proxy=proxy_url)
+    extractor = LLMTripletExtractor(
+        model=model_name, api_key=api_key, base_url=base_url, proxy=proxy_url
+    )
 
     if args.structured_inference:
         inference_with_db = StructuredInferenceWithDB(
@@ -98,7 +101,6 @@ if __name__ == "__main__":
     sampled_ids = list(id2sample.keys())[:num_samples]
 
     for i, sample_id in tqdm(enumerate(sampled_ids), total=len(sampled_ids)):
-
         sample = id2sample[sample_id]
         texts = [" ".join(item[1]) for item in sample["context"]]
 

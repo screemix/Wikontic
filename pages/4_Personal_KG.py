@@ -30,6 +30,7 @@ TRIPLETS_DB_NAME = "demo"
 _ = load_dotenv(find_dotenv())
 mongo_client = MongoClient(os.getenv("MONGO_URI"))
 api_key = os.getenv("KEY")
+base_url = os.getenv("OPENROUTER_BASE_URL")
 proxy_url = os.getenv("PROXY_URL")
 ontology_db = mongo_client.get_database(WIKIDATA_ONTOLOGY_DB_NAME)
 triplets_db = mongo_client.get_database(TRIPLETS_DB_NAME)
@@ -77,7 +78,6 @@ def visualize_knowledge_graph(triplets, highlight_entities=None):
         net.save_graph(tmp_file.name)
         html_path = tmp_file.name
     with open(html_path, "r", encoding="utf-8") as f:
-
         st.components.v1.html(f.read(), height=600, scrolling=True)
     os.remove(html_path)
 
@@ -127,7 +127,7 @@ if trigger:
         st.warning("Please select a model for KG extraction for the person.")
     else:
         extractor = LLMTripletExtractor(
-            model=selected_model, api_key=api_key, proxy=proxy_url
+            model=selected_model, api_key=api_key, base_url=base_url, proxy=proxy_url
         )
         response = extractor.client.responses.create(
             model="gpt-4.1",

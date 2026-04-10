@@ -42,6 +42,7 @@ class LLMTripletExtractor:
     def __init__(
         self,
         api_key: str,
+        base_url: str = None,
         prompt_folder_path: str = str(Path(__file__).parent / "prompts"),
         system_prompt_paths: Optional[Dict[str, str]] = None,
         model: str = "gpt-4o",
@@ -50,17 +51,23 @@ class LLMTripletExtractor:
     ):
         if proxy:
             http_client = httpx.Client(proxy=proxy)
-            self.client = openai.OpenAI(api_key=api_key, http_client=http_client)
+            self.client = openai.OpenAI(
+                api_key=api_key, base_url=base_url, http_client=http_client
+            )
         else:
-            self.client = openai.OpenAI(api_key=api_key)
+            self.client = openai.OpenAI(api_key=api_key, base_url=base_url)
 
         """
         Initialize the LLMTripletExtractor.
 
         Args:
+            api_key: API key for the LLM service
+            base_url: Base URL for the API endpoint (e.g., OpenRouter)
             prompt_folder_path: Path to folder containing prompt files
             system_prompt_paths: Dictionary mapping prompt types to file paths
-            model: Name of the OpenAI model to use
+            model: Name of the model to use
+            max_attempts: Maximum number of retry attempts
+            proxy: Proxy URL if needed
         """
         if system_prompt_paths is None:
             system_prompt_paths = {
@@ -178,7 +185,7 @@ class LLMTripletExtractor:
         system_prompt = self.prompts["triplet_extraction"]
         if attempt > 1:
             prev_error = self._prev_error
-            system_prompt += f"\n(Previous attempt #{attempt-1} failed with error: {prev_error}. Please adjust your answer!)"
+            system_prompt += f"\n(Previous attempt #{attempt - 1} failed with error: {prev_error}. Please adjust your answer!)"
             logger.log(logging.ERROR, "System prompt: %s", system_prompt)
 
         try:
@@ -229,7 +236,7 @@ class LLMTripletExtractor:
         system_prompt = self.prompts["entity_types_ranker"]
         if attempt > 1:
             prev_error = self._prev_error
-            system_prompt += f"\n(Previous attempt #{attempt-1} failed with error: {prev_error}. Please adjust your answer!)"
+            system_prompt += f"\n(Previous attempt #{attempt - 1} failed with error: {prev_error}. Please adjust your answer!)"
             logger.log(logging.ERROR, "System prompt: %s", system_prompt)
 
         try:
@@ -260,12 +267,12 @@ class LLMTripletExtractor:
         )
 
         try:
-            assert (
-                output["subject_type"] in candidate_subject_types
-            ), "Refined subject type is not in candidate subject types"
-            assert (
-                output["object_type"] in candidate_object_types
-            ), "Refined object type is not in candidate object types"
+            assert output["subject_type"] in candidate_subject_types, (
+                "Refined subject type is not in candidate subject types"
+            )
+            assert output["object_type"] in candidate_object_types, (
+                "Refined object type is not in candidate object types"
+            )
         except Exception as e:
             self._prev_error = e
             logger.log(logging.ERROR, str(e))
@@ -299,7 +306,7 @@ class LLMTripletExtractor:
 
         if attempt > 1:
             prev_error = self._prev_error
-            system_prompt += f"\n(Previous attempt #{attempt-1} failed with error {prev_error}. Please adjust your answer!)"
+            system_prompt += f"\n(Previous attempt #{attempt - 1} failed with error {prev_error}. Please adjust your answer!)"
             logger.log(logging.ERROR, "System prompt: %s", system_prompt)
         try:
             output = self.get_completion(
@@ -323,9 +330,9 @@ class LLMTripletExtractor:
         )
 
         try:
-            assert (
-                output["relation"] in candidate_relations
-            ), "Refined relation is not in candidate relations"
+            assert output["relation"] in candidate_relations, (
+                "Refined relation is not in candidate relations"
+            )
         except Exception as e:
             self._prev_error = e
             logger.log(logging.ERROR, str(e))
@@ -359,7 +366,7 @@ class LLMTripletExtractor:
 
         if attempt > 1:
             prev_error = self._prev_error
-            system_prompt += f"\n(Previous attempt #{attempt-1} failed with error {prev_error}. Please adjust your answer!)"
+            system_prompt += f"\n(Previous attempt #{attempt - 1} failed with error {prev_error}. Please adjust your answer!)"
             logger.log(logging.ERROR, "System prompt: %s", system_prompt)
         try:
             return self.get_completion(
@@ -417,7 +424,7 @@ class LLMTripletExtractor:
 
         if attempt > 1:
             prev_error = self._prev_error
-            system_prompt += f"\n(Previous attempt #{attempt-1} failed with error: {prev_error}. Please adjust your answer!)"
+            system_prompt += f"\n(Previous attempt #{attempt - 1} failed with error: {prev_error}. Please adjust your answer!)"
             logger.log(logging.ERROR, "System prompt: %s", system_prompt)
 
         try:
