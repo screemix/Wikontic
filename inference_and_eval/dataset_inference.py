@@ -49,7 +49,7 @@ CONFIG_DEFAULTS = {
     "ontology_db_name": "wikidata_ontology",
     "triplets_db_name": "triplets_db",
     "model_name": "gpt-4o-mini",
-    "dataset_path": "datasets/musique_200_test.json",
+    "dataset_path": "datasets/musique_200_test_preprocessed.json",
     "preprocessing": "musique",
     "sample_start_index": 0,
     "num_samples": 50,
@@ -85,48 +85,11 @@ def get_mongo_client(mongo_uri):
     client = MongoClient(mongo_uri)
     return client
 
-
 def get_json_dataset(dataset_path):
     with open(dataset_path, "r") as f:
         ds = json.load(f)
     return ds
 
-
-def get_jsonl_dataset(dataset_path):
-    with open(dataset_path, "r") as f:
-        ds = [json.loads(line) for line in f]
-    return ds
-
-
-def convert_musique_dataset(ds):
-    id2texts = {}
-    for elem in ds:
-        answerable = "Answerable" if elem["answerable"] else "Unanswerable"
-        texts = [item["paragraph_text"] for item in elem["paragraphs"]]
-        id2texts[elem["id"] + "_" + answerable] = texts
-    return id2texts
-
-def convert_edgar_dataset(ds):
-    id2texts = {}
-    filenames = list(ds.keys())
-    for filename in filenames:
-        texts = [item["text"] for item in ds[filename]]
-        id2texts[filename] = texts
-    return id2texts
-
-def convert_hotpot_dataset(ds):
-    id2texts = {}
-    for elem in ds:
-        texts = [" ".join(item[1]) for item in elem["context"]]
-        id2texts[elem["_id"]] = texts
-    return id2texts
-
-def convert_mine_dataset(ds):
-    id2texts = {}
-    for elem in ds:
-        texts = [item["paragraph_text"] for item in elem["paragraphs"]]
-        id2texts[elem["id"]] = texts
-    return id2texts
 
 if __name__ == "__main__":
     args = parser.parse_args()
@@ -168,15 +131,11 @@ if __name__ == "__main__":
             triplets_db = mongo_client.get_database(triplets_db_name)
             logger.info(f"Triplets database created successfully: {triplets_db_name}")
     api_key = os.getenv(cfg.api_key_env_var)
-    # api_key = ""
+    api_key = ""
     proxy_url = cfg.proxy_env_var if cfg.proxy_env_var else None
     base_url = os.getenv(cfg.base_url_env_var)
 
-    ds = (
-        get_json_dataset(cfg.dataset_path)
-        if cfg.dataset_path.endswith(".json")
-        else get_jsonl_dataset(cfg.dataset_path)
-    )
+    ds = get_json_dataset(cfg.dataset_path)
 
     extractor = LLMTripletExtractor(
         model=cfg.model_name, api_key=api_key, proxy=proxy_url, base_url=base_url
@@ -194,22 +153,11 @@ if __name__ == "__main__":
             extractor=extractor, aligner=aligner, triplets_db=triplets_db
         )   
 
-    if cfg.preprocessing == "musique":
-        id2texts = convert_musique_dataset(ds)
-    elif cfg.preprocessing == "edgar":
-        id2texts = convert_edgar_dataset(ds)
-    elif cfg.preprocessing == "hotpot":
-        id2texts = convert_hotpot_dataset(ds)
-    elif cfg.preprocessing == "mine":
-        id2texts = convert_mine_dataset(ds)
-    else:
-        raise ValueError(f"Invalid preprocessing: {cfg.preprocessing}")
-
-    sampled_ids = list(id2texts.keys())[cfg.sample_start_index : cfg.sample_start_index + cfg.num_samples]
+    sampled_ids = list(ds.keys())[cfg.sample_start_index : cfg.sample_start_index + cfg.num_samples]
 
     for i, sample_id in tqdm(enumerate(sampled_ids), total=len(sampled_ids)):
 
-        texts = id2texts[sample_id]
+        texts = ds[sample_id]
 
         for idx, text in tqdm(enumerate(texts), total=len(texts)):
             if (
