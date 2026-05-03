@@ -1,0 +1,10 @@
+# Paths are resolved relative to the process working directory unless absolute.
+mongo_uri: "mongodb://localhost:27018/?directConnection=true"
+ontology_db_name: "wikidata_ontology"
+triplets_db_name: "triplets_musique_train_split_occ"
+model_name: "openai/gpt-oss-120b"
+dataset_path: "../datasets/data/musique_full_v1.0_train.jsonl"
+num_samples: 1000
+structured_inference: true
+base_url_env_var: "OSS_URL"
+api_key_env_var: "OSS_URL"

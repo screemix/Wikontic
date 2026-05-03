@@ -6,5 +6,5 @@ model_name: "Openai/Gpt-oss-120b"
 dataset_path: "../datasets/data/musique_full_v1.0_train.jsonl"
 num_samples: 1000
 structured_inference: true
-base_url_env_var: "AIRI_BASE_URL"
-api_key_env_var: "AIRI_KEY_MAX"
+base_url_env_var: "AXXX_BASE_URL"
+api_key_env_var: "AXXX_KEY_MAX"
