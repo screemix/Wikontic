@@ -1,5 +1,8 @@
 # Paths are resolved relative to the process working directory unless absolute.
 mongo_uri: "mongodb://localhost:27018/?directConnection=true"
+vector_db_backend: "mongodb"
+qdrant_url: ":memory:"
+qdrant_api_key: null
 ontology_db_name: "wikidata_ontology"
 triplets_db_name: "triplets_db"
 model_name: "gpt-4o-mini"
