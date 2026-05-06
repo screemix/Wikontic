@@ -1,16 +1,9 @@
-from pymongo.mongo_client import MongoClient
-from pymongo.operations import SearchIndexModel
-import pymongo
-
-from typing import List
-from pydantic import BaseModel, ValidationError
-from transformers import AutoTokenizer, AutoModel
-from tqdm import tqdm
-import json
-import time
 import argparse
 import logging
-import os
+from pymongo.mongo_client import MongoClient
+
+from wikontic.db.bootstrap import ensure_collections
+from wikontic.db.factory import create_backend
 
 # Configure logging
 logging.basicConfig(
@@ -19,53 +12,11 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-def get_mongo_client(mongo_uri):
-    client = MongoClient(mongo_uri)
-    logger.info("Connection to MongoDB successful")
-    return client
-
-
-def create_search_index_for_entities(
-    db,
-    collection_name="entity_aliases",
-    embedding_field_name="alias_text_embedding",
-    entity_type_id_field_name="entity_type",
-    index_name="entities",
-):
-    logger.info(f"Starting to create index {index_name} for {collection_name}")
-    collection = db.get_collection(collection_name)
-    vector_search_index_model = SearchIndexModel(
-        definition={
-            "mappings": {
-                "dynamic": True,
-                "fields": {
-                    embedding_field_name: {
-                        "dimensions": 768,
-                        "similarity": "cosine",
-                        "type": "knnVector",
-                    },
-                    entity_type_id_field_name: {"type": "token"},
-                    "sample_id": {
-                        # "type": "number"
-                        "type": "token"
-                    },
-                },
-            }
-        },
-        name=index_name,
-    )
-
-    try:
-        result = collection.create_search_index(model=vector_search_index_model)
-        logger.info("Creating index...")
-        time.sleep(20)
-        logger.info(f"New index {index_name} created successfully: {result}")
-    except Exception as e:
-        logger.error(f"Error creating new vector search index {index_name}: {str(e)}")
-
-
 def create_ontological_triplets_database(
+    backend: str = "mongodb",
     mongo_uri: str = "mongodb://localhost:27018/?directConnection=true",
+    qdrant_url: str = ":memory:",
+    qdrant_api_key: str = None,
     db_name: str = "triplets_db",
     entity_aliases_collection: str = "entity_aliases",
     triplets_collection: str = "triplets",
@@ -73,6 +24,7 @@ def create_ontological_triplets_database(
     filtered_triplets_collection: str = "filtered_triplets",
     ontology_filtered_triplets_collection: str = "ontology_filtered_triplets",
     entity_aliases_index: str = "entity_aliases",
+    embedding_dimensions: int = 768,
     drop_collections: bool = False,
 ):
     """
@@ -92,41 +44,49 @@ def create_ontological_triplets_database(
     Returns:
         Database object
     """
-    mongo_client = get_mongo_client(mongo_uri)
-    db = mongo_client.get_database(db_name)
-
-    if drop_collections:
-        for collection_name in db.list_collection_names():
-            db.drop_collection(collection_name)
-            logger.info(f"Dropped collection: {collection_name}")
-
-    db.create_collection(entity_aliases_collection)
-    db.create_collection(initial_triplets_collection)
-    db.create_collection(filtered_triplets_collection)
-    db.create_collection(ontology_filtered_triplets_collection)
-    db.create_collection(triplets_collection)
-
-    logger.info("Collections created successfully")
-    db.entity_aliases.create_index([("entity_type", 1), ("sample_id", 1)])
-    db.entity_aliases.create_index([("label", 1)])
-
-    db.triplets.create_index([("sample_id", 1)])
-    db.initial_triplets.create_index([("sample_id", 1)])
-    db.filtered_triplets.create_index([("sample_id", 1)])
-    db.ontology_filtered_triplets.create_index([("sample_id", 1)])
-    logger.info("Indexes created successfully")
-
-    create_search_index_for_entities(
-        db,
-        collection_name=entity_aliases_collection,
-        embedding_field_name="alias_text_embedding",
-        entity_type_id_field_name="entity_type",
-        index_name=entity_aliases_index,
+    mongo_db = None
+    if backend == "mongodb":
+        mongo_client = MongoClient(mongo_uri)
+        mongo_db = mongo_client.get_database(db_name)
+        logger.info("Connection to MongoDB successful")
+    storage_backend = create_backend(
+        backend_type=backend,
+        mongo_db=mongo_db,
+        qdrant_url=qdrant_url,
+        qdrant_api_key=qdrant_api_key,
     )
-    logger.info("Search index created successfully")
-    logger.info("All indexes created successfully")
-
-    return db
+    ensure_collections(
+        storage_backend,
+        [
+            entity_aliases_collection,
+            initial_triplets_collection,
+            filtered_triplets_collection,
+            ontology_filtered_triplets_collection,
+            triplets_collection,
+        ],
+        drop_collections=drop_collections,
+    )
+    if backend == "mongodb":
+        storage_backend.create_indexes(
+            entity_aliases_collection, [["entity_type", "sample_id"], ["label"]]
+        )
+        for coll in [
+            triplets_collection,
+            initial_triplets_collection,
+            filtered_triplets_collection,
+            ontology_filtered_triplets_collection,
+        ]:
+            storage_backend.create_indexes(coll, [["sample_id"]])
+        logger.info("Indexes created successfully")
+        storage_backend.ensure_vector_index(
+            collection_name=entity_aliases_collection,
+            index_name=entity_aliases_index,
+            vector_field="alias_text_embedding",
+            num_dimensions=embedding_dimensions,
+            token_fields=["entity_type", "sample_id"],
+        )
+    logger.info("Collections created successfully for backend=%s", backend)
+    return storage_backend
 
 
 if __name__ == "__main__":
@@ -138,6 +98,9 @@ if __name__ == "__main__":
         type=str,
         default="mongodb://localhost:27018/?directConnection=true",
     )
+    parser.add_argument("--backend", type=str, default="mongodb")
+    parser.add_argument("--qdrant_url", type=str, default=":memory:")
+    parser.add_argument("--qdrant_api_key", type=str, default=None)
     parser.add_argument("--db_name", type=str, default="triplets_db")
     parser.add_argument(
         "--entity_aliases_collection",
@@ -173,7 +136,13 @@ if __name__ == "__main__":
         "--entity_aliases_index",
         type=str,
         default="entity_aliases",
-        help="Index name for entities",
+        help="MongoDB Atlas Vector Search index name for entity aliases",
+    )
+    parser.add_argument(
+        "--embedding_dimensions",
+        type=int,
+        default=768,
+        help="Embedding dimensions for MongoDB Atlas Vector Search indexes",
     )
     parser.add_argument(
         "--drop_collections", type=bool, default=False, help="Drop existing collections"
@@ -181,7 +150,10 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
     create_ontological_triplets_database(
+        backend=args.backend,
         mongo_uri=args.mongo_uri,
+        qdrant_url=args.qdrant_url,
+        qdrant_api_key=args.qdrant_api_key,
         db_name=args.db_name,
         entity_aliases_collection=args.entity_aliases_collection,
         triplets_collection=args.triplets_collection,
@@ -189,5 +161,6 @@ if __name__ == "__main__":
         filtered_triplets_collection=args.filtered_triplets_collection,
         ontology_filtered_triplets_collection=args.ontology_filtered_triplets_collection,
         entity_aliases_index=args.entity_aliases_index,
+        embedding_dimensions=args.embedding_dimensions,
         drop_collections=args.drop_collections,
     )

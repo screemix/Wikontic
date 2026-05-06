@@ -39,6 +39,7 @@ class LLMTripletExtractor:
         "qwen/qwen3-32b": {"input": 0.05, "output": 0.2},
         "Openai/Gpt-oss-120b": {"input": 0.05, "output": 0.2},
         "Qwen/Qwen3-32B": {"input": 0.05, "output": 0.2},
+        # "openai/gpt-oss-120b": {"input": 0.05, "output": 0.2},
     }
 
     def __init__(
@@ -110,9 +111,13 @@ class LLMTripletExtractor:
 
         # Set pricing
         if model not in self.MODEL_PRICES:
-            raise ValueError(f"Unknown model: {model}")
-        self.input_price = self.MODEL_PRICES[model]["input"]
-        self.output_price = self.MODEL_PRICES[model]["output"]
+            logger.error(f"Unknown model: {model}. Price will be set to 0.")
+            self.input_price = 0.0
+            self.output_price = 0.0
+        else:
+            self.input_price = self.MODEL_PRICES[model]["input"]
+            self.output_price = self.MODEL_PRICES[model]["output"]
+            logger.info(f"Model: {model}. Input price: {self.input_price}. Output price: {self.output_price}.")
 
     def extract_json(self, text: str) -> Union[dict, list, str]:
         """Extract JSON from text, handling both code blocks and inline JSON."""
@@ -139,7 +144,7 @@ class LLMTripletExtractor:
     @retry(
         wait=wait_random_exponential(multiplier=1, max=60),
         before_sleep=before_sleep_log(logger, logging.ERROR),
-        # stop=stop_after_attempt(5),
+        stop=stop_after_attempt(5),
     )
     def get_completion(
         self, system_prompt: str, user_prompt: str, transform_to_json: bool = True

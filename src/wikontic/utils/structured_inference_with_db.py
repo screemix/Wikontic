@@ -6,6 +6,7 @@ from langchain.tools import tool
 import logging
 
 from .base_inference_with_db import BaseInferenceWithDB
+from wikontic.db.mongo_backend import MongoBackend
 
 warnings.filterwarnings("ignore")
 logger = logging.getLogger("StructuredInferenceWithDB")
@@ -16,7 +17,11 @@ class StructuredInferenceWithDB(BaseInferenceWithDB):
     def __init__(self, extractor, aligner, triplets_db):
         self.extractor = extractor
         self.aligner = aligner
-        self.triplets_db = triplets_db
+        self.triplets_db = (
+            triplets_db
+            if hasattr(triplets_db, "match_documents")
+            else MongoBackend(triplets_db)
+        )
 
         self.extract_triplets_with_ontology_filtering_tool = tool(
             self.extract_triplets_with_ontology_filtering

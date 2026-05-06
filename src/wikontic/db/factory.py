@@ -1,0 +1,22 @@
+from __future__ import annotations
+
+from typing import Optional
+
+from .mongo_backend import MongoBackend
+from .qdrant_backend import QdrantBackend
+
+
+def create_backend(
+    backend_type: str,
+    mongo_db=None,
+    qdrant_url: str = ":memory:",
+    qdrant_api_key: Optional[str] = None,
+):
+    normalized = (backend_type or "mongodb").lower()
+    if normalized == "mongodb":
+        if mongo_db is None:
+            raise ValueError("mongo_db must be provided when backend_type='mongodb'")
+        return MongoBackend(mongo_db=mongo_db)
+    if normalized == "qdrant":
+        return QdrantBackend(qdrant_url=qdrant_url, api_key=qdrant_api_key)
+    raise ValueError(f"Unsupported backend_type: {backend_type}")
