@@ -144,7 +144,7 @@ class BaseInferenceWithDB:
                     "relation": item["relation"],
                     "object": item["object"],
                     "qualifiers": item["qualifiers"],
-		    "source_text_id": item["source_text_id"]
+		    "source_text_id": item.get("source_text_id")
                 }
                 for item in results
             ]
@@ -154,7 +154,7 @@ class BaseInferenceWithDB:
                     "subject": item["subject"],
                     "relation": item["relation"],
                     "object": item["object"],
-		    "source_text_id": item["source_text_id"]
+		    "source_text_id": item.get("source_text_id")
                 }
                 for item in results
             ]
@@ -218,7 +218,7 @@ class BaseInferenceWithDB:
                     "relation": item["relation"],
                     "object": item["object"],
                     "qualifiers": item["qualifiers"],
-		    "source_text_id": item["source_text_id"]
+		    "source_text_id": item.get("source_text_id")
                 }
                 for item in supporting_triplets
             ]
@@ -228,7 +228,7 @@ class BaseInferenceWithDB:
                     "subject": item["subject"],
                     "relation": item["relation"],
                     "object": item["object"],
-		    "source_text_id": item["source_text_id"]
+		    "source_text_id": item.get("source_text_id")
                 }
                 for item in supporting_triplets
             ]
