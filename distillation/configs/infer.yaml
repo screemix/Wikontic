@@ -1,0 +1,25 @@
+# Inference & evaluation config for Wikontic distillation.
+# Paths are resolved relative to the directory where infer.py lives.
+
+# Model paths
+base_model: "HuggingFaceTB/SmolLM2-1.7B-Instruct"
+adapter_path: "./checkpoints/wikontic-curriculum"
+
+# Data (same chat format used for training)
+val_path: "./data/val.jsonl"
+output_dir: "./inference_outputs"
+
+# Generation
+temperature: 0.0
+do_sample: false
+max_new_tokens: 2048
+batch_size: 1
+
+# Quantization (must match training settings)
+load_in_4bit: true
+bnb_4bit_quant_type: "nf4"
+bnb_4bit_compute_dtype: "bfloat16"
+
+# Comparison report
+# Path to training data for distribution comparison
+train_path: "./data/train.jsonl"

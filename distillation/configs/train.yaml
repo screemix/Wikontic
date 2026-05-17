@@ -1,0 +1,64 @@
+# Training config for Wikontic distillation with curriculum & loss weighting.
+# Paths are resolved relative to the directory where train.py lives.
+
+train_path: "./data/train.jsonl"
+val_path: "./data/val.jsonl"
+system_prompt_path: "../src/wikontic/utils/prompts/triplet_extraction/propmt_1_types_qualifiers.txt"
+output_dir: "./checkpoints/wikontic-curriculum"
+
+# Model
+base_model: "HuggingFaceTB/SmolLM2-1.7B-Instruct"
+
+# Quantization (QLoRA)
+load_in_4bit: true
+bnb_4bit_quant_type: "nf4"
+bnb_4bit_compute_dtype: "bfloat16"
+
+# LoRA
+lora_r: 16
+lora_alpha: 32
+lora_dropout: 0.05
+target_modules:
+  - "q_proj"
+  - "v_proj"
+
+# Training hyperparameters
+num_train_epochs: 3
+per_device_train_batch_size: 1
+per_device_eval_batch_size: 1
+gradient_accumulation_steps: 4
+learning_rate: 2.0e-4
+warmup_steps: 100
+logging_steps: 10
+save_steps: 500
+eval_strategy: "steps"
+eval_steps: 500
+bf16: true
+remove_unused_columns: false
+dataloader_num_workers: 0
+save_total_limit: 2
+report_to: "none"
+
+# ---------------------------------------------------------------------------
+# Curriculum scheduler
+# ---------------------------------------------------------------------------
+# Stages are evaluated in order.  At global step < until_step that stage is
+# active.  Triplets are sorted so "instance of" always comes first, then
+# truncated to max_triplets.  A final unlimited stage is appended automatically.
+curriculum:
+  enabled: true
+  stages:
+    - until_step: 500
+      max_triplets: 2
+    - until_step: 1000
+      max_triplets: 5
+    - until_step: 999999
+      max_triplets: 999
+
+# ---------------------------------------------------------------------------
+# Loss down-weighting for "instance of"
+# ---------------------------------------------------------------------------
+# Tokens that literally spell the string "instance of" inside the completion
+# get their CE loss multiplied by this coefficient (< 1.0 down-weights).
+# 1.0 means no effect.
+instance_of_weight: 0.3
