@@ -3,7 +3,7 @@
 
 # Model paths
 base_model: "HuggingFaceTB/SmolLM2-1.7B-Instruct"
-adapter_path: "./checkpoints/wikontic-curriculum"
+adapter_path: "./checkpoints/wikontic-v2"
 
 # Data (same chat format used for training)
 val_path: "./data/val.jsonl"
@@ -20,6 +20,12 @@ load_in_4bit: true
 bnb_4bit_quant_type: "nf4"
 bnb_4bit_compute_dtype: "bfloat16"
 
+# Whitelist filtering
+# Extract allowed relations/types from training data and filter predictions
+use_whitelist: true
+whitelist_soft_mapping: true    # use string-similarity to map unknown relations
+whitelist_min_similarity: 0.6   # minimum similarity threshold for soft mapping
+
 # Comparison report
-# Path to training data for distribution comparison
+# Path to training data for distribution comparison and whitelist extraction
 train_path: "./data/train.jsonl"

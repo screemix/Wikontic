@@ -1,10 +1,11 @@
-# Training config for Wikontic distillation with curriculum & loss weighting.
+# Training config for Wikontic distillation — v2
+# (softened curriculum, stronger instance_of suppression, SFTTrainer)
 # Paths are resolved relative to the directory where train.py lives.
 
 train_path: "./data/train.jsonl"
 val_path: "./data/val.jsonl"
 system_prompt_path: "../src/wikontic/utils/prompts/triplet_extraction/propmt_1_types_qualifiers.txt"
-output_dir: "./checkpoints/wikontic-curriculum"
+output_dir: "./checkpoints/wikontic-v2"
 
 # Model
 base_model: "HuggingFaceTB/SmolLM2-1.7B-Instruct"
@@ -30,11 +31,10 @@ gradient_accumulation_steps: 4
 learning_rate: 2.0e-4
 warmup_steps: 100
 logging_steps: 10
-save_steps: 500
+save_steps: 1000
 eval_strategy: "steps"
-eval_steps: 500
+eval_steps: 1000
 bf16: true
-remove_unused_columns: false
 dataloader_num_workers: 0
 save_total_limit: 2
 report_to: "none"
@@ -42,23 +42,22 @@ report_to: "none"
 # ---------------------------------------------------------------------------
 # Curriculum scheduler
 # ---------------------------------------------------------------------------
-# Stages are evaluated in order.  At global step < until_step that stage is
-# active.  Triplets are sorted so "instance of" always comes first, then
-# truncated to max_triplets.  A final unlimited stage is appended automatically.
+# Stage 1 (steps 0–300): start at max_triplets=8 (close to the dataset median
+#   of 11), so the model learns the full JSON structure from the beginning
+#   while still seeing a manageable number of relations per example.
+#   "instance of" triplets are always sorted first, so they dominate this
+#   stage naturally.
+# Stage 2 (steps 300+): full examples — the automatically-appended unlimited
+#   stage takes over and the model learns to extract all relations.
 curriculum:
   enabled: true
   stages:
-    - until_step: 500
-      max_triplets: 2
-    - until_step: 1000
-      max_triplets: 5
-    - until_step: 999999
-      max_triplets: 999
+    - until_step: 300
+      max_triplets: 8
 
 # ---------------------------------------------------------------------------
 # Loss down-weighting for "instance of"
 # ---------------------------------------------------------------------------
-# Tokens that literally spell the string "instance of" inside the completion
-# get their CE loss multiplied by this coefficient (< 1.0 down-weights).
-# 1.0 means no effect.
-instance_of_weight: 0.3
+# Applied ONLY to tokens inside the completion (labels != -100).
+# 0.1 = strongly suppress; 1.0 = no effect.
+instance_of_weight: 0.1
