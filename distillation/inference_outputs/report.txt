@@ -5,80 +5,77 @@ WIKONTIC DISTILLATION INFERENCE REPORT
 --- Overall counts ---
 Validation examples: 199
 GT triplets total:   2109
-Raw pred triplets:   1171
-Filtered pred triplets: 1168
-Empty predictions:   1
+Raw pred triplets:   1291
+Filtered pred triplets: 1274
+Empty predictions:   0
 
 --- Overall FULL-MATCH metrics (subj+rel+obj+types) ---
-Precision: 0.772
-Recall:    0.428
-F1:        0.551
+Precision: 0.871
+Recall:    0.526
+F1:        0.656
 
 --- Overall SRO-MATCH metrics (subj+rel+obj only) ---
-Precision: 0.827
-Recall:    0.459
-F1:        0.591
-  (Type labels cost 0.040 F1 SRO>)
+Precision: 0.889
+Recall:    0.538
+F1:        0.670
+  (Type labels cost 0.014 F1 SRO>)
 
 --- Per-relation metrics FULL-MATCH (top 15 by GT support) ---
-  instance of                P=0.761  R=0.585  F1=0.661  gt= 142  pred= 109
-  occupation                 P=0.922  R=0.716  F1=0.806  gt= 116  pred=  90
-  has part(s)                P=0.592  R=0.290  F1=0.389  gt= 100  pred=  49
-  located in the administrative territorial entity  P=0.829  R=0.586  F1=0.687  gt=  58  pred=  41
-  part of                    P=0.806  R=0.463  F1=0.588  gt=  54  pred=  31
-  country of citizenship     P=0.923  R=0.889  F1=0.906  gt=  54  pred=  52
-  position held              P=0.806  R=0.490  F1=0.610  gt=  51  pred=  31
-  date of birth              P=0.939  R=0.939  F1=0.939  gt=  49  pred=  49
-  location                   P=0.895  R=0.447  F1=0.596  gt=  38  pred=  19
-  film crew member           P=0.889  R=0.250  F1=0.390  gt=  32  pred=   9
-  inception                  P=0.833  R=0.500  F1=0.625  gt=  30  pred=  18
-  notable work               P=0.714  R=0.172  F1=0.278  gt=  29  pred=   7
-  country of origin          P=0.885  R=0.821  F1=0.852  gt=  28  pred=  26
-  named after                P=0.545  R=0.462  F1=0.500  gt=  26  pred=  22
-  genre                      P=0.800  R=0.640  F1=0.711  gt=  25  pred=  20
+  instance of                P=0.895  R=0.782  F1=0.835  gt= 142  pred= 124
+  occupation                 P=0.979  R=0.793  F1=0.876  gt= 116  pred=  94
+  has part(s)                P=0.725  R=0.370  F1=0.490  gt= 100  pred=  51
+  located in the administrative territorial entity  P=0.759  R=0.707  F1=0.732  gt=  58  pred=  54
+  part of                    P=0.921  R=0.648  F1=0.761  gt=  54  pred=  38
+  country of citizenship     P=0.980  R=0.907  F1=0.942  gt=  54  pred=  50
+  position held              P=0.781  R=0.490  F1=0.602  gt=  51  pred=  32
+  date of birth              P=0.959  R=0.959  F1=0.959  gt=  49  pred=  49
+  location                   P=0.850  R=0.447  F1=0.586  gt=  38  pred=  20
+  film crew member           P=0.833  R=0.312  F1=0.455  gt=  32  pred=  12
+  inception                  P=0.857  R=0.600  F1=0.706  gt=  30  pred=  21
+  notable work               P=0.833  R=0.345  F1=0.488  gt=  29  pred=  12
+  country of origin          P=0.958  R=0.821  F1=0.885  gt=  28  pred=  24
+  named after                P=0.654  R=0.654  F1=0.654  gt=  26  pred=  26
+  genre                      P=0.731  R=0.760  F1=0.745  gt=  25  pred=  26
 
 --- Per-relation metrics SRO-MATCH (top 15 by GT support) ---
-  instance of                P=0.890  R=0.683  F1=0.773  gt= 142  pred= 109
-  occupation                 P=0.922  R=0.716  F1=0.806  gt= 116  pred=  90
-  has part(s)                P=0.694  R=0.340  F1=0.456  gt= 100  pred=  49
-  located in the administrative territorial entity  P=0.878  R=0.655  F1=0.750  gt=  55  pred=  41
-  part of                    P=0.871  R=0.500  F1=0.635  gt=  54  pred=  31
-  country of citizenship     P=0.923  R=0.889  F1=0.906  gt=  54  pred=  52
-  position held              P=0.903  R=0.549  F1=0.683  gt=  51  pred=  31
-  date of birth              P=0.939  R=0.939  F1=0.939  gt=  49  pred=  49
-  location                   P=0.947  R=0.474  F1=0.632  gt=  38  pred=  19
-  film crew member           P=0.889  R=0.250  F1=0.390  gt=  32  pred=   9
-  inception                  P=0.889  R=0.533  F1=0.667  gt=  30  pred=  18
-  notable work               P=0.714  R=0.172  F1=0.278  gt=  29  pred=   7
-  country of origin          P=0.885  R=0.821  F1=0.852  gt=  28  pred=  26
-  named after                P=0.591  R=0.520  F1=0.553  gt=  25  pred=  22
-  genre                      P=0.800  R=0.640  F1=0.711  gt=  25  pred=  20
+  instance of                P=0.960  R=0.838  F1=0.895  gt= 142  pred= 124
+  occupation                 P=0.979  R=0.793  F1=0.876  gt= 116  pred=  94
+  has part(s)                P=0.725  R=0.370  F1=0.490  gt= 100  pred=  51
+  located in the administrative territorial entity  P=0.759  R=0.745  F1=0.752  gt=  55  pred=  54
+  part of                    P=0.921  R=0.648  F1=0.761  gt=  54  pred=  38
+  country of citizenship     P=0.980  R=0.907  F1=0.942  gt=  54  pred=  50
+  position held              P=0.844  R=0.529  F1=0.651  gt=  51  pred=  32
+  date of birth              P=0.959  R=0.959  F1=0.959  gt=  49  pred=  49
+  location                   P=0.900  R=0.474  F1=0.621  gt=  38  pred=  20
+  film crew member           P=0.833  R=0.312  F1=0.455  gt=  32  pred=  12
+  inception                  P=0.905  R=0.633  F1=0.745  gt=  30  pred=  21
+  notable work               P=0.917  R=0.379  F1=0.537  gt=  29  pred=  12
+  country of origin          P=0.958  R=0.821  F1=0.885  gt=  28  pred=  24
+  named after                P=0.654  R=0.680  F1=0.667  gt=  25  pred=  26
+  genre                      P=0.731  R=0.760  F1=0.745  gt=  25  pred=  26
 
 --- Subject / Object hallucination ---
-Subject hallucination rate: 0.092 (108/1168)
-Object  hallucination rate: 0.231 (270/1168)
+Subject hallucination rate: 0.092 (117/1274)
+Object  hallucination rate: 0.226 (288/1274)
 
 --- Type accuracy (on correctly-matched SRO triplets) ---
-Subject type accuracy: 0.965 (966 checked)
-Object  type accuracy: 0.962 (966 checked)
+Subject type accuracy: 0.992 (1132 checked)
+Object  type accuracy: 0.986 (1132 checked)
 
 --- Most confused relation pairs (GT relation → predicted relation) ---
-  number of wins            → number of lanes               6 times
-  found in taxon            → foundational text             3 times
-  participant in            → performer                     3 times
-  different from            → named after                   2 times
-  country of origin         → country                       2 times
-  director                  → developer                     2 times
-  capital of                → located in the administrative territorial entity     2 times
-  notable work              → has characteristic            2 times
+  located in/on physical feature → located in the administrative territorial entity     5 times
+  uses                      → has part(s)                   4 times
+  characteristic of         → has part(s)                   4 times
   connects with             → terminus                      2 times
+  character role            → film crew member              2 times
+  instance of               → has part(s)                   2 times
+  capital of                → located in the administrative territorial entity     2 times
+  work location             → member of                     2 times
   sponsor                   → named after                   1 times
+  replaces                  → named after                   1 times
 
 --- Whitelist filtering ---
-  object_type_mapped: 24
-  relation_dropped: 3
-  relation_soft_mapped: 17
-  subject_type_mapped: 33
+  relation_dropped: 17
 
 --- Distribution comparison ---
 TRAINING DATA:
@@ -89,13 +86,14 @@ TRAINING DATA:
   Top 10 relations cover: 30.2%
 
 MODEL PREDICTIONS:
-  Total triplets: 1168
-  Unique relations: 192
-  Parse success rate: 198/199 (99.5%)
+  Total triplets: 1274
+  Unique relations: 206
+  Parse success rate: 199/199 (100.0%)
   Top relation: instance of
-  Top-relation dominance: 9.3%
+  Top-relation dominance: 9.7%
 
 COMPARISON:
-  Shared top-5 relations: 4/5
+  Shared top-5 relations: 3/5
   Top-relation dominance  train: 6.4%
-  Top-relation dominance  pred:  9.3%
+  Top-relation dominance  pred:  9.7%
+  WARNING: Model is heavily biased toward the most common relation!

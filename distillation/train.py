@@ -1,15 +1,13 @@
 """
-Training script for Wikontic distillation — v2.
+Training script for Wikontic distillation — v3.
 
-Key changes vs v1:
-  - Uses trl.SFTTrainer with prompt/completion columns and
-    completion_only_loss=True (trl 1.1.0+ compatible).
-  - instance_of loss down-weighting applied ONLY to completion tokens
-    (via completion_mask), fixing the prompt-contamination bug in v1.
-  - Softened curriculum: single short stage (max_triplets=8) before
-    jumping to full examples.
-  - All datasets (including curriculum stages) are pre-tokenized so
-    swapping works seamlessly.
+Key changes vs v2:
+  - Stronger LoRA: lora_alpha=64, added k_proj + o_proj targets.
+  - 5 epochs with cosine LR decay.
+  - Relation-aware loss weighting:
+      * up-weights under-performing relations (has part(s), notable work, ...)
+      * down-weights easy "safe" relations (instance of, date of birth, ...)
+  - All datasets pre-tokenized; SFTTrainer with skip_prepare_dataset.
 """
 import argparse
 import json
@@ -115,16 +113,17 @@ def build_dataset(
 
 class WeightedSFTTrainer(SFTTrainer):
     """
-    SFTTrainer subclass that:
-      1. Down-weights per-token CE loss for the literal string "instance of",
-         but ONLY for completion tokens (completion_mask == 1).
-      2. Switches the training dataset according to a curriculum schedule at
-         every epoch boundary.
+    SFTTrainer subclass with three loss modifications:
+      1. instance_of down-weighting (completion-only).
+      2. relation-aware weighting: up-weights hard relations,
+         down-weights easy ones.
+      3. curriculum dataset switching.
     """
 
     def __init__(
         self,
         instance_of_weight: float = 1.0,
+        relation_weighting: Optional[Dict[str, Any]] = None,
         curriculum_datasets: Optional[List[Dataset]] = None,
         curriculum_switch_steps: Optional[List[int]] = None,
         *args: Any,
@@ -132,12 +131,38 @@ class WeightedSFTTrainer(SFTTrainer):
     ):
         super().__init__(*args, **kwargs)
         self.instance_of_weight = instance_of_weight
+        self.relation_weighting_cfg = relation_weighting or {}
         tok = (
             getattr(self, "processing_class", None)
             or getattr(self, "tokenizer", None)
         )
+
+        # instance_of token IDs
         ids = tok.encode("instance of", add_special_tokens=False)
         self.instance_of_token_ids = torch.tensor(ids, dtype=torch.long)
+
+        # relation token IDs for weighting
+        self.rel_up_weights: Dict[str, float] = {}
+        self.rel_down_weights: Dict[str, float] = {}
+        self.rel_up_token_ids: Dict[str, torch.Tensor] = {}
+        self.rel_down_token_ids: Dict[str, torch.Tensor] = {}
+
+        if self.relation_weighting_cfg.get("enabled", False):
+            for rel in self.relation_weighting_cfg.get("up_weight_relations", []):
+                try:
+                    tids = tok.encode(rel, add_special_tokens=False)
+                    self.rel_up_token_ids[rel] = torch.tensor(tids, dtype=torch.long)
+                    self.rel_up_weights[rel] = self.relation_weighting_cfg.get("up_weight", 1.0)
+                except Exception:
+                    pass
+            for rel in self.relation_weighting_cfg.get("down_weight_relations", []):
+                try:
+                    tids = tok.encode(rel, add_special_tokens=False)
+                    self.rel_down_token_ids[rel] = torch.tensor(tids, dtype=torch.long)
+                    self.rel_down_weights[rel] = self.relation_weighting_cfg.get("down_weight", 1.0)
+                except Exception:
+                    pass
+
         self.curriculum_datasets = curriculum_datasets or []
         self.curriculum_switch_steps = curriculum_switch_steps or []
 
@@ -202,29 +227,59 @@ class WeightedSFTTrainer(SFTTrainer):
         valid_mask = (shift_labels != -100).to(losses.dtype)
 
         # ----------------------------------------------------------------
-        # instance_of down-weighting — completion tokens only.
-        # We search for the token sequence in shift_labels.  Any position
+        # Token-level weighting — completion tokens only.
+        # We search for token sequences in shift_labels.  Any position
         # where shift_labels[pos] == -100 is skipped (prompt/padding).
         # ----------------------------------------------------------------
-        if (
-            model.training
-            and self.instance_of_weight != 1.0
-            and self.instance_of_token_ids.numel() > 0
-        ):
+        if model.training:
             weights = torch.ones_like(losses)
-            target_ids = self.instance_of_token_ids.to(shift_labels.device)
-            L = target_ids.numel()
 
-            for b in range(shift_labels.size(0)):
-                seq = shift_labels[b]
-                seq_len = seq.size(0)
-                for pos in range(seq_len - L + 1):
-                    chunk = seq[pos : pos + L]
-                    # Skip if this range includes any masked (prompt) tokens.
-                    if (chunk == -100).any():
-                        continue
-                    if torch.equal(chunk, target_ids):
-                        weights[b, pos : pos + L] = self.instance_of_weight
+            # --- instance_of down-weighting ---
+            if (
+                self.instance_of_weight != 1.0
+                and self.instance_of_token_ids.numel() > 0
+            ):
+                target_ids = self.instance_of_token_ids.to(shift_labels.device)
+                L = target_ids.numel()
+                for b in range(shift_labels.size(0)):
+                    seq = shift_labels[b]
+                    seq_len = seq.size(0)
+                    for pos in range(seq_len - L + 1):
+                        chunk = seq[pos : pos + L]
+                        if (chunk == -100).any():
+                            continue
+                        if torch.equal(chunk, target_ids):
+                            weights[b, pos : pos + L] = self.instance_of_weight
+
+            # --- relation up-weighting (hard relations) ---
+            for rel, target_ids in self.rel_up_token_ids.items():
+                target_ids = target_ids.to(shift_labels.device)
+                L = target_ids.numel()
+                w = self.rel_up_weights.get(rel, 1.0)
+                for b in range(shift_labels.size(0)):
+                    seq = shift_labels[b]
+                    seq_len = seq.size(0)
+                    for pos in range(seq_len - L + 1):
+                        chunk = seq[pos : pos + L]
+                        if (chunk == -100).any():
+                            continue
+                        if torch.equal(chunk, target_ids):
+                            weights[b, pos : pos + L] = w
+
+            # --- relation down-weighting (easy relations) ---
+            for rel, target_ids in self.rel_down_token_ids.items():
+                target_ids = target_ids.to(shift_labels.device)
+                L = target_ids.numel()
+                w = self.rel_down_weights.get(rel, 1.0)
+                for b in range(shift_labels.size(0)):
+                    seq = shift_labels[b]
+                    seq_len = seq.size(0)
+                    for pos in range(seq_len - L + 1):
+                        chunk = seq[pos : pos + L]
+                        if (chunk == -100).any():
+                            continue
+                        if torch.equal(chunk, target_ids):
+                            weights[b, pos : pos + L] = w
 
             losses = losses * weights
 
@@ -351,6 +406,7 @@ def main() -> None:
         load_best_model_at_end=True,
         metric_for_best_model="eval_loss",
         greater_is_better=False,
+        lr_scheduler_type=cfg.get("lr_scheduler_type", "linear"),
         completion_only_loss=True,
         max_length=cfg.get("max_seq_length", 2048),
         packing=False,
@@ -359,6 +415,7 @@ def main() -> None:
     )
 
     instance_of_weight = cfg.get("instance_of_weight", 1.0)
+    relation_weighting = cfg.get("relation_weighting", {})
 
     trainer = WeightedSFTTrainer(
         model=model,
@@ -367,6 +424,7 @@ def main() -> None:
         eval_dataset=eval_dataset,
         processing_class=tokenizer,
         instance_of_weight=instance_of_weight,
+        relation_weighting=relation_weighting,
         curriculum_datasets=curriculum_datasets,
         curriculum_switch_steps=curriculum_switch_steps,
     )

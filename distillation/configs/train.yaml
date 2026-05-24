@@ -1,11 +1,11 @@
-# Training config for Wikontic distillation — v2
-# (softened curriculum, stronger instance_of suppression, SFTTrainer)
+# Training config for Wikontic distillation — v3
+# (stronger LoRA, relation-weighted loss, cosine LR)
 # Paths are resolved relative to the directory where train.py lives.
 
 train_path: "./data/train.jsonl"
 val_path: "./data/val.jsonl"
 system_prompt_path: "../src/wikontic/utils/prompts/triplet_extraction/propmt_1_types_qualifiers.txt"
-output_dir: "./checkpoints/wikontic-v2"
+output_dir: "./checkpoints/wikontic-v3"
 
 # Model
 base_model: "HuggingFaceTB/SmolLM2-1.7B-Instruct"
@@ -17,14 +17,16 @@ bnb_4bit_compute_dtype: "bfloat16"
 
 # LoRA
 lora_r: 16
-lora_alpha: 32
+lora_alpha: 64                        # stronger update (doubled from 32)
 lora_dropout: 0.05
 target_modules:
   - "q_proj"
   - "v_proj"
+  - "k_proj"
+  - "o_proj"
 
 # Training hyperparameters
-num_train_epochs: 3
+num_train_epochs: 5                   # more epochs
 per_device_train_batch_size: 1
 per_device_eval_batch_size: 1
 gradient_accumulation_steps: 4
@@ -42,13 +44,6 @@ report_to: "none"
 # ---------------------------------------------------------------------------
 # Curriculum scheduler
 # ---------------------------------------------------------------------------
-# Stage 1 (steps 0–300): start at max_triplets=8 (close to the dataset median
-#   of 11), so the model learns the full JSON structure from the beginning
-#   while still seeing a manageable number of relations per example.
-#   "instance of" triplets are always sorted first, so they dominate this
-#   stage naturally.
-# Stage 2 (steps 300+): full examples — the automatically-appended unlimited
-#   stage takes over and the model learns to extract all relations.
 curriculum:
   enabled: true
   stages:
@@ -58,6 +53,30 @@ curriculum:
 # ---------------------------------------------------------------------------
 # Loss down-weighting for "instance of"
 # ---------------------------------------------------------------------------
-# Applied ONLY to tokens inside the completion (labels != -100).
-# 0.1 = strongly suppress; 1.0 = no effect.
 instance_of_weight: 0.1
+
+# ---------------------------------------------------------------------------
+# Relation-aware loss weighting
+# ---------------------------------------------------------------------------
+# Relations with training precision < threshold get their loss up-weighted.
+# This forces the model to focus on low-recall relations.
+relation_weighting:
+  enabled: true
+  # These relations have low precision in the current model → up-weight them
+  up_weight_relations:
+    - "has part(s)"
+    - "notable work"
+    - "position held"
+    - "inception"
+    - "genre"
+    - "film crew member"
+    - "named after"
+    - "location"
+  up_weight: 2.0          # loss multiplier for under-performing relations
+  down_weight_relations:  # high-precision "safe" relations → down-weight slightly
+    - "instance of"
+    - "date of birth"
+    - "occupation"
+    - "country of citizenship"
+    - "country of origin"
+  down_weight: 0.5
