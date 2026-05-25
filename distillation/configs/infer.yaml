@@ -1,5 +1,11 @@
 # Inference & evaluation config for Wikontic distillation.
 # Paths are resolved relative to the directory where infer.py lives.
+#
+# Workflow:
+#   - Use --split val  (default) during development: comparing checkpoints,
+#     tuning whitelist settings, etc.
+#   - Use --split test ONLY once for the final unbiased evaluation after
+#     model & hyperparameters are frozen.
 
 # Model paths
 base_model: "HuggingFaceTB/SmolLM2-1.7B-Instruct"
@@ -7,6 +13,7 @@ adapter_path: "./checkpoints/wikontic-v3"
 
 # Data (same chat format used for training)
 val_path: "./data/val.jsonl"
+test_path: "./data/test.jsonl"
 output_dir: "./inference_outputs"
 
 # Generation

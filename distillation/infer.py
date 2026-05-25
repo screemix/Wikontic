@@ -386,17 +386,27 @@ def main() -> None:
         default="configs/infer.yaml",
         help="Path to YAML inference config (relative to infer.py dir).",
     )
+    parser.add_argument(
+        "--split",
+        type=str,
+        choices=["val", "test"],
+        default="val",
+        help="Which split to evaluate on. Use 'val' during development, 'test' only for final evaluation.",
+    )
     args = parser.parse_args()
 
     cfg = load_yaml_config(args.config)
     script_dir = Path(__file__).resolve().parent
-    val_path = script_dir / cfg["val_path"]
+
+    split = args.split
+    data_path_key = f"{split}_path"
+    eval_path = script_dir / cfg[data_path_key]
     output_dir = script_dir / cfg["output_dir"]
     output_dir.mkdir(parents=True, exist_ok=True)
     adapter_path = script_dir / cfg["adapter_path"]
 
-    val_examples = load_jsonl(val_path)
-    print(f"Loaded {len(val_examples)} validation examples.")
+    eval_examples = load_jsonl(eval_path)
+    print(f"Loaded {len(eval_examples)} {split} examples from {eval_path}")
 
     # Tokenizer
     base_model_name = cfg["base_model"]
@@ -447,7 +457,7 @@ def main() -> None:
     gt_examples_triplets: List[List[Dict]] = []
     all_texts: List[str] = []
 
-    for idx, ex in enumerate(val_examples):
+    for idx, ex in enumerate(eval_examples):
         text = extract_text_from_prompt(ex["messages"][1]["content"])
         prompt_messages = ex["messages"][:]  # system + user
         prompt_text = tokenizer.apply_chat_template(
@@ -510,10 +520,11 @@ def main() -> None:
         all_texts.append(text)
 
         if (idx + 1) % 20 == 0:
-            print(f"  Processed {idx + 1}/{len(val_examples)} ...")
+            print(f"  Processed {idx + 1}/{len(eval_examples)} ...")
 
     # ── Save predictions ──
-    preds_path = output_dir / "val_predictions.json"
+    preds_filename = f"{split}_predictions.json"
+    preds_path = output_dir / preds_filename
     with open(preds_path, "w", encoding="utf-8") as f:
         json.dump(results, f, ensure_ascii=False, indent=2)
     print(f"Saved predictions to {preds_path}")
@@ -532,11 +543,11 @@ def main() -> None:
 
     lines = []
     lines.append("=" * 70)
-    lines.append("WIKONTIC DISTILLATION INFERENCE REPORT")
+    lines.append(f"WIKONTIC DISTILLATION INFERENCE REPORT — {split.upper()} SPLIT")
     lines.append("=" * 70)
 
-    lines.append("\n--- Overall counts ---")
-    lines.append(f"Validation examples: {len(val_examples)}")
+    lines.append(f"\n--- Overall counts ---")
+    lines.append(f"{split.capitalize()} examples: {len(eval_examples)}")
     lines.append(f"GT triplets total:   {len(all_gt_triplets)}")
     lines.append(f"Raw pred triplets:   {len(all_raw_triplets)}")
     lines.append(f"Filtered pred triplets: {len(all_pred_triplets)}")
@@ -663,7 +674,7 @@ def main() -> None:
     lines.append(f"  Total triplets: {len(all_pred_triplets)}")
     lines.append(f"  Unique relations: {len(pred_relation_counts)}")
     parse_success = sum(1 for ex in pred_examples_triplets if ex)
-    lines.append(f"  Parse success rate: {parse_success}/{len(val_examples)} ({parse_success / len(val_examples) * 100:.1f}%)")
+    lines.append(f"  Parse success rate: {parse_success}/{len(eval_examples)} ({parse_success / len(eval_examples) * 100:.1f}%)")
     if pred_relation_counts:
         top_r, top_c = pred_relation_counts.most_common(1)[0]
         lines.append(f"  Top relation: {top_r}")
@@ -683,7 +694,8 @@ def main() -> None:
 
     report_text = "\n".join(lines)
     print("\n" + report_text)
-    report_path = output_dir / "report.txt"
+    report_filename = f"{split}_report.txt"
+    report_path = output_dir / report_filename
     with open(report_path, "w", encoding="utf-8") as f:
         f.write(report_text + "\n")
     print(f"\nSaved report to {report_path}")
