@@ -9,7 +9,7 @@
 
 # Model paths
 base_model: "HuggingFaceTB/SmolLM2-1.7B-Instruct"
-adapter_path: "./checkpoints/wikontic-v3"
+adapter_path: "./checkpoints/wikontic-v4"
 
 # Data (same chat format used for training)
 val_path: "./data/val.jsonl"
