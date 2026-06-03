@@ -19,10 +19,12 @@ def create_triplets_database(
     qdrant_api_key: str = None,
     db_name: str = "triplets_db",
     entity_aliases_collection: str = "entity_aliases",
+    property_aliases_collection: str = "property_aliases",
     triplets_collection: str = "triplets",
     initial_triplets_collection: str = "initial_triplets",
     filtered_triplets_collection: str = "filtered_triplets",
     entity_aliases_index: str = "entity_aliases",
+    property_aliases_index: str = "property_aliases",
     embedding_dimensions: int = 768,
     drop_collections: bool = False,
 ):
@@ -58,20 +60,39 @@ def create_triplets_database(
         storage_backend,
         [
             entity_aliases_collection,
+            property_aliases_collection,
             triplets_collection,
             initial_triplets_collection,
             filtered_triplets_collection,
         ],
         drop_collections=drop_collections,
     )
-    if backend == "mongodb":
-        storage_backend.ensure_vector_index(
-            collection_name=entity_aliases_collection,
-            index_name=entity_aliases_index,
-            vector_field="alias_text_embedding",
-            num_dimensions=embedding_dimensions,
-            token_fields=["sample_id"],
-        )
+
+    alias_index_fields = [["sample_id"], ["label"]]
+    storage_backend.create_indexes(entity_aliases_collection, alias_index_fields)
+    storage_backend.create_indexes(property_aliases_collection, alias_index_fields)
+    for coll in (
+        triplets_collection,
+        initial_triplets_collection,
+        filtered_triplets_collection,
+    ):
+        storage_backend.create_indexes(coll, [["sample_id"]])
+
+    storage_backend.ensure_vector_index(
+        collection_name=entity_aliases_collection,
+        index_name=entity_aliases_index,
+        vector_field="alias_text_embedding",
+        num_dimensions=embedding_dimensions,
+        token_fields=["sample_id"],
+        recreate=drop_collections,
+    )
+    storage_backend.ensure_vector_index(
+        collection_name=property_aliases_collection,
+        index_name=property_aliases_index,
+        vector_field="alias_text_embedding",
+        num_dimensions=embedding_dimensions,
+        recreate=drop_collections,
+    )
     logger.info("Collections created successfully for backend=%s", backend)
     return storage_backend
 
@@ -94,6 +115,12 @@ if __name__ == "__main__":
         type=str,
         default="entity_aliases",
         help="Collection name for entity aliases",
+    )
+    parser.add_argument(
+        "--property_aliases_collection",
+        type=str,
+        default="property_aliases",
+        help="Collection name for property aliases",
     )
     parser.add_argument(
         "--triplets_collection",
@@ -120,6 +147,12 @@ if __name__ == "__main__":
         help="MongoDB Atlas Vector Search index name for entity aliases",
     )
     parser.add_argument(
+        "--property_aliases_index",
+        type=str,
+        default="property_aliases",
+        help="MongoDB Atlas Vector Search index name for property aliases",
+    )
+    parser.add_argument(
         "--embedding_dimensions",
         type=int,
         default=768,
@@ -137,10 +170,12 @@ if __name__ == "__main__":
         qdrant_api_key=args.qdrant_api_key,
         db_name=args.db_name,
         entity_aliases_collection=args.entity_aliases_collection,
+        property_aliases_collection=args.property_aliases_collection,
         triplets_collection=args.triplets_collection,
         initial_triplets_collection=args.initial_triplets_collection,
         filtered_triplets_collection=args.filtered_triplets_collection,
         entity_aliases_index=args.entity_aliases_index,
+        property_aliases_index=args.property_aliases_index,
         embedding_dimensions=args.embedding_dimensions,
         drop_collections=args.drop_collections,
     )

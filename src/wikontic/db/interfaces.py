@@ -60,6 +60,21 @@ class StorageBackend(Protocol):
     def list_collection_names(self) -> List[str]:
         ...
 
+    def create_indexes(self, collection_name: str, indexes: List[List[str]]) -> None:
+        ...
+
+    def ensure_vector_index(
+        self,
+        collection_name: str,
+        index_name: str,
+        vector_field: str,
+        num_dimensions: int,
+        similarity: str = "cosine",
+        token_fields: Optional[List[str]] = None,
+        recreate: bool = False,
+    ) -> None:
+        ...
+
     def upsert_many(
         self,
         collection_name: str,

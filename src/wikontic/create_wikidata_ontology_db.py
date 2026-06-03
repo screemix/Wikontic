@@ -303,10 +303,10 @@ def create_wikidata_ontology_database(
     if mappings_dir is None:
         # Try to find the mappings directory relative to this file
         current_file = Path(__file__).parent
-        mappings_dir = str(current_file / "utils" / "ontology_mappings" / "")
+        mappings_dir = str(current_file /"src" / "wikontic" / "utils" / "ontology_mappings_en_en")
         if not os.path.exists(mappings_dir):
             # Fallback to relative path
-            mappings_dir = "utils/ontology_mappings/"
+            mappings_dir = "src/wikontic/utils/ontology_mappings_en_en"
 
     logger.info("Starting database population process")
     logger.info(f"Using database: {database}")
@@ -356,8 +356,6 @@ def create_wikidata_ontology_database(
             entity_type_aliases_collection,
             properties_collection,
             property_aliases_collection,
-            "entity_aliases",
-            "triplets",
         ],
         drop_collections=drop_collections,
     )
@@ -390,27 +388,26 @@ def create_wikidata_ontology_database(
         collection_name=property_aliases_collection,
     )
 
-    if backend == "mongodb":
-        db.create_indexes(entity_types_collection, [["entity_type_id"], ["label"]])
-        db.create_indexes(entity_type_aliases_collection, [["entity_type_id"], ["alias_label"]])
-        db.create_indexes(properties_collection, [["property_id"]])
-        db.create_indexes("entity_aliases", [["entity_type", "sample_id"], ["label"]])
-        db.create_indexes("triplets", [["sample_id"]])
-        logger.info("Indexes created successfully")
-        db.ensure_vector_index(
-            collection_name=entity_type_aliases_collection,
-            index_name=entity_types_index,
-            vector_field="alias_text_embedding",
-            num_dimensions=embedding_dimensions,
-            token_fields=["entity_type_id"],
-        )
-        db.ensure_vector_index(
-            collection_name=property_aliases_collection,
-            index_name=property_aliases_index,
-            vector_field="alias_text_embedding",
-            num_dimensions=embedding_dimensions,
-            token_fields=["relation_id"],
-        )
+    db.create_indexes(entity_types_collection, [["entity_type_id"], ["label"]])
+    db.create_indexes(entity_type_aliases_collection, [["entity_type_id"], ["alias_label"]])
+    db.create_indexes(properties_collection, [["property_id"]])
+    logger.info("Indexes created successfully")
+    db.ensure_vector_index(
+        collection_name=entity_type_aliases_collection,
+        index_name=entity_types_index,
+        vector_field="alias_text_embedding",
+        num_dimensions=embedding_dimensions,
+        token_fields=["entity_type_id"],
+        recreate=drop_collections,
+    )
+    db.ensure_vector_index(
+        collection_name=property_aliases_collection,
+        index_name=property_aliases_index,
+        vector_field="alias_text_embedding",
+        num_dimensions=embedding_dimensions,
+        token_fields=["relation_id"],
+        recreate=drop_collections,
+    )
     logger.info("Database population process completed")
 
     return db

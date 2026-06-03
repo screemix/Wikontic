@@ -66,25 +66,25 @@ def create_ontological_triplets_database(
         ],
         drop_collections=drop_collections,
     )
-    if backend == "mongodb":
-        storage_backend.create_indexes(
-            entity_aliases_collection, [["entity_type", "sample_id"], ["label"]]
-        )
-        for coll in [
-            triplets_collection,
-            initial_triplets_collection,
-            filtered_triplets_collection,
-            ontology_filtered_triplets_collection,
-        ]:
-            storage_backend.create_indexes(coll, [["sample_id"]])
-        logger.info("Indexes created successfully")
-        storage_backend.ensure_vector_index(
-            collection_name=entity_aliases_collection,
-            index_name=entity_aliases_index,
-            vector_field="alias_text_embedding",
-            num_dimensions=embedding_dimensions,
-            token_fields=["entity_type", "sample_id"],
-        )
+    storage_backend.create_indexes(
+        entity_aliases_collection, [["entity_type", "sample_id"], ["label"]]
+    )
+    for coll in [
+        triplets_collection,
+        initial_triplets_collection,
+        filtered_triplets_collection,
+        ontology_filtered_triplets_collection,
+    ]:
+        storage_backend.create_indexes(coll, [["sample_id"]])
+    logger.info("Indexes created successfully")
+    storage_backend.ensure_vector_index(
+        collection_name=entity_aliases_collection,
+        index_name=entity_aliases_index,
+        vector_field="alias_text_embedding",
+        num_dimensions=embedding_dimensions,
+        token_fields=["entity_type", "sample_id"],
+        recreate=drop_collections,
+    )
     logger.info("Collections created successfully for backend=%s", backend)
     return storage_backend
 

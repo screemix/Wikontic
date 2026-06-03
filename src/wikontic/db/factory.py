@@ -16,7 +16,7 @@ def create_backend(
     if normalized == "mongodb":
         if mongo_db is None:
             raise ValueError("mongo_db must be provided when backend_type='mongodb'")
-        return MongoBackend(mongo_db=mongo_db)
+        return MongoBackend(mongo_db)
     if normalized == "qdrant":
         return QdrantBackend(qdrant_url=qdrant_url, api_key=qdrant_api_key)
     raise ValueError(f"Unsupported backend_type: {backend_type}")
