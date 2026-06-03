@@ -32,6 +32,23 @@ def dump_kg(db_name):
         source_text_ids = list(set(source_text_ids))
 
         for source_text_id in source_text_ids:
+            initial_triplets = (
+                mongo_client.get_database(db_name)
+                .get_collection("initial_triplets")
+                .find(
+                    {"sample_id": sample_id, "source_text_id": source_text_id},
+                    {
+                        "_id": 0,
+                        "subject": 1,
+                        "relation": 1,
+                        "object": 1,
+                        "subject_type": 1,
+                        "object_type": 1,
+                        "qualifiers": 1,
+                    },
+                )
+            )
+            
             triplets = (
                 mongo_client.get_database(db_name)
                 .get_collection("triplets")
@@ -83,11 +100,16 @@ def dump_kg(db_name):
             )
 
             kg_dump[sample_id][source_text_id] = {
+                "initial_triplets": list(initial_triplets),
                 "triplets": list(triplets),
                 "ontology_filtered_triplets": list(ontology_filtered_triplets),
                 "filtered_triplets": list(filtered_triplets),
             }
-
+            assert len(kg_dump[sample_id][source_text_id]["initial_triplets"]) == mongo_client.get_database(db_name).get_collection(
+                "initial_triplets"
+            ).count_documents(
+                {"sample_id": sample_id, "source_text_id": source_text_id}
+            )
             assert len(
                 kg_dump[sample_id][source_text_id]["triplets"]
             ) == mongo_client.get_database(db_name).get_collection(
@@ -110,11 +132,11 @@ def dump_kg(db_name):
                 {"sample_id": sample_id, "source_text_id": source_text_id}
             )
 
-        if not os.path.exists("kg_dump"):
-            os.makedirs("kg_dump")
+    if not os.path.exists("kg_dump"):
+        os.makedirs("kg_dump")
 
-        with open(f"kg_dump/kg_dump_{db_name}.json", "w") as f:
-            json.dump(kg_dump, f)
+    with open(f"kg_dump/kg_dump_{db_name}.json", "w") as f:
+        json.dump(kg_dump, f)
 
 
 if __name__ == "__main__":
