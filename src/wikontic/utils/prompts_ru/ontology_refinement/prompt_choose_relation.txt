@@ -21,4 +21,4 @@ Select the most appropriate relation candidate from the provided candidate tripl
 Provide only an answer in JSON format with the following keys:
 
 "relation": Relation for the selected triplet.
-NO additional text, NO "```" in json, ONLY triplets in JSON format. Translate refined relation in the language of the original text (particularly, Russian)!
+NO additional text, NO "```" in json, ONLY triplets in JSON format. Preserve refined relation in the language of the original text (particularly, Russian)!

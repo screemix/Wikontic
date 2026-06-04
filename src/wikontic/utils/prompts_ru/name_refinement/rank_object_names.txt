@@ -15,4 +15,4 @@ Select the most contextually appropriate object name from the Candidate Object l
 - If an exact or semantically appropriate match for object name is found, return the corresponding name exactly as it appears in the list.
 - If no suitable match for object exists, return the string "None".
 - Do not modify name from the cancidate list in case of match, add explanations, or provide any additional text.
-- Preserve language of the original text (particularly, Russian) for the name of object!
+- Preserve language of the original text (particularly, Russian) for the name of subject! Not transliteration, but original cyrillic script!
