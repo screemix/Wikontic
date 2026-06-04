@@ -513,3 +513,570 @@ body,
   font-weight: 760;
   cursor: pointer;
 }
+
+.documentView {
+  width: 760px;
+  min-height: 500px;
+  padding: 30px 36px 34px;
+  border: 1px solid #dbe3ef;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 28px 75px rgba(23, 32, 51, 0.13);
+  transform-origin: 48% 32%;
+}
+
+.documentToolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid #edf1f6;
+  color: #647084;
+  font-size: 20px;
+  font-weight: 720;
+}
+
+.documentHeading {
+  margin: 24px 0 20px;
+  font-size: 30px;
+  font-weight: 780;
+}
+
+.documentText p {
+  margin: 0 0 22px;
+  font-size: 28px;
+  line-height: 1.55;
+}
+
+.docMutedText {
+  opacity: 0.16;
+  filter: blur(1.6px);
+}
+
+.highlightedFact {
+  max-width: 520px;
+  padding: 14px 18px;
+  border: 1px solid #dbe3ef;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 15px 36px rgba(23, 32, 51, 0.1);
+  font-size: 21px;
+  line-height: 1.24;
+  font-weight: 750;
+}
+
+.highlightedFactCompact {
+  font-size: 18px;
+  padding: 10px 13px;
+}
+
+.fact-blue {
+  border-color: #cbd9ff;
+  color: #1748b5;
+  background: #eef4ff;
+}
+
+.fact-green {
+  border-color: rgba(25, 169, 116, 0.32);
+  color: #08724d;
+  background: #dff8ec;
+}
+
+.fact-amber {
+  border-color: rgba(242, 169, 0, 0.34);
+  color: #8a5c00;
+  background: #fff2cc;
+}
+
+.fact-violet {
+  border-color: rgba(122, 92, 255, 0.34);
+  color: #5637c8;
+  background: #eee9ff;
+}
+
+.methodStage {
+  position: relative;
+  height: 100%;
+}
+
+.methodDocumentSlot {
+  position: absolute;
+  left: 0;
+  top: 22px;
+}
+
+.floatingFacts {
+  position: absolute;
+  left: 820px;
+  top: 26px;
+  display: grid;
+  gap: 14px;
+}
+
+.methodTriplets {
+  position: absolute;
+  left: 840px;
+  top: 12px;
+  display: grid;
+  gap: 12px;
+}
+
+.methodOntology {
+  position: absolute;
+  right: 8px;
+  top: 24px;
+  width: 740px;
+}
+
+.methodDedup {
+  position: absolute;
+  left: 500px;
+  top: 70px;
+  width: 760px;
+}
+
+.methodFinalGraph {
+  position: absolute;
+  inset: 0;
+}
+
+.finalGraphPanel {
+  width: 1180px;
+  height: 640px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.panelTitleRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+  color: #1748b5;
+  font-size: 24px;
+  font-weight: 780;
+}
+
+.metricRow {
+  position: absolute;
+  right: 24px;
+  bottom: 20px;
+  display: flex;
+  gap: 12px;
+}
+
+.ontologyPass {
+  position: relative;
+  padding: 24px;
+  border: 1px solid #cbd9ff;
+  border-radius: 8px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(238, 244, 255, 0.94));
+  box-shadow: 0 22px 58px rgba(47, 109, 246, 0.14);
+  overflow: hidden;
+}
+
+.ontologyGrid {
+  display: grid;
+  gap: 13px;
+  margin-top: 18px;
+}
+
+.ontologyRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  align-items: center;
+  gap: 14px;
+  min-height: 62px;
+  padding: 14px 16px;
+  border: 1px solid;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.92);
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.ontologyRow span {
+  color: #647084;
+  font-size: 18px;
+  font-weight: 690;
+}
+
+.ontologyRow strong {
+  color: #172033;
+  font-size: 20px;
+  line-height: 1.2;
+}
+
+.ontologyScanner {
+  position: absolute;
+  top: 0;
+  width: 52px;
+  height: 100%;
+  border-radius: 999px;
+  background: rgba(47, 109, 246, 0.1);
+  box-shadow: 0 0 45px rgba(47, 109, 246, 0.42);
+}
+
+.dedupPanel {
+  padding: 22px;
+  border: 1px solid rgba(25, 169, 116, 0.3);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 24px 64px rgba(23, 32, 51, 0.12);
+}
+
+.dedupHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #08724d;
+  font-size: 24px;
+  font-weight: 780;
+}
+
+.dedupSvg {
+  width: 100%;
+  height: 430px;
+}
+
+.mergeAlias,
+.mergeCanonical,
+.mergeFooter {
+  font-size: 22px;
+  font-weight: 780;
+  fill: #172033;
+}
+
+.mergeTags {
+  font-size: 15px;
+  font-weight: 720;
+  fill: #647084;
+}
+
+.ragQuestionWrap {
+  position: absolute;
+  top: -8px;
+  left: 0;
+  right: 0;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: fit-content;
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 18px 24px;
+  border: 1px solid #cbd9ff;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 18px 50px rgba(23, 32, 51, 0.12);
+  color: #172033;
+  font-size: 31px;
+  font-weight: 780;
+}
+
+.comparisonGrid {
+  display: grid;
+  grid-template-columns: 0.88fr 1.12fr;
+  gap: 28px;
+  height: 100%;
+  padding-top: 86px;
+}
+
+.comparisonPanel {
+  padding: 24px;
+  min-height: 548px;
+}
+
+.comparisonHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 18px;
+  font-size: 28px;
+  font-weight: 820;
+}
+
+.ragHeader {
+  color: #647084;
+}
+
+.wikonticHeader {
+  color: #1748b5;
+}
+
+.chunkStack {
+  display: grid;
+  gap: 13px;
+}
+
+.ragChunk {
+  padding: 16px 18px;
+  border: 1px solid #dbe3ef;
+  border-radius: 8px;
+  background: #f8fafc;
+}
+
+.ragChunk strong {
+  display: block;
+  margin-bottom: 6px;
+  color: #647084;
+  font-size: 17px;
+}
+
+.ragChunk p {
+  margin: 0;
+  color: #172033;
+  font-size: 21px;
+  line-height: 1.28;
+  font-weight: 680;
+}
+
+.ragNote {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-top: 16px;
+  padding: 13px 15px;
+  border-radius: 8px;
+  background: #fff2cc;
+  color: #8a5c00;
+  font-size: 19px;
+  font-weight: 760;
+}
+
+.wikonticPanel .graphSvg {
+  height: 470px;
+  box-shadow: none;
+}
+
+.internalPath {
+  margin-top: 12px;
+  padding: 12px 14px;
+  border: 1px solid #dbe3ef;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.internalPathLabel {
+  margin-bottom: 7px;
+  color: #647084;
+  font-size: 15px;
+  font-weight: 760;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.pathHighlight {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  font-size: 19px;
+  line-height: 1.25;
+  font-weight: 760;
+}
+
+.pathHighlightCompact {
+  gap: 6px;
+  font-size: 14px;
+}
+
+.pathNode {
+  padding: 6px 8px;
+  border-radius: 7px;
+  background: #eef4ff;
+  color: #1748b5;
+}
+
+.pathRelation {
+  color: #08724d;
+}
+
+.pathArrow {
+  color: #8b98aa;
+  font-weight: 780;
+}
+
+.answerOverlay {
+  position: absolute;
+  left: 235px;
+  right: 235px;
+  bottom: 0;
+  z-index: 7;
+  padding: 22px 28px;
+  border: 1px solid rgba(25, 169, 116, 0.34);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.98);
+  box-shadow: 0 24px 68px rgba(23, 32, 51, 0.18);
+}
+
+.answerOverlay strong {
+  color: #08724d;
+  font-size: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.answerOverlay p {
+  margin: 8px 0 10px;
+  font-size: 29px;
+  line-height: 1.25;
+  font-weight: 790;
+}
+
+.answerOverlay div {
+  color: #647084;
+  font-size: 22px;
+  font-weight: 720;
+}
+
+.syntheticStage {
+  display: grid;
+  grid-template-columns: 0.95fr 1.05fr;
+  gap: 28px;
+  height: 100%;
+}
+
+.syntheticGraphPanel {
+  position: relative;
+  padding: 24px;
+}
+
+.syntheticGraphPanel .graphSvg {
+  height: 560px;
+  box-shadow: none;
+}
+
+.selectedAnswer {
+  position: absolute;
+  left: 28px;
+  bottom: 28px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 11px 13px;
+  border-radius: 8px;
+  background: #eee9ff;
+  color: #5637c8;
+  font-size: 20px;
+  font-weight: 770;
+}
+
+.syntheticRightRail {
+  position: relative;
+  min-height: 650px;
+}
+
+.pathSampler {
+  padding: 20px;
+}
+
+.sampledPath {
+  margin-top: 11px;
+  padding: 12px;
+  border: 1px solid #dbe3ef;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.sampledPath strong {
+  display: inline-flex;
+  margin-bottom: 7px;
+  padding: 5px 9px;
+  border-radius: 7px;
+  background: #eee9ff;
+  color: #5637c8;
+  font-size: 16px;
+}
+
+.qaCardRail {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  gap: 12px;
+}
+
+.datasetCard {
+  padding: 14px 16px;
+  border: 1px solid #dbe3ef;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 16px 42px rgba(23, 32, 51, 0.1);
+}
+
+.datasetCardTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  color: #5637c8;
+  font-size: 16px;
+  font-weight: 820;
+}
+
+.datasetQuestion {
+  margin-bottom: 8px;
+  color: #172033;
+  font-size: 22px;
+  line-height: 1.2;
+  font-weight: 780;
+}
+
+.datasetAnswer {
+  margin-bottom: 10px;
+  color: #08724d;
+  font-size: 19px;
+  font-weight: 760;
+}
+
+.datasetAssembly {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: grid;
+  grid-template-columns: 1fr auto 270px;
+  align-items: center;
+  gap: 18px;
+}
+
+.datasetStackPanel {
+  padding: 18px;
+}
+
+.datasetLabelGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.datasetLabelGrid span {
+  padding: 11px 12px;
+  border-radius: 7px;
+  background: #f4f7fb;
+  color: #172033;
+  font-size: 17px;
+  font-weight: 760;
+  text-align: center;
+}
+
+.datasetArrow {
+  color: #2f6df6;
+}
+
+.smallModel {
+  width: 270px;
+  height: 164px;
+  padding: 18px;
+  border-radius: 8px;
+  border: 1px solid #cbd9ff;
+  background: linear-gradient(180deg, #ffffff, #eef4ff);
+  display: grid;
+  place-items: center;
+  gap: 8px;
+  text-align: center;
+  color: #1748b5;
+  font-size: 22px;
+  font-weight: 800;
+  box-shadow: 0 18px 44px rgba(47, 109, 246, 0.14);
+}
