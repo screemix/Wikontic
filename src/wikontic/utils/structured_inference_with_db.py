@@ -6,22 +6,18 @@ from langchain.tools import tool
 import logging
 
 from .base_inference_with_db import BaseInferenceWithDB
-from wikontic.db.mongo_backend import MongoBackend
+from wikontic.db.factory import ensure_storage_backend
 
 warnings.filterwarnings("ignore")
 logger = logging.getLogger("StructuredInferenceWithDB")
-logger.setLevel(logging.INFO)
+logger.setLevel(logging.DEBUG)
 
 
 class StructuredInferenceWithDB(BaseInferenceWithDB):
     def __init__(self, extractor, aligner, triplets_db):
         self.extractor = extractor
         self.aligner = aligner
-        self.triplets_db = (
-            triplets_db
-            if hasattr(triplets_db, "match_documents")
-            else MongoBackend(triplets_db)
-        )
+        self.triplets_db = ensure_storage_backend(triplets_db)
 
         self.extract_triplets_with_ontology_filtering_tool = tool(
             self.extract_triplets_with_ontology_filtering
@@ -274,17 +270,17 @@ class StructuredInferenceWithDB(BaseInferenceWithDB):
                 exception_msg += "Triplet backbone violates property constraints\n"
                 return False, exception_msg
 
-    def _refine_entity_name(self, text, triplet, sample_id, is_object=False):
+    def _refine_entity_name(self, text, triplet, sample_id, is_object=False, use_unidecode=True):
         """
         Refine entity names using type constraints.
         """
         self.extractor.reset_error_state()
         if is_object:
-            entity = unidecode(triplet["object"])
+            entity = unidecode(triplet["object"]) if use_unidecode else triplet["object"]
             entity_type = triplet["object_type"]
             entity_hierarchy = self.aligner.retrieve_entity_type_hierarchy(entity_type)
         else:
-            entity = unidecode(triplet["subject"])
+            entity = unidecode(triplet["subject"]) if use_unidecode else triplet["subject"]
             entity_type = triplet["subject_type"]
             entity_hierarchy = []
 
@@ -310,7 +306,7 @@ class StructuredInferenceWithDB(BaseInferenceWithDB):
                         is_object=is_object,
                     )
                     # unidecode the updated entity
-                    updated_entity = unidecode(updated_entity)
+                    updated_entity = unidecode(updated_entity) if use_unidecode else updated_entity
                     # if the updated entity is None (meaning that LLM didn't find any similar entities)
                     # -> return the original entity
                     if re.sub(r"[^\w\s]", "", updated_entity) == "None":
@@ -329,7 +325,7 @@ class StructuredInferenceWithDB(BaseInferenceWithDB):
         return updated_entity
 
     def extract_triplets_with_ontology_filtering(
-        self, text, sample_id=None, source_text_id=None
+        self, text, sample_id=None, source_text_id=None, use_unidecode=True
     ):
         """
         Extract and refine knowledge graph triplets from text using LLM.
@@ -351,6 +347,7 @@ class StructuredInferenceWithDB(BaseInferenceWithDB):
         extracted_triplets = self.extractor.extract_triplets_from_text(text)
 
         initial_triplets = []
+        logger.debug(f"Extracted triplets: {extracted_triplets}")
         for triplet in extracted_triplets["triplets"]:
             triplet["prompt_token_num"], triplet["completion_token_num"] = (
                 self.extractor.calculate_used_tokens()
@@ -425,12 +422,12 @@ class StructuredInferenceWithDB(BaseInferenceWithDB):
                 backbone_triplet["qualifiers"] = triplet["qualifiers"]
                 if refined_subject_type_id:
                     backbone_triplet["subject"] = self._refine_entity_name(
-                        text, backbone_triplet, sample_id, is_object=False
+                        text, backbone_triplet, sample_id, is_object=False, use_unidecode=use_unidecode
                     )
 
                 if refined_object_type_id:
                     backbone_triplet["object"] = self._refine_entity_name(
-                        text, backbone_triplet, sample_id, is_object=True
+                        text, backbone_triplet, sample_id, is_object=True, use_unidecode=use_unidecode
                     )
 
                 logger.log(
@@ -530,7 +527,7 @@ class StructuredInferenceWithDB(BaseInferenceWithDB):
         )
 
     def extract_triplets_with_ontology_filtering_and_add_to_db(
-        self, text, sample_id=None, source_text_id=None
+        self, text, sample_id=None, source_text_id=None, use_unidecode=True
     ):
         """
         Extract and refine knowledge graph triplets from text using LLM, then add them to the database.
@@ -547,7 +544,7 @@ class StructuredInferenceWithDB(BaseInferenceWithDB):
             filtered_triplets,
             ontology_filtered_triplets,
         ) = self.extract_triplets_with_ontology_filtering(
-            text, sample_id=sample_id, source_text_id=source_text_id
+            text, sample_id=sample_id, source_text_id=source_text_id, use_unidecode=use_unidecode
         )
         if len(initial_triplets) > 0:
             self.aligner.add_initial_triplets(initial_triplets, sample_id=sample_id)

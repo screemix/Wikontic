@@ -4,7 +4,7 @@ from langchain.tools import tool
 import logging
 
 from .base_inference_with_db import BaseInferenceWithDB
-from wikontic.db.mongo_backend import MongoBackend
+from wikontic.db.factory import ensure_storage_backend
 
 warnings.filterwarnings("ignore")
 logger = logging.getLogger("InferenceWithDB")
@@ -15,11 +15,7 @@ class InferenceWithDB(BaseInferenceWithDB):
     def __init__(self, extractor, aligner, triplets_db):
         self.extractor = extractor
         self.aligner = aligner
-        self.triplets_db = (
-            triplets_db
-            if hasattr(triplets_db, "match_documents")
-            else MongoBackend(triplets_db)
-        )
+        self.triplets_db = ensure_storage_backend(triplets_db)
 
         self.extract_triplets_tool = tool(self.extract_triplets)
         self.extract_triplets_and_add_to_db_tool = tool(

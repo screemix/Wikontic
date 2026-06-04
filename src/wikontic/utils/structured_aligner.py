@@ -6,8 +6,8 @@ import torch
 from dotenv import load_dotenv, find_dotenv
 import os
 from pathlib import Path
+from wikontic.db.factory import ensure_storage_backend
 from wikontic.db.interfaces import VectorQuery
-from wikontic.db.mongo_backend import MongoBackend
 
 # os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 _ = load_dotenv(find_dotenv())
@@ -30,12 +30,8 @@ class EntityAlias(BaseModel):
 
 class Aligner:
     def __init__(self, ontology_db, triplets_db, device="cuda"):
-        self.ontology_db = (
-            ontology_db if hasattr(ontology_db, "vector_search") else MongoBackend(ontology_db)
-        )
-        self.triplets_db = (
-            triplets_db if hasattr(triplets_db, "vector_search") else MongoBackend(triplets_db)
-        )
+        self.ontology_db = ensure_storage_backend(ontology_db)
+        self.triplets_db = ensure_storage_backend(triplets_db)
 
         self.entity_type_collection_name = "entity_types"
         self.entity_type_aliases_collection_name = "entity_type_aliases"

@@ -4,8 +4,8 @@ from pydantic import BaseModel
 from dotenv import load_dotenv, find_dotenv
 import os
 import torch
+from wikontic.db.factory import ensure_storage_backend
 from wikontic.db.interfaces import VectorQuery
-from wikontic.db.mongo_backend import MongoBackend
 
 # os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 _ = load_dotenv(find_dotenv())
@@ -29,11 +29,7 @@ class PropertyAlias(BaseModel):
 
 class Aligner:
     def __init__(self, triplets_db, device="cuda:0"):
-        self.db = (
-            triplets_db
-            if hasattr(triplets_db, "vector_search")
-            else MongoBackend(triplets_db)
-        )
+        self.db = ensure_storage_backend(triplets_db)
 
         self.entity_aliases_collection_name = "entity_aliases"
         self.property_aliases_collection_name = "property_aliases"
