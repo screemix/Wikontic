@@ -83,9 +83,10 @@ def test_retrieve_properties_for_entity_type(structured_aligner_mongo):
     assert all(
         r[1] in ("direct", "inverse") for r in results
     ), "direction must be 'direct' or 'inverse'"
-    assert all(
-        r[0] in ("P276", "P706") for r in results
-    ), "property_id must be 'P276' or 'P706'"
+    # P131 has the alias "is located in" and is valid for city (Q515) / country (Q6256).
+    assert results[0][0] == "P131", (
+        f"expected P131 as top property for 'is located in', got {results[0][0]!r}"
+    )
 
 
 def _backend_label(aligner):

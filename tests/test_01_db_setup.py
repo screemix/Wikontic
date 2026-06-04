@@ -28,12 +28,12 @@ def _vector_index_names(mongo_db, collection_name):
 
 # ── collections ────────────────────────────────────────────────────────────────
 
-TRIPLETS_COLLS      = {"entity_aliases", "triplets",
+TRIPLETS_COLLS      = {"entity_aliases", "property_aliases", "triplets",
                         "initial_triplets", "filtered_triplets"}
 ONTO_TRIPLETS_COLLS = {"entity_aliases", "triplets", "initial_triplets",
                         "filtered_triplets", "ontology_filtered_triplets"}
 ONTOLOGY_COLLS      = {"entity_types", "entity_type_aliases", "properties",
-                        "property_aliases", "entity_aliases", "triplets"}
+                        "property_aliases"}
 
 
 @pytest.mark.parametrize("coll", sorted(TRIPLETS_COLLS))
@@ -84,7 +84,7 @@ def ontology_raw(mongo_client):
 
 
 @pytest.mark.parametrize("fields", [
-    ["entity_type", "sample_id"],
+    ["sample_id"],
     ["label"],
 ])
 def test_triplets_entity_aliases_index(triplets_raw, fields):
@@ -117,9 +117,6 @@ def test_onto_triplets_sample_id_index(onto_raw, coll):
     ("entity_type_aliases", ["entity_type_id"]),
     ("entity_type_aliases", ["alias_label"]),
     ("properties",          ["property_id"]),
-    ("entity_aliases",      ["entity_type", "sample_id"]),
-    ("entity_aliases",      ["label"]),
-    ("triplets",            ["sample_id"]),
 ])
 def test_ontology_regular_indexes(ontology_raw, collection, fields):
     assert _has_index(ontology_raw, collection, *fields)
@@ -129,6 +126,7 @@ def test_ontology_regular_indexes(ontology_raw, collection, fields):
 
 def test_triplets_vector_indexes(triplets_raw):
     assert "entity_aliases" in _vector_index_names(triplets_raw, "entity_aliases")
+    assert "property_aliases" in _vector_index_names(triplets_raw, "property_aliases")
 
 
 def test_onto_triplets_vector_index(onto_raw):
