@@ -20,7 +20,7 @@ import httpx
 # Configure logging
 logger = logging.getLogger("OpenAIUtils")
 logger.setLevel(logging.INFO)
-logging.getLogger("httpx").setLevel(logging.WARNING)
+logging.getLogger("httpx").setLevel(logging.DEBUG)
 
 # _ = load_dotenv(find_dotenv())
 # OpenAI
@@ -92,12 +92,16 @@ class LLMTripletExtractor:
                 "qa": "qa/qa_prompt.txt",
             }
 
-        # Load all prompts
+        # Load all prompts (paths may include subfolders, e.g. triplet_extraction/foo.txt)
         prompt_folder = Path(prompt_folder_path)
         self.prompts = {}
         for prompt_type, filename in system_prompt_paths.items():
-            with open(prompt_folder / filename) as f:
-                self.prompts[prompt_type] = f.read()
+            prompt_path = prompt_folder / filename
+            if prompt_path.is_file():
+                self.prompts[prompt_type] = prompt_path.read_text(encoding="utf-8")
+            else:
+                logger.warning(f"Prompt file {filename} not found in {prompt_folder}")
+                self.prompts[prompt_type] = ""
 
         self.model = model
         self.messages = []
