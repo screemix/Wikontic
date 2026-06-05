@@ -69,8 +69,8 @@ export const presentationSlides: PresentationSlide[] = [
   {
     kind: 'animation',
     id: 'synthetic-data',
-    title: 'Synthetic data',
-    subtitle: 'Граф становится фабрикой контролируемых QA-примеров',
+    title: 'Генерация синтетических данных',
+    subtitle: 'Граф как генератор качественных синтетических данных для обучения моделей',
     component: Animation3_SyntheticData,
     durationInFrames: SYNTHETIC_DATA_FRAMES,
     chapters: [

@@ -18,12 +18,12 @@ const MetricsSlide: React.FC = () => (
       <img src="/assets/wikontic.png" alt="Wikontic" className="metricsLogo" />
       <div>
         <h1>из документов в проверяемую базу фактов</h1>
-        <p>Интерпретируемость · Multi-hop reasoning · Синтетические данные</p>
+        <p>Интерпретируемость · Multi-hop reasoning · Генерация синтетических данных</p>
       </div>
       <div className="metricsBadges">
-        <MetricBadge value="84-86%" label="MINE-1 retention" tone="blue" />
-        <MetricBadge value="76.0 F1" label="HotpotQA triplets-only" tone="green" />
-        <MetricBadge value="59.8 F1" label="MuSiQue triplets-only" tone="amber" />
+        <MetricBadge value="84-86%" label="извлеченных фактов (MINE-1)" tone="blue" />
+        <MetricBadge value="76.0 F1" label="QA только по графу (HotpotQA)" tone="green" />
+        <MetricBadge value="x20 экономия токенов" label="по сравнению с GraphRAG" tone="blue" />
       </div>
     </div>
   </div>
