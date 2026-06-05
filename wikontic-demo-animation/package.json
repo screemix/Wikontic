@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "preview": "remotion studio src/index.ts",
+    "present": "vite --host 0.0.0.0 --open /presentation.html",
     "render:text-to-graph": "remotion render src/index.ts TextToGraph out/text-to-graph.mp4 --codec=h264 --pixel-format=yuv420p",
     "render:rag-vs-wikontic": "remotion render src/index.ts RagVsWikontic out/rag-vs-wikontic.mp4 --codec=h264 --pixel-format=yuv420p",
     "render:synthetic-data": "remotion render src/index.ts SyntheticDataFactory out/synthetic-data-factory.mp4 --codec=h264 --pixel-format=yuv420p",
@@ -14,6 +15,7 @@
   },
   "dependencies": {
     "@remotion/cli": "^4.0.0",
+    "@remotion/player": "^4.0.0",
     "@remotion/renderer": "^4.0.0",
     "@remotion/transitions": "^4.0.0",
     "@vitejs/plugin-react": "^5.0.0",

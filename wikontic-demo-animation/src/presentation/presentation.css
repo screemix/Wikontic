@@ -1,0 +1,332 @@
+#presentation-root {
+  min-height: 100vh;
+}
+
+.presentationShell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 330px minmax(0, 1fr);
+  background: #eef3f9;
+  color: #172033;
+}
+
+.presentationSidebar {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 28px;
+  padding: 28px 22px;
+  border-right: 1px solid #dbe3ef;
+  background: rgba(255, 255, 255, 0.88);
+}
+
+.presentationBrand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.presentationBrand img {
+  width: 46px;
+  height: 46px;
+}
+
+.presentationBrand strong,
+.presentationBrand span {
+  display: block;
+}
+
+.presentationBrand strong {
+  font-size: 23px;
+  line-height: 1;
+}
+
+.presentationBrand span {
+  margin-top: 5px;
+  color: #647084;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.slideList {
+  display: grid;
+  align-content: start;
+  gap: 12px;
+}
+
+.slideList button {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 4px 12px;
+  width: 100%;
+  padding: 15px 16px;
+  border: 1px solid #dbe3ef;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #172033;
+  text-align: left;
+  cursor: pointer;
+}
+
+.slideList button span {
+  grid-row: span 2;
+  color: #8b98aa;
+  font-size: 14px;
+  font-weight: 820;
+}
+
+.slideList button strong {
+  font-size: 18px;
+  line-height: 1.1;
+}
+
+.slideList button small {
+  color: #647084;
+  font-size: 13px;
+  line-height: 1.25;
+  font-weight: 650;
+}
+
+.slideList .activeSlideButton {
+  border-color: #2f6df6;
+  background: #eef4ff;
+  box-shadow: 0 14px 32px rgba(47, 109, 246, 0.12);
+}
+
+.slideList .activeSlideButton span,
+.slideList .activeSlideButton strong {
+  color: #1748b5;
+}
+
+.keyboardHints {
+  display: grid;
+  gap: 7px;
+  padding: 14px;
+  border: 1px solid #dbe3ef;
+  border-radius: 8px;
+  background: #f8fafc;
+  color: #647084;
+  font-size: 13px;
+  font-weight: 720;
+}
+
+.presentationMain {
+  min-width: 0;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: 18px;
+  padding: 26px 32px 24px;
+}
+
+.presentationTopbar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.presentationEyebrow {
+  margin-bottom: 5px;
+  color: #2f6df6;
+  font-size: 13px;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.presentationTopbar h1 {
+  margin: 0;
+  font-size: 34px;
+  line-height: 1.05;
+}
+
+.presentationTopbar p {
+  margin: 6px 0 0;
+  color: #647084;
+  font-size: 17px;
+  font-weight: 650;
+}
+
+.frameCounter {
+  min-width: 150px;
+  padding: 10px 12px;
+  border: 1px solid #dbe3ef;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #647084;
+  font-size: 15px;
+  font-weight: 800;
+  text-align: center;
+}
+
+.stageOuter {
+  min-height: 0;
+  display: grid;
+  place-items: center;
+}
+
+.stageFrame {
+  width: min(100%, calc((100vh - 230px) * 16 / 9));
+  aspect-ratio: 16 / 9;
+  border: 1px solid #cfd9e8;
+  border-radius: 8px;
+  background: #ffffff;
+  overflow: hidden;
+  box-shadow: 0 24px 80px rgba(23, 32, 51, 0.16);
+}
+
+.presentationControls {
+  display: grid;
+  gap: 13px;
+  padding: 16px;
+  border: 1px solid #dbe3ef;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.92);
+}
+
+.transportControls,
+.chapterControls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+}
+
+.transportControls button,
+.chapterControls button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 40px;
+  padding: 9px 12px;
+  border: 1px solid #dbe3ef;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #172033;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.transportControls button:disabled,
+.chapterControls button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.transportControls button:hover:not(:disabled),
+.chapterControls button:hover:not(:disabled) {
+  border-color: #2f6df6;
+}
+
+.chapterControls button span {
+  display: inline-grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  background: #eef4ff;
+  color: #1748b5;
+  font-size: 12px;
+}
+
+.chapterControls .activeChapter {
+  border-color: #2f6df6;
+  background: #eef4ff;
+  color: #1748b5;
+}
+
+.frameScrubber {
+  width: 100%;
+  accent-color: #2f6df6;
+}
+
+.finalSlideNote {
+  min-height: 40px;
+  align-items: center;
+  color: #647084;
+  font-size: 15px;
+  font-weight: 760;
+}
+
+.metricsSlide {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: linear-gradient(180deg, #fbfcff 0%, #f4f7fb 100%);
+}
+
+.metricsGridTexture {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(23, 32, 51, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(23, 32, 51, 0.035) 1px, transparent 1px);
+  background-size: 42px 42px;
+}
+
+.metricsContent {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  justify-items: center;
+  gap: 32px;
+  width: min(1180px, 88%);
+  text-align: center;
+}
+
+.metricsLogo {
+  width: 340px;
+  max-width: 40%;
+  height: auto;
+}
+
+.metricsEyebrow {
+  margin-bottom: 12px;
+  color: #2f6df6;
+  font-size: 18px;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.metricsContent h1 {
+  margin: 0;
+  color: #172033;
+  font-size: 58px;
+  line-height: 1.06;
+  font-weight: 780;
+  letter-spacing: 0;
+}
+
+.metricsContent p {
+  margin: 18px 0 0;
+  color: #647084;
+  font-size: 29px;
+  line-height: 1.3;
+}
+
+.metricsBadges {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+}
+
+@media (max-width: 1100px) {
+  .presentationShell {
+    grid-template-columns: 1fr;
+  }
+
+  .presentationSidebar {
+    grid-template-rows: auto auto;
+  }
+
+  .keyboardHints {
+    display: none;
+  }
+}
+
