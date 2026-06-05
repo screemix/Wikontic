@@ -117,23 +117,18 @@ class BaseInferenceWithDB:
             return []
         or_conditions = []
         for ent in entities4search:
-            or_conditions.append({"$and": [{"subject": ent}]})
-            or_conditions.append({"$and": [{"object": ent}]})
+            or_conditions.append({"subject": ent})
+            or_conditions.append({"object": ent})
         if sample_id is None:
-            pipeline = [{"$match": {"$or": or_conditions}}]
+            query = {"$or": or_conditions}
         else:
-            pipeline = [{"$match": {"sample_id": sample_id, "$or": or_conditions}}]
-        results = list(
-            self.triplets_db.get_collection(
-                self.aligner.triplets_collection_name
-            ).aggregate(pipeline)
-        )
+            query = {"sample_id": sample_id, "$or": or_conditions}
+        results = self.triplets_db.match_documents(self.aligner.triplets_collection_name, query)
 
         if use_filtered_triplets:
-            filtered_results = list(
-                self.triplets_db.get_collection(
-                    self.aligner.ontology_filtered_triplets_collection_name
-                ).aggregate(pipeline)
+            filtered_results = self.triplets_db.match_documents(
+                self.aligner.ontology_filtered_triplets_collection_name,
+                query,
             )
             results.extend(filtered_results)
 

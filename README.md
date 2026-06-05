@@ -78,6 +78,22 @@ Knowledge Graphs (KGs) provide structured, verifiable representations of knowled
    streamlit run Wikontic.py
    ```
 
+## Backend Selection (`mongodb` or `qdrant`)
+
+`inference_and_eval/configs/*.yaml` now supports:
+
+- `vector_db_backend`: `mongodb` or `qdrant`
+- `qdrant_url`: set to `:memory:` for pure in-memory mode
+- `qdrant_api_key`: optional (for remote Qdrant)
+
+Example (in-memory Qdrant):
+
+```yaml
+vector_db_backend: "qdrant"
+qdrant_url: ":memory:"
+qdrant_api_key: null
+```
+
 ---
 
 Enjoy building knowledge graphs with Wikontic!

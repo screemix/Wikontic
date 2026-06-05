@@ -21,6 +21,7 @@ from wikontic.utils.inference_with_db import InferenceWithDB
 
 from wikontic.utils.dynamic_aligner import Aligner as DynamicDBAligner
 from wikontic.utils.structured_inference_with_db import StructuredInferenceWithDB
+from wikontic.db.factory import create_backend
 
 from wikontic.create_ontological_triplets_db import create_ontological_triplets_database
 from wikontic.create_triplets_db import create_triplets_database
@@ -46,6 +47,9 @@ warnings.filterwarnings("ignore")
 
 CONFIG_DEFAULTS = {
     "mongo_uri": "mongodb://localhost:27018/?directConnection=true",
+    "vector_db_backend": "mongodb",
+    "qdrant_url": ":memory:",
+    "qdrant_api_key": None,
     "ontology_db_name": "wikidata_ontology",
     "triplets_db_name": "triplets_db",
     "model_name": "gpt-4o-mini",
@@ -103,32 +107,111 @@ if __name__ == "__main__":
     else:
         triplets_db_name = triplets_db_name + "_non_onto"
 
-    mongo_client = get_mongo_client(cfg.mongo_uri)
+    mongo_client = get_mongo_client(cfg.mongo_uri) if cfg.vector_db_backend == "mongodb" else None
     if cfg.structured_inference:
-        ontology_db = mongo_client.get_database(cfg.ontology_db_name)
-        if ontology_db is None:
-            create_wikidata_ontology_database(
-                mongo_uri=cfg.mongo_uri, database=cfg.ontology_db_name
+        ontology_db = (
+            create_backend(
+                backend_type="mongodb",
+                mongo_db=mongo_client.get_database(cfg.ontology_db_name),
             )
-            ontology_db = mongo_client.get_database(cfg.ontology_db_name)
+            if cfg.vector_db_backend == "mongodb"
+            else create_backend(
+                backend_type="qdrant",
+                qdrant_url=cfg.qdrant_url,
+                qdrant_api_key=cfg.qdrant_api_key,
+            )
+        )
+        if not ontology_db.list_collection_names():
+            create_wikidata_ontology_database(
+                backend=cfg.vector_db_backend,
+                mongo_uri=cfg.mongo_uri,
+                qdrant_url=cfg.qdrant_url,
+                qdrant_api_key=cfg.qdrant_api_key,
+                database=cfg.ontology_db_name,
+            )
+            ontology_db = (
+                create_backend(
+                    backend_type="mongodb",
+                    mongo_db=mongo_client.get_database(cfg.ontology_db_name),
+                )
+                if cfg.vector_db_backend == "mongodb"
+                else create_backend(
+                    backend_type="qdrant",
+                    qdrant_url=cfg.qdrant_url,
+                    qdrant_api_key=cfg.qdrant_api_key,
+                )
+            )
             logger.info(
                 f"Wikidata ontology database created successfully: {cfg.ontology_db_name}"
             )
-        triplets_db = mongo_client.get_database(triplets_db_name)
-        if triplets_db is None:
+        triplets_db = (
+            create_backend(
+                backend_type="mongodb",
+                mongo_db=mongo_client.get_database(triplets_db_name),
+            )
+            if cfg.vector_db_backend == "mongodb"
+            else create_backend(
+                backend_type="qdrant",
+                qdrant_url=cfg.qdrant_url,
+                qdrant_api_key=cfg.qdrant_api_key,
+            )
+        )
+        if not triplets_db.list_collection_names():
             create_ontological_triplets_database(
+                backend=cfg.vector_db_backend,
                 mongo_uri=cfg.mongo_uri,
+                qdrant_url=cfg.qdrant_url,
+                qdrant_api_key=cfg.qdrant_api_key,
                 db_name=triplets_db_name,
             )
-            triplets_db = mongo_client.get_database(triplets_db_name)
+            triplets_db = (
+                create_backend(
+                    backend_type="mongodb",
+                    mongo_db=mongo_client.get_database(triplets_db_name),
+                )
+                if cfg.vector_db_backend == "mongodb"
+                else create_backend(
+                    backend_type="qdrant",
+                    qdrant_url=cfg.qdrant_url,
+                    qdrant_api_key=cfg.qdrant_api_key,
+                )
+            )
             logger.info(
                 f"Ontological triplets database created successfully: {triplets_db_name}"
             )
     else:
-        triplets_db = mongo_client.get_database(triplets_db_name)
-        if triplets_db is None:
-            create_triplets_database(mongo_uri=cfg.mongo_uri, db_name=triplets_db_name)
-            triplets_db = mongo_client.get_database(triplets_db_name)
+        triplets_db = (
+            create_backend(
+                backend_type="mongodb",
+                mongo_db=mongo_client.get_database(triplets_db_name),
+            )
+            if cfg.vector_db_backend == "mongodb"
+            else create_backend(
+                backend_type="qdrant",
+                qdrant_url=cfg.qdrant_url,
+                qdrant_api_key=cfg.qdrant_api_key,
+            )
+        )
+        if not triplets_db.list_collection_names():
+            create_triplets_database(
+                backend=cfg.vector_db_backend,
+                mongo_uri=cfg.mongo_uri,
+                qdrant_url=cfg.qdrant_url,
+                qdrant_api_key=cfg.qdrant_api_key,
+                db_name=triplets_db_name,
+            )
+            triplets_db = (
+                create_backend(
+                    backend_type="mongodb",
+                    mongo_db=mongo_client.get_database(triplets_db_name),
+                )
+                if cfg.vector_db_backend == "mongodb"
+                else create_backend(
+                    backend_type="qdrant",
+                    qdrant_url=cfg.qdrant_url,
+                    qdrant_api_key=cfg.qdrant_api_key,
+                )
+            )
             logger.info(f"Triplets database created successfully: {triplets_db_name}")
     api_key = os.getenv(cfg.api_key_env_var)
     api_key = ""

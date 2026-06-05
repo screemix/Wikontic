@@ -1,11 +1,11 @@
-from typing import List, Tuple, Set, Dict, Optional
+from typing import List, Dict, Optional
 from transformers import AutoTokenizer, AutoModel
-from dataclasses import dataclass
-from pydantic import BaseModel, ValidationError
-from pymongo import MongoClient, UpdateOne
+from pydantic import BaseModel
 from dotenv import load_dotenv, find_dotenv
 import os
 import torch
+from wikontic.db.factory import ensure_storage_backend
+from wikontic.db.interfaces import VectorQuery
 
 # os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 _ = load_dotenv(find_dotenv())
@@ -29,7 +29,7 @@ class PropertyAlias(BaseModel):
 
 class Aligner:
     def __init__(self, triplets_db, device="cuda:0"):
-        self.db = triplets_db
+        self.db = ensure_storage_backend(triplets_db)
 
         self.entity_aliases_collection_name = "entity_aliases"
         self.property_aliases_collection_name = "property_aliases"
@@ -84,7 +84,6 @@ class Aligner:
             List of property labels
         """
 
-        collection = self.db.get_collection(self.property_aliases_collection_name)
         query_embedding = self.get_embedding(target_relation)
         if query_embedding is None:
             return []
@@ -96,33 +95,19 @@ class Aligner:
 
         while len(unique_ranked_properties) < k and attempt < max_attempts:
 
-            pipeline = [
-                {
-                    "$vectorSearch": {
-                        "index": self.property_vector_index_name,
-                        "queryVector": query_embedding,
-                        "path": "alias_text_embedding",
-                        "numCandidates": 150,
-                        "limit": query_k if query_k < 150 else 150,
-                        # "filter": {
-                        #                 "sample_id": {"$eq": sample_id},
-                        #             },
-                    }
-                },
-                {
-                    "$project": {
-                        "_id": 0,
-                        "label": 1,
-                        # "alias": 1
-                        # "score": {"$meta": "vectorSearchScore"}
-                    }
-                },
-            ]
-
-            similar_properties = collection.aggregate(pipeline)
+            similar_properties = self.db.vector_search(
+                VectorQuery(
+                    collection_name=self.property_aliases_collection_name,
+                    index_name=self.property_vector_index_name,
+                    query_vector=query_embedding,
+                    vector_field="alias_text_embedding",
+                    limit=query_k if query_k < 150 else 150,
+                    projection={"_id": 0, "label": 1},
+                )
+            )
 
             for prop in similar_properties:
-                if prop["label"] not in unique_ranked_properties:
+                if prop.get("label") not in unique_ranked_properties:
                     unique_ranked_properties.append(prop["label"])
                 if len(unique_ranked_properties) == k:
                     break
@@ -146,7 +131,6 @@ class Aligner:
             List of entity labels
         """
 
-        collection = self.db.get_collection(self.entity_aliases_collection_name)
         query_embedding = self.get_embedding(entity_name)
         if query_embedding is None:
             return []
@@ -159,33 +143,20 @@ class Aligner:
         while len(unique_ranked_entities) < k and attempt < max_attempts:
 
             if sample_id is not None:
-                filter = {
-                    "sample_id": {"$eq": sample_id},
-                }
+                query_filter = {"sample_id": {"$eq": sample_id}}
             else:
-                filter = {}
-
-            pipeline = [
-                {
-                    "$vectorSearch": {
-                        "index": self.entities_vector_index_name,
-                        "queryVector": query_embedding,
-                        "path": "alias_text_embedding",
-                        "numCandidates": 150,
-                        "limit": query_k if query_k < 150 else 150,
-                        "filter": filter,
-                    }
-                },
-                {
-                    "$project": {
-                        "_id": 0,
-                        "label": 1,
-                        # "score": {"$meta": "vectorSearchScore"}
-                    }
-                },
-            ]
-
-            similar_entities = collection.aggregate(pipeline)
+                query_filter = {}
+            similar_entities = self.db.vector_search(
+                VectorQuery(
+                    collection_name=self.entity_aliases_collection_name,
+                    index_name=self.entities_vector_index_name,
+                    query_vector=query_embedding,
+                    vector_field="alias_text_embedding",
+                    limit=query_k if query_k < 150 else 150,
+                    filters=query_filter,
+                    projection={"_id": 0, "label": 1},
+                )
+            )
 
             for entity in similar_entities:
                 if entity["label"] not in unique_ranked_entities:
@@ -226,56 +197,28 @@ class Aligner:
             )
 
     def add_triplets(self, triplets_list, sample_id):
-        collection = self.db.get_collection(self.triplets_collection_name)
-
-        operations = []
         for triple in triplets_list:
             triple["sample_id"] = sample_id
-            filter_query = {
-                "subject": triple["subject"],
-                "relation": triple["relation"],
-                "object": triple["object"],
-                "sample_id": triple["sample_id"],
-            }
-            operations.append(
-                UpdateOne(filter_query, {"$setOnInsert": triple}, upsert=True)
-            )
-
-        if operations:
-            collection.bulk_write(operations)
+        self.db.upsert_many(
+            collection_name=self.triplets_collection_name,
+            documents=triplets_list,
+            unique_fields=["subject", "relation", "object", "sample_id"],
+        )
 
     def add_filtered_triplets(self, triplets_list, sample_id):
-        collection = self.db.get_collection(self.filtered_triplets_collection_name)
-
-        operations = []
         for triple in triplets_list:
             triple["sample_id"] = sample_id
-            filter_query = {
-                "subject": triple["subject"],
-                "relation": triple["relation"],
-                "object": triple["object"],
-                "sample_id": triple["sample_id"],
-            }
-            operations.append(
-                UpdateOne(filter_query, {"$setOnInsert": triple}, upsert=True)
-            )
-
-        if operations:
-            collection.bulk_write(operations)
+        self.db.upsert_many(
+            collection_name=self.filtered_triplets_collection_name,
+            documents=triplets_list,
+            unique_fields=["subject", "relation", "object", "sample_id"],
+        )
 
     def add_initial_triplets(self, triplets_list, sample_id):
-        collection = self.db.get_collection(self.initial_triplets_collection_name)
-        operations = []
         for triple in triplets_list:
             triple["sample_id"] = sample_id
-            filter_query = {
-                "subject": triple["subject"],
-                "relation": triple["relation"],
-                "object": triple["object"],
-                "sample_id": triple["sample_id"],
-            }
-            operations.append(
-                UpdateOne(filter_query, {"$setOnInsert": triple}, upsert=True)
-            )
-        if operations:
-            collection.bulk_write(operations)
+        self.db.upsert_many(
+            collection_name=self.initial_triplets_collection_name,
+            documents=triplets_list,
+            unique_fields=["subject", "relation", "object", "sample_id"],
+        )

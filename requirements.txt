@@ -16,3 +16,4 @@ pydantic
 accelerate
 langchain_openai
 langchain
+qdrant-client

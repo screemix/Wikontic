@@ -1,7 +1,3 @@
-from pymongo.mongo_client import MongoClient
-from pymongo.operations import SearchIndexModel
-import pymongo
-
 from typing import List
 from pydantic import BaseModel, ValidationError
 from transformers import AutoTokenizer, AutoModel
@@ -14,6 +10,10 @@ import os
 from pathlib import Path
 import torch
 from dotenv import load_dotenv, find_dotenv
+from pymongo.mongo_client import MongoClient
+
+from wikontic.db.bootstrap import ensure_collections
+from wikontic.db.factory import create_backend
 
 _ = load_dotenv(find_dotenv())
 # Configure logging
@@ -90,9 +90,7 @@ def get_embedding(text):
 
 
 def get_mongo_client(mongo_uri):
-    client = MongoClient(mongo_uri)
-    logger.info("Connection to MongoDB successful")
-    return client
+    return MongoClient(mongo_uri)
 
 
 def populate_entity_types(
@@ -264,102 +262,13 @@ def populate_property_aliases(
     logger.info(f"Successfully populated {collection_name} with {len(records)} records")
 
 
-def create_search_index_for_entity_types(
-    db,
-    collection_name="entity_type_aliases",
-    embedding_field_name="alias_text_embedding",
-    index_name="entity_type_aliases",
-):
-    logger.info(f"Starting to create index {index_name} for {collection_name}")
-    collection = db.get_collection(collection_name)
-    vector_search_index_model = SearchIndexModel(
-        definition={
-            "mappings": {
-                "dynamic": True,
-                "fields": {
-                    embedding_field_name: {
-                        "dimensions": 768,
-                        "similarity": "cosine",
-                        "type": "knnVector",
-                    }
-                },
-            }
-        },
-        name=index_name,
-    )
-
-    try:
-        result = collection.create_search_index(model=vector_search_index_model)
-        logger.info("Creating index...")
-        time.sleep(20)
-        logger.info(f"New index {index_name} created successfully: {result}")
-    except Exception as e:
-        logger.error(f"Error creating new vector search index {index_name}: {str(e)}")
-
-
-def create_search_index_for_properties(
-    db,
-    collection_name="property_aliases",
-    embedding_field_name="alias_text_embedding",
-    prop_id_field_name="relation_id",
-    index_name="property_aliases_ids",
-):
-    logger.info(f"Starting to create index {index_name} for {collection_name}")
-    collection = db.get_collection(collection_name)
-    vector_search_index_model = SearchIndexModel(
-        definition={
-            "mappings": {
-                "dynamic": True,
-                "fields": {
-                    embedding_field_name: {
-                        "dimensions": 768,
-                        "similarity": "cosine",
-                        "type": "knnVector",
-                    },
-                    prop_id_field_name: {"type": "token"},
-                },
-            }
-        },
-        name=index_name,
-    )
-
-    try:
-        result = collection.create_search_index(model=vector_search_index_model)
-        logger.info("Creating index...")
-        time.sleep(20)
-        logger.info(f"New index {index_name} created successfully: {result}")
-    except Exception as e:
-        logger.error(f"Error creating new vector search index {index_name}: {str(e)}")
-
-
-def create_indexes(db):
-    logger.info("Creating indexes for entity_types collection...")
-    db.entity_types.create_index([("entity_type_id", 1)])
-    db.entity_types.create_index([("label", 1)])
-
-    logger.info("Creating indexes for entity_type_aliases collection...")
-    db.entity_type_aliases.create_index([("entity_type_id", 1)])
-    db.entity_type_aliases.create_index([("alias_label", 1)])
-
-    logger.info("Creating indexes for properties collection...")
-    db.properties.create_index([("property_id", 1)])
-
-    # logger.info("Creating indexes for property_aliases collection...")
-    # db.property_aliases.create_index("relation_id")
-
-    logger.info("Creating indexes for entity_aliases collection...")
-    db.entity_aliases.create_index([("entity_type", 1), ("sample_id", 1)])
-    db.entity_aliases.create_index([("label", 1)])
-
-    db.create_collection("triplets")
-    logger.info("Creating indexes for triplets collection...")
-    db.triplets.create_index([("sample_id", 1)])
-
-    logger.info("All indexes created successfully")
 
 
 def create_wikidata_ontology_database(
+    backend: str = "mongodb",
     mongo_uri: str = "mongodb://localhost:27018/?directConnection=true",
+    qdrant_url: str = ":memory:",
+    qdrant_api_key: str = None,
     database: str = "wikidata_ontology",
     mappings_dir: str = None,
     entity_types_collection: str = "entity_types",
@@ -368,6 +277,7 @@ def create_wikidata_ontology_database(
     property_aliases_collection: str = "property_aliases",
     entity_types_index: str = "entity_type_aliases",
     property_aliases_index: str = "property_aliases",
+    embedding_dimensions: int = 768,
     drop_collections: bool = False,
 ):
     """
@@ -393,10 +303,10 @@ def create_wikidata_ontology_database(
     if mappings_dir is None:
         # Try to find the mappings directory relative to this file
         current_file = Path(__file__).parent
-        mappings_dir = str(current_file / "utils" / "ontology_mappings" / "")
+        mappings_dir = str(current_file /"src" / "wikontic" / "utils" / "ontology_mappings_en_en")
         if not os.path.exists(mappings_dir):
             # Fallback to relative path
-            mappings_dir = "utils/ontology_mappings/"
+            mappings_dir = "src/wikontic/utils/ontology_mappings_en_en"
 
     logger.info("Starting database population process")
     logger.info(f"Using database: {database}")
@@ -429,17 +339,26 @@ def create_wikidata_ontology_database(
 
     logger.info("Successfully loaded all mapping files")
 
-    # Connect to MongoDB
-    mongo_client = get_mongo_client(mongo_uri)
-    db = mongo_client.get_database(database)
-
-    # Drop all existing collections
-    if drop_collections:
-        logger.info("Dropping existing collections...")
-        for collection_name in db.list_collection_names():
-            logger.info(f"Dropping collection: {collection_name}")
-            db.drop_collection(collection_name)
-        logger.info("Successfully dropped all existing collections")
+    mongo_db = None
+    if backend == "mongodb":
+        mongo_client = get_mongo_client(mongo_uri)
+        mongo_db = mongo_client.get_database(database)
+    db = create_backend(
+        backend_type=backend,
+        mongo_db=mongo_db,
+        qdrant_url=qdrant_url,
+        qdrant_api_key=qdrant_api_key,
+    )
+    ensure_collections(
+        db,
+        [
+            entity_types_collection,
+            entity_type_aliases_collection,
+            properties_collection,
+            property_aliases_collection,
+        ],
+        drop_collections=drop_collections,
+    )
 
     # Populate collections
     populate_entity_types(
@@ -469,20 +388,26 @@ def create_wikidata_ontology_database(
         collection_name=property_aliases_collection,
     )
 
-    # Create search indexes
-    create_search_index_for_entity_types(
-        db,
+    db.create_indexes(entity_types_collection, [["entity_type_id"], ["label"]])
+    db.create_indexes(entity_type_aliases_collection, [["entity_type_id"], ["alias_label"]])
+    db.create_indexes(properties_collection, [["property_id"]])
+    logger.info("Indexes created successfully")
+    db.ensure_vector_index(
         collection_name=entity_type_aliases_collection,
         index_name=entity_types_index,
+        vector_field="alias_text_embedding",
+        num_dimensions=embedding_dimensions,
+        token_fields=["entity_type_id"],
+        recreate=drop_collections,
     )
-    create_search_index_for_properties(
-        db,
+    db.ensure_vector_index(
         collection_name=property_aliases_collection,
         index_name=property_aliases_index,
+        vector_field="alias_text_embedding",
+        num_dimensions=embedding_dimensions,
+        token_fields=["relation_id"],
+        recreate=drop_collections,
     )
-
-    # Create indexes
-    create_indexes(db)
     logger.info("Database population process completed")
 
     return db
@@ -505,6 +430,9 @@ if __name__ == "__main__":
         default="mongodb://localhost:27018/?directConnection=true",
         help="MongoDB connection URI",
     )
+    parser.add_argument("--backend", type=str, default="mongodb")
+    parser.add_argument("--qdrant_url", type=str, default=":memory:")
+    parser.add_argument("--qdrant_api_key", type=str, default=None)
     parser.add_argument(
         "--database",
         type=str,
@@ -554,7 +482,10 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
     create_wikidata_ontology_database(
+        backend=args.backend,
         mongo_uri=args.mongo_uri,
+        qdrant_url=args.qdrant_url,
+        qdrant_api_key=args.qdrant_api_key,
         database=args.database,
         mappings_dir=args.mappings_dir,
         entity_types_collection=args.entity_types_collection,

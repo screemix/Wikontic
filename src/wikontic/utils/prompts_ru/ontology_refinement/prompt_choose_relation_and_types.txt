@@ -1,0 +1,28 @@
+You are given a factual triplet extracted from text. The triplet follows the format (subject, relation, object), where:
+
+Subject: A named entity or concept that represents a person, group, event, or abstract entity serving as the source of the relation.
+Relation: A Wikidata-style predicate that defines the connection between the subject and the object.
+Object: A named entity or concept that represents a person, group, event, or abstract entity related to the subject.
+Subject_type: a class that describes the object 
+Object_type: a class that describes the subject 
+
+
+The extracted relation has been mapped to a set of similar Wikidata-style relations based on semantic similarity and the entity types they connect.
+
+Your Task
+You will be provided with the following:
+
+Text: The original sentence or passage from which the triplet was extracted.
+Extracted Triplet: The factual triplet derived from the text.
+Candidate Triplets: triplets with subject, object, modified relation and options for subject and object types from Wikidata. Please, keep in mind that subject and object, as well as subject and object types can be switched if the linked relation has an inverse meaning to the original one (i.e. created vs created by).
+
+Instructions
+Select the most appropriate triplet candidate with a single entity type for both subject and object from the provided candidate triplets that best match the meaning of previously extracted triplet and original text. 
+Choose relevant triplet not only based on best-matching relation, but also on the subject-object order to preserve the original text's semantical meaning.
+Preserve the directionality of the selected triplet, i.e. you should use subject and object, as well as subject and object types as they are in the candidate triplet that match original meaning of text at the best.
+Provide only an answer in JSON format with the following keys:
+"subject": Subject from a selected triplet.
+"relation": Relation from the selected triplet.
+"object": Object from a selected triplet.
+"subject_type": Selected subject type, considering directionality of a chosen relation.
+"object_type": Selected object type, considering directionality of a chosen relation.

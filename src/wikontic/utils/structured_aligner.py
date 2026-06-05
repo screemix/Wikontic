@@ -2,11 +2,12 @@ from typing import List, Tuple, Set, Dict
 from transformers import AutoTokenizer, AutoModel
 from dataclasses import dataclass
 from pydantic import BaseModel, ValidationError
-from pymongo import MongoClient, UpdateOne
 import torch
 from dotenv import load_dotenv, find_dotenv
 import os
 from pathlib import Path
+from wikontic.db.factory import ensure_storage_backend
+from wikontic.db.interfaces import VectorQuery
 
 # os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 _ = load_dotenv(find_dotenv())
@@ -29,8 +30,8 @@ class EntityAlias(BaseModel):
 
 class Aligner:
     def __init__(self, ontology_db, triplets_db, device="cuda"):
-        self.ontology_db = ontology_db
-        self.triplets_db = triplets_db
+        self.ontology_db = ensure_storage_backend(ontology_db)
+        self.triplets_db = ensure_storage_backend(triplets_db)
 
         self.entity_type_collection_name = "entity_types"
         self.entity_type_aliases_collection_name = "entity_type_aliases"
@@ -105,28 +106,22 @@ class Aligner:
         attempt = 0
         unique_ranked_entities: List[str] = []
         query_embedding = self.get_embedding(target_entity_type)
-        collection = self.ontology_db.get_collection(
-            self.entity_type_aliases_collection_name
-        )
 
         # as we search among aliases, there can be duplicated original entitites
         # and as we want K unique entities in result, we querying the index until we get exactly K unique entities
         while len(unique_ranked_entities) < k and attempt < max_attempts:
-            search_pipeline = [
-                {
-                    "$vectorSearch": {
-                        "index": self.entity_type_vector_index_name,  #
-                        "queryVector": query_embedding,
-                        "path": "alias_text_embedding",
-                        "numCandidates": 150 if query_k < 150 else query_k,
-                        "limit": query_k,
-                    }
-                },
-                {"$project": {"_id": 0, "entity_type_id": 1}},
-            ]
-            result = collection.aggregate(search_pipeline)
+            result = self.ontology_db.vector_search(
+                VectorQuery(
+                    collection_name=self.entity_type_aliases_collection_name,
+                    index_name=self.entity_type_vector_index_name,
+                    query_vector=query_embedding,
+                    vector_field="alias_text_embedding",
+                    limit=query_k,
+                    projection={"_id": 0, "entity_type_id": 1},
+                )
+            )
             for res in result:
-                if res["entity_type_id"] not in unique_ranked_entities:
+                if res.get("entity_type_id") not in unique_ranked_entities:
                     unique_ranked_entities.append(res["entity_type_id"])
                 if len(unique_ranked_entities) == k:
                     break
@@ -171,44 +166,17 @@ class Aligner:
         )
         extended_types.extend(hirerarchy["parent_type_ids"])
 
-        pipeline = [
-            {"$match": {"entity_type_id": {"$in": extended_types}}},
-            {
-                "$group": {
-                    "_id": None,
-                    "subject_ids": {
-                        "$addToSet": {"$ifNull": ["$valid_subject_property_ids", []]}
-                    },
-                    "object_ids": {
-                        "$addToSet": {"$ifNull": ["$valid_object_property_ids", []]}
-                    },
-                }
-            },
-            {
-                "$project": {
-                    "subject_ids": {
-                        "$reduce": {
-                            "input": "$subject_ids",
-                            "initialValue": [],
-                            "in": {"$setUnion": ["$$value", "$$this"]},
-                        }
-                    },
-                    "object_ids": {
-                        "$reduce": {
-                            "input": "$object_ids",
-                            "initialValue": [],
-                            "in": {"$setUnion": ["$$value", "$$this"]},
-                        }
-                    },
-                }
-            },
-        ]
-        result = collection.aggregate(pipeline)
-
-        result_data = next(result, {})
-
-        subject_props = result_data.get("subject_ids", [])
-        object_props = result_data.get("object_ids", [])
+        matched_types = collection.find(
+            {"entity_type_id": {"$in": extended_types}},
+            {"valid_subject_property_ids": 1, "valid_object_property_ids": 1, "_id": 0},
+        )
+        subject_props_set: Set[str] = set()
+        object_props_set: Set[str] = set()
+        for item in matched_types:
+            subject_props_set.update(item.get("valid_subject_property_ids") or [])
+            object_props_set.update(item.get("valid_object_property_ids") or [])
+        subject_props = list(subject_props_set)
+        object_props = list(object_props_set)
 
         if is_object:
             direct_props = set(object_props)
@@ -228,9 +196,6 @@ class Aligner:
         """
         Rank properties based on similarity to target relation.
         """
-        collection = self.ontology_db.get_collection(
-            self.property_aliases_collection_name
-        )
         query_embedding = self.get_embedding(target_property)
         if query_embedding is None:
             return []
@@ -243,26 +208,17 @@ class Aligner:
 
         while len(unique_ranked_properties) < k and attempt < max_attempts:
 
-            pipeline = [
-                {
-                    "$vectorSearch": {
-                        "index": self.property_vector_index_name,
-                        "queryVector": query_embedding,
-                        "path": "alias_text_embedding",
-                        "numCandidates": 150 if query_k < 150 else query_k,
-                        "limit": query_k,
-                        "filter": {"relation_id": {"$in": props}},
-                    }
-                },
-                {
-                    "$project": {
-                        "_id": 0,
-                        "relation_id": 1,
-                    }
-                },
-            ]
-
-            similar_properties = collection.aggregate(pipeline)
+            similar_properties = self.ontology_db.vector_search(
+                VectorQuery(
+                    collection_name=self.property_aliases_collection_name,
+                    index_name=self.property_vector_index_name,
+                    query_vector=query_embedding,
+                    vector_field="alias_text_embedding",
+                    limit=query_k,
+                    filters={"relation_id": {"$in": props}},
+                    projection={"_id": 0, "relation_id": 1},
+                )
+            )
 
             for prop in similar_properties:
                 if prop["relation_id"] not in unique_ranked_properties:
@@ -338,20 +294,16 @@ class Aligner:
         self, property_id_list: List[str]
     ) -> Dict[str, Dict[str, str]]:
         collection = self.ontology_db.get_collection(self.property_collection_name)
-
-        pipeline = [
-            {"$match": {"property_id": {"$in": property_id_list}}},
-            {
-                "$project": {
-                    "_id": 0,
-                    "property_id": 1,
-                    "label": 1,
-                    "valid_subject_type_ids": 1,
-                    "valid_object_type_ids": 1,
-                }
+        result = collection.find(
+            query={"property_id": {"$in": property_id_list}},
+            projection={
+                "_id": 0,
+                "property_id": 1,
+                "label": 1,
+                "valid_subject_type_ids": 1,
+                "valid_object_type_ids": 1,
             },
-        ]
-        result = collection.aggregate(pipeline)
+        )
 
         result_dict = {
             item["property_id"]: {
@@ -366,17 +318,10 @@ class Aligner:
 
     def retrieve_entity_type_labels(self, entity_type_ids: List[str]):
         collection = self.ontology_db.get_collection(self.entity_type_collection_name)
-        pipeline = [
-            {"$match": {"entity_type_id": {"$in": entity_type_ids}}},
-            {
-                "$project": {
-                    "_id": 0,
-                    "entity_type_id": 1,
-                    "label": 1,
-                }
-            },
-        ]
-        result = collection.aggregate(pipeline)
+        result = collection.find(
+            {"entity_type_id": {"$in": entity_type_ids}},
+            {"_id": 0, "entity_type_id": 1, "label": 1},
+        )
 
         result_dict = {item["entity_type_id"]: item["label"] for item in result}
 
@@ -434,21 +379,17 @@ class Aligner:
                 "entity_type": {"$in": extended_types},
                 "sample_id": {"$eq": sample_id},
             }
-        pipeline = [
-            {
-                "$vectorSearch": {
-                    "index": self.entities_vector_index_name,
-                    "queryVector": query_embedding,
-                    "path": "alias_text_embedding",
-                    "numCandidates": 150 if k < 150 else k,
-                    "limit": k,
-                    "filter": filter_query,
-                }
-            },
-            {"$project": {"_id": 0, "label": 1, "alias": 1}},
-        ]
-
-        result = collection.aggregate(pipeline)
+        result = self.triplets_db.vector_search(
+            VectorQuery(
+                collection_name=self.entity_aliases_collection_name,
+                index_name=self.entities_vector_index_name,
+                query_vector=query_embedding,
+                vector_field="alias_text_embedding",
+                limit=k,
+                filters=filter_query,
+                projection={"_id": 0, "label": 1, "alias": 1},
+            )
+        )
         result_dict = {item["alias"]: item["label"] for item in result}
 
         return result_dict
@@ -481,100 +422,76 @@ class Aligner:
             )
 
     def add_triplets(self, triplets_list, sample_id):
-        collection = self.triplets_db.get_collection(self.triplets_collection_name)
-
-        operations = []
         if not sample_id:
             sample_id = "all"
         for triple in triplets_list:
             triple["sample_id"] = sample_id
-            filter_query = {
-                "subject": triple["subject"],
-                "relation": triple["relation"],
-                "object": triple["object"],
-                "subject_type": triple["subject_type"],
-                "object_type": triple["object_type"],
-                "sample_id": triple["sample_id"],
-            }
-            operations.append(
-                UpdateOne(filter_query, {"$setOnInsert": triple}, upsert=True)
-            )
-
-        if operations:
-            collection.bulk_write(operations)
+        self.triplets_db.upsert_many(
+            collection_name=self.triplets_collection_name,
+            documents=triplets_list,
+            unique_fields=[
+                "subject",
+                "relation",
+                "object",
+                "subject_type",
+                "object_type",
+                "sample_id",
+            ],
+        )
 
     def add_filtered_triplets(self, triplets_list, sample_id):
-        collection = self.triplets_db.get_collection(
-            self.filtered_triplets_collection_name
-        )
-
-        operations = []
         if not sample_id:
             sample_id = "all"
         for triple in triplets_list:
             triple["sample_id"] = sample_id
-            filter_query = {
-                "subject": triple["subject"],
-                "relation": triple["relation"],
-                "object": triple["object"],
-                "subject_type": triple["subject_type"],
-                "object_type": triple["object_type"],
-                "sample_id": triple["sample_id"],
-            }
-            operations.append(
-                UpdateOne(filter_query, {"$setOnInsert": triple}, upsert=True)
-            )
-
-        if operations:
-            collection.bulk_write(operations)
+        self.triplets_db.upsert_many(
+            collection_name=self.filtered_triplets_collection_name,
+            documents=triplets_list,
+            unique_fields=[
+                "subject",
+                "relation",
+                "object",
+                "subject_type",
+                "object_type",
+                "sample_id",
+            ],
+        )
 
     def add_ontology_filtered_triplets(self, triplets_list, sample_id):
-        collection = self.triplets_db.get_collection(
-            self.ontology_filtered_triplets_collection_name
-        )
-
-        operations = []
         if not sample_id:
             sample_id = "all"
         for triple in triplets_list:
             triple["sample_id"] = sample_id
-            filter_query = {
-                "subject": triple["subject"],
-                "relation": triple["relation"],
-                "object": triple["object"],
-                "subject_type": triple["subject_type"],
-                "object_type": triple["object_type"],
-                "sample_id": triple["sample_id"],
-            }
-            operations.append(
-                UpdateOne(filter_query, {"$setOnInsert": triple}, upsert=True)
-            )
-
-        if operations:
-            collection.bulk_write(operations)
+        self.triplets_db.upsert_many(
+            collection_name=self.ontology_filtered_triplets_collection_name,
+            documents=triplets_list,
+            unique_fields=[
+                "subject",
+                "relation",
+                "object",
+                "subject_type",
+                "object_type",
+                "sample_id",
+            ],
+        )
 
     def add_initial_triplets(self, triplets_list, sample_id):
         if not sample_id:
             sample_id = "all"
-        collection = self.triplets_db.get_collection(
-            self.initial_triplets_collection_name
-        )
-        operations = []
         for triple in triplets_list:
             triple["sample_id"] = sample_id
-            filter_query = {
-                "subject": triple["subject"],
-                "relation": triple["relation"],
-                "object": triple["object"],
-                "subject_type": triple["subject_type"],
-                "object_type": triple["object_type"],
-                "sample_id": triple["sample_id"],
-            }
-            operations.append(
-                UpdateOne(filter_query, {"$setOnInsert": triple}, upsert=True)
-            )
-        if operations:
-            collection.bulk_write(operations)
+        self.triplets_db.upsert_many(
+            collection_name=self.initial_triplets_collection_name,
+            documents=triplets_list,
+            unique_fields=[
+                "subject",
+                "relation",
+                "object",
+                "subject_type",
+                "object_type",
+                "sample_id",
+            ],
+        )
 
     def retrieve_similar_entity_names(
         self, entity_name: str, k: int = 10, sample_id: str = None
@@ -588,38 +505,20 @@ class Aligner:
 
         # First try to search with sample_id filter if provided
         if sample_id:
-            pipeline = [
-                {
-                    "$vectorSearch": {
-                        "index": self.entities_vector_index_name,
-                        "queryVector": embedded_query,
-                        "path": "alias_text_embedding",
-                        "numCandidates": 150,
-                        "limit": k,
-                        "filter": {
-                            "sample_id": {"$eq": sample_id},
-                        },
-                    }
-                },
-                {"$project": {"_id": 0, "label": 1, "entity_type": 1}},
-            ]
+            search_filter = {"sample_id": {"$eq": sample_id}}
         else:
-            pipeline = [
-                {
-                    "$vectorSearch": {
-                        "index": self.entities_vector_index_name,
-                        "queryVector": embedded_query,
-                        "path": "alias_text_embedding",
-                        "numCandidates": 150,
-                        "limit": k,
-                    }
-                },
-                {"$project": {"_id": 0, "label": 1, "entity_type": 1}},
-            ]
-
-        result = collection.aggregate(pipeline)
-        result_list = list(result)
-
+            search_filter = {}
+        result_list = self.triplets_db.vector_search(
+            VectorQuery(
+                collection_name=self.entity_aliases_collection_name,
+                index_name=self.entities_vector_index_name,
+                query_vector=embedded_query,
+                vector_field="alias_text_embedding",
+                limit=k,
+                filters=search_filter,
+                projection={"_id": 0, "label": 1, "entity_type": 1},
+            )
+        )
         result_dict = [{"entity": item["label"]} for item in result_list]
 
         return result_dict
