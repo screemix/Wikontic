@@ -1,5 +1,6 @@
 # --- File: 0_KG_Extraction.py ---
 import streamlit as st
+from streamlit_ui import show_sidebar_logo
 from pyvis.network import Network
 
 # import networkx as nx
@@ -31,11 +32,13 @@ logger.info(f"User ID: {user_id}")
 st.set_page_config(
     page_title="Wikontic", page_icon="media/wikotic-wo-text.png", layout="wide"
 )
+show_sidebar_logo()
 
 WIKIDATA_ONTOLOGY_DB_NAME = "wikidata_ontology_ru"
 TRIPLETS_DB_NAME = "demo_ru"
 PROMPT_FOLDER_PATH = "src/wikontic/utils/prompts_ru"
 USE_UNIDECODE = False
+EXTRACTION_MODEL = "gpt-4.1"
 # --- Mongo Setup ---
 _ = load_dotenv(find_dotenv())
 mongo_client = MongoClient(os.getenv("MONGO_URI"))
@@ -133,11 +136,6 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-model_options = ["gpt-4.1", "gpt-4o-mini", "gpt-4.1-mini"]
-selected_model = st.selectbox(
-    "Choose a model for KG extraction:", model_options, index=0
-)
-
 # Predefined Wikipedia texts
 WIKIPEDIA_TEXTS = {
     "Albert Einstein": "Albert Einstein was a German-born theoretical physicist who is widely held to be one of the greatest and most influential scientists of all time. Best known for developing the theory of relativity, Einstein also made important contributions to quantum mechanics. His mass–energy equivalence formula E = mc², which arises from relativity theory, has been called 'the world's most famous equation'. He received the 1921 Nobel Prize in Physics for his services to theoretical physics, and especially for his discovery of the law of the photoelectric effect.",
@@ -208,11 +206,9 @@ trigger = st.button("Extract and Visualize")
 if trigger:
     if not input_text:
         st.warning("Please enter a text to extract KG.")
-    elif not selected_model:
-        st.warning("Please select a model for KG extraction.")
     else:
         extractor = LLMTripletExtractor(
-            model=selected_model, api_key=api_key, proxy=proxy_url,
+            model=EXTRACTION_MODEL, api_key=api_key, proxy=proxy_url,
             prompt_folder_path=PROMPT_FOLDER_PATH
         )
         inference_with_db = StructuredInferenceWithDB(

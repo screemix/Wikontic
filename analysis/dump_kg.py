@@ -11,13 +11,15 @@ def get_mongo_client(mongo_uri):
     return client
 
 
-def dump_kg(db_name):
+def dump_kg(db_name, include_initial_triplets, num_samples):
 
     sample_ids = list(
         mongo_client.get_database(db_name)
         .get_collection("initial_triplets")
         .distinct("sample_id")
     )
+    if num_samples is not None:
+        sample_ids = sample_ids[:num_samples]
 
     kg_dump = {}
     for sample_id in tqdm(sample_ids, total=len(sample_ids)):
@@ -105,11 +107,14 @@ def dump_kg(db_name):
                 "ontology_filtered_triplets": list(ontology_filtered_triplets),
                 "filtered_triplets": list(filtered_triplets),
             }
-            assert len(kg_dump[sample_id][source_text_id]["initial_triplets"]) == mongo_client.get_database(db_name).get_collection(
-                "initial_triplets"
-            ).count_documents(
-                {"sample_id": sample_id, "source_text_id": source_text_id}
-            )
+            if include_initial_triplets:
+                assert len(
+                    kg_dump[sample_id][source_text_id]["initial_triplets"]
+                ) == mongo_client.get_database(db_name).get_collection(
+                    "initial_triplets"
+                ).count_documents(
+                    {"sample_id": sample_id, "source_text_id": source_text_id}
+                )
             assert len(
                 kg_dump[sample_id][source_text_id]["triplets"]
             ) == mongo_client.get_database(db_name).get_collection(
@@ -142,9 +147,12 @@ def dump_kg(db_name):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--db_name", type=str, default="triplets_db")
+    parser.add_argument("--include_initial_triplets", action="store_true", default=False)
+    parser.add_argument("--num_samples", type=int, default=None)
     args = parser.parse_args()
     db_name = args.db_name
-
+    include_initial_triplets = args.include_initial_triplets
+    num_samples = args.num_samples
     mongo_uri = "mongodb://localhost:27018/?directConnection=true"
     mongo_client = get_mongo_client(mongo_uri)
-    dump_kg(db_name)
+    dump_kg(db_name, include_initial_triplets, num_samples)

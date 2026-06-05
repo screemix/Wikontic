@@ -1,4 +1,5 @@
 import streamlit as st
+from streamlit_ui import show_sidebar_logo
 import uuid
 import logging
 import sys
@@ -22,6 +23,7 @@ logger.info(f"User ID: {user_id}")
 st.set_page_config(
     page_title="Wikontic", page_icon="media/wikotic-wo-text.png", layout="wide"
 )
+show_sidebar_logo()
 
 with open("media/wikontic.png", "rb") as f:
     img_bytes = f.read()
@@ -44,8 +46,9 @@ encoded_pipeline = base64.b64encode(img_bytes).decode()
 st.markdown(
     """
 <span style="font-size: 1.2em;">
-Welcome to the <b>Wikontic</b> &mdash; an integrated tool for Knowledge
-Graph (KG) construction and question answering (QA).
+Добро пожаловать в <b>Wikontic</b> &mdash; 
+интегрированный инструмент для построения графов знаний (KG)
+и ответа на вопросы (QA).
 </span>
 """,
     unsafe_allow_html=True,
@@ -54,17 +57,17 @@ st.markdown("---")
 
 st.markdown(
     f"""
-    <div style="display: flex; flex-direction: row; align-items: flex-start; justify-content: center; gap: 40px; text-align: left;">
-        <img src="data:image/png;base64,{encoded_pipeline}" style="max-width: 600px; height: auto; flex-shrink: 0;">
-        <div style="max-width: 400px; margin-left: 8px; font-size: 1.1em; line-height: 1.6;">
-            <p style="font-size: 1.1em; margin-bottom: 12px;">
-            <b>Wikontic</b> is a tool for ontology-aware construction of a Wikidata-aligned knowledge graph.
+    <div style="display: flex; flex-direction: row; align-items: flex-start; justify-content: center; gap: 32px; text-align: left;">
+        <img src="data:image/png;base64,{encoded_pipeline}" style="flex: 0 1 42%; max-width: 460px; height: auto;">
+        <div style="flex: 1 1 58%; max-width: 560px; margin-left: 8px; font-size: 1.1em; line-height: 1.6;">
+            <p style="font-size: 1em; margin-bottom: 12px;">
+            <b>Wikontic</b> предназначен для построения графов знаний, согласованных с онтологией Wikidata.
             </p>
             <ul style="padding-left: 1.4em; margin: 0;">
-            <li style="font-size: 1.1em; margin-bottom: 8px;">An LLM-based triplet extractor proposes candidate (subject, relation, object) triples; </li>
-            <li style="font-size: 1.1em; margin-bottom: 8px;">The LLM, guided by the Wikidata ontology, assigns entity types (node colors), merges similar nodes, and prunes or rewrites relations that violate ontology constraints.</li>
-            <li style="font-size: 1.1em; margin-bottom: 8px;">
-                The resulting graph is de-duplicated and fully compliant with Wikidata semantics—ready for downstream tasks and further usage.
+            <li style="font-size: 0.9em; margin-bottom: 8px;">LLM-модель извлекает кандидатные триплеты вида (сущность — отношение — сущность); </li>
+            <li style="font-size: 0.9em; margin-bottom: 8px;">LLM c учётом онтологии Wikidata определяет типы сущностей (отражаемые цветами узлов), объединяет семантически близкие узлы, а также удаляет или переформулирует отношения, нарушающие онтологические правила;</li>
+            <li style="font-size: 0.9em; margin-bottom: 8px;">
+                В итоге получаемый граф не включает дубликаты и соответствует семантике Wikidata, что делает его готовым для последующего анализа и использования в прикладных задачах.
             </li>
             </ul>
         </div>

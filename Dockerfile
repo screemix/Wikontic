@@ -23,6 +23,7 @@ COPY src/wikontic/create_triplets_db.py ./src/wikontic/create_triplets_db.py
 COPY src/wikontic/create_wikidata_ontology_db.py ./src/wikontic/create_wikidata_ontology_db.py
 
 COPY Wikontic.py .
+COPY streamlit_ui.py .
 COPY pages/ ./pages/
 
 COPY media/ ./media/

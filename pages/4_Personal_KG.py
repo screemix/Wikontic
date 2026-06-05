@@ -1,4 +1,5 @@
 import streamlit as st
+from streamlit_ui import show_sidebar_logo
 from pyvis.network import Network
 
 # import networkx as nx
@@ -23,9 +24,11 @@ logger.setLevel(logging.INFO)
 st.set_page_config(
     page_title="Wikontic", page_icon="media/wikotic-wo-text.png", layout="wide"
 )
+show_sidebar_logo()
 
 WIKIDATA_ONTOLOGY_DB_NAME = "wikidata_ontology"
 TRIPLETS_DB_NAME = "demo"
+EXTRACTION_MODEL = "gpt-4.1"
 # --- Mongo Setup ---
 _ = load_dotenv(find_dotenv())
 mongo_client = MongoClient(os.getenv("MONGO_URI"))
@@ -98,12 +101,6 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-model_options = ["gpt-4.1", "gpt-4o-mini", "gpt-4.1-mini"]
-selected_model = st.selectbox(
-    "Choose a model for KG extraction:", model_options, index=0
-)
-
-
 # Initialize session state
 st.session_state.input_text = ""
 
@@ -123,14 +120,12 @@ if trigger:
         st.warning(
             "Please enter name and surname of the person you want to extract KG for."
         )
-    elif not selected_model:
-        st.warning("Please select a model for KG extraction for the person.")
     else:
         extractor = LLMTripletExtractor(
-            model=selected_model, api_key=api_key, proxy=proxy_url
+            model=EXTRACTION_MODEL, api_key=api_key, proxy=proxy_url
         )
         response = extractor.client.responses.create(
-            model="gpt-4.1",
+            model=EXTRACTION_MODEL,
             tools=[{"type": "web_search"}],
             input=f"Search recent and relevant info about {input_text} in the internet and return a paragraph that summarizes the info on the person. Return only the paragraph, no other text.",
         )

@@ -1,4 +1,5 @@
 import streamlit as st
+from streamlit_ui import show_sidebar_logo
 from pyvis.network import Network
 import networkx as nx
 import tempfile
@@ -33,6 +34,7 @@ _ = load_dotenv(find_dotenv())
 
 WIKIDATA_ONTOLOGY_DB_NAME = "wikidata_ontology"
 TRIPLETS_DB_NAME = "demo"
+QA_MODEL = "gpt-4.1"
 mongo_client = MongoClient(os.getenv("MONGO_URI"))
 api_key = os.getenv("KEY")
 proxy_url = os.getenv("PROXY_URL")
@@ -43,6 +45,7 @@ aligner = Aligner(ontology_db=ontology_db, triplets_db=triplets_db)
 st.set_page_config(
     page_title="Wikontic", page_icon="media/wikotic-wo-text.png", layout="wide"
 )
+show_sidebar_logo()
 
 
 # --- Visualize ---
@@ -103,8 +106,6 @@ st.markdown(
 )
 
 
-model_options = ["gpt-4.1", "gpt-4o-mini", "gpt-4.1-mini"]
-selected_model = st.selectbox("Choose a model for QA:", model_options, index=0)
 question = st.text_input("Ask a question about the Knowledge Graph")
 trigger = st.button("Answer question")
 
@@ -112,11 +113,9 @@ trigger = st.button("Answer question")
 if trigger:
     if not question:
         st.warning("Please enter a question.")
-    elif not selected_model:
-        st.warning("Please select a model.")
     else:
         extractor = LLMTripletExtractor(
-            model=selected_model, api_key=api_key, proxy=proxy_url
+            model=QA_MODEL, api_key=api_key, proxy=proxy_url
         )
         inferer = StructuredInferenceWithDB(
             extractor=extractor, aligner=aligner, triplets_db=triplets_db

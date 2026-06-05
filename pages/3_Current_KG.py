@@ -1,5 +1,6 @@
 # --- File: 0_KG_Extraction.py ---
 import streamlit as st
+from streamlit_ui import show_sidebar_logo
 from pyvis.network import Network
 
 # import networkx as nx
@@ -33,6 +34,7 @@ logger.info(f"User ID: {user_id}")
 st.set_page_config(
     page_title="Wikontic", page_icon="media/wikotic-wo-text.png", layout="wide"
 )
+show_sidebar_logo()
 
 # --- Mongo Setup ---
 _ = load_dotenv(find_dotenv())
