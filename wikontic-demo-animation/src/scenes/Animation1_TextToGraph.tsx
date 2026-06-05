@@ -4,7 +4,6 @@ import {CheckCircle2} from 'lucide-react';
 import {DedupMerge} from '../components/DedupMerge';
 import {DocumentView} from '../components/DocumentView';
 import {GraphView} from '../components/GraphView';
-import {HighlightedFact} from '../components/HighlightedFact';
 import {MetricBadge} from '../components/MetricBadge';
 import {OntologyPass} from '../components/OntologyPass';
 import {Panel, SceneLayout} from '../components/SceneLayout';
@@ -22,29 +21,27 @@ const clamp = (value: number) => Math.max(0, Math.min(1, value));
 const progress = (frame: number, from: number, to: number) =>
   interpolate(frame, [from, to], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
 
-export const TEXT_TO_GRAPH_FRAMES = 810;
+export const TEXT_TO_GRAPH_FRAMES = 720;
 
 export const Animation1_TextToGraph: React.FC = () => {
   const frame = useCurrentFrame();
   const activeFactCount = Math.min(highlightedFacts.length, Math.floor(frame / 22) + 1);
   const activeFactIds = highlightedFacts.slice(0, activeFactCount).map((fact) => fact.id);
   const factsRemain = progress(frame, 110, 195);
-  const tripletsIn = progress(frame, 210, 350);
-  const ontologyIn = progress(frame, 360, 505);
-  const dedupIn = progress(frame, 505, 635);
-  const graphIn = progress(frame, 625, 760);
+  const tripletsIn = progress(frame, 120, 260);
+  const ontologyIn = progress(frame, 270, 415);
+  const dedupIn = progress(frame, 415, 545);
+  const graphIn = progress(frame, 535, 670);
   const title =
     frame < 120
       ? 'Документ содержит факты'
-      : frame < 210
-        ? 'Из текста выделяются факты'
-        : frame < 360
-          ? '1. Кандидатные триплеты'
-          : frame < 505
-            ? '2. Проверка на онтологию / верификация'
-            : frame < 635
-              ? '3. Очистка и дедупликация'
-              : 'Вся информация представлена компактно в графе';
+      : frame < 270
+        ? '1. Кандидатные триплеты'
+        : frame < 415
+          ? '2. Проверка на онтологию / верификация'
+          : frame < 545
+            ? '3. Очистка и дедупликация'
+            : 'Вся информация представлена компактно в графе';
 
   return (
     <SceneLayout
@@ -67,18 +64,6 @@ export const Animation1_TextToGraph: React.FC = () => {
             dimNonFacts={factsRemain > 0.45}
             closeup={1 - progress(frame, 40, 130)}
           />
-        </div>
-
-        <div className="floatingFacts" style={{opacity: factsRemain * (1 - graphIn)}}>
-          {highlightedFacts.map((fact, index) => (
-            <HighlightedFact
-              key={fact.id}
-              tone={fact.tone}
-              progress={clamp(factsRemain * 1.25 - index * 0.11)}
-            >
-              {fact.text}
-            </HighlightedFact>
-          ))}
         </div>
 
         <div className="methodTriplets" style={{opacity: tripletsIn * (1 - ontologyIn) * (1 - graphIn)}}>
