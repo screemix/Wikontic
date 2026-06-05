@@ -146,6 +146,7 @@ const NOTE_Y = 500;
 const BOX_H = 104; // assumed scatter height, used only for arrow anchoring
 
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+const ease = (t: number) => t * t * (3 - 2 * t); // smoothstep — calm, pretty motion
 
 type CorpusBox = {
   text: string;
@@ -246,12 +247,13 @@ const RagPhase: React.FC = () => {
   const allIn = progress(frame, 24, 84); // all boxes appear (identical grey)
   const arrowsIn = progress(frame, 92, 150); // links between fragments
   const linkIn = progress(frame, 162, 220); // question concepts highlighted
-  const lostIn = progress(frame, 232, 274); // relevant fragment we will miss — red outline
-  const select = progress(frame, 288, 332); // relevant ones brighten
-  const discard = progress(frame, 338, 382); // irrelevant (incl. lost) + arrows leave
-  const settle = progress(frame, 348, 388); // relevant slide into column — fast, hides reflow
-  const missedIn = progress(frame, 415, 458); // the relevant fragment RAG missed
-  const noteIn = progress(frame, 480, 523); // takeaway, then holds
+  const select = progress(frame, 226, 268); // relevant ones brighten FIRST
+  const lostIn = progress(frame, 282, 326); // THEN the missed fragment flares (softly) red
+  const arrowsOut = progress(frame, 330, 346); // links fade out quickly, before any box moves
+  const discard = progress(frame, 350, 394); // irrelevant (incl. lost) leave
+  const settle = progress(frame, 358, 398); // relevant slide into column — fast, hides reflow
+  const missedIn = progress(frame, 425, 468); // the relevant fragment RAG missed
+  const noteIn = progress(frame, 490, 533); // takeaway, then holds
   return (
     <Phase duration={PHASES.rag}>
       {/* Header: RAG title + the question, mirroring the Wikontic slide. */}
@@ -307,7 +309,7 @@ const RagPhase: React.FC = () => {
           } else {
             left = box.sx + (box.tx ?? 0) * 600 * discard;
             top = box.sy + (box.ty ?? 0) * 420 * discard;
-            opacity = itemIn * (1 - 0.45 * select) * (1 - discard);
+            opacity = itemIn * (isLost ? 1 : 1 - 0.45 * select) * (1 - discard);
             scale = 1 - 0.12 * discard;
           }
           const sel = isSel ? select : 0;
@@ -315,15 +317,15 @@ const RagPhase: React.FC = () => {
           const ch = (a: number, b: number, t: number) => Math.round(lerp(a, b, t));
           // All cards start as identical grey; selected brighten, lost goes red-outlined.
           const bg = isLost
-            ? `rgb(${ch(238, 255, lost)}, ${ch(241, 225, lost)}, ${ch(246, 225, lost)})`
+            ? `rgb(${ch(238, 253, lost)}, ${ch(241, 237, lost)}, ${ch(246, 237, lost)})`
             : `rgb(${ch(238, 248, sel)}, ${ch(241, 250, sel)}, ${ch(246, 252, sel)})`;
           const borderCol = isSel
             ? `rgb(${ch(221, 47, sel)}, ${ch(227, 109, sel)}, ${ch(236, 246, sel)})`
             : isLost
-              ? `rgb(${ch(221, 215, lost)}, ${ch(227, 40, lost)}, ${ch(236, 40, lost)})`
+              ? `rgb(${ch(221, 216, lost)}, ${ch(227, 116, lost)}, ${ch(236, 116, lost)})`
               : 'rgb(221, 227, 236)';
           const textCol = isLost
-            ? `rgb(${ch(91, 178, lost)}, ${ch(102, 28, lost)}, ${ch(117, 28, lost)})`
+            ? `rgb(${ch(91, 168, lost)}, ${ch(102, 70, lost)}, ${ch(117, 70, lost)})`
             : `rgb(${ch(91, 23, sel)}, ${ch(102, 32, sel)}, ${ch(117, 51, sel)})`;
           const fontSize = isSel ? lerp(24, 29, settle) : 24;
           const weight = Math.round(lerp(600, 700, sel));
@@ -338,8 +340,8 @@ const RagPhase: React.FC = () => {
                 padding: '18px 24px',
                 borderRadius: 12,
                 background: bg,
-                border: `${1 + 2 * lost}px solid ${borderCol}`,
-                boxShadow: `0 10px 26px rgba(23, 32, 51, 0.06), 0 ${18 * sel}px ${44 * sel}px rgba(47, 109, 246, ${0.18 * sel}), 0 0 0 ${2 * sel}px rgba(47, 109, 246, 0.55), 0 0 0 ${5 * lost}px rgba(215, 40, 40, ${0.95 * lost}), 0 12px 34px rgba(215, 40, 40, ${0.3 * lost})`,
+                border: `${1 + 1.5 * lost}px solid ${borderCol}`,
+                boxShadow: `0 10px 26px rgba(23, 32, 51, 0.06), 0 ${18 * sel}px ${44 * sel}px rgba(47, 109, 246, ${0.18 * sel}), 0 0 0 ${2 * sel}px rgba(47, 109, 246, 0.55), 0 0 0 ${3 * lost}px rgba(216, 116, 116, ${0.5 * lost}), 0 10px 30px rgba(216, 116, 116, ${0.22 * lost})`,
                 opacity,
                 transform: `scale(${scale})`,
                 color: textCol,
@@ -370,7 +372,7 @@ const RagPhase: React.FC = () => {
             </marker>
           </defs>
           {arrows.map((ar, i) => {
-            const o = clamp(arrowsIn * 1.2 - i * 0.12) * (1 - discard);
+            const o = clamp(arrowsIn * 1.2 - i * 0.12) * (1 - arrowsOut);
             return (
               <line
                 key={i}
@@ -476,22 +478,29 @@ const wikonticGraphNodes = ragVsGraphNodes.map((node) => ({
 const GRAPH_W = 1740;
 const GRAPH_H = 560;
 
-const GRAPH_CX = GRAPH_W / 2;
 const GRAPH_CY = GRAPH_H / 2;
+
+// The dot squashes onto — and unfolds from — where the first graph node (проект)
+// will render, so the handoff reads as a single seamless motion.
+const PROJECT_SX = wikonticLayout.project.x * GRAPH_W;
+const PROJECT_SY = wikonticLayout.project.y * GRAPH_H;
+const DOT_SCALE = 0.05;
+const DOT_HALF = (DOC_W * DOT_SCALE) / 2;
 
 const WikonticPhase: React.FC = () => {
   const frame = useCurrentFrame();
   const headerIn = progress(frame, 6, 40);
   const docsIn = progress(frame, 24, 96); // same corpus appears, scattered & grey
-  const uniteIn = progress(frame, 130, 200); // all docs converge to centre, text fades
-  const graphIn = progress(frame, 200, 264); // graph grows out of the merged mass
+  const uniteIn = progress(frame, 124, 192); // all docs converge + squash to a single dot
+  const graphIn = progress(frame, 200, 286); // the dot unfolds into the graph, проект first
   const pathIn = progress(frame, 300, 420);
   const internalIn = progress(frame, 320, 410);
   const answerIn = progress(frame, 510, 558); // answer box slides up from the bottom
   const pathOut = progress(frame, 510, 552); // path box slides out downward
   const visiblePathCount = Math.ceil(answerPathEdgeIds.length * pathIn);
-  // The merged cluster lingers under the first frames of the graph, then dissolves.
-  const docsGone = progress(frame, 200, 252);
+  // The dot fades out fully BEFORE the проект node ramps up, so the node always
+  // fades in over clean white and the dot never bleeds through it.
+  const docsGone = progress(frame, 192, 204);
   return (
     <Phase duration={PHASES.wikontic}>
       {/* Header: Wikontic title + the question, mirroring the RAG slide. */}
@@ -530,18 +539,30 @@ const WikonticPhase: React.FC = () => {
         </div>
       </div>
 
-      <div style={{position: 'relative', width: GRAPH_W, height: GRAPH_H}}>
-        {/* Intro: the same corpus RAG saw, scattered — then united into the centre. */}
+      <div
+        style={{
+          position: 'relative',
+          width: GRAPH_W,
+          height: GRAPH_H,
+          background: '#ffffff',
+          borderRadius: 8,
+        }}
+      >
+        {/* Intro: the same corpus RAG saw, scattered — then squashed to a dot.
+            Sits BEHIND the graph layer so the проект node unfolds over it. */}
         {docsGone < 1 && (
-          <div style={{position: 'absolute', inset: 0, opacity: 1 - docsGone, zIndex: 2}}>
+          <div style={{position: 'absolute', inset: 0, opacity: 1 - docsGone, zIndex: 0}}>
             {docScatter.map((doc, i) => {
               const itemIn = clamp(docsIn * 1.3 - i * 0.05);
-              const left = lerp(doc.x, GRAPH_CX - (DOC_W * 0.34) / 2, uniteIn);
-              const top = lerp(doc.y, GRAPH_CY - 36, uniteIn);
-              const scale = lerp(1, 0.34, uniteIn);
-              const textOpacity = clamp(1 - uniteIn * 1.7);
-              // Borders blend toward a single united block as they pile up.
+              const u = ease(uniteIn);
+              // Converge + squash onto the проект node's spot, collapsing to a dot.
+              const left = lerp(doc.x, PROJECT_SX - DOT_HALF, u);
+              const top = lerp(doc.y, PROJECT_SY - DOT_HALF, u);
+              const scale = lerp(1, DOT_SCALE, u);
+              const textOpacity = clamp(1 - uniteIn * 2.4);
+              // Borders blend toward a single united block, then round into a dot.
               const united = uniteIn;
+              const cornerRadius = lerp(12, 80, united);
               return (
                 <div
                   key={i}
@@ -551,7 +572,7 @@ const WikonticPhase: React.FC = () => {
                     top,
                     width: DOC_W,
                     padding: '16px 20px',
-                    borderRadius: 12,
+                    borderRadius: cornerRadius,
                     background: `rgb(${Math.round(lerp(238, 224, united))}, ${Math.round(
                       lerp(241, 234, united),
                     )}, ${Math.round(lerp(246, 255, united))})`,
@@ -594,11 +615,13 @@ const WikonticPhase: React.FC = () => {
           Объединяем документы в граф
         </div>
 
+        <div style={{position: 'absolute', inset: 0, zIndex: 1}}>
         <GraphView
           nodes={wikonticGraphNodes}
           edges={ragVsGraphEdges}
           reveal={graphIn}
           softReveal
+          transparentBg
           showTypes
           typeOutside
           nodeRadius={78}
@@ -612,6 +635,7 @@ const WikonticPhase: React.FC = () => {
           height={GRAPH_H}
           muted={pathIn > 0.05}
         />
+        </div>
       </div>
 
       {/* Bottom slot: the path box, then the answer box slides up to replace it. */}

@@ -22,6 +22,7 @@ type GraphViewProps = {
   typeFontSize?: number;
   edgeFontSize?: number;
   softReveal?: boolean;
+  transparentBg?: boolean;
   onNodeSelect?: (node: GraphNode) => void;
 };
 
@@ -96,6 +97,7 @@ export const GraphView: React.FC<GraphViewProps> = ({
   typeFontSize,
   edgeFontSize,
   softReveal = false,
+  transparentBg = false,
   onNodeSelect,
 }) => {
   const edgeFs = edgeFontSize ?? 17;
@@ -140,7 +142,14 @@ export const GraphView: React.FC<GraphViewProps> = ({
           <path d="M0,0 L0,6 L9,3 z" fill={colors.blue} />
         </marker>
       </defs>
-      <rect x="0" y="0" width={width} height={height} rx="26" fill={muted ? '#fbfcfe' : '#ffffff'} />
+      <rect
+        x="0"
+        y="0"
+        width={width}
+        height={height}
+        rx="26"
+        fill={transparentBg ? 'transparent' : muted ? '#fbfcfe' : '#ffffff'}
+      />
       {scannerProgress !== undefined ? (
         <rect
           x={scannerProgress * width - 22}
