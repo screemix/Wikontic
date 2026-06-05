@@ -32,8 +32,10 @@ st.set_page_config(
     page_title="Wikontic", page_icon="media/wikotic-wo-text.png", layout="wide"
 )
 
-WIKIDATA_ONTOLOGY_DB_NAME = "wikidata_ontology"
-TRIPLETS_DB_NAME = "demo"
+WIKIDATA_ONTOLOGY_DB_NAME = "wikidata_ontology_ru"
+TRIPLETS_DB_NAME = "demo_ru"
+PROMPT_FOLDER_PATH = "src/wikontic/utils/prompts_ru"
+USE_UNIDECODE = False
 # --- Mongo Setup ---
 _ = load_dotenv(find_dotenv())
 mongo_client = MongoClient(os.getenv("MONGO_URI"))
@@ -210,7 +212,8 @@ if trigger:
         st.warning("Please select a model for KG extraction.")
     else:
         extractor = LLMTripletExtractor(
-            model=selected_model, api_key=api_key, proxy=proxy_url
+            model=selected_model, api_key=api_key, proxy=proxy_url,
+            prompt_folder_path=PROMPT_FOLDER_PATH
         )
         inference_with_db = StructuredInferenceWithDB(
             extractor=extractor, aligner=aligner, triplets_db=triplets_db
@@ -221,7 +224,7 @@ if trigger:
             filtered_triplets,
             ontology_filtered_triplets,
         ) = inference_with_db.extract_triplets_with_ontology_filtering_and_add_to_db(
-            text=input_text, sample_id=user_id, source_text_id=None
+            text=input_text, sample_id=user_id, source_text_id=None, use_unidecode=USE_UNIDECODE
         )
         logger.info("Initial triplets: ", initial_triplets)
         logger.info("-" * 100)
