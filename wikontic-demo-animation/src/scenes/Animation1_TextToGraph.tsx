@@ -31,7 +31,7 @@ export const Animation1_TextToGraph: React.FC = () => {
   const tripletsIn = progress(frame, 120, 260);
   const ontologyIn = progress(frame, 270, 455);
   const dedupIn = progress(frame, 455, 625);
-  const graphIn = progress(frame, 615, 750);
+  const graphIn = progress(frame, 605, 675);
   const title =
     frame < 120
       ? 'Документ содержит факты'
@@ -69,7 +69,7 @@ export const Animation1_TextToGraph: React.FC = () => {
         <div
           className="methodDocumentSlot"
           style={{
-            opacity: graphIn > 0.45 ? 0.22 : 1 - docFadeForOntology,
+            opacity: graphIn > 0 ? 0 : 1 - docFadeForOntology,
             transform: `translateX(${graphIn * -70 - docFadeForOntology * 80}px) scale(${1 - graphIn * 0.12})`,
           }}
         >
@@ -138,8 +138,11 @@ export const Animation1_TextToGraph: React.FC = () => {
               edges={compactGraphEdges}
               reveal={graphIn}
               showTypes={graphIn > 0.55}
+              typeOutside={true}
+              labelFontSize={15}
+              nodeAspect={1.45}
               width={1040}
-              height={560}
+              height={520}
             />
             <div className="metricRow">
               <MetricBadge value="420" label="токенов в тексте" tone="amber" />

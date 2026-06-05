@@ -101,8 +101,6 @@ export const GraphView: React.FC<GraphViewProps> = ({
   onNodeSelect,
 }) => {
   const edgeFs = edgeFontSize ?? 17;
-  const edgeHalf = edgeFs * 0.3;
-  const edgeRectH = edgeFs + 15;
   const visibleNodeCount = Math.ceil(nodes.length * clamp(reveal));
   const visibleNodes = nodes.slice(0, visibleNodeCount);
   const visibleNodeIds = new Set(visibleNodes.map((node) => node.id));
@@ -193,23 +191,16 @@ export const GraphView: React.FC<GraphViewProps> = ({
               markerEnd={highlighted ? 'url(#arrowBlue)' : 'url(#arrow)'}
               filter={highlighted ? 'url(#softGlow)' : undefined}
             />
-            <rect
-              x={midX - edge.label.length * edgeHalf - 12}
-              y={midY - edgeRectH / 2}
-              width={edge.label.length * edgeHalf * 2 + 24}
-              height={edgeRectH}
-              rx={edgeRectH / 2}
-              fill="#ffffff"
-              stroke={stroke}
-              opacity="0.96"
-            />
             <text
               x={midX}
-              y={midY + edgeFs * 0.34}
+              y={midY}
               textAnchor="middle"
               className="edgeLabel"
-              style={{fontSize: edgeFs}}
+              style={{fontSize: edgeFs, paintOrder: 'stroke fill'}}
               fill={stroke}
+              stroke="white"
+              strokeWidth={5}
+              strokeLinejoin="round"
             >
               {edge.label}
             </text>
