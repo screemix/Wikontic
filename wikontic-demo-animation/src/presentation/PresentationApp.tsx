@@ -17,8 +17,7 @@ const MetricsSlide: React.FC = () => (
     <div className="metricsContent">
       <img src="/assets/wikontic.png" alt="Wikontic" className="metricsLogo" />
       <div>
-        <div className="metricsEyebrow">Wikontic</div>
-        <h1>из документов в проверяемую карту фактов</h1>
+        <h1>из документов в проверяемую базу фактов</h1>
         <p>Интерпретируемость · Multi-hop reasoning · Синтетические данные</p>
       </div>
       <div className="metricsBadges">
@@ -35,8 +34,14 @@ export const PresentationApp: React.FC = () => {
   const [currentFrame, setCurrentFrame] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const playerRef = useRef<PlayerRef>(null);
+  const [playerHandle, setPlayerHandle] = useState<PlayerRef | null>(null);
   const activeSlide = presentationSlides[activeIndex];
   const activeAnimation = activeSlide.kind === 'animation' ? activeSlide : null;
+
+  const setPlayerRef = useCallback((node: PlayerRef | null) => {
+    playerRef.current = node;
+    setPlayerHandle(node);
+  }, []);
 
   const pause = useCallback(() => {
     playerRef.current?.pause();
@@ -91,6 +96,21 @@ export const PresentationApp: React.FC = () => {
       play();
     }
   }, [activeAnimation, pause, play]);
+
+  useEffect(() => {
+    if (!activeAnimation || !playerHandle) {
+      return;
+    }
+
+    const timer = window.setTimeout(() => {
+      playerHandle.seekTo(0);
+      setCurrentFrame(0);
+      playerHandle.play();
+      setIsPlaying(true);
+    }, 0);
+
+    return () => window.clearTimeout(timer);
+  }, [activeAnimation?.id, playerHandle]);
 
   useEffect(() => {
     if (!activeAnimation) {
@@ -204,9 +224,9 @@ export const PresentationApp: React.FC = () => {
             <h1>{activeSlide.title}</h1>
             <p>{activeSlide.subtitle}</p>
           </div>
-          <div className="frameCounter">
-            {activeAnimation ? formatTime(currentFrame, activeAnimation.durationInFrames) : 'final slide'}
-          </div>
+          {activeAnimation ? (
+            <div className="frameCounter">{formatTime(currentFrame, activeAnimation.durationInFrames)}</div>
+          ) : null}
         </header>
 
         <div className="stageOuter">
@@ -214,13 +234,16 @@ export const PresentationApp: React.FC = () => {
             {activeAnimation ? (
               <Player
                 key={activeAnimation.id}
-                ref={playerRef}
+                ref={setPlayerRef}
                 component={activeAnimation.component}
                 durationInFrames={activeAnimation.durationInFrames}
                 fps={presentationVideo.fps}
                 compositionWidth={presentationVideo.width}
                 compositionHeight={presentationVideo.height}
                 controls={false}
+                autoPlay
+                initialFrame={0}
+                initiallyMuted
                 clickToPlay={false}
                 spaceKeyToPlayOrPause={false}
                 doubleClickToFullscreen={false}
@@ -309,4 +332,3 @@ export const PresentationApp: React.FC = () => {
     </main>
   );
 };
-

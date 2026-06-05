@@ -1,8 +1,8 @@
 # Wikontic Demo Animation
 
-Local React + Remotion project for the Wikontic CEO demo animations.
+Local React + Remotion project for the Wikontic demo animations.
 
-The project contains three independently renderable short animations and a separate presentation-style web viewer that lets you play, pause, restart, jump between chapters, and move through the animations like a slide deck.
+The project contains three independently renderable short animations and a separate presentation-style web viewer. Each animation starts automatically when its slide opens, and the viewer lets you pause, restart, jump between chapters, and move through the animations like a slide deck.
 
 ## Requirements
 
@@ -26,7 +26,7 @@ The source of truth for dependency versions is `package-lock.json`.
 
 ## Run The Presentation Viewer
 
-This is the recommended mode for a live CEO demo.
+This is the recommended mode for a live demo.
 
 ```bash
 npm run present
@@ -46,6 +46,7 @@ npm run present -- --host=127.0.0.1 --port=5174
 
 Presentation controls:
 
+- animations start automatically when their slide opens
 - `Space`: play / pause current animation
 - `R`: restart current animation
 - `Left` / `Right`: previous / next slide
@@ -175,4 +176,3 @@ Expected constraints:
 - no external API calls
 - Russian labels remain readable at 1920x1080
 - presentation viewer does not modify the animation scene files
-
