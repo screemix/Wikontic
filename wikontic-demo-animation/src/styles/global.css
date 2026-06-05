@@ -630,8 +630,8 @@ body,
 
 .methodDedup {
   position: absolute;
-  left: 500px;
-  top: 70px;
+  right: 8px;
+  top: 24px;
   width: 760px;
 }
 
