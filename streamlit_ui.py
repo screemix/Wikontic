@@ -1,11 +1,12 @@
 import streamlit as st
 
-SIDEBAR_LOGO = "media/Logo.png"
+SIDEBAR_LOGO = "media/sidebar_logo.png"
 ACCENT_COLOR = "#2fbeac"
 
 
 def show_sidebar_logo():
-    st.logo(SIDEBAR_LOGO)
+    st.logo(SIDEBAR_LOGO, icon_image=SIDEBAR_LOGO)
+    # st.logo(SIDEBAR_LOGO, icon_image=SIDEBAR_LOGO)
     st.markdown(
         f"""
         <style>

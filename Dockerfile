@@ -18,6 +18,9 @@ RUN pip install --upgrade pip && pip install -r requirements.txt
 
 COPY streamlit_ui.py ./streamlit_ui.py
 COPY streamlit_session.py ./streamlit_session.py
+COPY streamlit_navigation.py ./streamlit_navigation.py
+COPY streamlit_kg_viz.py ./streamlit_kg_viz.py
+COPY streamlit_token_stats.py ./streamlit_token_stats.py
 COPY scripts/inject_streamlit_head.py ./scripts/inject_streamlit_head.py
 RUN python scripts/inject_streamlit_head.py
 
