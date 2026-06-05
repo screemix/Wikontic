@@ -1,17 +1,18 @@
 # --- File: 0_KG_Extraction.py ---
 import streamlit as st
 from streamlit_ui import show_sidebar_logo
+from streamlit_session import (
+    USE_UNIDECODE,
+    get_inference,
+    get_triplets_db,
+    get_user_id,
+    init_session,
+)
 from pyvis.network import Network
 
 # import networkx as nx
 import tempfile
 import os
-from dotenv import load_dotenv, find_dotenv
-from src.wikontic.utils.structured_inference_with_db import StructuredInferenceWithDB
-from src.wikontic.utils.openai_utils import LLMTripletExtractor
-from src.wikontic.utils.structured_aligner import Aligner
-from pymongo import MongoClient
-import uuid
 import logging
 import sys
 import base64
@@ -21,34 +22,16 @@ logging.basicConfig(stream=sys.stderr)
 logger = logging.getLogger("KGExtraction")
 logger.setLevel(logging.INFO)
 
-
-# Ensure the same user_id across all pages
-if "user_id" not in st.session_state:
-    st.session_state.user_id = str(uuid.uuid4())
-
-user_id = st.session_state.user_id
-logger.info(f"User ID: {user_id}")
-
 st.set_page_config(
     page_title="Wikontic", page_icon="media/wikotic-wo-text.png", layout="wide"
 )
 show_sidebar_logo()
+init_session()
 
-WIKIDATA_ONTOLOGY_DB_NAME = "wikidata_ontology_ru"
-TRIPLETS_DB_NAME = "demo_ru"
-PROMPT_FOLDER_PATH = "src/wikontic/utils/prompts_ru"
-USE_UNIDECODE = False
-EXTRACTION_MODEL = "gpt-4.1"
-# --- Mongo Setup ---
-_ = load_dotenv(find_dotenv())
-mongo_client = MongoClient(os.getenv("MONGO_URI"))
-api_key = os.getenv("KEY")
-proxy_url = os.getenv("PROXY_URL")
-ontology_db = mongo_client.get_database(WIKIDATA_ONTOLOGY_DB_NAME)
-triplets_db = mongo_client.get_database(TRIPLETS_DB_NAME)
-
-
-aligner = Aligner(ontology_db=ontology_db, triplets_db=triplets_db)
+user_id = get_user_id()
+triplets_db = get_triplets_db()
+inference_with_db = get_inference()
+logger.info(f"User ID: {user_id}")
 
 
 def fetch_related_triplets(entities):
@@ -81,7 +64,7 @@ def visualize_knowledge_graph(triplets, highlight_entities=None):
                 net.add_node(
                     node,
                     label=node,
-                    color="#B2CD9C" if node in highlight_entities else "#C7C8CC",
+                    color="#2fbeac" if node in highlight_entities else "#C7C8CC",
                 )
                 added_nodes.add(node)
         net.add_edge(s, o, label=r, color="#000000")
@@ -107,8 +90,8 @@ def visualize_initial_knowledge_graph(initial_triplets):
     for t in initial_triplets:
         s, r, o = t["subject"], t["relation"], t["object"]
         logger.info(f"Initial triplet: {s} {r} {o}")
-        net.add_node(s, label=s, color="#B2CD9C")
-        net.add_node(o, label=o, color="#B2CD9C")
+        net.add_node(s, label=s, color="#2fbeac")
+        net.add_node(o, label=o, color="#2fbeac")
         net.add_edge(s, o, label=r, color="#000000")
 
     with tempfile.NamedTemporaryFile(delete=False, suffix=".html") as tmp_file:
@@ -207,13 +190,6 @@ if trigger:
     if not input_text:
         st.warning("Please enter a text to extract KG.")
     else:
-        extractor = LLMTripletExtractor(
-            model=EXTRACTION_MODEL, api_key=api_key, proxy=proxy_url,
-            prompt_folder_path=PROMPT_FOLDER_PATH
-        )
-        inference_with_db = StructuredInferenceWithDB(
-            extractor=extractor, aligner=aligner, triplets_db=triplets_db
-        )
         (
             initial_triplets,
             final_triplets,

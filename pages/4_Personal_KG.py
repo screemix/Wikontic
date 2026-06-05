@@ -1,16 +1,17 @@
 import streamlit as st
 from streamlit_ui import show_sidebar_logo
+from streamlit_session import (
+    EXTRACTION_MODEL,
+    get_extractor,
+    get_inference,
+    get_triplets_db,
+    init_session,
+)
 from pyvis.network import Network
 
 # import networkx as nx
 import tempfile
 import os
-from dotenv import load_dotenv, find_dotenv
-from src.wikontic.utils.structured_inference_with_db import StructuredInferenceWithDB
-from src.wikontic.utils.openai_utils import LLMTripletExtractor
-from src.wikontic.utils.structured_aligner import Aligner
-from pymongo import MongoClient
-import uuid
 import logging
 import sys
 import base64
@@ -20,25 +21,15 @@ logging.basicConfig(stream=sys.stderr)
 logger = logging.getLogger("PersonalKG")
 logger.setLevel(logging.INFO)
 
-
 st.set_page_config(
     page_title="Wikontic", page_icon="media/wikotic-wo-text.png", layout="wide"
 )
 show_sidebar_logo()
+init_session()
 
-WIKIDATA_ONTOLOGY_DB_NAME = "wikidata_ontology"
-TRIPLETS_DB_NAME = "demo"
-EXTRACTION_MODEL = "gpt-4.1"
-# --- Mongo Setup ---
-_ = load_dotenv(find_dotenv())
-mongo_client = MongoClient(os.getenv("MONGO_URI"))
-api_key = os.getenv("KEY")
-proxy_url = os.getenv("PROXY_URL")
-ontology_db = mongo_client.get_database(WIKIDATA_ONTOLOGY_DB_NAME)
-triplets_db = mongo_client.get_database(TRIPLETS_DB_NAME)
-
-
-aligner = Aligner(ontology_db=ontology_db, triplets_db=triplets_db)
+extractor = get_extractor()
+inference_with_db = get_inference()
+triplets_db = get_triplets_db()
 
 
 def fetch_related_triplets(entities):
@@ -121,9 +112,6 @@ if trigger:
             "Please enter name and surname of the person you want to extract KG for."
         )
     else:
-        extractor = LLMTripletExtractor(
-            model=EXTRACTION_MODEL, api_key=api_key, proxy=proxy_url
-        )
         response = extractor.client.responses.create(
             model=EXTRACTION_MODEL,
             tools=[{"type": "web_search"}],
@@ -132,9 +120,6 @@ if trigger:
         personal_text = response.output_text
 
         logger.info(f"Personal text: {personal_text}")
-        inference_with_db = StructuredInferenceWithDB(
-            extractor=extractor, aligner=aligner, triplets_db=triplets_db
-        )
         (
             initial_triplets,
             final_triplets,

@@ -1,17 +1,10 @@
 import streamlit as st
 from streamlit_ui import show_sidebar_logo
+from streamlit_session import get_inference, get_user_id, init_session
 from pyvis.network import Network
 import networkx as nx
 import tempfile
 import os
-from dotenv import load_dotenv, find_dotenv
-
-# from neo4j import GraphDatabase
-from pymongo import MongoClient
-from src.wikontic.utils.structured_aligner import Aligner
-from src.wikontic.utils.openai_utils import LLMTripletExtractor
-from src.wikontic.utils.structured_inference_with_db import StructuredInferenceWithDB
-import uuid
 import logging
 import sys
 import base64
@@ -21,31 +14,15 @@ logging.basicConfig(stream=sys.stderr)
 logger = logging.getLogger("QA")
 logger.setLevel(logging.ERROR)
 
-
-# Ensure the same user_id across all pages
-if "user_id" not in st.session_state:
-    st.session_state.user_id = str(uuid.uuid4())
-
-user_id = st.session_state.user_id
-
-logger.info(f"User ID: {user_id}")
-
-_ = load_dotenv(find_dotenv())
-
-WIKIDATA_ONTOLOGY_DB_NAME = "wikidata_ontology"
-TRIPLETS_DB_NAME = "demo"
-QA_MODEL = "gpt-4.1"
-mongo_client = MongoClient(os.getenv("MONGO_URI"))
-api_key = os.getenv("KEY")
-proxy_url = os.getenv("PROXY_URL")
-triplets_db = mongo_client.get_database(TRIPLETS_DB_NAME)
-ontology_db = mongo_client.get_database(WIKIDATA_ONTOLOGY_DB_NAME)
-aligner = Aligner(ontology_db=ontology_db, triplets_db=triplets_db)
-
 st.set_page_config(
     page_title="Wikontic", page_icon="media/wikotic-wo-text.png", layout="wide"
 )
 show_sidebar_logo()
+init_session()
+
+user_id = get_user_id()
+inference = get_inference()
+logger.info(f"User ID: {user_id}")
 
 
 # --- Visualize ---
@@ -67,7 +44,7 @@ def visualize_knowledge_graph(triplets, highlight_entities=None):
                 net.add_node(
                     node,
                     label=node,
-                    color="#B2CD9C" if node in highlight_entities else "#C7C8CC",
+                    color="#2fbeac" if node in highlight_entities else "#C7C8CC",
                 )
                 added_nodes.add(node)
         net.add_edge(s, o, label=r, color="#000000")
@@ -114,16 +91,9 @@ if trigger:
     if not question:
         st.warning("Please enter a question.")
     else:
-        extractor = LLMTripletExtractor(
-            model=QA_MODEL, api_key=api_key, proxy=proxy_url
-        )
-        inferer = StructuredInferenceWithDB(
-            extractor=extractor, aligner=aligner, triplets_db=triplets_db
-        )
-
         st.markdown(f"#### Results for: *{question}*")
         identified_entities_names, supporting_triplets, ans = query_kg(
-            inferer, question
+            inference, question
         )
 
         st.session_state.kg = nx.DiGraph()

@@ -1,19 +1,12 @@
 # --- File: 0_KG_Extraction.py ---
 import streamlit as st
 from streamlit_ui import show_sidebar_logo
+from streamlit_session import get_triplets_db, get_user_id, init_session
 from pyvis.network import Network
 
 # import networkx as nx
 import tempfile
 import os
-from dotenv import load_dotenv, find_dotenv
-
-# from neo4j import GraphDatabase
-from pymongo import MongoClient
-from src.wikontic.utils.openai_utils import LLMTripletExtractor
-from src.wikontic.utils.structured_aligner import Aligner
-from src.wikontic.utils.structured_inference_with_db import StructuredInferenceWithDB
-import uuid
 import logging
 import sys
 import base64
@@ -23,23 +16,15 @@ logging.basicConfig(stream=sys.stderr)
 logger = logging.getLogger("KGExtraction")
 logger.setLevel(logging.INFO)
 
-
-# Ensure the same user_id across all pages
-if "user_id" not in st.session_state:
-    st.session_state.user_id = str(uuid.uuid4())
-
-user_id = st.session_state.user_id
-logger.info(f"User ID: {user_id}")
-
 st.set_page_config(
     page_title="Wikontic", page_icon="media/wikotic-wo-text.png", layout="wide"
 )
 show_sidebar_logo()
+init_session()
 
-# --- Mongo Setup ---
-_ = load_dotenv(find_dotenv())
-mongo_client = MongoClient(os.getenv("MONGO_URI"))
-triplets_db = mongo_client.get_database("demo")
+user_id = get_user_id()
+triplets_db = get_triplets_db()
+logger.info(f"User ID: {user_id}")
 
 
 def fetch_triplets():

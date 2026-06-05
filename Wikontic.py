@@ -1,6 +1,6 @@
 import streamlit as st
 from streamlit_ui import show_sidebar_logo
-import uuid
+from streamlit_session import get_user_id, init_session
 import logging
 import sys
 import base64
@@ -11,19 +11,13 @@ logging.basicConfig(stream=sys.stderr)
 logger = logging.getLogger("App")
 logger.setLevel(logging.ERROR)
 
-# Ensure the same user_id across all pages
-if "user_id" not in st.session_state:
-    st.session_state.user_id = str(uuid.uuid4())
-
-user_id = st.session_state.user_id
-
-logger.info(f"User ID: {user_id}")
-
-
 st.set_page_config(
     page_title="Wikontic", page_icon="media/wikotic-wo-text.png", layout="wide"
 )
 show_sidebar_logo()
+init_session()
+user_id = get_user_id()
+logger.info(f"User ID: {user_id}")
 
 with open("media/wikontic.png", "rb") as f:
     img_bytes = f.read()
