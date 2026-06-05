@@ -40,7 +40,7 @@ export const presentationSlides: PresentationSlide[] = [
     kind: 'animation',
     id: 'text-to-graph',
     title: 'Метод',
-    subtitle: 'Текст превращается в проверяемый граф',
+    subtitle: 'Текст превращается в проверяемую базу фактов',
     component: Animation1_TextToGraph,
     durationInFrames: TEXT_TO_GRAPH_FRAMES,
     chapters: [
@@ -56,7 +56,7 @@ export const presentationSlides: PresentationSlide[] = [
     kind: 'animation',
     id: 'rag-vs-wikontic',
     title: 'RAG vs Wikontic',
-    subtitle: 'Фрагменты текста против явного пути между фактами',
+    subtitle: 'Wikonitc лучше подходит для сложных вопросов, где надо связать несколько фактов',
     component: Animation2_RagVsGraph,
     durationInFrames: RAG_VS_WIKONTIC_FRAMES,
     chapters: [
@@ -85,7 +85,7 @@ export const presentationSlides: PresentationSlide[] = [
     kind: 'metrics',
     id: 'metrics',
     title: 'Итог',
-    subtitle: 'Ключевые результаты для финального слайда',
+    subtitle: 'Ключевые результаты',
     chapters: [],
   },
 ];

@@ -17,8 +17,7 @@ const MetricsSlide: React.FC = () => (
     <div className="metricsContent">
       <img src="/assets/wikontic.png" alt="Wikontic" className="metricsLogo" />
       <div>
-        <div className="metricsEyebrow">Wikontic</div>
-        <h1>из документов в проверяемую карту фактов</h1>
+        <h1>из документов в проверяемую базу фактов</h1>
         <p>Интерпретируемость · Multi-hop reasoning · Синтетические данные</p>
       </div>
       <div className="metricsBadges">
@@ -225,9 +224,9 @@ export const PresentationApp: React.FC = () => {
             <h1>{activeSlide.title}</h1>
             <p>{activeSlide.subtitle}</p>
           </div>
-          <div className="frameCounter">
-            {activeAnimation ? formatTime(currentFrame, activeAnimation.durationInFrames) : 'final slide'}
-          </div>
+          {activeAnimation ? (
+            <div className="frameCounter">{formatTime(currentFrame, activeAnimation.durationInFrames)}</div>
+          ) : null}
         </header>
 
         <div className="stageOuter">
