@@ -238,7 +238,7 @@ body,
   height: 100%;
   overflow: visible;
   border-radius: 8px;
-  box-shadow: 0 22px 60px rgba(23, 32, 51, 0.1);
+  box-shadow: 0 14px 38px rgba(23, 32, 51, 0.05);
 }
 
 .nodeLabel {
@@ -250,8 +250,8 @@ body,
 
 .nodeType {
   font-size: 15px;
-  font-weight: 680;
-  fill: #647084;
+  font-weight: 700;
+  fill: #4a5568;
   dominant-baseline: middle;
 }
 

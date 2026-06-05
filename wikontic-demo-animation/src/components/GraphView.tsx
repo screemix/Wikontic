@@ -15,7 +15,19 @@ type GraphViewProps = {
   width?: number;
   height?: number;
   muted?: boolean;
+  nodeRadius?: number;
+  nodeAspect?: number;
+  typeOutside?: boolean;
+  labelFontSize?: number;
+  typeFontSize?: number;
+  edgeFontSize?: number;
+  softReveal?: boolean;
   onNodeSelect?: (node: GraphNode) => void;
+};
+
+const smoothstep = (t: number) => {
+  const x = Math.max(0, Math.min(1, t));
+  return x * x * (3 - 2 * x);
 };
 
 const kindColor: Record<GraphNode['kind'], {fill: string; stroke: string}> = {
@@ -77,11 +89,39 @@ export const GraphView: React.FC<GraphViewProps> = ({
   width = 980,
   height = 620,
   muted = false,
+  nodeRadius,
+  nodeAspect = 1,
+  typeOutside = false,
+  labelFontSize,
+  typeFontSize,
+  edgeFontSize,
+  softReveal = false,
   onNodeSelect,
 }) => {
+  const edgeFs = edgeFontSize ?? 17;
+  const edgeHalf = edgeFs * 0.3;
+  const edgeRectH = edgeFs + 15;
   const visibleNodeCount = Math.ceil(nodes.length * clamp(reveal));
   const visibleNodes = nodes.slice(0, visibleNodeCount);
   const visibleNodeIds = new Set(visibleNodes.map((node) => node.id));
+
+  // Soft, staggered reveal: each node gently fades + scales in over an
+  // overlapping window so the graph "grows" smoothly instead of popping.
+  const nodeIndex = new Map(nodes.map((node, i) => [node.id, i]));
+  // Smaller window => more spacing between consecutive node appearances
+  // (less simultaneous, less jittery). Per-node fade speed is kept constant by
+  // lengthening the overall reveal window in the caller.
+  const appearWindow = 0.2;
+  const appear = (id: string): number => {
+    if (!softReveal) {
+      return 1;
+    }
+    const i = nodeIndex.get(id) ?? 0;
+    const start = nodes.length > 1 ? (i / (nodes.length - 1)) * (1 - appearWindow) : 0;
+    return smoothstep((clamp(reveal) - start) / appearWindow);
+  };
+
+  const renderNodes = softReveal ? nodes : visibleNodes;
 
   return (
     <svg className="graphSvg" viewBox={`0 0 ${width} ${height}`} role="img">
@@ -100,7 +140,7 @@ export const GraphView: React.FC<GraphViewProps> = ({
           <path d="M0,0 L0,6 L9,3 z" fill={colors.blue} />
         </marker>
       </defs>
-      <rect x="0" y="0" width={width} height={height} rx="26" fill={muted ? '#f3f5f8' : '#ffffff'} />
+      <rect x="0" y="0" width={width} height={height} rx="26" fill={muted ? '#fbfcfe' : '#ffffff'} />
       {scannerProgress !== undefined ? (
         <rect
           x={scannerProgress * width - 22}
@@ -113,12 +153,16 @@ export const GraphView: React.FC<GraphViewProps> = ({
         />
       ) : null}
       {edges.map((edge) => {
-        if (!visibleNodeIds.has(edge.source) || !visibleNodeIds.has(edge.target)) {
+        if (!softReveal && (!visibleNodeIds.has(edge.source) || !visibleNodeIds.has(edge.target))) {
           return null;
         }
         const source = nodes.find((node) => node.id === edge.source);
         const target = nodes.find((node) => node.id === edge.target);
         if (!source || !target) {
+          return null;
+        }
+        const edgeAppear = softReveal ? Math.min(appear(edge.source), appear(edge.target)) : 1;
+        if (edgeAppear <= 0.001) {
           return null;
         }
         const start = nodePosition(source, width, height, mergeProgress);
@@ -128,7 +172,7 @@ export const GraphView: React.FC<GraphViewProps> = ({
         const midX = (start.x + end.x) / 2;
         const midY = (start.y + end.y) / 2;
         return (
-          <g key={edge.id} opacity={muted && !highlighted ? 0.36 : 1}>
+          <g key={edge.id} opacity={(muted && !highlighted ? 0.36 : 1) * edgeAppear}>
             <line
               x1={start.x}
               y1={start.y}
@@ -140,50 +184,94 @@ export const GraphView: React.FC<GraphViewProps> = ({
               markerEnd={highlighted ? 'url(#arrowBlue)' : 'url(#arrow)'}
               filter={highlighted ? 'url(#softGlow)' : undefined}
             />
-            <rect x={midX - edge.label.length * 5.1 - 12} y={midY - 18} width={edge.label.length * 10.2 + 24} height="32" rx="16" fill="#ffffff" stroke={stroke} opacity="0.96" />
-            <text x={midX} y={midY + 4} textAnchor="middle" className="edgeLabel" fill={stroke}>
+            <rect
+              x={midX - edge.label.length * edgeHalf - 12}
+              y={midY - edgeRectH / 2}
+              width={edge.label.length * edgeHalf * 2 + 24}
+              height={edgeRectH}
+              rx={edgeRectH / 2}
+              fill="#ffffff"
+              stroke={stroke}
+              opacity="0.96"
+            />
+            <text
+              x={midX}
+              y={midY + edgeFs * 0.34}
+              textAnchor="middle"
+              className="edgeLabel"
+              style={{fontSize: edgeFs}}
+              fill={stroke}
+            >
               {edge.label}
             </text>
           </g>
         );
       })}
-      {visibleNodes.map((node) => {
+      {renderNodes.map((node) => {
         const pos = nodePosition(node, width, height, mergeProgress);
         const highlighted = highlightedNodeIds.includes(node.id) || Boolean(node.aliasOf && mergeProgress > 0.8);
         const color = kindColor[node.kind];
-        const radius = node.label.length > 14 ? 68 : 54;
+        const radius = nodeRadius ?? (node.label.length > 14 ? 68 : 54);
+        const labelFs = labelFontSize ?? 22;
+        const typeFs = typeFontSize ?? 15;
+        const labelLineHeight = labelFs * 1.05;
         const aliasFade = node.aliasOf && mergeProgress > 0.75 ? 1 - mergeProgress : 1;
+        const nodeAppear = appear(node.id);
+        if (softReveal && nodeAppear <= 0.001) {
+          return null;
+        }
+        const scale = softReveal ? 0.85 + 0.15 * nodeAppear : 1;
         const lines = labelLines(node.label);
         return (
           <g
             key={node.id}
-            opacity={Math.max(0.08, aliasFade)}
+            opacity={softReveal ? nodeAppear * aliasFade : Math.max(0.08, aliasFade)}
             filter={highlighted ? 'url(#softGlow)' : undefined}
+            transform={softReveal ? `translate(${pos.x} ${pos.y}) scale(${scale}) translate(${-pos.x} ${-pos.y})` : undefined}
             onClick={onNodeSelect ? () => onNodeSelect(node) : undefined}
             style={{cursor: onNodeSelect ? 'pointer' : 'default'}}
           >
-            <circle
+            <ellipse
               cx={pos.x}
               cy={pos.y}
-              r={radius}
+              rx={radius * nodeAspect}
+              ry={radius}
               fill={highlighted ? '#ffffff' : color.fill}
               stroke={highlighted ? colors.blue : color.stroke}
               strokeWidth={highlighted ? 6 : 3}
             />
             <text
               x={pos.x}
-              y={pos.y - (showTypes && node.type ? 16 : lines.length > 1 ? 0 : -2)}
+              y={
+                pos.y -
+                (showTypes && node.type && !typeOutside
+                  ? labelLineHeight * 0.7
+                  : lines.length > 1
+                    ? labelLineHeight / 2
+                    : -2)
+              }
               textAnchor="middle"
               className="nodeLabel"
+              style={{fontSize: labelFs}}
             >
               {lines.map((line, index) => (
-                <tspan key={line} x={pos.x} dy={index === 0 ? 0 : 24}>
+                <tspan key={line} x={pos.x} dy={index === 0 ? 0 : labelLineHeight}>
                   {line}
                 </tspan>
               ))}
             </text>
             {showTypes && node.type ? (
-              <text x={pos.x} y={pos.y + (lines.length > 1 ? 40 : 24)} textAnchor="middle" className="nodeType">
+              <text
+                x={pos.x}
+                y={
+                  typeOutside
+                    ? pos.y + radius + typeFs + 8
+                    : pos.y + (lines.length > 1 ? labelLineHeight + 16 : 24)
+                }
+                textAnchor="middle"
+                className="nodeType"
+                style={{fontSize: typeFs}}
+              >
                 {node.type}
               </text>
             ) : null}

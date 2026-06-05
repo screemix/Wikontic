@@ -4,13 +4,22 @@ type PathHighlightProps = {
   path: string;
   progress?: number;
   compact?: boolean;
+  fontSize?: number;
 };
 
-export const PathHighlight: React.FC<PathHighlightProps> = ({path, progress = 1, compact = false}) => {
+export const PathHighlight: React.FC<PathHighlightProps> = ({
+  path,
+  progress = 1,
+  compact = false,
+  fontSize,
+}) => {
   const parts = path.split(' -> ');
   const visibleCount = Math.max(1, Math.ceil(parts.length * Math.max(0, Math.min(1, progress))));
   return (
-    <div className={`pathHighlight ${compact ? 'pathHighlightCompact' : ''}`}>
+    <div
+      className={`pathHighlight ${compact ? 'pathHighlightCompact' : ''}`}
+      style={fontSize ? {fontSize} : undefined}
+    >
       {parts.map((part, index) => {
         const visible = index < visibleCount;
         const isRelation = index % 2 === 1;
