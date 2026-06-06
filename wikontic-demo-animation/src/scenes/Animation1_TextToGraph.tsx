@@ -21,6 +21,25 @@ const clamp = (value: number) => Math.max(0, Math.min(1, value));
 const progress = (frame: number, from: number, to: number) =>
   interpolate(frame, [from, to], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
 
+// Same spread-out grid layout used in Animation 2 — nodes never overlap at any size.
+// Columns shifted to give edge labels clearance: complex→right, center-column→right,
+// networks→right; risks moved up so "связаны с" becomes diagonal (longer path, label fits).
+const finalGraphLayout: Record<string, {x: number; y: number}> = {
+  requirements: {x: 0.08, y: 0.14},
+  year:         {x: 0.3,  y: 0.14},
+  project:      {x: 0.05, y: 0.5},
+  complex:      {x: 0.285, y: 0.5},
+  buildings:    {x: 0.52, y: 0.14},
+  monitoring:   {x: 0.52, y: 0.5},
+  parking:      {x: 0.52, y: 0.86},
+  networks:     {x: 0.78, y: 0.5},
+  risks:        {x: 0.95, y: 0.25},
+};
+const finalGraphNodes = compactGraphNodes.map((node) => ({
+  ...node,
+  ...(finalGraphLayout[node.id] ?? {}),
+}));
+
 export const TEXT_TO_GRAPH_FRAMES = 800;
 
 export const Animation1_TextToGraph: React.FC = () => {
@@ -134,13 +153,16 @@ export const Animation1_TextToGraph: React.FC = () => {
               <span>Компактный проверяемый граф</span>
             </div>
             <GraphView
-              nodes={compactGraphNodes}
+              nodes={finalGraphNodes}
               edges={compactGraphEdges}
               reveal={graphIn}
               showTypes={graphIn > 0.55}
               typeOutside={true}
-              labelFontSize={15}
-              nodeAspect={1.45}
+              nodeRadius={52}
+              nodeAspect={1.3}
+              labelFontSize={19}
+              typeFontSize={13}
+              edgeFontSize={16}
               width={1040}
               height={520}
             />
