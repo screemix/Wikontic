@@ -1,0 +1,98 @@
+======================================================================
+WIKONTIC DISTILLATION INFERENCE REPORT — TEST SPLIT
+======================================================================
+
+--- Overall counts ---
+Test examples: 599
+GT triplets total:   6082
+Raw pred triplets:   4031
+Filtered pred triplets: 4010
+Empty predictions:   4
+
+--- Overall FULL-MATCH metrics (subj+rel+obj+types) ---
+Precision: 0.714
+Recall:    0.471
+F1:        0.567
+
+--- Overall SRO-MATCH metrics (subj+rel+obj only) ---
+Precision: 0.754
+Recall:    0.498
+F1:        0.600
+  (Type labels cost 0.033 F1 SRO>)
+
+--- Per-relation metrics FULL-MATCH (top 15 by GT support) ---
+  instance of                P=0.614  R=0.559  F1=0.585  gt= 365  pred= 332
+  has part(s)                P=0.681  R=0.378  F1=0.486  gt= 249  pred= 138
+  occupation                 P=0.881  R=0.725  F1=0.796  gt= 204  pred= 168
+  located in the administrative territorial entity  P=0.675  R=0.541  F1=0.601  gt= 157  pred= 126
+  part of                    P=0.767  R=0.597  F1=0.672  gt= 154  pred= 120
+  location                   P=0.584  R=0.482  F1=0.528  gt= 137  pred= 113
+  participant                P=0.536  R=0.113  F1=0.186  gt= 133  pred=  28
+  award received             P=0.732  R=0.256  F1=0.380  gt= 117  pred=  41
+  date of birth              P=0.955  R=0.929  F1=0.942  gt= 113  pred= 110
+  position held              P=0.731  R=0.490  F1=0.587  gt= 100  pred=  67
+  has characteristic         P=0.589  R=0.439  F1=0.503  gt=  98  pred=  73
+  country of citizenship     P=0.952  R=0.930  F1=0.941  gt=  86  pred=  84
+  inception                  P=0.700  R=0.598  F1=0.645  gt=  82  pred=  70
+  notable work               P=0.738  R=0.383  F1=0.504  gt=  81  pred=  42
+  country                    P=0.732  R=0.759  F1=0.745  gt=  79  pred=  82
+
+--- Per-relation metrics SRO-MATCH (top 15 by GT support) ---
+  instance of                P=0.690  R=0.629  F1=0.658  gt= 364  pred= 332
+  has part(s)                P=0.768  R=0.426  F1=0.548  gt= 249  pred= 138
+  occupation                 P=0.881  R=0.725  F1=0.796  gt= 204  pred= 168
+  located in the administrative territorial entity  P=0.698  R=0.564  F1=0.624  gt= 156  pred= 126
+  part of                    P=0.783  R=0.610  F1=0.686  gt= 154  pred= 120
+  location                   P=0.593  R=0.500  F1=0.543  gt= 134  pred= 113
+  participant                P=0.571  R=0.121  F1=0.200  gt= 132  pred=  28
+  award received             P=0.732  R=0.256  F1=0.380  gt= 117  pred=  41
+  date of birth              P=0.964  R=0.938  F1=0.951  gt= 113  pred= 110
+  position held              P=0.821  R=0.550  F1=0.659  gt= 100  pred=  67
+  has characteristic         P=0.630  R=0.469  F1=0.538  gt=  98  pred=  73
+  country of citizenship     P=0.952  R=0.930  F1=0.941  gt=  86  pred=  84
+  inception                  P=0.814  R=0.695  F1=0.750  gt=  82  pred=  70
+  notable work               P=0.738  R=0.383  F1=0.504  gt=  81  pred=  42
+  country                    P=0.756  R=0.785  F1=0.770  gt=  79  pred=  82
+
+--- Subject / Object hallucination ---
+Subject hallucination rate: 0.077 (309/4010)
+Object  hallucination rate: 0.192 (770/4010)
+
+--- Type accuracy (on correctly-matched SRO triplets) ---
+Subject type accuracy: 0.970 (3025 checked)
+Object  type accuracy: 0.972 (3025 checked)
+
+--- Most confused relation pairs (GT relation → predicted relation) ---
+  located in the administrative territorial entity → location                      7 times
+  followed by               → follows                       5 times
+  located in the administrative territorial entity → country                       5 times
+  announcement date         → point in time                 4 times
+  party chief representative → follows                       3 times
+  has part(s)               → contains                      3 times
+  produced by               → director                      3 times
+  location                  → located in/on physical feature     3 times
+  subject has role          → instance of                   3 times
+  part of                   → together with                 3 times
+
+--- Whitelist filtering ---
+  relation_dropped: 21
+
+--- Distribution comparison ---
+TRAINING DATA:
+  Total triplets: 48859
+  Unique relations: 960
+  Top relation: instance of (3071 occurrences)
+  Top 5 relations cover: 19.2%
+  Top 10 relations cover: 27.5%
+
+MODEL PREDICTIONS:
+  Total triplets: 4010
+  Unique relations: 331
+  Parse success rate: 595/599 (99.3%)
+  Top relation: instance of
+  Top-relation dominance: 8.3%
+
+COMPARISON:
+  Shared top-5 relations: 4/5
+  Top-relation dominance  train: 6.3%
+  Top-relation dominance  pred:  8.3%

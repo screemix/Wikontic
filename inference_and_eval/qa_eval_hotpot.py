@@ -109,7 +109,6 @@ def get_args():
 
 
 if __name__ == "__main__":
-
     args = get_args()
     mongo_client = get_mongo_client(args.mongo_uri)
     db = mongo_client.get_database(args.ontology_db_name)
@@ -118,6 +117,7 @@ if __name__ == "__main__":
     ontology_db = mongo_client.get_database(args.ontology_db_name)
 
     api_key = os.getenv("OPENROUTER_KEY")
+    base_url = os.getenv("OPENROUTER_BASE_URL")
     proxy_url = os.getenv("PROXY_URL")
 
     model_name = args.model_name
@@ -141,7 +141,9 @@ if __name__ == "__main__":
         logger.info("Structured inference disabled, using dynamic inference")
         aligner = DynamicDBAligner(triplets_db=triplets_db)
 
-    extractor = LLMTripletExtractor(model=model_name, api_key=api_key, proxy=proxy_url)
+    extractor = LLMTripletExtractor(
+        model=model_name, api_key=api_key, base_url=base_url, proxy=proxy_url
+    )
 
     if args.structured_inference:
         inference_with_db = StructuredInferenceWithDB(
@@ -161,7 +163,6 @@ if __name__ == "__main__":
 
     sample_id2ans = {}
     if args.multi_step_qa:
-
         for sample_id in tqdm(unique_sample_ids):
             try:
                 question = id2sample[sample_id]["question"]

@@ -1,0 +1,51 @@
+# Training config for Wikontic distillation — v4
+# (stronger LoRA, Focal Loss, no curriculum, no hand-tuned weights)
+# Paths are resolved relative to the directory where train.py lives.
+
+train_path: "./data/train.jsonl"
+val_path: "./data/val.jsonl"
+test_path: "./data/test.jsonl"
+system_prompt_path: "../src/wikontic/utils/prompts/triplet_extraction/propmt_1_types_qualifiers.txt"
+output_dir: "./checkpoints/wikontic-v5"
+
+# Model
+base_model: "HuggingFaceTB/SmolLM2-1.7B-Instruct"
+
+# Quantization (QLoRA)
+load_in_4bit: true
+bnb_4bit_quant_type: "nf4"
+bnb_4bit_compute_dtype: "bfloat16"
+
+# LoRA
+lora_r: 32                        # increased from 16
+lora_alpha: 64
+lora_dropout: 0.05
+target_modules:
+  - "q_proj"
+  - "v_proj"
+  - "k_proj"
+  - "o_proj"
+  - "gate_proj"
+  - "up_proj"
+  - "down_proj"
+
+# Training hyperparameters
+num_train_epochs: 5
+per_device_train_batch_size: 1
+per_device_eval_batch_size: 1
+gradient_accumulation_steps: 4
+learning_rate: 2.0e-4
+warmup_steps: 100
+logging_steps: 10
+save_steps: 1000
+eval_strategy: "steps"
+eval_steps: 1000
+bf16: true
+dataloader_num_workers: 0
+save_total_limit: 2
+report_to: "none"
+
+# ---------------------------------------------------------------------------
+# Focal Loss gamma (set to 0.0 for standard CE, 1.0-2.0 for focal)
+# ---------------------------------------------------------------------------
+focal_gamma: 2.0

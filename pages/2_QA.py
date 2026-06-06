@@ -35,6 +35,7 @@ WIKIDATA_ONTOLOGY_DB_NAME = "wikidata_ontology"
 TRIPLETS_DB_NAME = "demo"
 mongo_client = MongoClient(os.getenv("MONGO_URI"))
 api_key = os.getenv("KEY")
+base_url = os.getenv("OPENROUTER_BASE_URL")
 proxy_url = os.getenv("PROXY_URL")
 triplets_db = mongo_client.get_database(TRIPLETS_DB_NAME)
 ontology_db = mongo_client.get_database(WIKIDATA_ONTOLOGY_DB_NAME)
@@ -116,7 +117,7 @@ if trigger:
         st.warning("Please select a model.")
     else:
         extractor = LLMTripletExtractor(
-            model=selected_model, api_key=api_key, proxy=proxy_url
+            model=selected_model, api_key=api_key, base_url=base_url, proxy=proxy_url
         )
         inferer = StructuredInferenceWithDB(
             extractor=extractor, aligner=aligner, triplets_db=triplets_db

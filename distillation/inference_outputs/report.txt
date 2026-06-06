@@ -1,0 +1,98 @@
+======================================================================
+WIKONTIC DISTILLATION INFERENCE REPORT
+======================================================================
+
+--- Overall counts ---
+Validation examples: 200
+GT triplets total:   2270
+Raw pred triplets:   1334
+Filtered pred triplets: 1310
+Empty predictions:   0
+
+--- Overall FULL-MATCH metrics (subj+rel+obj+types) ---
+Precision: 0.830
+Recall:    0.479
+F1:        0.607
+
+--- Overall SRO-MATCH metrics (subj+rel+obj only) ---
+Precision: 0.853
+Recall:    0.493
+F1:        0.625
+  (Type labels cost 0.017 F1 SRO>)
+
+--- Per-relation metrics FULL-MATCH (top 15 by GT support) ---
+  instance of                P=0.791  R=0.611  F1=0.689  gt= 149  pred= 115
+  occupation                 P=0.971  R=0.835  F1=0.898  gt= 121  pred= 104
+  has part(s)                P=0.682  R=0.333  F1=0.448  gt=  90  pred=  44
+  country of citizenship     P=0.964  R=0.885  F1=0.923  gt=  61  pred=  56
+  date of birth              P=0.964  R=0.915  F1=0.939  gt=  59  pred=  56
+  position held              P=0.727  R=0.453  F1=0.558  gt=  53  pred=  33
+  part of                    P=0.774  R=0.500  F1=0.608  gt=  48  pred=  31
+  member of                  P=0.688  R=0.234  F1=0.349  gt=  47  pred=  16
+  location                   P=0.789  R=0.417  F1=0.545  gt=  36  pred=  19
+  genre                      P=0.880  R=0.611  F1=0.721  gt=  36  pred=  25
+  director                   P=0.929  R=0.722  F1=0.813  gt=  36  pred=  28
+  film crew member           P=0.833  R=0.429  F1=0.566  gt=  35  pred=  18
+  country of origin          P=0.963  R=0.765  F1=0.852  gt=  34  pred=  27
+  award received             P=0.545  R=0.182  F1=0.273  gt=  33  pred=  11
+  inception                  P=0.952  R=0.606  F1=0.741  gt=  33  pred=  21
+
+--- Per-relation metrics SRO-MATCH (top 15 by GT support) ---
+  instance of                P=0.887  R=0.685  F1=0.773  gt= 149  pred= 115
+  occupation                 P=0.971  R=0.835  F1=0.898  gt= 121  pred= 104
+  has part(s)                P=0.682  R=0.333  F1=0.448  gt=  90  pred=  44
+  country of citizenship     P=0.964  R=0.885  F1=0.923  gt=  61  pred=  56
+  date of birth              P=0.982  R=0.932  F1=0.957  gt=  59  pred=  56
+  position held              P=0.818  R=0.509  F1=0.628  gt=  53  pred=  33
+  part of                    P=0.806  R=0.521  F1=0.633  gt=  48  pred=  31
+  member of                  P=0.812  R=0.277  F1=0.413  gt=  47  pred=  16
+  location                   P=0.789  R=0.417  F1=0.545  gt=  36  pred=  19
+  genre                      P=0.880  R=0.611  F1=0.721  gt=  36  pred=  25
+  director                   P=0.929  R=0.722  F1=0.813  gt=  36  pred=  28
+  film crew member           P=0.833  R=0.429  F1=0.566  gt=  35  pred=  18
+  country of origin          P=0.963  R=0.765  F1=0.852  gt=  34  pred=  27
+  award received             P=0.545  R=0.182  F1=0.273  gt=  33  pred=  11
+  inception                  P=1.000  R=0.636  F1=0.778  gt=  33  pred=  21
+
+--- Subject / Object hallucination ---
+Subject hallucination rate: 0.140 (184/1310)
+Object  hallucination rate: 0.313 (410/1310)
+
+--- Type accuracy (on correctly-matched SRO triplets) ---
+Subject type accuracy: 0.991 (1117 checked)
+Object  type accuracy: 0.980 (1117 checked)
+
+--- Most confused relation pairs (GT relation → predicted relation) ---
+  located in the administrative territorial entity → location                      2 times
+  point in time             → refine date                   2 times
+  produced by               → lyricist                      2 times
+  has part(s)               → founded by                    1 times
+  replaced by               → used by                       1 times
+  participant in            → home venue                    1 times
+  follows                   → founded by                    1 times
+  variety of lexeme, form or sense → named after                   1 times
+  uses                      → has characteristic            1 times
+  appears in the form of    → has characteristic            1 times
+
+--- Whitelist filtering ---
+  relation_dropped: 24
+
+--- Distribution comparison ---
+TRAINING DATA:
+  Total triplets: 17761
+  Unique relations: 715
+  Top relation: instance of (1156 occurrences)
+  Top 5 relations cover: 21.0%
+  Top 10 relations cover: 30.6%
+
+MODEL PREDICTIONS:
+  Total triplets: 1310
+  Unique relations: 185
+  Parse success rate: 200/200 (100.0%)
+  Top relation: instance of
+  Top-relation dominance: 8.8%
+
+COMPARISON:
+  Shared top-5 relations: 3/5
+  Top-relation dominance  train: 6.5%
+  Top-relation dominance  pred:  8.8%
