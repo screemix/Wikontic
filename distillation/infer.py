@@ -7,6 +7,7 @@ including distribution analysis, per-relation P/R/F1, subject/object
 hallucination, partial-match metrics, and confused-relation analysis.
 """
 import argparse
+import gc
 import json
 import re
 from collections import Counter, defaultdict
@@ -33,7 +34,7 @@ def load_jsonl(path: Path) -> List[Dict[str, Any]]:
     return examples
 
 
-def extract_whitelist(train_examples: List[Dict[str, Any]]) -> Dict[str, Set[str]]:
+def extract_whitelist(train_examples: List[Dict[str, Any]], triplet_field: str = "triplets") -> Dict[str, Set[str]]:
     """Extract unique relations, subject_types, and object_types from training data."""
     relations: Set[str] = set()
     subject_types: Set[str] = set()
@@ -41,7 +42,7 @@ def extract_whitelist(train_examples: List[Dict[str, Any]]) -> Dict[str, Set[str
     for ex in train_examples:
         try:
             parsed = json.loads(ex["messages"][2]["content"])
-            for t in parsed.get("triplets", []):
+            for t in parsed.get(triplet_field, []):
                 if t.get("relation"):
                     relations.add(t["relation"])
                 if t.get("subject_type"):
@@ -130,13 +131,13 @@ def apply_whitelist(
     return valid, dict(stats)
 
 
-def parse_completion_triplets(example: Dict[str, Any]) -> List[Dict[str, Any]]:
+def parse_completion_triplets(example: Dict[str, Any], triplet_field: str = "triplets") -> List[Dict[str, Any]]:
     """Extract triplets from the completion field of a chat example."""
     try:
         completion = example["messages"][2]["content"]
         data = json.loads(completion)
-        if isinstance(data, dict) and "triplets" in data:
-            return data["triplets"]
+        if isinstance(data, dict) and triplet_field in data:
+            return data[triplet_field]
     except (json.JSONDecodeError, TypeError, IndexError, KeyError):
         pass
     return []
@@ -393,10 +394,19 @@ def main() -> None:
         default="val",
         help="Which split to evaluate on. Use 'val' during development, 'test' only for final evaluation.",
     )
+    parser.add_argument(
+        "--triplet-field",
+        type=str,
+        default=None,
+        help="Which triplet field to evaluate against (overrides config; default: triplets)",
+    )
     args = parser.parse_args()
 
     cfg = load_yaml_config(args.config)
     script_dir = Path(__file__).resolve().parent
+
+    triplet_field = args.triplet_field or cfg.get("triplet_field", "triplets")
+    print(f"Using triplet field: {triplet_field}")
 
     split = args.split
     data_path_key = f"{split}_path"
@@ -441,7 +451,7 @@ def main() -> None:
     # ── Whitelist from training data ──
     train_path = script_dir / cfg.get("train_path", "./data/train.jsonl")
     train_examples = load_jsonl(train_path)
-    whitelist = extract_whitelist(train_examples)
+    whitelist = extract_whitelist(train_examples, triplet_field=triplet_field)
     print(
         f"Whitelist: {len(whitelist['relations'])} relations, "
         f"{len(whitelist['subject_types'])} subj types, "
@@ -463,36 +473,57 @@ def main() -> None:
         prompt_text = tokenizer.apply_chat_template(
             prompt_messages, tokenize=False, add_generation_prompt=True
         )
-        inputs = tokenizer(prompt_text, return_tensors="pt").to(model.device)
 
-        with torch.no_grad():
-            output = model.generate(
-                **inputs,
-                max_new_tokens=max_new_tokens,
-                temperature=temperature,
-                do_sample=do_sample,
-                pad_token_id=tokenizer.pad_token_id,
-                eos_token_id=tokenizer.eos_token_id,
-            )
+        raw_pred_triplets: List[Dict] = []
+        answer = ""
+        try:
+            inputs = tokenizer(prompt_text, return_tensors="pt").to(model.device)
 
-        full_output = tokenizer.decode(output[0], skip_special_tokens=False)
+            with torch.no_grad():
+                output = model.generate(
+                    **inputs,
+                    max_new_tokens=max_new_tokens,
+                    temperature=temperature,
+                    do_sample=do_sample,
+                    pad_token_id=tokenizer.pad_token_id,
+                    eos_token_id=tokenizer.eos_token_id,
+                )
 
-        # Extract assistant answer
-        marker = "\nassistant\n"
-        marker_pos = full_output.find(marker)
-        if marker_pos >= 0:
-            answer = full_output[marker_pos + len(marker) :].strip()
-        else:
-            answer = full_output[len(prompt_text) :].strip()
+            full_output = tokenizer.decode(output[0], skip_special_tokens=False)
 
-        for turn_marker in ["<|im_start|>user", "<|im_start|>system", "<|endoftext|>", "</s>"]:
-            pos = answer.find(turn_marker)
-            if pos >= 0:
-                answer = answer[:pos].strip()
+            # Aggressively clear generation tensors from GPU memory
+            del inputs, output
+            gc.collect()
+            if torch.cuda.is_available():
+                torch.cuda.empty_cache()
 
-        parsed = robust_extract_triplets(answer)
-        raw_pred_triplets: List[Dict] = parsed["triplets"] if parsed else []
-        gt_triplets = parse_completion_triplets(ex)
+            # Extract assistant answer
+            marker = "\nassistant\n"
+            marker_pos = full_output.find(marker)
+            if marker_pos >= 0:
+                answer = full_output[marker_pos + len(marker) :].strip()
+            else:
+                answer = full_output[len(prompt_text) :].strip()
+
+            for turn_marker in ["<|im_start|>user", "<|im_start|>system", "<|endoftext|>", "</s>"]:
+                pos = answer.find(turn_marker)
+                if pos >= 0:
+                    answer = answer[:pos].strip()
+
+            parsed = robust_extract_triplets(answer)
+            raw_pred_triplets = parsed["triplets"] if parsed else []
+        except Exception as exc:
+            is_oom = "CUDA out of memory" in str(exc) or "OutOfMemoryError" in type(exc).__name__
+            if is_oom:
+                print(f"  WARNING: CUDA OOM on example {idx}, skipping.")
+            else:
+                print(f"  WARNING: Error on example {idx}: {exc}")
+            if torch.cuda.is_available():
+                torch.cuda.empty_cache()
+            answer = ""
+            raw_pred_triplets = []
+
+        gt_triplets = parse_completion_triplets(ex, triplet_field=triplet_field)
 
         # ── Apply whitelist filtering ──
         if use_whitelist:
@@ -538,7 +569,7 @@ def main() -> None:
     gt_relation_counts = Counter(t.get("relation", "UNKNOWN") for t in all_gt_triplets)
 
     # Training distribution
-    train_triplets = [t for ex in train_examples for t in parse_completion_triplets(ex)]
+    train_triplets = [t for ex in train_examples for t in parse_completion_triplets(ex, triplet_field=triplet_field)]
     train_relation_counts = Counter(t.get("relation", "UNKNOWN") for t in train_triplets)
 
     lines = []

@@ -9,7 +9,7 @@
 
 # Model paths
 base_model: "HuggingFaceTB/SmolLM2-1.7B-Instruct"
-adapter_path: "./checkpoints/wikontic-v4"
+adapter_path: "./checkpoints/wikontic-v5"
 
 # Data (same chat format used for training)
 val_path: "./data/val.jsonl"
@@ -19,7 +19,7 @@ output_dir: "./inference_outputs"
 # Generation
 temperature: 0.0
 do_sample: false
-max_new_tokens: 2048
+max_new_tokens: 512
 batch_size: 1
 
 # Quantization (must match training settings)
@@ -36,3 +36,7 @@ whitelist_min_similarity: 0.6   # minimum similarity threshold for soft mapping
 # Comparison report
 # Path to training data for distribution comparison and whitelist extraction
 train_path: "./data/train.jsonl"
+
+# Which triplet field to compare against (default "triplets").
+# Only needed if the dataset was built with a non-default --triplet-field.
+triplet_field: "triplets"

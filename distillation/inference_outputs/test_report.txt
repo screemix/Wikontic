@@ -3,96 +3,96 @@ WIKONTIC DISTILLATION INFERENCE REPORT — TEST SPLIT
 ======================================================================
 
 --- Overall counts ---
-Test examples: 200
-GT triplets total:   2281
-Raw pred triplets:   2005
-Filtered pred triplets: 1972
-Empty predictions:   0
+Test examples: 599
+GT triplets total:   6082
+Raw pred triplets:   4031
+Filtered pred triplets: 4010
+Empty predictions:   4
 
 --- Overall FULL-MATCH metrics (subj+rel+obj+types) ---
-Precision: 0.656
-Recall:    0.567
-F1:        0.609
+Precision: 0.714
+Recall:    0.471
+F1:        0.567
 
 --- Overall SRO-MATCH metrics (subj+rel+obj only) ---
-Precision: 0.703
-Recall:    0.609
-F1:        0.653
-  (Type labels cost 0.044 F1 SRO>)
+Precision: 0.754
+Recall:    0.498
+F1:        0.600
+  (Type labels cost 0.033 F1 SRO>)
 
 --- Per-relation metrics FULL-MATCH (top 15 by GT support) ---
-  instance of                P=0.556  R=0.511  F1=0.532  gt= 137  pred= 126
-  has part(s)                P=0.577  R=0.544  F1=0.560  gt= 103  pred=  97
-  position held              P=0.583  R=0.589  F1=0.586  gt=  95  pred=  96
-  occupation                 P=0.853  R=0.659  F1=0.744  gt=  88  pred=  68
-  performer                  P=0.840  R=0.857  F1=0.848  gt=  49  pred=  50
-  part of                    P=0.655  R=0.404  F1=0.500  gt=  47  pred=  29
-  country of citizenship     P=0.897  R=0.761  F1=0.824  gt=  46  pred=  39
-  date of birth              P=0.912  R=0.689  F1=0.785  gt=  45  pred=  34
-  product or material produced  P=0.744  R=0.727  F1=0.736  gt=  44  pred=  43
-  located in the administrative territorial entity  P=0.750  R=0.786  F1=0.767  gt=  42  pred=  44
-  award received             P=0.765  R=0.619  F1=0.684  gt=  42  pred=  34
-  location                   P=0.566  R=0.750  F1=0.645  gt=  40  pred=  53
-  participant in             P=0.614  R=0.794  F1=0.692  gt=  34  pred=  44
-  inception                  P=0.735  R=0.758  F1=0.746  gt=  33  pred=  34
-  produced by                P=0.652  R=0.484  F1=0.556  gt=  31  pred=  23
+  instance of                P=0.614  R=0.559  F1=0.585  gt= 365  pred= 332
+  has part(s)                P=0.681  R=0.378  F1=0.486  gt= 249  pred= 138
+  occupation                 P=0.881  R=0.725  F1=0.796  gt= 204  pred= 168
+  located in the administrative territorial entity  P=0.675  R=0.541  F1=0.601  gt= 157  pred= 126
+  part of                    P=0.767  R=0.597  F1=0.672  gt= 154  pred= 120
+  location                   P=0.584  R=0.482  F1=0.528  gt= 137  pred= 113
+  participant                P=0.536  R=0.113  F1=0.186  gt= 133  pred=  28
+  award received             P=0.732  R=0.256  F1=0.380  gt= 117  pred=  41
+  date of birth              P=0.955  R=0.929  F1=0.942  gt= 113  pred= 110
+  position held              P=0.731  R=0.490  F1=0.587  gt= 100  pred=  67
+  has characteristic         P=0.589  R=0.439  F1=0.503  gt=  98  pred=  73
+  country of citizenship     P=0.952  R=0.930  F1=0.941  gt=  86  pred=  84
+  inception                  P=0.700  R=0.598  F1=0.645  gt=  82  pred=  70
+  notable work               P=0.738  R=0.383  F1=0.504  gt=  81  pred=  42
+  country                    P=0.732  R=0.759  F1=0.745  gt=  79  pred=  82
 
 --- Per-relation metrics SRO-MATCH (top 15 by GT support) ---
-  instance of                P=0.659  R=0.606  F1=0.631  gt= 137  pred= 126
-  has part(s)                P=0.701  R=0.660  F1=0.680  gt= 103  pred=  97
-  position held              P=0.604  R=0.611  F1=0.607  gt=  95  pred=  96
-  occupation                 P=0.853  R=0.659  F1=0.744  gt=  88  pred=  68
-  performer                  P=0.860  R=0.878  F1=0.869  gt=  49  pred=  50
-  part of                    P=0.759  R=0.468  F1=0.579  gt=  47  pred=  29
-  country of citizenship     P=0.897  R=0.761  F1=0.824  gt=  46  pred=  39
-  date of birth              P=0.912  R=0.689  F1=0.785  gt=  45  pred=  34
-  product or material produced  P=0.814  R=0.814  F1=0.814  gt=  43  pred=  43
-  located in the administrative territorial entity  P=0.750  R=0.786  F1=0.767  gt=  42  pred=  44
-  award received             P=0.853  R=0.690  F1=0.763  gt=  42  pred=  34
-  location                   P=0.623  R=0.825  F1=0.710  gt=  40  pred=  53
-  participant in             P=0.682  R=0.882  F1=0.769  gt=  34  pred=  44
-  inception                  P=0.794  R=0.818  F1=0.806  gt=  33  pred=  34
-  produced by                P=0.652  R=0.484  F1=0.556  gt=  31  pred=  23
+  instance of                P=0.690  R=0.629  F1=0.658  gt= 364  pred= 332
+  has part(s)                P=0.768  R=0.426  F1=0.548  gt= 249  pred= 138
+  occupation                 P=0.881  R=0.725  F1=0.796  gt= 204  pred= 168
+  located in the administrative territorial entity  P=0.698  R=0.564  F1=0.624  gt= 156  pred= 126
+  part of                    P=0.783  R=0.610  F1=0.686  gt= 154  pred= 120
+  location                   P=0.593  R=0.500  F1=0.543  gt= 134  pred= 113
+  participant                P=0.571  R=0.121  F1=0.200  gt= 132  pred=  28
+  award received             P=0.732  R=0.256  F1=0.380  gt= 117  pred=  41
+  date of birth              P=0.964  R=0.938  F1=0.951  gt= 113  pred= 110
+  position held              P=0.821  R=0.550  F1=0.659  gt= 100  pred=  67
+  has characteristic         P=0.630  R=0.469  F1=0.538  gt=  98  pred=  73
+  country of citizenship     P=0.952  R=0.930  F1=0.941  gt=  86  pred=  84
+  inception                  P=0.814  R=0.695  F1=0.750  gt=  82  pred=  70
+  notable work               P=0.738  R=0.383  F1=0.504  gt=  81  pred=  42
+  country                    P=0.756  R=0.785  F1=0.770  gt=  79  pred=  82
 
 --- Subject / Object hallucination ---
-Subject hallucination rate: 0.119 (234/1972)
-Object  hallucination rate: 0.255 (502/1972)
+Subject hallucination rate: 0.077 (309/4010)
+Object  hallucination rate: 0.192 (770/4010)
 
 --- Type accuracy (on correctly-matched SRO triplets) ---
-Subject type accuracy: 0.956 (1387 checked)
-Object  type accuracy: 0.970 (1387 checked)
+Subject type accuracy: 0.970 (3025 checked)
+Object  type accuracy: 0.972 (3025 checked)
 
 --- Most confused relation pairs (GT relation → predicted relation) ---
-  creator                   → author                       10 times
-  represented by            → represents                    4 times
-  presented works           → field of work                 4 times
-  uses                      → operator                      4 times
-  has part(s)               → record of                     3 times
-  characteristic of         → has part(s)                   3 times
-  located in the administrative territorial entity → location                      3 times
-  variety of lexeme, form or sense → named after                   2 times
-  located in/on physical feature → located in the administrative territorial entity     2 times
-  named by                  → named after                   2 times
+  located in the administrative territorial entity → location                      7 times
+  followed by               → follows                       5 times
+  located in the administrative territorial entity → country                       5 times
+  announcement date         → point in time                 4 times
+  party chief representative → follows                       3 times
+  has part(s)               → contains                      3 times
+  produced by               → director                      3 times
+  location                  → located in/on physical feature     3 times
+  subject has role          → instance of                   3 times
+  part of                   → together with                 3 times
 
 --- Whitelist filtering ---
-  relation_dropped: 33
+  relation_dropped: 21
 
 --- Distribution comparison ---
 TRAINING DATA:
-  Total triplets: 17761
-  Unique relations: 715
-  Top relation: instance of (1156 occurrences)
-  Top 5 relations cover: 21.0%
-  Top 10 relations cover: 30.6%
+  Total triplets: 48859
+  Unique relations: 960
+  Top relation: instance of (3071 occurrences)
+  Top 5 relations cover: 19.2%
+  Top 10 relations cover: 27.5%
 
 MODEL PREDICTIONS:
-  Total triplets: 1972
-  Unique relations: 242
-  Parse success rate: 200/200 (100.0%)
+  Total triplets: 4010
+  Unique relations: 331
+  Parse success rate: 595/599 (99.3%)
   Top relation: instance of
-  Top-relation dominance: 6.4%
+  Top-relation dominance: 8.3%
 
 COMPARISON:
   Shared top-5 relations: 4/5
-  Top-relation dominance  train: 6.5%
-  Top-relation dominance  pred:  6.4%
+  Top-relation dominance  train: 6.3%
+  Top-relation dominance  pred:  8.3%
