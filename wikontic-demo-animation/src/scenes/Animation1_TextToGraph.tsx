@@ -53,14 +53,14 @@ export const Animation1_TextToGraph: React.FC = () => {
   const graphIn = progress(frame, 605, 675);
   const title =
     frame < 120
-      ? 'Документ содержит факты'
+      ? 'Документы содержат факты, представимые в виде графа'
       : frame < 270
-        ? '1. Кандидатные триплеты'
+        ? '1. Триплеты-кандидаты'
         : frame < 455
-          ? '2. Проверка на онтологию / верификация'
+          ? '2. Верификация и согласование графа с онтологией'
           : frame < 625
-            ? '3. Очистка и дедупликация'
-            : 'Вся информация представлена компактно в графе';
+            ? '3. Очистка и дедупликация графа'
+            : 'Итог: информация компактно представлена в графе знаний и готова к использованию в прикладных задачах';
 
   // During step 2 (ontologyIn): document fades out and triplets slide left
   const docFadeForOntology = progress(frame, 265, 310);
@@ -81,7 +81,7 @@ export const Animation1_TextToGraph: React.FC = () => {
     <SceneLayout
       eyebrow="Метод"
       title={title}
-      subtitle="Wikontic превращает неструктурированный текст в компактный проверяемый граф знаний"
+      subtitle="Wikontic превращает неструктурированный текст в компактный и проверяемый граф знаний"
       frameLabel="Text → KG"
     >
       <div className="methodStage">
@@ -150,7 +150,7 @@ export const Animation1_TextToGraph: React.FC = () => {
           <Panel className="finalGraphPanel">
             <div className="panelTitleRow">
               <CheckCircle2 size={24} />
-              <span>Компактный проверяемый граф</span>
+              <span>Компактный и проверяемый граф знаний</span>
             </div>
             <GraphView
               nodes={finalGraphNodes}
@@ -168,7 +168,7 @@ export const Animation1_TextToGraph: React.FC = () => {
             />
             <div className="metricRow">
               <MetricBadge value="420" label="токенов в тексте" tone="amber" />
-              <MetricBadge value="9 / 12" label="сущностей / триплетов" tone="green" />
+              <MetricBadge value="9, 12" label="сущностей и триплетов" tone="green" />
             </div>
           </Panel>
         </div>
