@@ -55,7 +55,7 @@ export const Animation1_TextToGraph: React.FC = () => {
     frame < 120
       ? 'Документы содержат факты, представимые в виде графа'
       : frame < 270
-        ? '1. Триплеты-кандидаты'
+        ? '1. Из текста извлекаются триплеты-кандидаты'
         : frame < 455
           ? '2. Верификация и согласование графа с онтологией'
           : frame < 625
@@ -81,7 +81,6 @@ export const Animation1_TextToGraph: React.FC = () => {
     <SceneLayout
       eyebrow="Метод"
       title={title}
-frameLabel="Text → KG"
     >
       <div className="methodStage">
         <div
