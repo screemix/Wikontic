@@ -9,7 +9,9 @@ export type DocumentLine = DocumentPart[];
 
 export const methodDocument: DocumentLine[] = [
   [
-    {text: 'В 2024 году проектная команда '},
+    {text: 'В '},
+    {text: '2024', factId: 'requirements-date'},
+    {text: ' году проектная команда '},
     {text: 'утвердила требования к жилому комплексу', factId: 'requirements-date'},
     {text: '.'},
   ],
