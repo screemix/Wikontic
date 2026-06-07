@@ -60,10 +60,10 @@ export const dedupGroups = [
 ];
 
 export const compactGraphNodes: GraphNode[] = [
-  {id: 'project', label: 'проект', type: 'проект', x: 0.12, y: 0.48, kind: 'document'},
+  {id: 'project', label: 'проект', type: 'документ', x: 0.12, y: 0.48, kind: 'document'},
   {id: 'complex', label: 'жилой комплекс', type: 'строительный объект', x: 0.34, y: 0.48, kind: 'project'},
   {id: 'buildings', label: 'три корпуса', type: 'здание', x: 0.58, y: 0.24, kind: 'asset'},
-  {id: 'parking', label: 'подземный паркинг', type: 'инфраструктура', x: 0.62, y: 0.48, kind: 'asset'},
+  {id: 'parking', label: 'подземный паркинг', type: 'строительный объект', x: 0.62, y: 0.48, kind: 'asset'},
   {id: 'monitoring', label: 'система мониторинга', type: 'инженерная система', x: 0.58, y: 0.72, kind: 'system'},
   {id: 'networks', label: 'инженерные сети', type: 'инженерная система', x: 0.84, y: 0.72, kind: 'system'},
   {id: 'requirements', label: 'требования', type: 'требование', x: 0.34, y: 0.2, kind: 'requirement'},

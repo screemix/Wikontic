@@ -29,11 +29,11 @@ const finalGraphLayout: Record<string, {x: number; y: number}> = {
   year:         {x: 0.3,  y: 0.14},
   project:      {x: 0.05, y: 0.5},
   complex:      {x: 0.285, y: 0.5},
-  buildings:    {x: 0.52, y: 0.14},
-  monitoring:   {x: 0.52, y: 0.5},
-  parking:      {x: 0.52, y: 0.86},
-  networks:     {x: 0.78, y: 0.5},
-  risks:        {x: 0.95, y: 0.25},
+  buildings:    {x: 0.51, y: 0.14},
+  monitoring:   {x: 0.51, y: 0.5},
+  parking:      {x: 0.51, y: 0.86},
+  networks:     {x: 0.74, y: 0.5},
+  risks:        {x: 0.91, y: 0.25},
 };
 const finalGraphNodes = compactGraphNodes.map((node) => ({
   ...node,
@@ -157,11 +157,11 @@ frameLabel="Text → KG"
               reveal={graphIn}
               showTypes={graphIn > 0.55}
               typeOutside={true}
-              nodeRadius={52}
+              nodeRadius={46}
               nodeAspect={1.3}
-              labelFontSize={19}
-              typeFontSize={13}
-              edgeFontSize={16}
+              labelFontSize={16}
+              typeFontSize={11}
+              edgeFontSize={13}
               width={1040}
               height={520}
             />
