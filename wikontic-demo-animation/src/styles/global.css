@@ -52,14 +52,14 @@ body,
   align-items: flex-start;
   justify-content: space-between;
   gap: 48px;
-  margin-bottom: 24px;
+  margin-bottom: 40px;
 }
 
 .sceneHeader h1 {
   margin: 0;
-  max-width: 1220px;
-  font-size: 58px;
-  line-height: 1.06;
+  max-width: 1700px;
+  font-size: 44px;
+  line-height: 1.1;
   font-weight: 760;
   letter-spacing: 0;
 }
@@ -642,7 +642,7 @@ body,
 
 .finalGraphPanel {
   width: 1380px;
-  height: 700px;
+  height: 820px;
   margin: 0 auto;
   padding: 24px;
 }

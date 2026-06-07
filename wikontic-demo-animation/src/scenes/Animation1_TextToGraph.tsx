@@ -46,11 +46,11 @@ export const Animation1_TextToGraph: React.FC = () => {
   const frame = useCurrentFrame();
   const activeFactCount = Math.min(highlightedFacts.length, Math.floor(frame / 22) + 1);
   const activeFactIds = highlightedFacts.slice(0, activeFactCount).map((fact) => fact.id);
-  const factsRemain = progress(frame, 110, 195);
-  const tripletsIn = progress(frame, 120, 260);
+  const factsRemain = progress(frame, 110, 150);
+  const tripletsIn = progress(frame, 120, 180);
   const ontologyIn = progress(frame, 270, 455);
-  const dedupIn = progress(frame, 455, 625);
-  const graphIn = progress(frame, 605, 675);
+  const dedupIn = progress(frame, 455, 600);
+  const graphIn = progress(frame, 600, 760);
   const title =
     frame < 120
       ? 'Документы содержат факты, представимые в виде графа'
@@ -60,18 +60,18 @@ export const Animation1_TextToGraph: React.FC = () => {
           ? '2. Верификация и согласование графа с онтологией'
           : frame < 625
             ? '3. Очистка и дедупликация графа'
-            : 'Итог: информация компактно представлена в графе знаний и готова к использованию в прикладных задачах';
+            : 'Итог: информация в компактном и проверяемом графе знаний';
 
   // During step 2 (ontologyIn): document fades out and triplets slide left
-  const docFadeForOntology = progress(frame, 265, 310);
-  const ontologyFadeIn = progress(frame, 270, 305);
-  const tripletsSlide = progress(frame, 270, 320);
+  const docFadeForOntology = progress(frame, 265, 300);
+  const ontologyFadeIn = progress(frame, 260, 305);
+  const tripletsSlide = progress(frame, 270, 295);
   const tripletsLeft = interpolate(tripletsSlide, [0, 1], [840, 40]);
-  const dedupFadeIn = progress(frame, 455, 490);
-  const dedupSlide = progress(frame, 455, 500);
+  const dedupFadeIn = progress(frame, 450, 470);
+  const dedupSlide = progress(frame, 450, 485);
   const tripletsDedupScale = interpolate(dedupSlide, [0, 1], [1, 0.80]);
   const tripletsScale = interpolate(tripletsSlide, [0, 1], [1, 0.88]) * tripletsDedupScale;
-  const tripletsOpacityDedup = interpolate(dedupSlide, [0, 1], [1, 0.60]);
+  const tripletsOpacityDedup = interpolate(dedupSlide, [0, 1], [1, 0.40]);
 
   const ontologyDedupX = interpolate(dedupSlide, [0, 1], [0, -560]);
   const ontologyDedupScale = interpolate(dedupSlide, [0, 1], [1, 0.65]);
