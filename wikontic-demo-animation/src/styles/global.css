@@ -187,7 +187,7 @@ body,
 }
 
 .tripletCompact {
-  width: 560px;
+  width: 700px;
   padding: 18px 20px;
 }
 
@@ -641,10 +641,73 @@ body,
 }
 
 .finalGraphPanel {
-  width: 1180px;
+  width: 1380px;
   height: 640px;
   margin: 0 auto;
   padding: 24px;
+}
+
+.finalComparisonPanel {
+  padding: 22px 24px 112px;
+}
+
+.finalComparisonGrid {
+  display: grid;
+  grid-template-columns: 430px 1fr;
+  gap: 30px;
+  height: 100%;
+}
+
+.finalDocumentPanel,
+.finalGraphColumn {
+  min-width: 0;
+}
+
+.compactTitleRow {
+  margin-bottom: 10px;
+  font-size: 21px;
+}
+
+.finalDocumentCompact {
+  overflow: hidden;
+  border: 1px solid #dbe3ef;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.finalDocumentCompact .documentView {
+  width: auto;
+  min-height: 0;
+  padding: 20px 22px 24px;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  transform: none !important;
+}
+
+.finalDocumentCompact .documentToolbar {
+  padding-bottom: 11px;
+  font-size: 15px;
+}
+
+.finalDocumentCompact .documentHeading {
+  margin: 14px 0 12px;
+  font-size: 19px;
+}
+
+.finalDocumentCompact .documentText p {
+  margin: 0 0 13px;
+  font-size: 17px;
+  line-height: 1.48;
+}
+
+.finalGraphPanel .graphSvg {
+  height: 460px;
+  box-shadow: none;
+}
+
+.finalGraphColumn .graphSvg {
+  height: 470px;
 }
 
 .panelTitleRow {
@@ -663,6 +726,106 @@ body,
   bottom: 20px;
   display: flex;
   gap: 12px;
+}
+
+.metricTransform {
+  position: absolute;
+  left: 50%;
+  bottom: 18px;
+  display: grid;
+  grid-template-columns: minmax(300px, auto) 58px minmax(340px, auto);
+  align-items: center;
+  gap: 12px;
+  transform: translateX(-50%);
+  padding: 12px 16px;
+  border: 1px solid #dbe3ef;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 18px 44px rgba(23, 32, 51, 0.1);
+}
+
+.finalComparisonPanel .metricTransform {
+  left: 24px;
+  right: 24px;
+  grid-template-columns: 430px 30px 1fr;
+  gap: 0;
+  transform: none;
+}
+
+.finalComparisonPanel .metricBefore {
+  justify-self: center;
+}
+
+.finalComparisonPanel .metricAfter {
+  justify-self: center;
+}
+
+.finalComparisonPanel .metricTransformArrow {
+  justify-self: center;
+}
+
+.metricTransformBlock {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  align-items: baseline;
+  gap: 8px;
+  min-height: 62px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  white-space: nowrap;
+}
+
+.metricTransformBlock span {
+  color: #647084;
+  font-size: 18px;
+  font-weight: 760;
+}
+
+.metricTransformBlock strong {
+  font-size: 36px;
+  line-height: 1;
+  font-weight: 830;
+}
+
+.metricTransformBlock em {
+  color: #647084;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 720;
+}
+
+.metricBefore {
+  background: #fff2cc;
+  border: 1px solid rgba(242, 169, 0, 0.38);
+}
+
+.metricBefore strong {
+  color: #8a5c00;
+}
+
+.metricAfter {
+  grid-template-columns: auto auto;
+  background: #dff8ec;
+  border: 1px solid rgba(25, 169, 116, 0.34);
+}
+
+.metricAfter strong {
+  color: #08724d;
+}
+
+.structuredMetrics {
+  display: grid;
+  grid-template-columns: auto auto auto auto;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.metricTransformArrow {
+  color: #2f6df6;
+  font-size: 43px;
+  line-height: 1;
+  font-weight: 820;
+  text-align: center;
 }
 
 .ontologyPass {

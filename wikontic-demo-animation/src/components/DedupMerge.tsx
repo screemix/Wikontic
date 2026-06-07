@@ -65,7 +65,7 @@ export const DedupMerge: React.FC<DedupMergeProps> = ({progress}) => {
         </g>
         <g opacity={Math.max(0, p - 0.35) / 0.65}>
           <text x="380" y="370" textAnchor="middle" className="mergeFooter">
-            Синонимы → Единая каноническая сущность
+            Синонимы объединены в одну сущность
           </text>
         </g>
       </svg>
