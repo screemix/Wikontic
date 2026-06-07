@@ -75,10 +75,10 @@ export const presentationSlides: PresentationSlide[] = [
     durationInFrames: SYNTHETIC_DATA_FRAMES,
     chapters: [
       {label: 'Граф', frame: 0},
-      {label: 'Ответ', frame: 110},
-      {label: 'Пути', frame: 220},
-      {label: 'QA-карточки', frame: 350},
-      {label: 'Датасет', frame: 520},
+      {label: 'Ответ', frame: 140},
+      {label: 'Пути', frame: 330},
+      {label: 'QA-карточки', frame: 530},
+      {label: 'Датасет', frame: 680},
     ],
   },
   {
@@ -89,4 +89,3 @@ export const presentationSlides: PresentationSlide[] = [
     chapters: [],
   },
 ];
-

@@ -39,6 +39,13 @@ const finalGraphNodes = compactGraphNodes.map((node) => ({
   ...(finalGraphLayout[node.id] ?? {}),
 }));
 
+const graphBenefits = [
+  'Интерпретируемость',
+  'Верифицируемость',
+  'Редактируемость',
+  'Компактность',
+];
+
 export const TEXT_TO_GRAPH_FRAMES = 870;
 
 export const Animation1_TextToGraph: React.FC = () => {
@@ -62,7 +69,7 @@ export const Animation1_TextToGraph: React.FC = () => {
           ? '2. Верификация и согласование графа с онтологией'
           : frame < 625
             ? '3. Очистка и дедупликация графа'
-            : 'Итог: информация в компактном и проверяемом графе знаний';
+            : 'Информация сохранена в компактном и проверяемом графе знаний';
 
   // During step 2 (ontologyIn): document fades out and triplets slide left
   const docFadeForOntology = progress(frame, 265, 300);
@@ -147,61 +154,81 @@ export const Animation1_TextToGraph: React.FC = () => {
             transform: `translateX(${(1 - graphFadeIn) * 36}px)`,
           }}
         >
-          <Panel className="finalGraphPanel finalComparisonPanel">
-            <div className="finalComparisonGrid">
-              <div className="finalDocumentPanel">
-                <div className="panelTitleRow compactTitleRow">
-                  <CheckCircle2 size={22} />
-                  <span>Исходный текст</span>
+          <div className="methodFinalLayout">
+            <Panel className="finalGraphPanel finalComparisonPanel">
+              <div className="finalComparisonGrid">
+                <div className="finalDocumentPanel">
+                  <div className="panelTitleRow compactTitleRow">
+                    <CheckCircle2 size={22} />
+                    <span>Исходный текст</span>
+                  </div>
+                  <div className="finalDocumentCompact">
+                    <DocumentView
+                      lines={methodDocument}
+                      activeFactIds={highlightedFacts.map((fact) => fact.id)}
+                      closeup={0}
+                    />
+                  </div>
                 </div>
-                <div className="finalDocumentCompact">
-                  <DocumentView
-                    lines={methodDocument}
-                    activeFactIds={highlightedFacts.map((fact) => fact.id)}
-                    closeup={0}
+                <div className="finalGraphColumn">
+                  <div className="panelTitleRow compactTitleRow">
+                    <CheckCircle2 size={22} />
+                    <span>Граф знаний</span>
+                  </div>
+                  <GraphView
+                    nodes={finalGraphNodes}
+                    edges={compactGraphEdges}
+                    reveal={graphReveal}
+                    showTypes={graphReveal > 0.55}
+                    softReveal={true}
+                    typeOutside={true}
+                    nodeRadius={42}
+                    nodeAspect={1.32}
+                    labelFontSize={16}
+                    typeFontSize={11}
+                    edgeFontSize={13}
+                    width={680}
+                    height={400}
                   />
                 </div>
               </div>
-              <div className="finalGraphColumn">
-                <div className="panelTitleRow compactTitleRow">
-                  <CheckCircle2 size={22} />
-                  <span>Граф знаний</span>
+              <div className="metricTransform">
+                <div className="metricTransformBlock metricBefore">
+                  <span>Было</span>
+                  <strong>420</strong>
+                  <em>токенов</em>
                 </div>
-                <GraphView
-                  nodes={finalGraphNodes}
-                  edges={compactGraphEdges}
-                  reveal={graphReveal}
-                  showTypes={graphReveal > 0.55}
-                  softReveal={true}
-                  typeOutside={true}
-                  nodeRadius={42}
-                  nodeAspect={1.32}
-                  labelFontSize={16}
-                  typeFontSize={11}
-                  edgeFontSize={13}
-                  width={680}
-                  height={400}
-                />
-              </div>
-            </div>
-            <div className="metricTransform">
-              <div className="metricTransformBlock metricBefore">
-                <span>Было</span>
-                <strong>420</strong>
-                <em>токенов</em>
-              </div>
-              <div className="metricTransformArrow">→</div>
-              <div className="metricTransformBlock metricAfter">
-                <span>Стало</span>
-                <div className="structuredMetrics">
-                  <strong>9</strong>
-                  <em>сущностей и</em>
-                  <strong>12</strong>
-                  <em>триплетов</em>
+                <div className="metricTransformArrow">→</div>
+                <div className="metricTransformBlock metricAfter">
+                  <span>Стало</span>
+                  <div className="structuredMetrics">
+                    <strong>9</strong>
+                    <em>сущностей и</em>
+                    <strong>12</strong>
+                    <em>триплетов</em>
+                  </div>
                 </div>
               </div>
+            </Panel>
+            <div className="finalGraphBenefits">
+              {graphBenefits.map((benefit, index) => {
+                const itemIn = clamp(graphReveal * 1.45 - index * 0.16);
+                return (
+                  <div
+                    key={benefit}
+                    className="finalGraphBenefit"
+                    style={{
+                      opacity: itemIn,
+                      transform: `translateX(${(1 - itemIn) * 18}px)`,
+                    }}
+                  >
+                    <CheckCircle2 size={24} />
+                    <span>{benefit}</span>
+                  </div>
+                );
+              })}
             </div>
-          </Panel>
+          </div>
         </div>
       </div>
     </SceneLayout>

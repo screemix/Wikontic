@@ -640,10 +640,21 @@ body,
   inset: 0;
 }
 
+.methodFinalLayout {
+  width: 1704px;
+  max-width: 100%;
+  height: 820px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1380px 300px;
+  gap: 24px;
+  align-items: start;
+}
+
 .finalGraphPanel {
   width: 1380px;
   height: 820px;
-  margin: 0 auto;
+  margin: 0;
   padding: 24px;
 }
 
@@ -762,6 +773,33 @@ body,
 
 .finalComparisonPanel .metricTransformArrow {
   justify-self: center;
+}
+
+.finalGraphBenefits {
+  align-self: center;
+  display: grid;
+  gap: 14px;
+}
+
+.finalGraphBenefit {
+  display: grid;
+  grid-template-columns: 24px 1fr;
+  align-items: center;
+  gap: 12px;
+  min-height: 72px;
+  padding: 16px 18px;
+  border: 1px solid #cbd9ff;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.94);
+  color: #1748b5;
+  font-size: 24px;
+  line-height: 1.14;
+  font-weight: 820;
+  box-shadow: 0 18px 44px rgba(23, 32, 51, 0.1);
+}
+
+.finalGraphBenefit svg {
+  color: #19a974;
 }
 
 .metricTransformBlock {
@@ -1242,4 +1280,160 @@ body,
   font-size: 22px;
   font-weight: 800;
   box-shadow: 0 18px 44px rgba(47, 109, 246, 0.14);
+}
+
+.syntheticHeroCards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+  align-items: start;
+}
+
+.syntheticGraphOverlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.syntheticPathGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  align-items: stretch;
+}
+
+.syntheticPathCard {
+  min-height: 118px;
+  padding: 16px 18px;
+  border: 2px solid #dbe3ef;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.98);
+  box-shadow: 0 18px 46px rgba(23, 32, 51, 0.1);
+}
+
+.syntheticPathCardTop {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.syntheticPathCardTop span {
+  width: 17px;
+  height: 17px;
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+
+.syntheticPathCardTop strong {
+  color: #172033;
+  font-size: 22px;
+  font-weight: 850;
+}
+
+.syntheticHeroCard {
+  min-height: 360px;
+  padding: 24px 26px;
+  border: 1px solid #dbe3ef;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 22px 58px rgba(23, 32, 51, 0.12);
+}
+
+.syntheticHeroCardTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+  color: #5637c8;
+  font-size: 22px;
+  font-weight: 850;
+}
+
+.syntheticHeroQuestion {
+  min-height: 96px;
+  margin-bottom: 18px;
+  color: #172033;
+  font-size: 29px;
+  line-height: 1.18;
+  font-weight: 830;
+}
+
+.syntheticHeroAnswer {
+  margin-bottom: 18px;
+  color: #08724d;
+  font-size: 25px;
+  font-weight: 800;
+}
+
+.syntheticDatasetFlow {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: grid;
+  grid-template-columns: 1fr auto 330px;
+  align-items: center;
+  gap: 28px;
+}
+
+.syntheticDatasetStack {
+  padding: 28px 30px;
+  border: 1px solid #cbd9ff;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 22px 58px rgba(23, 32, 51, 0.12);
+}
+
+.syntheticDatasetTitle {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+  color: #1748b5;
+  font-size: 30px;
+  font-weight: 840;
+}
+
+.syntheticDatasetLabels {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.syntheticDatasetLabels span {
+  padding: 14px 16px;
+  border-radius: 8px;
+  background: #f4f7fb;
+  color: #172033;
+  font-size: 20px;
+  font-weight: 780;
+  text-align: center;
+}
+
+.syntheticFlowArrow {
+  color: #2f6df6;
+}
+
+.syntheticModelHero {
+  height: 210px;
+  padding: 24px;
+  border: 1px solid #cbd9ff;
+  border-radius: 8px;
+  background: linear-gradient(180deg, #ffffff, #eef4ff);
+  color: #1748b5;
+  display: grid;
+  place-items: center;
+  gap: 12px;
+  text-align: center;
+  box-shadow: 0 22px 58px rgba(47, 109, 246, 0.14);
+}
+
+.syntheticModelHero strong {
+  max-width: 250px;
+  font-size: 25px;
+  line-height: 1.16;
 }
