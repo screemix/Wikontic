@@ -39,8 +39,8 @@ export const presentationSlides: PresentationSlide[] = [
   {
     kind: 'animation',
     id: 'text-to-graph',
-    title: 'Метод',
-    subtitle: 'Wikontic превращает неструктурированный текст в компактный и проверяемый граф знаний',
+    title: 'Wikontic',
+    subtitle: 'Текст превращается в проверяемую базу фактов',
     component: Animation1_TextToGraph,
     durationInFrames: TEXT_TO_GRAPH_FRAMES,
     chapters: [

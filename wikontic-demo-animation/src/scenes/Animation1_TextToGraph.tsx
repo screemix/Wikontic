@@ -4,7 +4,6 @@ import {CheckCircle2} from 'lucide-react';
 import {DedupMerge} from '../components/DedupMerge';
 import {DocumentView} from '../components/DocumentView';
 import {GraphView} from '../components/GraphView';
-import {MetricBadge} from '../components/MetricBadge';
 import {OntologyPass} from '../components/OntologyPass';
 import {Panel, SceneLayout} from '../components/SceneLayout';
 import {TripletCard} from '../components/TripletCard';
@@ -56,7 +55,7 @@ export const Animation1_TextToGraph: React.FC = () => {
   const graphReveal = progress(frame, 605, 770);
   const title =
     frame < 120
-      ? 'Документы содержат факты, представимые в виде графа'
+      ? 'Документы содержат факты'
       : frame < 270
         ? '1. Из текста извлекаются триплеты-кандидаты'
         : frame < 455
@@ -148,29 +147,58 @@ export const Animation1_TextToGraph: React.FC = () => {
             transform: `translateX(${(1 - graphFadeIn) * 36}px)`,
           }}
         >
-          <Panel className="finalGraphPanel">
-            <div className="panelTitleRow">
-              <CheckCircle2 size={24} />
-              <span>Компактный и проверяемый граф знаний</span>
+          <Panel className="finalGraphPanel finalComparisonPanel">
+            <div className="finalComparisonGrid">
+              <div className="finalDocumentPanel">
+                <div className="panelTitleRow compactTitleRow">
+                  <CheckCircle2 size={22} />
+                  <span>Исходный текст</span>
+                </div>
+                <div className="finalDocumentCompact">
+                  <DocumentView
+                    lines={methodDocument}
+                    activeFactIds={highlightedFacts.map((fact) => fact.id)}
+                    closeup={0}
+                  />
+                </div>
+              </div>
+              <div className="finalGraphColumn">
+                <div className="panelTitleRow compactTitleRow">
+                  <CheckCircle2 size={22} />
+                  <span>Граф знаний</span>
+                </div>
+                <GraphView
+                  nodes={finalGraphNodes}
+                  edges={compactGraphEdges}
+                  reveal={graphIn}
+                  showTypes={graphIn > 0.55}
+                  typeOutside={true}
+                  nodeRadius={42}
+                  nodeAspect={1.32}
+                  labelFontSize={16}
+                  typeFontSize={11}
+                  edgeFontSize={13}
+                  width={680}
+                  height={400}
+                />
+              </div>
             </div>
-            <GraphView
-              nodes={finalGraphNodes}
-              edges={compactGraphEdges}
-              reveal={graphReveal}
-              showTypes={graphReveal > 0.55}
-              softReveal={true}
-              typeOutside={true}
-              nodeRadius={46}
-              nodeAspect={1.3}
-              labelFontSize={16}
-              typeFontSize={11}
-              edgeFontSize={13}
-              width={1040}
-              height={520}
-            />
-            <div className="metricRow">
-              <MetricBadge value="420" label="токенов в тексте" tone="amber" />
-              <MetricBadge value="9, 12" label="сущностей и триплетов" tone="green" />
+            <div className="metricTransform">
+              <div className="metricTransformBlock metricBefore">
+                <span>Было</span>
+                <strong>420</strong>
+                <em>токенов</em>
+              </div>
+              <div className="metricTransformArrow">→</div>
+              <div className="metricTransformBlock metricAfter">
+                <span>Стало</span>
+                <div className="structuredMetrics">
+                  <strong>9</strong>
+                  <em>сущностей и</em>
+                  <strong>12</strong>
+                  <em>триплетов</em>
+                </div>
+              </div>
             </div>
           </Panel>
         </div>
