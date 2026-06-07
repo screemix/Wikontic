@@ -40,7 +40,7 @@ const finalGraphNodes = compactGraphNodes.map((node) => ({
   ...(finalGraphLayout[node.id] ?? {}),
 }));
 
-export const TEXT_TO_GRAPH_FRAMES = 800;
+export const TEXT_TO_GRAPH_FRAMES = 870;
 
 export const Animation1_TextToGraph: React.FC = () => {
   const frame = useCurrentFrame();
@@ -50,7 +50,10 @@ export const Animation1_TextToGraph: React.FC = () => {
   const tripletsIn = progress(frame, 120, 180);
   const ontologyIn = progress(frame, 270, 455);
   const dedupIn = progress(frame, 455, 600);
-  const graphIn = progress(frame, 600, 760);
+  // Panel background fades in fast (opaque quickly, less "transparent" time).
+  // Node reveal is separate and slower — each of 9 nodes gets ~18 frames to itself.
+  const graphFadeIn = progress(frame, 600, 635);
+  const graphReveal = progress(frame, 605, 770);
   const title =
     frame < 120
       ? 'Документы содержат факты, представимые в виде графа'
@@ -86,8 +89,8 @@ export const Animation1_TextToGraph: React.FC = () => {
         <div
           className="methodDocumentSlot"
           style={{
-            opacity: graphIn > 0 ? 0 : 1 - docFadeForOntology,
-            transform: `translateX(${graphIn * -70 - docFadeForOntology * 80}px) scale(${1 - graphIn * 0.12})`,
+            opacity: graphFadeIn > 0 ? 0 : 1 - docFadeForOntology,
+            transform: `translateX(${graphFadeIn * -70 - docFadeForOntology * 80}px) scale(${1 - graphFadeIn * 0.12})`,
           }}
         >
           <DocumentView
@@ -102,7 +105,7 @@ export const Animation1_TextToGraph: React.FC = () => {
           className="methodTriplets"
           style={{
             left: `${tripletsLeft}px`,
-            opacity: tripletsIn * tripletsOpacityDedup * (1 - graphIn),
+            opacity: tripletsIn * tripletsOpacityDedup * (1 - graphFadeIn),
             transform: `scale(${tripletsScale})`,
             transformOrigin: 'top left',
           }}
@@ -120,7 +123,7 @@ export const Animation1_TextToGraph: React.FC = () => {
         <div
           className="methodOntology"
           style={{
-            opacity: ontologyFadeIn * ontologyOpacityDedup * (1 - graphIn),
+            opacity: ontologyFadeIn * ontologyOpacityDedup * (1 - graphFadeIn),
             transform: `translateX(${(1 - ontologyIn) * 40 + ontologyDedupX}px) scale(${ontologyDedupScale})`,
             transformOrigin: 'top left',
           }}
@@ -131,7 +134,7 @@ export const Animation1_TextToGraph: React.FC = () => {
         <div
           className="methodDedup"
           style={{
-            opacity: dedupFadeIn * (1 - graphIn),
+            opacity: dedupFadeIn * (1 - graphFadeIn),
             transform: `translateY(${(1 - dedupFadeIn) * 24}px)`,
           }}
         >
@@ -141,8 +144,8 @@ export const Animation1_TextToGraph: React.FC = () => {
         <div
           className="methodFinalGraph"
           style={{
-            opacity: graphIn,
-            transform: `translateX(${(1 - graphIn) * 36}px)`,
+            opacity: graphFadeIn,
+            transform: `translateX(${(1 - graphFadeIn) * 36}px)`,
           }}
         >
           <Panel className="finalGraphPanel">
@@ -153,8 +156,9 @@ export const Animation1_TextToGraph: React.FC = () => {
             <GraphView
               nodes={finalGraphNodes}
               edges={compactGraphEdges}
-              reveal={graphIn}
-              showTypes={graphIn > 0.55}
+              reveal={graphReveal}
+              showTypes={graphReveal > 0.55}
+              softReveal={true}
               typeOutside={true}
               nodeRadius={46}
               nodeAspect={1.3}
