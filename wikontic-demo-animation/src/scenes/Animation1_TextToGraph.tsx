@@ -170,8 +170,9 @@ export const Animation1_TextToGraph: React.FC = () => {
                 <GraphView
                   nodes={finalGraphNodes}
                   edges={compactGraphEdges}
-                  reveal={graphIn}
-                  showTypes={graphIn > 0.55}
+                  reveal={graphReveal}
+                  showTypes={graphReveal > 0.55}
+                  softReveal={true}
                   typeOutside={true}
                   nodeRadius={42}
                   nodeAspect={1.32}
