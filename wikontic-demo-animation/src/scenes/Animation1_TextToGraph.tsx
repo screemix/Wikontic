@@ -81,8 +81,7 @@ export const Animation1_TextToGraph: React.FC = () => {
     <SceneLayout
       eyebrow="Метод"
       title={title}
-      subtitle="Wikontic превращает неструктурированный текст в компактный и проверяемый граф знаний"
-      frameLabel="Text → KG"
+frameLabel="Text → KG"
     >
       <div className="methodStage">
         <div
