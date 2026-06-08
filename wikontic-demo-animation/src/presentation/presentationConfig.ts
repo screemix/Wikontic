@@ -56,7 +56,7 @@ export const presentationSlides: PresentationSlide[] = [
     kind: 'animation',
     id: 'rag-vs-wikontic',
     title: 'RAG vs Wikontic',
-    subtitle: 'Wikonitc лучше подходит для сложных вопросов, где надо связать несколько фактов',
+    subtitle: 'Wikontic лучше подходит для сложных вопросов, где надо связать несколько фактов',
     component: Animation2_RagVsGraph,
     durationInFrames: RAG_VS_WIKONTIC_FRAMES,
     chapters: [

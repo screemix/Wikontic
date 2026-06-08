@@ -188,7 +188,7 @@ export const PresentationApp: React.FC = () => {
           <img src="/assets/wikotic-wo-text.png" alt="Wikontic" />
           <div>
             <strong>Wikontic</strong>
-            <span>Demo slide deck</span>
+            {/* <span>Demo slide deck</span> */}
           </div>
         </div>
 
