@@ -1,6 +1,6 @@
 import React from 'react';
 import {AbsoluteFill, Sequence, interpolate, useCurrentFrame} from 'remotion';
-import {Search, Split, Waypoints} from 'lucide-react';
+import {Search, Split, Waypoints, X} from 'lucide-react';
 import {GraphView} from '../components/GraphView';
 import {PathHighlight} from '../components/PathHighlight';
 import {colors, font} from '../theme';
@@ -22,7 +22,7 @@ const progress = (frame: number, from: number, to: number) =>
 // with a long hold so it reads on the first watch. Phases never overlap.
 const FADE = 11; // ~0.37s — fast decay/appear to/from white
 const PHASES = {
-  rag: 580, // ~19.3s — links → concept highlight → flag missed → select → settle → takeaway
+  rag: 616, // links → concept highlight → select → flag missed (cross + caption, dwell) → settle → takeaway
   wikontic: 620, // ~20.7s — same docs → unite → build graph → path → answer box
 } as const;
 
@@ -248,12 +248,14 @@ const RagPhase: React.FC = () => {
   const arrowsIn = progress(frame, 92, 150); // links between fragments
   const linkIn = progress(frame, 162, 220); // question concepts highlighted
   const select = progress(frame, 226, 268); // relevant ones brighten FIRST
-  const lostIn = progress(frame, 282, 326); // THEN the missed fragment flares (softly) red
-  const arrowsOut = progress(frame, 330, 346); // links fade out quickly, before any box moves
-  const discard = progress(frame, 350, 394); // irrelevant (incl. lost) leave
-  const settle = progress(frame, 358, 398); // relevant slide into column — fast, hides reflow
-  const missedIn = progress(frame, 425, 468); // the relevant fragment RAG missed
-  const noteIn = progress(frame, 490, 533); // takeaway, then holds
+  const lostIn = progress(frame, 282, 322); // THEN the missed fragment flares (softly) red
+  const lostMark = progress(frame, 318, 344); // red cross + «Фрагмент не найден!» appear
+  // dwell ~344-374 (≈1s) so the miss sinks in before anything moves
+  const arrowsOut = progress(frame, 374, 390); // links fade out quickly, before any box moves
+  const discard = progress(frame, 396, 440); // irrelevant (incl. lost) leave
+  const settle = progress(frame, 404, 444); // relevant slide into column — fast, hides reflow
+  const missedIn = progress(frame, 466, 509); // the relevant fragment RAG missed
+  const noteIn = progress(frame, 530, 573); // takeaway, then holds
   return (
     <Phase duration={PHASES.rag}>
       {/* Header: RAG title + the question, mirroring the Wikontic slide. */}
@@ -356,6 +358,51 @@ const RagPhase: React.FC = () => {
               ) : (
                 box.text
               )}
+              {isLost && lostMark > 0.001 ? (
+                <>
+                  {/* Red cross badge in the corner — clearly "this one is lost". */}
+                  <div
+                    style={{
+                      position: 'absolute',
+                      top: -20,
+                      right: -20,
+                      width: 44,
+                      height: 44,
+                      borderRadius: '50%',
+                      background: colors.red,
+                      color: '#ffffff',
+                      display: 'grid',
+                      placeItems: 'center',
+                      boxShadow: '0 8px 20px rgba(216, 77, 77, 0.5)',
+                      opacity: lostMark,
+                      transform: `scale(${0.5 + 0.5 * lostMark})`,
+                      zIndex: 6,
+                    }}
+                  >
+                    <X size={28} strokeWidth={4} />
+                  </div>
+                  {/* Caption under the box. */}
+                  <div
+                    style={{
+                      position: 'absolute',
+                      left: 0,
+                      right: 0,
+                      top: '100%',
+                      marginTop: 12,
+                      textAlign: 'center',
+                      color: colors.red,
+                      fontSize: 23,
+                      fontWeight: 900,
+                      letterSpacing: '0.01em',
+                      opacity: lostMark,
+                      transform: `translateY(${(1 - lostMark) * -8}px)`,
+                    }}
+                  >
+                    Не найден!
+                    Нет прямой связи с вопросом.
+                  </div>
+                </>
+              ) : null}
             </div>
           );
         })}
@@ -437,7 +484,7 @@ const RagPhase: React.FC = () => {
           }}
         >
           <Split size={28} />
-          <span>RAG не может найти все релевантные фрагменты.</span>
+          <span>RAG смотрит только на близость к вопросу, а не на взаимосвязь между фактами.</span>
         </div>
       </div>
     </Phase>
