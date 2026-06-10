@@ -26,6 +26,7 @@ OTHER_VECTOR_ENTITY_DOC = {
     "alias_text_embedding": [1.0] + [0.0] * (len(DUMMY_EMBEDDING) - 1),
 }
 UNIQUE_FIELDS = ["label", "alias", "sample_id"]
+TRIPLET_UNIQUE_FIELDS = ["subject", "relation", "object", "sample_id"]
 
 
 def _doc_identity_query():
@@ -95,6 +96,52 @@ def test_get_collection_find_one(backend):
     coll = backend.get_collection("entity_aliases")
     doc = coll.find_one({"label": "Test Entity"})
     assert doc is not None
+
+
+def test_match_documents_with_or(backend):
+    sample_id = "test_backend_or"
+    backend.upsert_many(
+        "triplets",
+        [
+            {"subject": "a", "relation": "r", "object": "b", "sample_id": sample_id},
+            {"subject": "a", "relation": "r", "object": "b", "sample_id": sample_id},
+        ],
+        unique_fields=TRIPLET_UNIQUE_FIELDS,
+    )
+    matches = backend.match_documents(
+        "triplets",
+        {"sample_id": sample_id, "$or": [{"subject": "a"}, {"object": "a"}]},
+    )
+    assert len(matches) == 1
+
+
+def test_match_documents_with_and_in(backend):
+    sample_id = "test_backend_and_in"
+    backend.upsert_many(
+        "triplets",
+        [
+            {"subject": "a", "relation": "r1", "object": "x", "sample_id": sample_id},
+            {"subject": "a", "relation": "r2", "object": "y", "sample_id": sample_id},
+            {
+                "subject": "b",
+                "relation": "r1",
+                "object": "x",
+                "sample_id": "test_backend_and_in_other",
+            },
+        ],
+        unique_fields=TRIPLET_UNIQUE_FIELDS,
+    )
+    matches = backend.match_documents(
+        "triplets",
+        {
+            "$and": [
+                {"sample_id": {"$eq": sample_id}},
+                {"relation": {"$in": ["r1", "r2"]}},
+                {"subject": "a"},
+            ]
+        },
+    )
+    assert len(matches) == 2
 
 
 def test_vector_search_mongo(triplets_db_mongo):

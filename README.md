@@ -432,11 +432,10 @@ pytest tests/test_05_inference_pipeline.py -v   # calls live LLM API
 | Test file | Coverage |
 |-----------|----------|
 | `test_01_db_setup.py` | DB collections, indexes (Mongo + Qdrant) |
-| `test_02_backend.py` | Upsert, match, vector search (both backends) |
+| `test_02_backend.py` | Upsert, match (`$or`, `$and`, `$in`), vector search (both backends) |
 | `test_03_dynamic_aligner.py` | Dynamic aligner CRUD & retrieval |
 | `test_04_structured_aligner.py` | Structured aligner & ontology retrieval |
 | `test_05_inference_pipeline.py` | End-to-end extraction + DB storage |
-| `test_qdrant_backend.py` | Qdrant-specific filter & search |
 
 ---
 
