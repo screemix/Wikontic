@@ -11,9 +11,11 @@ from pymongo.mongo_client import MongoClient
 from tqdm import tqdm
 import sys
 
-_analysis_dir = Path.cwd().resolve()
-if _analysis_dir.name == "inference_and_eval":
-    sys.path.insert(0, str(_analysis_dir.parent / "src"))
+_repo_root = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(_repo_root / "src"))
+sys.path.insert(0, str(_repo_root / "analysis"))
+
+from dump_kg import dump_kg_from_backend
 
 from wikontic.utils.openai_utils import LLMTripletExtractor
 from wikontic.utils.structured_aligner import Aligner as StructuredDBAligner
@@ -214,7 +216,7 @@ if __name__ == "__main__":
             )
             logger.info(f"Triplets database created successfully: {triplets_db_name}")
     api_key = os.getenv(cfg.api_key_env_var)
-    api_key = ""
+    # api_key = ""
     proxy_url = cfg.proxy_env_var if cfg.proxy_env_var else None
     base_url = os.getenv(cfg.base_url_env_var)
 
@@ -270,3 +272,11 @@ if __name__ == "__main__":
                     )
         logger.info("CURRENT COST: %s", extractor.calculate_cost())
         logger.info("--------------------------------")
+
+    if cfg.vector_db_backend == "qdrant" and cfg.qdrant_url == ":memory:":
+        dump_path = dump_kg_from_backend(
+            triplets_db,
+            triplets_db_name,
+            include_ontology_filtered=cfg.structured_inference,
+        )
+        logger.info("KG dump written to %s", dump_path)
