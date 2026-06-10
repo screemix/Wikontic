@@ -141,7 +141,7 @@ class LLMTripletExtractor:
                 try:
                     return json.loads(match.group(1))
                 except json.JSONDecodeError:
-                    logging.ERROR(f"Failed to parse JSON: {text}")
+                    logger.error("Failed to parse JSON: %s", text)
 
         return text
 
