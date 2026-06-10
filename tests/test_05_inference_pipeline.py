@@ -1,15 +1,27 @@
 """
 InferenceWithDB and StructuredInferenceWithDB on sample texts — MongoDB and Qdrant.
-Results are written to the `test_pipeline` collection in the respective DB.
+Verifies triplets are stored in aligner DB collections without duplicates.
 Requires OPENROUTER_KEY / KEY in .env — tests are skipped otherwise.
 """
 
 import json
 import logging
+from typing import Callable, Iterable, List, Optional
+
 import pytest
 from conftest import timed, SAMPLE_TEXTS
 
 logger = logging.getLogger(__name__)
+
+DYNAMIC_IDENTITY = ["subject", "relation", "object", "sample_id"]
+STRUCTURED_IDENTITY = [
+    "subject",
+    "relation",
+    "object",
+    "subject_type",
+    "object_type",
+    "sample_id",
+]
 
 
 def _log_triplets(sid: str, backend: str, initial, final, filtered, onto_filtered=None):
@@ -23,6 +35,90 @@ def _log_triplets(sid: str, backend: str, initial, final, filtered, onto_filtere
     if onto_filtered is not None:
         logger.info("  onto_filt (%d):\n%s", len(onto_filtered),
                     json.dumps(onto_filtered, indent=4, ensure_ascii=False))
+
+
+def _triplet_query(triplet: dict, sample_id: str, identity_keys: Iterable[str]) -> dict:
+    query = {
+        key: triplet[key]
+        for key in identity_keys
+        if key != "sample_id" and key in triplet
+    }
+    query["sample_id"] = sample_id
+    return query
+
+
+def _count_docs(db, collection: str, query: dict) -> int:
+    return len(db.match_documents(collection, query))
+
+
+def _assert_triplets_stored_once(
+    db,
+    collection: str,
+    sample_id: str,
+    triplets: List[dict],
+    identity_keys: List[str],
+) -> None:
+    stored = db.match_documents(collection, {"sample_id": sample_id})
+    assert len(stored) == len(triplets)
+    for triplet in triplets:
+        query = _triplet_query(triplet, sample_id, identity_keys)
+        assert _count_docs(db, collection, query) == 1, (
+            f"expected one stored triplet in {collection} for {query}, "
+            f"found {_count_docs(db, collection, query)}"
+        )
+
+
+def _assert_no_duplicates_on_readd(
+    aligner,
+    db,
+    collection: str,
+    sample_id: str,
+    triplets: List[dict],
+    identity_keys: List[str],
+    add_fn: Callable[[list, str], None],
+) -> None:
+    if not triplets:
+        return
+    add_fn(triplets, sample_id)
+    _assert_triplets_stored_once(db, collection, sample_id, triplets, identity_keys)
+
+
+def _verify_inference_storage(
+    inference,
+    db,
+    sample_id: str,
+    initial: List[dict],
+    final: List[dict],
+    filtered: List[dict],
+    *,
+    ontology_filtered: Optional[List[dict]] = None,
+) -> None:
+    aligner = inference.aligner
+    identity_keys = (
+        STRUCTURED_IDENTITY if ontology_filtered is not None else DYNAMIC_IDENTITY
+    )
+
+    collections = [
+        ("initial_triplets", initial, aligner.add_initial_triplets),
+        ("triplets", final, aligner.add_triplets),
+        ("filtered_triplets", filtered, aligner.add_filtered_triplets),
+    ]
+    if ontology_filtered is not None:
+        collections.append(
+            (
+                "ontology_filtered_triplets",
+                ontology_filtered,
+                aligner.add_ontology_filtered_triplets,
+            )
+        )
+
+    for collection, triplets, add_fn in collections:
+        _assert_triplets_stored_once(
+            db, collection, sample_id, triplets, identity_keys
+        )
+        _assert_no_duplicates_on_readd(
+            aligner, db, collection, sample_id, triplets, identity_keys, add_fn
+        )
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -53,22 +149,7 @@ def test_inference_extract_and_store(inference_backend, idx, text):
     assert isinstance(filtered, list)
 
     _log_triplets(sid, backend_label, initial, final, filtered)
-
-    db.upsert_many(
-        "test_pipeline",
-        [{
-            "sample_id": sid,
-            "text": text,
-            "initial_triplets": initial,
-            "final_triplets": final,
-            "filtered_triplets": filtered,
-        }],
-        unique_fields=["sample_id"],
-    )
-
-    stored = db.match_documents("test_pipeline", {"sample_id": sid})
-    assert len(stored) == 1
-    assert stored[0]["text"] == text
+    _verify_inference_storage(inference, db, sid, initial, final, filtered)
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -103,20 +184,12 @@ def test_structured_inference_extract_and_store(structured_inference_backend, id
     assert isinstance(onto_filtered, list)
 
     _log_triplets(sid, backend_label, initial, final, filtered, onto_filtered)
-
-    db.upsert_many(
-        "test_pipeline",
-        [{
-            "sample_id": sid,
-            "text": text,
-            "initial_triplets": initial,
-            "final_triplets": final,
-            "filtered_triplets": filtered,
-            "ontology_filtered_triplets": onto_filtered,
-        }],
-        unique_fields=["sample_id"],
+    _verify_inference_storage(
+        inference,
+        db,
+        sid,
+        initial,
+        final,
+        filtered,
+        ontology_filtered=onto_filtered,
     )
-
-    stored = db.match_documents("test_pipeline", {"sample_id": sid})
-    assert len(stored) == 1
-    assert stored[0]["text"] == text
