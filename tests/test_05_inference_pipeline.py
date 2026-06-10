@@ -147,6 +147,7 @@ def test_inference_extract_and_store(inference_backend, idx, text):
     assert isinstance(initial, list)
     assert isinstance(final, list)
     assert isinstance(filtered, list)
+    assert len(final) > 0
 
     _log_triplets(sid, backend_label, initial, final, filtered)
     _verify_inference_storage(inference, db, sid, initial, final, filtered)
@@ -182,6 +183,7 @@ def test_structured_inference_extract_and_store(structured_inference_backend, id
     assert isinstance(final, list)
     assert isinstance(filtered, list)
     assert isinstance(onto_filtered, list)
+    assert len(final) > 0
 
     _log_triplets(sid, backend_label, initial, final, filtered, onto_filtered)
     _verify_inference_storage(
