@@ -5,13 +5,13 @@ Requires OPENROUTER_KEY / KEY in .env — tests are skipped otherwise.
 """
 
 import json
-import logging
 from typing import Callable, Iterable, List, Optional
 
 import pytest
+from wikontic.logging_config import get_logger
 from conftest import timed, SAMPLE_TEXTS
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 DYNAMIC_IDENTITY = ["subject", "relation", "object", "sample_id"]
 STRUCTURED_IDENTITY = [

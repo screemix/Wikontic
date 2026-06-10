@@ -17,10 +17,10 @@ from typing import Dict, List, Union, Optional
 import tenacity
 import httpx
 
+from wikontic.logging_config import get_logger
+
 # Configure logging
-logger = logging.getLogger("OpenAIUtils")
-logger.setLevel(logging.INFO)
-logging.getLogger("httpx").setLevel(logging.DEBUG)
+logger = get_logger("OpenAIUtils")
 
 # _ = load_dotenv(find_dotenv())
 # OpenAI

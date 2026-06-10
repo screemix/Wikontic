@@ -14,10 +14,10 @@ import re
 from pathlib import Path
 from typing import Any
 import spacy
-import logging
 
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+from wikontic.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 nlp = spacy.load("en_core_web_sm")
 nlp.add_pipe("sentencizer")

@@ -1,3 +1,36 @@
+Metadata-Version: 2.4
+Name: wikontic
+Version: 0.0.7
+Summary: Extract a knowledge graph with LLM from texts and perform QA over the resulted KG
+Author-email: Alla Chepurova <chepurova.data@gmail.com>
+License-Expression: MIT
+Project-URL: Homepage, https://github.com/screemix/Wikontic
+Project-URL: Issues, https://github.com/screemix/Wikontic/issues
+Classifier: Programming Language :: Python :: 3
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: streamlit
+Requires-Dist: numpy
+Requires-Dist: pyvis
+Requires-Dist: python-dotenv
+Requires-Dist: pymongo
+Requires-Dist: openai
+Requires-Dist: tenacity
+Requires-Dist: pathlib
+Requires-Dist: typing
+Requires-Dist: unidecode
+Requires-Dist: torch>=2.4.0
+Requires-Dist: transformers
+Requires-Dist: dataclasses
+Requires-Dist: pydantic
+Requires-Dist: accelerate
+Requires-Dist: langchain
+Requires-Dist: langchain_openai
+Requires-Dist: qdrant-client
+Dynamic: license-file
+
 ![Wikontic logo](/media/wikotic-wo-text.png)
 
 # Wikontic
@@ -117,7 +150,6 @@ Create a `.env` file in the repository root (loaded automatically via `python-do
 | `KEY` or `OPENROUTER_KEY` | API key for the LLM provider |
 | `OPENROUTER_BASE_URL` | OpenAI-compatible API base URL (e.g. `https://openrouter.ai/api/v1`) |
 | `PROXY_URL` | Optional HTTP proxy for API calls |
-| `WIKONTIC_LOG_LEVEL` | Global log level: `DEBUG`, `INFO`, `WARNING`, `ERROR` (default: `INFO`) |
 | `OSS_URL` | Example custom base URL used in some configs |
 
 Scripts read API settings from env; batch configs let you choose which env var names to use (`api_key_env_var`, `base_url_env_var`).

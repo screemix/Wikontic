@@ -5,10 +5,10 @@ import logging
 
 from .base_inference_with_db import BaseInferenceWithDB
 from wikontic.db.factory import ensure_storage_backend
+from wikontic.logging_config import get_logger
 
 warnings.filterwarnings("ignore")
-logger = logging.getLogger("InferenceWithDB")
-logger.setLevel(logging.ERROR)
+logger = get_logger("InferenceWithDB")
 
 
 class InferenceWithDB(BaseInferenceWithDB):

@@ -1,8 +1,8 @@
 from typing import Dict, List, Optional
-import logging
 
-logger = logging.getLogger("BaseInferenceWithDB")
-logger.setLevel(logging.ERROR)
+from wikontic.logging_config import get_logger
+
+logger = get_logger("BaseInferenceWithDB")
 
 
 class BaseInferenceWithDB:

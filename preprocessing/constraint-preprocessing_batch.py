@@ -14,8 +14,9 @@ from tqdm import tqdm
 import urllib.request
 
 
-logger = logging.getLogger("ConstraintPreprocessingBatch")
-logging.basicConfig(level=logging.INFO)
+from wikontic.logging_config import get_logger
+
+logger = get_logger("ConstraintPreprocessingBatch")
 
 CHINESE_JAPANESE_PATTERN = re.compile(
     r"[\u4E00-\u9FFF\u3400-\u4DBF\uF900-\uFAFF\u3040-\u309F\u30A0-\u30FF\u31F0-\u31FF\uFF00-\uFFEF]"

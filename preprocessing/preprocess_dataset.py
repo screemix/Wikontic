@@ -1,11 +1,11 @@
 import json
-import logging
 import argparse
 import os
 from datasets import load_dataset
 
-logger = logging.getLogger("PreprocessDataset")
-logger.setLevel(logging.INFO)
+from wikontic.logging_config import get_logger
+
+logger = get_logger("PreprocessDataset")
 
 def get_json_dataset(dataset_path):
     with open(dataset_path, "r") as f:

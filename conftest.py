@@ -15,6 +15,14 @@ REPO_ROOT = Path(__file__).resolve().parent
 load_dotenv(REPO_ROOT / ".env", override=True)
 sys.path.insert(0, str(REPO_ROOT / "src"))
 
+from wikontic.logging_config import configure_logging, resolve_log_level_name
+
+configure_logging()
+
+
+def pytest_configure(config):
+    config.option.log_cli_level = resolve_log_level_name()
+
 from pymongo.mongo_client import MongoClient
 
 from wikontic.db.factory import create_backend

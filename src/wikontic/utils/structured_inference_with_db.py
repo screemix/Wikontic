@@ -7,10 +7,10 @@ import logging
 
 from .base_inference_with_db import BaseInferenceWithDB
 from wikontic.db.factory import ensure_storage_backend
+from wikontic.logging_config import get_logger
 
 warnings.filterwarnings("ignore")
-logger = logging.getLogger("StructuredInferenceWithDB")
-logger.setLevel(logging.DEBUG)
+logger = get_logger("StructuredInferenceWithDB")
 
 
 class StructuredInferenceWithDB(BaseInferenceWithDB):

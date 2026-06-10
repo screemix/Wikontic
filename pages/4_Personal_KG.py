@@ -5,19 +5,18 @@ from pyvis.network import Network
 import tempfile
 import os
 from dotenv import load_dotenv, find_dotenv
+
+load_dotenv(find_dotenv())
+
+from src.wikontic.logging_config import get_logger
 from src.wikontic.utils.structured_inference_with_db import StructuredInferenceWithDB
 from src.wikontic.utils.openai_utils import LLMTripletExtractor
 from src.wikontic.utils.structured_aligner import Aligner
 from pymongo import MongoClient
 import uuid
-import logging
-import sys
 import base64
 
-# Configure logging
-logging.basicConfig(stream=sys.stderr)
-logger = logging.getLogger("PersonalKG")
-logger.setLevel(logging.INFO)
+logger = get_logger("PersonalKG")
 
 
 st.set_page_config(

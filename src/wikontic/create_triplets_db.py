@@ -4,12 +4,9 @@ from pymongo.mongo_client import MongoClient
 
 from wikontic.db.bootstrap import ensure_collections
 from wikontic.db.factory import create_backend
+from wikontic.logging_config import get_logger
 
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
-)
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 def create_triplets_database(

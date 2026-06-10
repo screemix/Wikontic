@@ -1,14 +1,15 @@
 import streamlit as st
 import uuid
-import logging
 import sys
 import base64
 import os
+from dotenv import load_dotenv, find_dotenv
 
-# Configure logging
-logging.basicConfig(stream=sys.stderr)
-logger = logging.getLogger("App")
-logger.setLevel(logging.ERROR)
+load_dotenv(find_dotenv())
+
+from src.wikontic.logging_config import get_logger
+
+logger = get_logger("App")
 
 # Ensure the same user_id across all pages
 if "user_id" not in st.session_state:

@@ -1,6 +1,5 @@
 import json
 import os
-import logging
 import warnings
 from pathlib import Path
 from types import SimpleNamespace
@@ -14,6 +13,8 @@ import sys
 _repo_root = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(_repo_root / "src"))
 sys.path.insert(0, str(_repo_root / "analysis"))
+_ = load_dotenv(_repo_root / ".env")
+_ = load_dotenv(find_dotenv())
 
 from dump_kg import dump_kg_from_backend
 
@@ -31,6 +32,8 @@ from wikontic.create_wikidata_ontology_db import create_wikidata_ontology_databa
 
 import argparse
 
+from wikontic.logging_config import get_logger
+
 parser = argparse.ArgumentParser(
     description="Run KG construction with optional config file."
 )
@@ -41,10 +44,8 @@ parser.add_argument(
     help="Path to the config YAML file (overrides default/config from env var)",
 )
 
-logger = logging.getLogger("KGConstructionWithDB")
-logger.setLevel(logging.ERROR)
+logger = get_logger("KGConstructionWithDB")
 
-_ = load_dotenv(find_dotenv())
 warnings.filterwarnings("ignore")
 
 CONFIG_DEFAULTS = {
