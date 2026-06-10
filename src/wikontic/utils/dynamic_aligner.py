@@ -60,8 +60,7 @@ class Aligner:
         inputs = self.tokenizer(
             [text], padding=True, truncation=True, return_tensors="pt"
         )
-        inputs = inputs.to(self.device)
-        outputs = self.model(**inputs)
+        outputs = self.model(**inputs.to(self.device))
         embeddings = mean_pooling(outputs[0], inputs["attention_mask"])
         return embeddings.detach().cpu().tolist()[0]
 
