@@ -92,11 +92,12 @@ ONTOLOGY_DB_QDRANT = "test_wikidata_ontology_qdrant"
 
 @pytest.fixture(scope="session")
 def ontology_db_mongo(mongo_client):
-    backend = create_backend("mongodb", mongo_db=mongo_client.get_database(ONTOLOGY_DB_MONGO))
-    if not backend.list_collection_names():
-        backend = create_wikidata_ontology_database(
-            backend="mongodb", mongo_uri=MONGO_URI, database=ONTOLOGY_DB_MONGO
-        )
+    backend = create_wikidata_ontology_database(
+        backend="mongodb",
+        mongo_uri=MONGO_URI,
+        database=ONTOLOGY_DB_MONGO,
+        drop_collections=True,
+    )
     yield backend
     mongo_client.drop_database(ONTOLOGY_DB_MONGO)
 

@@ -138,7 +138,7 @@ docker pull mongodb/mongodb-atlas-local:latest
 docker run --name text2kg_mongo -d -p 27018:27018 mongodb/mongodb-atlas-local:latest
 ```
 
-Initialize databases (from repo root, with `PYTHONPATH=src` or after `pip install -e .`):
+Initialize databases from the repo root (requires `pip install -e .`):
 
 ```bash
 # 1. Wikidata ontology (required for structured inference)
@@ -198,7 +198,6 @@ See `--help` on each script for collection and index name overrides.
 Launch the interactive demo:
 
 ```bash
-export PYTHONPATH=src   # if not installed with pip install -e .
 streamlit run Wikontic.py
 ```
 
@@ -232,9 +231,18 @@ docker run -p 8501:8501 --env-file .env wikontic
 
 ### Run
 
+From the repo root (after `pip install -e .`):
+
+```bash
+python inference_and_eval/dataset_inference.py \
+  --config inference_and_eval/configs/musique_inference_with_db.yaml
+```
+
+Or from `inference_and_eval/` (config paths like `dataset_path` are relative to the working directory):
+
 ```bash
 cd inference_and_eval
-PYTHONPATH=../src:../analysis python dataset_inference.py --config configs/musique_inference_with_db.yaml
+python dataset_inference.py --config configs/musique_inference_with_db.yaml
 ```
 
 Or set `KG_CONSTRUCTION_CONFIG` to a YAML path.
@@ -303,10 +311,9 @@ See [analysis/dump_kg.py](analysis/dump_kg.py) for the JSON schema.
 After building KGs, evaluate question answering on MuSiQue or HotpotQA:
 
 ```bash
-cd inference_and_eval
-PYTHONPATH=../src python qa_eval_musique.py \
+python inference_and_eval/qa_eval_musique.py \
   --triplets_db_name triplets_db_gpt-4o-mini_onto \
-  --dataset_path ../datasets/musique_200_test.json \
+  --dataset_path datasets/musique_200_test.json \
   --structured_inference \
   --use_qualifiers
 ```
@@ -425,7 +432,7 @@ For LangChain tool bindings, see [`tutorial.ipynb`](tutorial.ipynb).
 
 ```bash
 # Requires MongoDB on MONGO_URI and OPENROUTER_KEY (or KEY) in .env for LLM tests
-PYTHONPATH=src pytest
+pytest
 
 # Subset examples
 pytest tests/test_01_db_setup.py -k qdrant -v

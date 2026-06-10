@@ -225,7 +225,7 @@ if __name__ == "__main__":
             logger.info(f"Triplets database created successfully: {triplets_db_name}")
     api_key = os.getenv(cfg.api_key_env_var)
     # api_key = ""
-    proxy_url = cfg.proxy_env_var if cfg.proxy_env_var else None
+    proxy_url = os.getenv(cfg.proxy_env_var) if cfg.proxy_env_var else None
     base_url = os.getenv(cfg.base_url_env_var)
 
     ds = get_json_dataset(cfg.dataset_path)

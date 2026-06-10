@@ -97,17 +97,17 @@ def test_onto_triplets_db_collection_qdrant(onto_triplets_db_qdrant, coll):
 # ── regular indexes (MongoDB) ──────────────────────────────────────────────────
 
 @pytest.fixture(scope="module")
-def triplets_raw(mongo_client):
+def triplets_raw(mongo_client, triplets_db_mongo):
     return mongo_client.get_database(TRIPLETS_DB)
 
 
 @pytest.fixture(scope="module")
-def onto_raw(mongo_client):
+def onto_raw(mongo_client, onto_triplets_db_mongo):
     return mongo_client.get_database(ONTO_TRIPLETS_DB)
 
 
 @pytest.fixture(scope="module")
-def ontology_raw(mongo_client):
+def ontology_raw(mongo_client, ontology_db_mongo):
     return mongo_client.get_database(ONTOLOGY_DB_MONGO)
 
 
