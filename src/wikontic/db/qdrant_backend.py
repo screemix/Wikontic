@@ -312,7 +312,16 @@ class QdrantBackend:
                 "QdrantBackend.vector_search currently supports `alias_text_embedding` "
                 "as the logical vector field."
             )
-        vector_name, _ = self._vector_config.get(query.collection_name, (None, 1))
+        if not query.query_vector:
+            return []
+        vector_name, expected_size = self._vector_config.get(
+            query.collection_name, (None, 1)
+        )
+        if len(query.query_vector) != expected_size:
+            raise ValueError(
+                f"Query vector length {len(query.query_vector)} does not match "
+                f"collection '{query.collection_name}' size {expected_size}."
+            )
         if vector_name and query.index_name and query.index_name != vector_name:
             raise ValueError(
                 f"Vector index '{query.index_name}' is not configured for collection "

@@ -68,11 +68,6 @@ class PropertyAlias(BaseModel):
 
 
 def get_embedding(text):
-    def mean_pooling(token_embeddings, mask):
-        token_embeddings = token_embeddings.masked_fill(~mask[..., None].bool(), 0.0)
-        sentence_embeddings = token_embeddings.sum(dim=1) / mask.sum(dim=1)[..., None]
-        return sentence_embeddings
-
     if not text or not isinstance(text, str):
         return None
 
@@ -81,7 +76,10 @@ def get_embedding(text):
         inputs = tokenizer([text], padding=True, truncation=True, return_tensors="pt")
         inputs = inputs.to(embed_device)
         outputs = model(**inputs)
-        embeddings = mean_pooling(outputs[0], inputs["attention_mask"])
+        mask = inputs["attention_mask"]
+        token_embeddings = outputs[0].masked_fill(~mask[..., None].bool(), 0.0)
+        denom = mask.sum(dim=1).clamp(min=1)[..., None]
+        embeddings = token_embeddings.sum(dim=1) / denom
         return embeddings.detach().cpu().tolist()[0]
 
     except Exception as e:
@@ -279,6 +277,7 @@ def create_wikidata_ontology_database(
     property_aliases_index: str = "property_aliases",
     embedding_dimensions: int = 768,
     drop_collections: bool = False,
+    storage_backend=None,
 ):
     """
     Populate MongoDB with Wikidata ontology data.
@@ -340,15 +339,24 @@ def create_wikidata_ontology_database(
     logger.info("Successfully loaded all mapping files")
 
     mongo_db = None
-    if backend == "mongodb":
+    if storage_backend is not None:
+        db = storage_backend
+    elif backend == "mongodb":
         mongo_client = get_mongo_client(mongo_uri)
         mongo_db = mongo_client.get_database(database)
-    db = create_backend(
-        backend_type=backend,
-        mongo_db=mongo_db,
-        qdrant_url=qdrant_url,
-        qdrant_api_key=qdrant_api_key,
-    )
+        db = create_backend(
+            backend_type=backend,
+            mongo_db=mongo_db,
+            qdrant_url=qdrant_url,
+            qdrant_api_key=qdrant_api_key,
+        )
+    else:
+        db = create_backend(
+            backend_type=backend,
+            mongo_db=mongo_db,
+            qdrant_url=qdrant_url,
+            qdrant_api_key=qdrant_api_key,
+        )
     ensure_collections(
         db,
         [

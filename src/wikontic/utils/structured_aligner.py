@@ -27,7 +27,7 @@ class EntityAlias(BaseModel):
 
 
 class Aligner:
-    def __init__(self, ontology_db, triplets_db, device="cuda"):
+    def __init__(self, ontology_db, triplets_db, device=None):
         self.ontology_db = ensure_storage_backend(ontology_db)
         self.triplets_db = ensure_storage_backend(triplets_db)
 
@@ -46,8 +46,9 @@ class Aligner:
         self.initial_triplets_collection_name = "initial_triplets"
         self.entities_vector_index_name = "entity_aliases"
 
-        self.device = torch.device(device)
-        self.tokenizer, self.model, self.device = load_contriever(device=str(self.device))
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+        self.tokenizer, self.model, self.device = load_contriever(device=str(device))
 
     def get_embedding(self, text):
 
@@ -55,9 +56,8 @@ class Aligner:
             token_embeddings = token_embeddings.masked_fill(
                 ~mask[..., None].bool(), 0.0
             )
-            sentence_embeddings = (
-                token_embeddings.sum(dim=1) / mask.sum(dim=1)[..., None]
-            )
+            denom = mask.sum(dim=1).clamp(min=1)[..., None]
+            sentence_embeddings = token_embeddings.sum(dim=1) / denom
             return sentence_embeddings
 
         if not text or not isinstance(text, str):
@@ -66,7 +66,8 @@ class Aligner:
         inputs = self.tokenizer(
             [text], padding=True, truncation=True, return_tensors="pt"
         )
-        outputs = self.model(**inputs.to(self.device))
+        inputs = inputs.to(self.device)
+        outputs = self.model(**inputs)
         embeddings = mean_pooling(outputs[0], inputs["attention_mask"])
         return embeddings.detach().cpu().tolist()[0]
 
@@ -81,6 +82,8 @@ class Aligner:
         attempt = 0
         unique_ranked_entities: List[str] = []
         query_embedding = self.get_embedding(target_entity_type)
+        if query_embedding is None:
+            return []
 
         # as we search among aliases, there can be duplicated original entitites
         # and as we want K unique entities in result, we querying the index until we get exactly K unique entities

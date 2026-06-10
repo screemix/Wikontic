@@ -27,6 +27,7 @@ def create_triplets_database(
     property_aliases_index: str = "property_aliases",
     embedding_dimensions: int = 768,
     drop_collections: bool = False,
+    storage_backend=None,
 ):
     """
     Create collections and indexes for the dynamic triplets database.
@@ -46,16 +47,25 @@ def create_triplets_database(
         Database object
     """
     mongo_db = None
-    if backend == "mongodb":
+    if storage_backend is not None:
+        storage_backend = storage_backend
+    elif backend == "mongodb":
         mongo_client = MongoClient(mongo_uri)
         mongo_db = mongo_client.get_database(db_name)
         logger.info("Connection to MongoDB successful")
-    storage_backend = create_backend(
-        backend_type=backend,
-        mongo_db=mongo_db,
-        qdrant_url=qdrant_url,
-        qdrant_api_key=qdrant_api_key,
-    )
+        storage_backend = create_backend(
+            backend_type=backend,
+            mongo_db=mongo_db,
+            qdrant_url=qdrant_url,
+            qdrant_api_key=qdrant_api_key,
+        )
+    else:
+        storage_backend = create_backend(
+            backend_type=backend,
+            mongo_db=mongo_db,
+            qdrant_url=qdrant_url,
+            qdrant_api_key=qdrant_api_key,
+        )
     ensure_collections(
         storage_backend,
         [

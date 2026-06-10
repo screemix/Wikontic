@@ -27,7 +27,7 @@ class PropertyAlias(BaseModel):
 
 
 class Aligner:
-    def __init__(self, triplets_db, device="cuda:0"):
+    def __init__(self, triplets_db, device=None):
         self.db = ensure_storage_backend(triplets_db)
 
         self.entity_aliases_collection_name = "entity_aliases"
@@ -40,8 +40,9 @@ class Aligner:
         self.triplets_collection_name = "triplets"
         self.filtered_triplets_collection_name = "filtered_triplets"
 
-        self.device = torch.device(device)
-        self.tokenizer, self.model, self.device = load_contriever(device=str(self.device))
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+        self.tokenizer, self.model, self.device = load_contriever(device=str(device))
 
     def get_embedding(self, text):
 
@@ -49,9 +50,8 @@ class Aligner:
             token_embeddings = token_embeddings.masked_fill(
                 ~mask[..., None].bool(), 0.0
             )
-            sentence_embeddings = (
-                token_embeddings.sum(dim=1) / mask.sum(dim=1)[..., None]
-            )
+            denom = mask.sum(dim=1).clamp(min=1)[..., None]
+            sentence_embeddings = token_embeddings.sum(dim=1) / denom
             return sentence_embeddings
 
         if not text or not isinstance(text, str):
@@ -60,7 +60,8 @@ class Aligner:
         inputs = self.tokenizer(
             [text], padding=True, truncation=True, return_tensors="pt"
         )
-        outputs = self.model(**inputs.to(self.device))
+        inputs = inputs.to(self.device)
+        outputs = self.model(**inputs)
         embeddings = mean_pooling(outputs[0], inputs["attention_mask"])
         return embeddings.detach().cpu().tolist()[0]
 
