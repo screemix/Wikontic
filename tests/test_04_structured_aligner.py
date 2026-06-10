@@ -3,42 +3,93 @@
 import pytest
 from conftest import timed
 
-SID = "test_struct"
+SAMPLE_ID = "test_struct"
 TRIPLET = {
     "subject": "Paris", "relation": "located in", "object": "France",
     "subject_type": "city", "object_type": "country",
 }
 
 
+def _count_docs(aligner, collection, query):
+    return len(aligner.triplets_db.match_documents(collection, query))
+
+
+def _assert_single_doc(aligner, collection, query, expected_fields):
+    docs = aligner.triplets_db.match_documents(collection, query)
+    assert len(docs) == 1
+    for key, value in expected_fields.items():
+        assert docs[0].get(key) == value
+    return docs[0]
+
+
 def test_add_entity(structured_aligner_mongo):
-    structured_aligner_mongo.add_entity("Paris", "city of light", "city", SID)
+    sample_id = "test_struct_add_entity"
+    label, alias, entity_type = "Paris", "city of light", "city"
+    query = {
+        "label": label,
+        "entity_type": entity_type,
+        "alias": alias,
+        "sample_id": sample_id,
+    }
+    structured_aligner_mongo.add_entity(label, alias, entity_type, sample_id)
+    _assert_single_doc(structured_aligner_mongo, "entity_aliases", query, query)
+    structured_aligner_mongo.add_entity(label, alias, entity_type, sample_id)
+    assert _count_docs(structured_aligner_mongo, "entity_aliases", query) == 1
 
 
 def test_add_triplets(structured_aligner_mongo):
-    structured_aligner_mongo.add_triplets([TRIPLET.copy()], SID)
+    sample_id = "test_struct_add_triplets"
+    triplet = TRIPLET.copy()
+    query = {**triplet, "sample_id": sample_id}
+    structured_aligner_mongo.add_triplets([triplet.copy()], sample_id)
+    _assert_single_doc(structured_aligner_mongo, "triplets", query, query)
+    structured_aligner_mongo.add_triplets([triplet.copy()], sample_id)
+    assert _count_docs(structured_aligner_mongo, "triplets", query) == 1
 
 
 def test_add_initial_triplets(structured_aligner_mongo):
-    structured_aligner_mongo.add_initial_triplets([TRIPLET.copy()], SID)
+    sample_id = "test_struct_add_initial_triplets"
+    triplet = TRIPLET.copy()
+    query = {**triplet, "sample_id": sample_id}
+    structured_aligner_mongo.add_initial_triplets([triplet.copy()], sample_id)
+    _assert_single_doc(structured_aligner_mongo, "initial_triplets", query, query)
+    structured_aligner_mongo.add_initial_triplets([triplet.copy()], sample_id)
+    assert _count_docs(structured_aligner_mongo, "initial_triplets", query) == 1
 
 
 def test_add_filtered_triplets(structured_aligner_mongo):
-    structured_aligner_mongo.add_filtered_triplets([TRIPLET.copy()], SID)
+    sample_id = "test_struct_add_filtered_triplets"
+    triplet = TRIPLET.copy()
+    query = {**triplet, "sample_id": sample_id}
+    structured_aligner_mongo.add_filtered_triplets([triplet.copy()], sample_id)
+    _assert_single_doc(structured_aligner_mongo, "filtered_triplets", query, query)
+    structured_aligner_mongo.add_filtered_triplets([triplet.copy()], sample_id)
+    assert _count_docs(structured_aligner_mongo, "filtered_triplets", query) == 1
 
 
 def test_add_ontology_filtered_triplets(structured_aligner_mongo):
-    structured_aligner_mongo.add_ontology_filtered_triplets([TRIPLET.copy()], SID)
+    sample_id = "test_struct_add_ontology_filtered_triplets"
+    triplet = TRIPLET.copy()
+    query = {**triplet, "sample_id": sample_id}
+    structured_aligner_mongo.add_ontology_filtered_triplets([triplet.copy()], sample_id)
+    _assert_single_doc(
+        structured_aligner_mongo, "ontology_filtered_triplets", query, query
+    )
+    structured_aligner_mongo.add_ontology_filtered_triplets([triplet.copy()], sample_id)
+    assert _count_docs(
+        structured_aligner_mongo, "ontology_filtered_triplets", query
+    ) == 1
 
 
 def test_retrieve_similar_entity_names(structured_aligner_mongo):
     # Seed two entities with different aliases so ranking is meaningful.
-    structured_aligner_mongo.add_entity("Paris", "city of light", "city", SID)
-    structured_aligner_mongo.add_entity("France", "French republic", "country", SID)
+    structured_aligner_mongo.add_entity("Paris", "city of light", "city", SAMPLE_ID)
+    structured_aligner_mongo.add_entity("France", "French republic", "country", SAMPLE_ID)
 
     results = timed(
         "StructuredAligner.retrieve_similar_entity_names",
         structured_aligner_mongo.retrieve_similar_entity_names,
-        "city of light", k=3, sample_id=SID,
+        "city of light", k=3, sample_id=SAMPLE_ID,
     )
 
     assert isinstance(results, list), "result must be a list"
@@ -89,17 +140,13 @@ def test_retrieve_properties_for_entity_type(structured_aligner_mongo):
     )
 
 
-def _backend_label(aligner):
-    return "mongo" if hasattr(aligner.db, "db") else "qdrant"
-
-
 def test_retrieve_entity_by_type(structured_aligner_mongo):
-    structured_aligner_mongo.add_entity("Paris", "city of light", "city", SID)
+    structured_aligner_mongo.add_entity("Paris", "city of light", "city", SAMPLE_ID)
 
     results = timed(
         "StructuredAligner.retrieve_entity_by_type",
         structured_aligner_mongo.retrieve_entity_by_type,
-        "Paris", "city", SID, k=3,
+        "Paris", "city", SAMPLE_ID, k=3,
     )
 
     assert isinstance(results, dict), "result must be a dict"
