@@ -257,6 +257,7 @@ All keys below can be set in YAML. Unspecified keys use defaults from `CONFIG_DE
 | `sample_start_index` | `0` | Start index into dataset keys |
 | `num_samples` | `50` | Number of samples to process |
 | `structured_inference` | `true` | Use `StructuredInferenceWithDB` if true |
+| `dump_kg` | `false` | Write `kg_dump/kg_dump_{db_name}.json` after the run (always on for Qdrant `:memory:`) |
 | `api_key_env_var` | `KEY` | Env var for API key |
 | `base_url_env_var` | `OPENROUTER_BASE_URL` | Env var for API base URL |
 | `proxy_env_var` | `null` | Env var name for proxy URL |
@@ -282,13 +283,16 @@ JSON object mapping `sample_id` → list of text passages:
 
 Each passage is stored with `source_text_id` = its index in the list. Extraction is skipped if triplets already exist for `(sample_id, source_text_id)`.
 
-### Qdrant in-memory KG dump
+### KG JSON dump
 
-When `vector_db_backend: qdrant` and `qdrant_url: :memory:`, the script automatically writes:
+After inference, the script can export triplets to:
 
 ```
 kg_dump/kg_dump_{triplets_db_name}.json
 ```
+
+- **Qdrant `:memory:`** — dump runs automatically (in-memory data is not persisted elsewhere).
+- **MongoDB or remote Qdrant** — set `dump_kg: true` in config to enable.
 
 See [analysis/dump_kg.py](analysis/dump_kg.py) for the JSON schema.
 

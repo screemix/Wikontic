@@ -60,6 +60,7 @@ CONFIG_DEFAULTS = {
     "sample_start_index": 0,
     "num_samples": 50,
     "structured_inference": True,
+    "dump_kg": False,
     "proxy_env_var": None,
     "base_url_env_var": "OPENROUTER_BASE_URL",
     "api_key_env_var": "KEY",
@@ -95,6 +96,13 @@ def get_json_dataset(dataset_path):
     with open(dataset_path, "r") as f:
         ds = json.load(f)
     return ds
+
+
+def should_dump_kg(cfg) -> bool:
+    """In-memory Qdrant is ephemeral — always persist KG to JSON. Other backends: opt-in."""
+    if cfg.vector_db_backend == "qdrant" and cfg.qdrant_url == ":memory:":
+        return True
+    return bool(cfg.dump_kg)
 
 
 if __name__ == "__main__":
@@ -273,7 +281,7 @@ if __name__ == "__main__":
         logger.info("CURRENT COST: %s", extractor.calculate_cost())
         logger.info("--------------------------------")
 
-    if cfg.vector_db_backend == "qdrant" and cfg.qdrant_url == ":memory:":
+    if should_dump_kg(cfg):
         dump_path = dump_kg_from_backend(
             triplets_db,
             triplets_db_name,
