@@ -162,27 +162,13 @@ def inference_with_db_qdrant(llm_extractor, dynamic_aligner_qdrant, triplets_db_
 @pytest.fixture(scope="session")
 def structured_inference_with_db_mongo(llm_extractor, structured_aligner_mongo, onto_triplets_db_mongo):
     from wikontic.utils.structured_inference_with_db import StructuredInferenceWithDB
-    from wikontic.utils.openai_utils import LLMTripletExtractor
-    extractor2 = LLMTripletExtractor(
-        api_key=OPENROUTER_KEY,
-        model=LLM_MODEL,
-        base_url=OPENROUTER_URL,
-        proxy=PROXY_URL,
-    )
-    return StructuredInferenceWithDB(extractor2, structured_aligner_mongo, onto_triplets_db_mongo)
+    return StructuredInferenceWithDB(llm_extractor, structured_aligner_mongo, onto_triplets_db_mongo)
 
 
 @pytest.fixture(scope="session")
 def structured_inference_with_db_qdrant(llm_extractor, structured_aligner_qdrant, onto_triplets_db_qdrant):
     from wikontic.utils.structured_inference_with_db import StructuredInferenceWithDB
-    from wikontic.utils.openai_utils import LLMTripletExtractor
-    extractor2 = LLMTripletExtractor(
-        api_key=OPENROUTER_KEY,
-        model=LLM_MODEL,
-        base_url=OPENROUTER_URL,
-        proxy=PROXY_URL,
-    )
-    return StructuredInferenceWithDB(extractor2, structured_aligner_qdrant, onto_triplets_db_qdrant)
+    return StructuredInferenceWithDB(llm_extractor, structured_aligner_qdrant, onto_triplets_db_qdrant)
 
 
 # ── timing helper ──────────────────────────────────────────────────────────────
