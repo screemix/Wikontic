@@ -95,6 +95,12 @@ def test_add_filtered_triplets(aligner):
     assert _count_docs(aligner, "filtered_triplets", query) == 1
 
 
+def _assert_unique_labels(results, label_name="labels"):
+    assert len(results) == len(set(results)), (
+        f"expected unique {label_name}, got duplicates in {results!r}"
+    )
+
+
 def test_retrieve_similar_entity_names(aligner):
     # Seed two entities with clearly different aliases so ranking is meaningful.
     aligner.add_entity("Paris", "the city of light", SAMPLE_ID)
@@ -109,6 +115,7 @@ def test_retrieve_similar_entity_names(aligner):
     assert isinstance(results, list), "result must be a list"
     assert len(results) > 0, "at least one result expected"
     assert all(isinstance(r, str) for r in results), "each result must be a label string"
+    _assert_unique_labels(results, label_name="entity labels")
     # The alias 'the city of light' was added for 'Paris' — it must rank first.
     assert results[0] == "Paris", f"expected 'Paris' as top result, got {results[0]!r}"
 
@@ -126,5 +133,6 @@ def test_retrieve_similar_properties(aligner):
     assert isinstance(results, list), "result must be a list"
     assert len(results) > 0, "at least one result expected"
     assert all(isinstance(r, str) for r in results), "each result must be a label string"
+    _assert_unique_labels(results, label_name="property labels")
     # The alias 'is located in' was added for 'located in' — it must rank first.
     assert results[0] == "located in", f"expected 'located in' as top result, got {results[0]!r}"
