@@ -117,6 +117,12 @@ def test_retrieve_similar_entity_types(structured_aligner_mongo):
     # Results are Wikidata IDs (e.g. Q515 for city, Q6256 for country).
     assert all(isinstance(t, str) for t in subject_types)
     assert all(isinstance(t, str) for t in object_types)
+    assert "Q515" in subject_types, (
+        f"expected Q515 (city) among subject types, got {subject_types!r}"
+    )
+    assert "Q6256" in object_types, (
+        f"expected Q6256 (country) among object types, got {object_types!r}"
+    )
 
 
 def test_retrieve_properties_for_entity_type(structured_aligner_mongo):
@@ -137,6 +143,9 @@ def test_retrieve_properties_for_entity_type(structured_aligner_mongo):
     # P131 has the alias "is located in" and is valid for city (Q515) / country (Q6256).
     assert results[0][0] == "P131", (
         f"expected P131 as top property for 'is located in', got {results[0][0]!r}"
+    )
+    assert "P276" in [r[0] for r in results], (
+        f"expected P276 (location) to be similar to 'is located in', got {results}"
     )
 
 
