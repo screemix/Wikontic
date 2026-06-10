@@ -301,9 +301,13 @@ if __name__ == "__main__":
         logger.info("--------------------------------")
 
     if should_dump_kg(cfg):
+        dump_dir = _repo_root / "kg_dump"
         dump_path = dump_kg_from_backend(
             triplets_db,
             triplets_db_name,
+            output_dir=str(dump_dir),
             include_ontology_filtered=cfg.structured_inference,
         )
-        logger.info("KG dump written to %s", dump_path)
+        resolved = Path(dump_path).resolve()
+        print(f"KG dump written to {resolved}", flush=True)
+        logger.info("KG dump written to %s", resolved)

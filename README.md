@@ -294,14 +294,18 @@ Each passage is stored with `source_text_id` = its index in the list. Extraction
 
 ### KG JSON dump
 
-After inference, the script can export triplets to:
+After inference, the script can export triplets to (always under the **repository root**, regardless of where you run the command from):
 
 ```
 kg_dump/kg_dump_{triplets_db_name}.json
 ```
 
-- **Qdrant `:memory:`** — dump runs automatically (in-memory data is not persisted elsewhere).
+Example with default config names: `kg_dump/kg_dump_triplets_db_gpt-4o-mini_onto.json`
+
+- **Qdrant `:memory:`** — dump runs automatically at the end of a successful run (in-memory data is not persisted elsewhere).
 - **MongoDB or remote Qdrant** — set `dump_kg: true` in config to enable.
+
+The dump path is printed to stdout when finished. Note: `kg_dump/` and `*.json` are in `.gitignore`, so the file exists on disk but won't appear in `git status`.
 
 See [analysis/dump_kg.py](analysis/dump_kg.py) for the JSON schema.
 
