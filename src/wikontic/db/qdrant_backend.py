@@ -137,13 +137,17 @@ class QdrantCollectionAdapter:
 
 class QdrantBackend:
     def __init__(self, qdrant_url: str = ":memory:", api_key: Optional[str] = None):
-        if qdrant_url == ":memory:":
+        self._in_memory = qdrant_url == ":memory:"
+        if self._in_memory:
             self.client = QdrantClient(":memory:")
         else:
             self.client = QdrantClient(url=qdrant_url, api_key=api_key)
         # collection_name -> (named_vector_name | None, vector_size)
         self._vector_config: Dict[str, Tuple[Optional[str], int]] = {}
         self._payload_indexes: Dict[str, set] = {}
+
+    def list_payload_index_fields(self, collection_name: str) -> set[str]:
+        return set(self._payload_indexes.get(collection_name, set()))
 
     def get_collection(self, collection_name: str) -> QdrantCollectionAdapter:
         self.ensure_collection(collection_name)
@@ -156,11 +160,12 @@ class QdrantBackend:
             for field in index_fields:
                 if field in created:
                     continue
-                self.client.create_payload_index(
-                    collection_name=collection_name,
-                    field_name=field,
-                    field_schema=models.PayloadSchemaType.KEYWORD,
-                )
+                if not self._in_memory:
+                    self.client.create_payload_index(
+                        collection_name=collection_name,
+                        field_name=field,
+                        field_schema=models.PayloadSchemaType.KEYWORD,
+                    )
                 created.add(field)
 
     def ensure_vector_index(
