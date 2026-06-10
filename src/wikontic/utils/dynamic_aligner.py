@@ -1,11 +1,10 @@
 from typing import List, Dict, Optional
-from transformers import AutoTokenizer, AutoModel
 from pydantic import BaseModel
 from dotenv import load_dotenv, find_dotenv
-import os
 import torch
 from wikontic.db.factory import ensure_storage_backend
 from wikontic.db.interfaces import VectorQuery
+from wikontic.utils.contriever_model import load_contriever
 
 # os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 _ = load_dotenv(find_dotenv())
@@ -42,12 +41,7 @@ class Aligner:
         self.filtered_triplets_collection_name = "filtered_triplets"
 
         self.device = torch.device(device)
-        # self.tokenizer = AutoTokenizer.from_pretrained('facebook/contriever', token=os.getenv("HF_KEY"))
-        self.tokenizer = AutoTokenizer.from_pretrained("facebook/contriever")
-        # self.model = AutoModel.from_pretrained('facebook/contriever', token=os.getenv("HF_KEY")).to(self.device)
-        self.model = AutoModel.from_pretrained(
-            "facebook/contriever", use_safetensors=True
-        ).to(self.device)
+        self.tokenizer, self.model, self.device = load_contriever(device=str(self.device))
 
     def get_embedding(self, text):
 

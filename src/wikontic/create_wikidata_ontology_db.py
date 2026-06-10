@@ -1,6 +1,5 @@
 from typing import List
 from pydantic import BaseModel, ValidationError
-from transformers import AutoTokenizer, AutoModel
 from tqdm import tqdm
 import json
 import time
@@ -14,6 +13,7 @@ from pymongo.mongo_client import MongoClient
 
 from wikontic.db.bootstrap import ensure_collections
 from wikontic.db.factory import create_backend
+from wikontic.utils.contriever_model import load_contriever
 
 _ = load_dotenv(find_dotenv())
 # Configure logging
@@ -24,19 +24,17 @@ logger = logging.getLogger(__name__)
 
 device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
 
-# Check for local model first, then fall back to remote
-model_name = "facebook/contriever"
-# local_model_path = os.getenv("HF_MODEL_PATH") or str(
-#     Path(__file__).parent.parent.parent.parent / "models" / "facebook--contriever"
-# )
+_tokenizer = None
+_model = None
+_contriever_device = device
 
-# if os.path.exists(local_model_path) and os.path.isdir(local_model_path):
-#     model_path = local_model_path
-# else:
-model_path = model_name
 
-tokenizer = AutoTokenizer.from_pretrained(model_path)
-model = AutoModel.from_pretrained(model_path, use_safetensors=True).to(device)
+def _ensure_contriever():
+    global _tokenizer, _model, _contriever_device
+    if _model is None:
+        _tokenizer, _model, _contriever_device = load_contriever(device=str(device))
+    return _tokenizer, _model, _contriever_device
+
 
 class EntityType(BaseModel):
     _id: int
@@ -79,8 +77,10 @@ def get_embedding(text):
         return None
 
     try:
+        tokenizer, model, embed_device = _ensure_contriever()
         inputs = tokenizer([text], padding=True, truncation=True, return_tensors="pt")
-        outputs = model(**inputs.to("cuda"))
+        inputs = inputs.to(embed_device)
+        outputs = model(**inputs)
         embeddings = mean_pooling(outputs[0], inputs["attention_mask"])
         return embeddings.detach().cpu().tolist()[0]
 
