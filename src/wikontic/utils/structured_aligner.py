@@ -1,13 +1,11 @@
 from typing import List, Tuple, Set, Dict
-from transformers import AutoTokenizer, AutoModel
 from dataclasses import dataclass
 from pydantic import BaseModel, ValidationError
 import torch
 from dotenv import load_dotenv, find_dotenv
-import os
-from pathlib import Path
 from wikontic.db.factory import ensure_storage_backend
 from wikontic.db.interfaces import VectorQuery
+from wikontic.utils.contriever_model import load_contriever
 
 # os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 _ = load_dotenv(find_dotenv())
@@ -49,30 +47,7 @@ class Aligner:
         self.entities_vector_index_name = "entity_aliases"
 
         self.device = torch.device(device)
-        # self.tokenizer = AutoTokenizer.from_pretrained(
-        #     "facebook/contriever", token=os.getenv("HF_KEY")
-        # )
-        # self.model = AutoModel.from_pretrained(
-        #     "facebook/contriever", token=os.getenv("HF_KEY"), use_safetensors=True
-        # ).to(self.device)
-        # Check for local model first, then fall back to remote
-        model_name = "facebook/contriever"
-        # local_model_path = os.getenv("HF_MODEL_PATH") or str(
-        #     Path(__file__).parent.parent.parent.parent
-        #     / "models"
-        #     / "facebook--contriever"
-        # )
-
-        # if os.path.exists(local_model_path) and os.path.isdir(local_model_path):
-        #     model_path = local_model_path
-        # else:
-        model_path = model_name
-
-        self.tokenizer = AutoTokenizer.from_pretrained(model_path)
-        self.model = AutoModel.from_pretrained(model_path, use_safetensors=True).to(
-            self.device
-        )
-        # self.model = AutoModel.from_pretrained(model_path).to(self.device)
+        self.tokenizer, self.model, self.device = load_contriever(device=str(self.device))
 
     def get_embedding(self, text):
 
