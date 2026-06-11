@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 from pydantic import BaseModel, ValidationError
 from tqdm import tqdm
 import json
@@ -16,6 +16,7 @@ from wikontic.db.factory import create_backend
 from wikontic.utils.contriever_model import load_contriever
 
 from wikontic.logging_config import get_logger
+from wikontic.utils.language_config import ontology_mappings_dir_for_language
 
 _ = load_dotenv(find_dotenv())
 # Configure logging
@@ -261,12 +262,31 @@ def populate_property_aliases(
 
 
 
+def _resolve_mappings_dir(
+    mappings_dir: Optional[str],
+    language: str,
+    fallback_language: str,
+) -> str:
+    if mappings_dir is not None:
+        path = Path(mappings_dir)
+    else:
+        path = ontology_mappings_dir_for_language(language, fallback_language)
+    if not path.is_dir():
+        raise FileNotFoundError(
+            f"Ontology mappings directory not found: {path}. "
+            "Pass mappings_dir explicitly or generate mappings for the requested language."
+        )
+    return str(path)
+
+
 def create_wikidata_ontology_database(
     backend: str = "mongodb",
     mongo_uri: str = "mongodb://localhost:27018/?directConnection=true",
     qdrant_url: str = ":memory:",
     qdrant_api_key: str = None,
     database: str = "wikidata_ontology",
+    language: str = "en",
+    fallback_language: str = "en",
     mappings_dir: str = None,
     entity_types_collection: str = "entity_types",
     entity_type_aliases_collection: str = "entity_type_aliases",
@@ -284,7 +304,10 @@ def create_wikidata_ontology_database(
     Args:
         mongo_uri: MongoDB connection URI
         database: MongoDB database name
-        mappings_dir: Directory containing ontology mapping files. If None, uses default path.
+        language: Source language for ontology labels/aliases (`en` or `ru`).
+        fallback_language: Fallback language suffix in mapping directory name (default `en`).
+        mappings_dir: Directory containing ontology mapping files. If None, uses
+            ontology_mappings_{language}_{fallback_language} from language_config.
         entity_types_collection: Collection name for entity types
         entity_type_aliases_collection: Collection name for entity type aliases
         properties_collection: Collection name for properties
@@ -297,18 +320,16 @@ def create_wikidata_ontology_database(
         Database object
     """
 
-    # Default mappings directory
-    if mappings_dir is None:
-        # Try to find the mappings directory relative to this file
-        current_file = Path(__file__).parent
-        mappings_dir = str(current_file /"src" / "wikontic" / "utils" / "ontology_mappings_en_en")
-        if not os.path.exists(mappings_dir):
-            # Fallback to relative path
-            mappings_dir = "src/wikontic/utils/ontology_mappings_en_en"
+    mappings_dir = _resolve_mappings_dir(mappings_dir, language, fallback_language)
 
     logger.info("Starting database population process")
     logger.info(f"Using database: {database}")
-    logger.info(f"Loading mapping files from: {mappings_dir}")
+    logger.info(
+        "Loading mapping files (language=%s, fallback=%s) from: %s",
+        language,
+        fallback_language,
+        mappings_dir,
+    )
 
     # Load mapping files
     with open(os.path.join(mappings_dir, "subj_constraint2prop.json"), "r") as f:
@@ -426,10 +447,22 @@ if __name__ == "__main__":
     )
 
     parser.add_argument(
+        "--language",
+        type=str,
+        default="en",
+        help="Source language for ontology mappings (en or ru)",
+    )
+    parser.add_argument(
+        "--fallback_language",
+        type=str,
+        default="en",
+        help="Fallback language suffix in mapping directory name (default: en)",
+    )
+    parser.add_argument(
         "--mappings_dir",
         type=str,
-        default="utils/ontology_mappings/",
-        help="Directory containing ontology mapping files",
+        default=None,
+        help="Override ontology mapping directory (default: ontology_mappings_{language}_{fallback})",
     )
     parser.add_argument(
         "--mongo_uri",
@@ -494,6 +527,8 @@ if __name__ == "__main__":
         qdrant_url=args.qdrant_url,
         qdrant_api_key=args.qdrant_api_key,
         database=args.database,
+        language=args.language,
+        fallback_language=args.fallback_language,
         mappings_dir=args.mappings_dir,
         entity_types_collection=args.entity_types_collection,
         entity_type_aliases_collection=args.entity_type_aliases_collection,

@@ -4,7 +4,6 @@ from streamlit_session import (
     get_extractor,
     get_inference,
     get_triplets_db,
-    USE_UNIDECODE,
 )
 from streamlit_kg_viz import TRIPLET_FIELDS, visualize_knowledge_graph
 
@@ -90,7 +89,7 @@ if trigger:
             filtered_triplets,
             ontology_filtered_triplets,
         ) = inference_with_db.extract_triplets_with_ontology_filtering_and_add_to_db(
-            text=personal_text, sample_id="personal_kg", source_text_id=None, use_unidecode=USE_UNIDECODE
+            text=personal_text, sample_id="personal_kg", source_text_id=None
         )
         logger.info(f"Initial triplets: {initial_triplets}")
         logger.info("-" * 100)

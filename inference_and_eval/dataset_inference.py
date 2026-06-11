@@ -25,6 +25,7 @@ from wikontic.utils.inference_with_db import InferenceWithDB
 from wikontic.utils.dynamic_aligner import Aligner as DynamicDBAligner
 from wikontic.utils.structured_inference_with_db import StructuredInferenceWithDB
 from wikontic.db.factory import create_backend
+from wikontic.utils.language_config import prompt_folder_for_language
 
 from wikontic.create_ontological_triplets_db import create_ontological_triplets_database
 from wikontic.create_triplets_db import create_triplets_database
@@ -61,6 +62,7 @@ CONFIG_DEFAULTS = {
     "sample_start_index": 0,
     "num_samples": 50,
     "structured_inference": True,
+    "language": "en",
     "dump_kg": False,
     "proxy_env_var": None,
     "base_url_env_var": "OPENROUTER_BASE_URL",
@@ -171,6 +173,7 @@ if __name__ == "__main__":
                     qdrant_url=cfg.qdrant_url,
                     qdrant_api_key=cfg.qdrant_api_key,
                     database=cfg.ontology_db_name,
+                    language=cfg.language,
                 )
                 logger.info(
                     f"Wikidata ontology database created successfully: {cfg.ontology_db_name}"
@@ -199,6 +202,7 @@ if __name__ == "__main__":
                     qdrant_url=cfg.qdrant_url,
                     qdrant_api_key=cfg.qdrant_api_key,
                     database=cfg.ontology_db_name,
+                    language=cfg.language,
                     storage_backend=qdrant_backend,
                 )
                 logger.info("Wikidata ontology collections created in Qdrant backend")
@@ -250,19 +254,29 @@ if __name__ == "__main__":
     ds = get_json_dataset(cfg.dataset_path)
 
     extractor = LLMTripletExtractor(
-        model=cfg.model_name, api_key=api_key, proxy=proxy_url, base_url=base_url
+        model=cfg.model_name,
+        api_key=api_key,
+        proxy=proxy_url,
+        base_url=base_url,
+        prompt_folder_path=str(prompt_folder_for_language(cfg.language)),
     )
     if cfg.structured_inference:
-        logger.info("Structured inference enabled")
+        logger.info("Structured inference enabled (language=%s)", cfg.language)
         aligner = StructuredDBAligner(ontology_db=ontology_db, triplets_db=triplets_db)
         inference_with_db = StructuredInferenceWithDB(
-            extractor=extractor, aligner=aligner, triplets_db=triplets_db
+            extractor=extractor,
+            aligner=aligner,
+            triplets_db=triplets_db,
+            language=cfg.language,
         )
     else:
-        logger.info("Structured inference disabled, using dynamic inference")
+        logger.info("Structured inference disabled, using dynamic inference (language=%s)", cfg.language)
         aligner = DynamicDBAligner(triplets_db=triplets_db)
         inference_with_db = InferenceWithDB(
-            extractor=extractor, aligner=aligner, triplets_db=triplets_db
+            extractor=extractor,
+            aligner=aligner,
+            triplets_db=triplets_db,
+            language=cfg.language,
         )   
 
     sampled_ids = list(ds.keys())[cfg.sample_start_index : cfg.sample_start_index + cfg.num_samples]

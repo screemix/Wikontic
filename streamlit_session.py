@@ -5,15 +5,15 @@ import streamlit as st
 from dotenv import load_dotenv, find_dotenv
 from pymongo import MongoClient
 
+from src.wikontic.utils.language_config import prompt_folder_for_language
 from src.wikontic.utils.openai_utils import LLMTripletExtractor
 from src.wikontic.utils.structured_aligner import Aligner
 from src.wikontic.utils.structured_inference_with_db import StructuredInferenceWithDB
 
+LANGUAGE = "ru"
 WIKIDATA_ONTOLOGY_DB_NAME = "wikidata_ontology_ru"
 TRIPLETS_DB_NAME = "demo_ru"
-PROMPT_FOLDER_PATH = "src/wikontic/utils/prompts_ru"
 EXTRACTION_MODEL = "gpt-4.1"
-USE_UNIDECODE = False
 
 _INIT_KEY = "wikontic_initialized"
 
@@ -36,10 +36,13 @@ def init_session() -> None:
         model=EXTRACTION_MODEL,
         api_key=api_key,
         proxy=proxy_url,
-        prompt_folder_path=PROMPT_FOLDER_PATH,
+        prompt_folder_path=str(prompt_folder_for_language(LANGUAGE)),
     )
     inference = StructuredInferenceWithDB(
-        extractor=extractor, aligner=aligner, triplets_db=triplets_db
+        extractor=extractor,
+        aligner=aligner,
+        triplets_db=triplets_db,
+        language=LANGUAGE,
     )
 
     st.session_state.mongo_client = mongo_client

@@ -12,10 +12,11 @@ logger = get_logger("InferenceWithDB")
 
 
 class InferenceWithDB(BaseInferenceWithDB):
-    def __init__(self, extractor, aligner, triplets_db):
+    def __init__(self, extractor, aligner, triplets_db, language: str = "en"):
         self.extractor = extractor
         self.aligner = aligner
         self.triplets_db = ensure_storage_backend(triplets_db)
+        self._init_language(language)
 
         self.extract_triplets_tool = tool(self.extract_triplets)
         self.extract_triplets_and_add_to_db_tool = tool(

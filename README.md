@@ -26,6 +26,8 @@ Two inference modes are supported:
 | **Structured** (default in research scripts) | `StructuredInferenceWithDB` | `structured_aligner.Aligner` | Wikidata types & property constraints | Wikidata-aligned KGs, QA benchmarks |
 | **Dynamic** | `InferenceWithDB` | `dynamic_aligner.Aligner` | None (learned aliases only) | Open-domain graphs without ontology |
 
+Both inference classes accept **`language="en"`** or **`language="ru"`**, which selects LLM prompt templates and whether entity names are transliterated (`unidecode`). See [Language](#language).
+
 ![Pipeline overview](/media/KG+LM-pipeline-with-background.png)
 
 Triplet stages written to the database:
@@ -57,6 +59,7 @@ Wikontic/
 │       ├── inference_with_db.py         # Dynamic extraction + QA
 │       ├── structured_inference_with_db.py
 │       ├── base_inference_with_db.py    # Shared QA logic
+│       ├── language_config.py           # en/ru prompts, transliteration, ontology paths
 │       ├── ontology_mappings/           # Wikidata JSON mappings
 │       ├── ontology_mappings_en_en/     # English ontology variant
 │       ├── ontology_mappings_ru_en/     # Russian mappings
@@ -148,6 +151,8 @@ python -m wikontic.create_wikidata_ontology_db \
   --mongo_uri "mongodb://localhost:27018/?directConnection=true" \
   --database wikidata_ontology
 
+# Russian demo: same command with --language ru --database wikidata_ontology_ru
+
 # 2a. Structured KG database (with ontology_filtered_triplets)
 python -m wikontic.create_ontological_triplets_db \
   --backend mongodb \
@@ -187,6 +192,9 @@ All three `create_*` scripts support:
 | `--qdrant_url` | Qdrant URL or `:memory:` |
 | `--qdrant_api_key` | Optional Qdrant API key |
 | `--database` / `--db_name` | Database / collection namespace name |
+| `--language` | Ontology source language (`en` or `ru`; ontology DB script only) |
+| `--fallback_language` | Mapping directory fallback suffix (default `en`) |
+| `--mappings_dir` | Override ontology mapping directory |
 | `--drop_collections` | Drop and recreate collections |
 | `--embedding_dimensions` | Vector size (default `768`) |
 
@@ -215,7 +223,7 @@ Default URL: `http://localhost:8501`
 | Personal KG | `app_pages/4_Personal_KG.py` | Build a personal knowledge graph |
 | Wikipedia vs Wikidata | `app_pages/5_Wikipedia_vs_Wikidata.py` | Compare extraction variants |
 
-The demo uses MongoDB databases `wikidata_ontology` and `demo` (or page-specific DB names). Ensure databases are initialized and `.env` contains `MONGO_URI` and `KEY`.
+The demo uses MongoDB databases `wikidata_ontology_ru` and `demo_ru` with `language="ru"` in [`streamlit_session.py`](streamlit_session.py). For English, use `wikidata_ontology` / `demo` and set `LANGUAGE = "en"`. Ensure databases are initialized and `.env` contains `MONGO_URI` and `KEY`.
 
 ### Docker
 
@@ -266,6 +274,7 @@ All keys below can be set in YAML. Unspecified keys use defaults from `CONFIG_DE
 | `sample_start_index` | `0` | Start index into dataset keys |
 | `num_samples` | `50` | Number of samples to process |
 | `structured_inference` | `true` | Use `StructuredInferenceWithDB` if true |
+| `language` | `en` | `en` or `ru` — LLM prompts (`prompts/` vs `prompts_ru/`) and entity transliteration |
 | `dump_kg` | `false` | Write `kg_dump/kg_dump_{db_name}.json` after the run (always on for Qdrant `:memory:`) |
 | `api_key_env_var` | `KEY` | Env var for API key |
 | `base_url_env_var` | `OPENROUTER_BASE_URL` | Env var for API base URL |
@@ -278,6 +287,41 @@ The script derives the actual triplets database name:
 ```
 
 Example: `triplets_db_gpt-4o-mini_onto`
+
+### Language
+
+`InferenceWithDB` and `StructuredInferenceWithDB` take a `language` argument (`"en"` or `"ru"`, default `"en"`). It controls:
+
+| Setting | `en` | `ru` |
+|---------|------|------|
+| LLM prompts | `src/wikontic/utils/prompts/` | `src/wikontic/utils/prompts_ru/` |
+| Entity transliteration (`use_unidecode`) | `true` | `false` (keep Cyrillic) |
+| Ontology mappings (when building DB) | `ontology_mappings_en_en/` | `ontology_mappings_ru_en/` |
+
+Helpers live in [`src/wikontic/utils/language_config.py`](src/wikontic/utils/language_config.py).
+
+Batch inference (`dataset_inference.py`) reads `language` from YAML and passes matching `prompt_folder_path` to `LLMTripletExtractor`:
+
+```yaml
+language: ru
+structured_inference: true
+```
+
+Python API:
+
+```python
+from wikontic.utils.language_config import prompt_folder_for_language
+from wikontic.utils.openai_utils import LLMTripletExtractor
+from wikontic.utils.structured_inference_with_db import StructuredInferenceWithDB
+
+extractor = LLMTripletExtractor(
+    api_key="...",
+    prompt_folder_path=str(prompt_folder_for_language("ru")),
+)
+inference = StructuredInferenceWithDB(extractor, aligner, triplets_db, language="ru")
+```
+
+Use an ontology database built with the matching mappings (e.g. `wikidata_ontology` for English, `wikidata_ontology_ru` for Russian).
 
 ### Dataset format
 
@@ -397,6 +441,7 @@ Minimal structured extraction example:
 
 ```python
 from pymongo import MongoClient
+from wikontic.utils.language_config import prompt_folder_for_language
 from wikontic.utils.openai_utils import LLMTripletExtractor
 from wikontic.utils.structured_aligner import Aligner
 from wikontic.utils.structured_inference_with_db import StructuredInferenceWithDB
@@ -405,9 +450,13 @@ client = MongoClient("mongodb://localhost:27018/?directConnection=true")
 ontology_db = client["wikidata_ontology"]
 triplets_db = client["my_triplets_db"]
 
-extractor = LLMTripletExtractor(model="gpt-4o-mini", api_key="...")
+extractor = LLMTripletExtractor(
+    model="gpt-4o-mini",
+    api_key="...",
+    prompt_folder_path=str(prompt_folder_for_language("en")),
+)
 aligner = Aligner(ontology_db=ontology_db, triplets_db=triplets_db)
-inference = StructuredInferenceWithDB(extractor, aligner, triplets_db)
+inference = StructuredInferenceWithDB(extractor, aligner, triplets_db, language="en")
 
 initial, final, filtered, onto_filtered = (
     inference.extract_triplets_with_ontology_filtering_and_add_to_db(
@@ -427,8 +476,9 @@ For LangChain tool bindings, see [`tutorial.ipynb`](tutorial.ipynb).
 | `openai_utils` | `LLMTripletExtractor` | LLM triplet extraction & QA prompts |
 | `dynamic_aligner` | `Aligner` | Embedding search over entity/property aliases |
 | `structured_aligner` | `Aligner` | Wikidata type/property alignment |
-| `inference_with_db` | `InferenceWithDB` | Dynamic pipeline + QA |
-| `structured_inference_with_db` | `StructuredInferenceWithDB` | Ontology-aware pipeline + QA |
+| `inference_with_db` | `InferenceWithDB` | Dynamic pipeline + QA (`language` param) |
+| `structured_inference_with_db` | `StructuredInferenceWithDB` | Ontology-aware pipeline + QA (`language` param) |
+| `language_config` | helpers | `prompt_folder_for_language`, `use_unidecode_for_language`, ontology mapping paths |
 | `db.factory` | `create_backend` | Create MongoDB or Qdrant backend |
 
 ### Pages
@@ -442,7 +492,7 @@ For LangChain tool bindings, see [`tutorial.ipynb`](tutorial.ipynb).
 | Personal KG | `app_pages/4_Personal_KG.py` | Build a personal knowledge graph |
 | Wikipedia vs Wikidata | `app_pages/5_Wikipedia_vs_Wikidata.py` | Compare extraction variants |
 
-The demo uses MongoDB databases `wikidata_ontology` and `demo` (or page-specific DB names). Ensure databases are initialized and `.env` contains `MONGO_URI` and `KEY`.
+The demo uses MongoDB databases `wikidata_ontology_ru` and `demo_ru` with `language="ru"` in [`streamlit_session.py`](streamlit_session.py). For English, use `wikidata_ontology` / `demo` and set `LANGUAGE = "en"`. Ensure databases are initialized and `.env` contains `MONGO_URI` and `KEY`.
 
 ### Docker
 
@@ -493,6 +543,7 @@ All keys below can be set in YAML. Unspecified keys use defaults from `CONFIG_DE
 | `sample_start_index` | `0` | Start index into dataset keys |
 | `num_samples` | `50` | Number of samples to process |
 | `structured_inference` | `true` | Use `StructuredInferenceWithDB` if true |
+| `language` | `en` | `en` or `ru` — LLM prompts (`prompts/` vs `prompts_ru/`) and entity transliteration |
 | `dump_kg` | `false` | Write `kg_dump/kg_dump_{db_name}.json` after the run (always on for Qdrant `:memory:`) |
 | `api_key_env_var` | `KEY` | Env var for API key |
 | `base_url_env_var` | `OPENROUTER_BASE_URL` | Env var for API base URL |
@@ -505,6 +556,41 @@ The script derives the actual triplets database name:
 ```
 
 Example: `triplets_db_gpt-4o-mini_onto`
+
+### Language
+
+`InferenceWithDB` and `StructuredInferenceWithDB` take a `language` argument (`"en"` or `"ru"`, default `"en"`). It controls:
+
+| Setting | `en` | `ru` |
+|---------|------|------|
+| LLM prompts | `src/wikontic/utils/prompts/` | `src/wikontic/utils/prompts_ru/` |
+| Entity transliteration (`use_unidecode`) | `true` | `false` (keep Cyrillic) |
+| Ontology mappings (when building DB) | `ontology_mappings_en_en/` | `ontology_mappings_ru_en/` |
+
+Helpers live in [`src/wikontic/utils/language_config.py`](src/wikontic/utils/language_config.py).
+
+Batch inference (`dataset_inference.py`) reads `language` from YAML and passes matching `prompt_folder_path` to `LLMTripletExtractor`:
+
+```yaml
+language: ru
+structured_inference: true
+```
+
+Python API:
+
+```python
+from wikontic.utils.language_config import prompt_folder_for_language
+from wikontic.utils.openai_utils import LLMTripletExtractor
+from wikontic.utils.structured_inference_with_db import StructuredInferenceWithDB
+
+extractor = LLMTripletExtractor(
+    api_key="...",
+    prompt_folder_path=str(prompt_folder_for_language("ru")),
+)
+inference = StructuredInferenceWithDB(extractor, aligner, triplets_db, language="ru")
+```
+
+Use an ontology database built with the matching mappings (e.g. `wikidata_ontology` for English, `wikidata_ontology_ru` for Russian).
 
 ### Dataset format
 
@@ -624,6 +710,7 @@ Minimal structured extraction example:
 
 ```python
 from pymongo import MongoClient
+from wikontic.utils.language_config import prompt_folder_for_language
 from wikontic.utils.openai_utils import LLMTripletExtractor
 from wikontic.utils.structured_aligner import Aligner
 from wikontic.utils.structured_inference_with_db import StructuredInferenceWithDB
@@ -632,9 +719,13 @@ client = MongoClient("mongodb://localhost:27018/?directConnection=true")
 ontology_db = client["wikidata_ontology"]
 triplets_db = client["my_triplets_db"]
 
-extractor = LLMTripletExtractor(model="gpt-4o-mini", api_key="...")
+extractor = LLMTripletExtractor(
+    model="gpt-4o-mini",
+    api_key="...",
+    prompt_folder_path=str(prompt_folder_for_language("en")),
+)
 aligner = Aligner(ontology_db=ontology_db, triplets_db=triplets_db)
-inference = StructuredInferenceWithDB(extractor, aligner, triplets_db)
+inference = StructuredInferenceWithDB(extractor, aligner, triplets_db, language="en")
 
 initial, final, filtered, onto_filtered = (
     inference.extract_triplets_with_ontology_filtering_and_add_to_db(
@@ -654,8 +745,9 @@ For LangChain tool bindings, see [`tutorial.ipynb`](tutorial.ipynb).
 | `openai_utils` | `LLMTripletExtractor` | LLM triplet extraction & QA prompts |
 | `dynamic_aligner` | `Aligner` | Embedding search over entity/property aliases |
 | `structured_aligner` | `Aligner` | Wikidata type/property alignment |
-| `inference_with_db` | `InferenceWithDB` | Dynamic pipeline + QA |
-| `structured_inference_with_db` | `StructuredInferenceWithDB` | Ontology-aware pipeline + QA |
+| `inference_with_db` | `InferenceWithDB` | Dynamic pipeline + QA (`language` param) |
+| `structured_inference_with_db` | `StructuredInferenceWithDB` | Ontology-aware pipeline + QA (`language` param) |
+| `language_config` | helpers | `prompt_folder_for_language`, `use_unidecode_for_language`, ontology mapping paths |
 | `db.factory` | `create_backend` | Create MongoDB or Qdrant backend |
 
 ---

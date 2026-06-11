@@ -15,7 +15,18 @@ class BaseInferenceWithDB:
         - self.extractor: The extractor instance
         - self.aligner: The aligner instance
         - self.triplets_db: The triplets database instance
+        - self.language: "en" or "ru"
+        - self.use_unidecode: whether to transliterate entity names (True for en)
     """
+
+    def _init_language(self, language: str = "en") -> None:
+        from wikontic.utils.language_config import (
+            normalize_language,
+            use_unidecode_for_language,
+        )
+
+        self.language = normalize_language(language)
+        self.use_unidecode = use_unidecode_for_language(self.language)
 
     def retrieve_similar_entity_names(
         self, entity_name: str, k: int, sample_id: Optional[str] = None

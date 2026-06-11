@@ -14,10 +14,11 @@ logger = get_logger("StructuredInferenceWithDB")
 
 
 class StructuredInferenceWithDB(BaseInferenceWithDB):
-    def __init__(self, extractor, aligner, triplets_db):
+    def __init__(self, extractor, aligner, triplets_db, language: str = "en"):
         self.extractor = extractor
         self.aligner = aligner
         self.triplets_db = ensure_storage_backend(triplets_db)
+        self._init_language(language)
 
         self.extract_triplets_with_ontology_filtering_tool = tool(
             self.extract_triplets_with_ontology_filtering
@@ -270,10 +271,14 @@ class StructuredInferenceWithDB(BaseInferenceWithDB):
                 exception_msg += "Triplet backbone violates property constraints\n"
                 return False, exception_msg
 
-    def _refine_entity_name(self, text, triplet, sample_id, is_object=False, use_unidecode=True):
+    def _refine_entity_name(
+        self, text, triplet, sample_id, is_object=False, use_unidecode=None
+    ):
         """
         Refine entity names using type constraints.
         """
+        if use_unidecode is None:
+            use_unidecode = self.use_unidecode
         self.extractor.reset_error_state()
         if is_object:
             entity = unidecode(triplet["object"]) if use_unidecode else triplet["object"]
@@ -325,7 +330,7 @@ class StructuredInferenceWithDB(BaseInferenceWithDB):
         return updated_entity
 
     def extract_triplets_with_ontology_filtering(
-        self, text, sample_id=None, source_text_id=None, use_unidecode=True
+        self, text, sample_id=None, source_text_id=None, use_unidecode=None
     ):
         """
         Extract and refine knowledge graph triplets from text using LLM.
@@ -340,6 +345,8 @@ class StructuredInferenceWithDB(BaseInferenceWithDB):
             tuple:
                 (initial_triplets, final_triplets, filtered_triplets, ontology_filtered_triplets)
         """
+        if use_unidecode is None:
+            use_unidecode = self.use_unidecode
         self.extractor.reset_tokens()
         self.extractor.reset_messages()
         self.extractor.reset_error_state()
@@ -531,7 +538,7 @@ class StructuredInferenceWithDB(BaseInferenceWithDB):
         )
 
     def extract_triplets_with_ontology_filtering_and_add_to_db(
-        self, text, sample_id=None, source_text_id=None, use_unidecode=True
+        self, text, sample_id=None, source_text_id=None, use_unidecode=None
     ):
         """
         Extract and refine knowledge graph triplets from text using LLM, then add them to the database.

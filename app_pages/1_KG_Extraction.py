@@ -1,7 +1,6 @@
 # --- File: 0_KG_Extraction.py ---
 import streamlit as st
 from streamlit_session import (
-    USE_UNIDECODE,
     get_inference,
     get_triplets_db,
     get_user_id,
@@ -135,7 +134,7 @@ if trigger:
             filtered_triplets,
             ontology_filtered_triplets,
         ) = inference_with_db.extract_triplets_with_ontology_filtering_and_add_to_db(
-            text=input_text, sample_id=user_id, source_text_id=None, use_unidecode=USE_UNIDECODE
+            text=input_text, sample_id=user_id, source_text_id=None
         )
         logger.info("Initial triplets: ", initial_triplets)
         logger.info("-" * 100)
