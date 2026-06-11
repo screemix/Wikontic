@@ -11,7 +11,6 @@ from streamlit_session import EXTRACTION_MODEL
 from streamlit_token_stats import compare_text_and_triplets
 
 # import networkx as nx
-<<<<<<< HEAD
 import tempfile
 import os
 from dotenv import load_dotenv, find_dotenv
@@ -24,10 +23,6 @@ from src.wikontic.utils.openai_utils import LLMTripletExtractor
 from src.wikontic.utils.structured_aligner import Aligner
 from pymongo import MongoClient
 import uuid
-=======
-import logging
-import sys
->>>>>>> demo
 import base64
 
 logger = get_logger("KGExtraction")
