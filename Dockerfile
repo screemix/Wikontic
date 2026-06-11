@@ -32,7 +32,7 @@ COPY src/wikontic/create_wikidata_ontology_db.py ./src/wikontic/create_wikidata_
 
 COPY Wikontic.py .
 COPY .streamlit/ ./.streamlit/
-COPY pages/ ./pages/
+COPY app_pages/ ./app_pages/
 
 COPY media/ ./media/
 

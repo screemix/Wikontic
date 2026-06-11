@@ -61,7 +61,7 @@ Wikontic/
 │       ├── ontology_mappings_en_en/     # English ontology variant
 │       ├── ontology_mappings_ru_en/     # Russian mappings
 │       └── prompts/ / prompts_ru/       # LLM prompt templates
-├── pages/                     # Streamlit multipage app
+├── app_pages/                 # Streamlit page scripts (wired via st.navigation)
 ├── inference_and_eval/        # KG construction & QA evaluation
 ├── analysis/                  # KG dump, stats, visualization helpers
 ├── preprocessing/             # Dataset preprocessing scripts
@@ -209,11 +209,11 @@ Default URL: `http://localhost:8501`
 | Page | File | Description |
 |------|------|-------------|
 | Home | `Wikontic.py` | Overview and links |
-| KG Extraction | `pages/1_KG_Extraction.py` | Extract triplets from text, visualize initial vs enriched graph |
-| QA | `pages/2_QA.py` | Ask questions over the session KG |
-| Current KG | `pages/3_Current_KG.py` | Browse triplets stored in the demo database |
-| Personal KG | `pages/4_Personal_KG.py` | Build a personal knowledge graph |
-| Wikipedia vs Wikidata | `pages/5_Wikipedia_vs_Wikidata.py` | Compare extraction variants |
+| KG Extraction | `app_pages/1_KG_Extraction.py` | Extract triplets from text, visualize initial vs enriched graph |
+| QA | `app_pages/2_QA.py` | Ask questions over the session KG |
+| Current KG | `app_pages/3_Current_KG.py` | Browse triplets stored in the demo database |
+| Personal KG | `app_pages/4_Personal_KG.py` | Build a personal knowledge graph |
+| Wikipedia vs Wikidata | `app_pages/5_Wikipedia_vs_Wikidata.py` | Compare extraction variants |
 
 The demo uses MongoDB databases `wikidata_ontology` and `demo` (or page-specific DB names). Ensure databases are initialized and `.env` contains `MONGO_URI` and `KEY`.
 
@@ -436,11 +436,11 @@ For LangChain tool bindings, see [`tutorial.ipynb`](tutorial.ipynb).
 | Page | File | Description |
 |------|------|-------------|
 | Home | `Wikontic.py` | Overview and links |
-| KG Extraction | `pages/1_KG_Extraction.py` | Extract triplets from text, visualize initial vs enriched graph |
-| QA | `pages/2_QA.py` | Ask questions over the session KG |
-| Current KG | `pages/3_Current_KG.py` | Browse triplets stored in the demo database |
-| Personal KG | `pages/4_Personal_KG.py` | Build a personal knowledge graph |
-| Wikipedia vs Wikidata | `pages/5_Wikipedia_vs_Wikidata.py` | Compare extraction variants |
+| KG Extraction | `app_pages/1_KG_Extraction.py` | Extract triplets from text, visualize initial vs enriched graph |
+| QA | `app_pages/2_QA.py` | Ask questions over the session KG |
+| Current KG | `app_pages/3_Current_KG.py` | Browse triplets stored in the demo database |
+| Personal KG | `app_pages/4_Personal_KG.py` | Build a personal knowledge graph |
+| Wikipedia vs Wikidata | `app_pages/5_Wikipedia_vs_Wikidata.py` | Compare extraction variants |
 
 The demo uses MongoDB databases `wikidata_ontology` and `demo` (or page-specific DB names). Ensure databases are initialized and `.env` contains `MONGO_URI` and `KEY`.
 
