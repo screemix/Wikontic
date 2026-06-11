@@ -3,7 +3,7 @@ from __future__ import annotations
 import hashlib
 import uuid
 from dataclasses import dataclass
-from typing import Any, Dict, Iterable, List, Optional, Tuple, Union
+from typing import Any, Dict, Iterable, List, Optional, Set, Tuple, Union
 
 from qdrant_client import QdrantClient, models
 
@@ -137,17 +137,8 @@ class QdrantCollectionAdapter:
 
 class QdrantBackend:
     def __init__(self, qdrant_url: str = ":memory:", api_key: Optional[str] = None):
-<<<<<<< HEAD
         self._in_memory = qdrant_url == ":memory:"
         if self._in_memory:
-=======
-<<<<<<< HEAD
-        self._in_memory = qdrant_url == ":memory:"
-        if self._in_memory:
-=======
-        if qdrant_url == ":memory:":
->>>>>>> demo
->>>>>>> main
             self.client = QdrantClient(":memory:")
         else:
             self.client = QdrantClient(url=qdrant_url, api_key=api_key)
@@ -155,18 +146,9 @@ class QdrantBackend:
         self._vector_config: Dict[str, Tuple[Optional[str], int]] = {}
         self._payload_indexes: Dict[str, set] = {}
 
-<<<<<<< HEAD
-    def list_payload_index_fields(self, collection_name: str) -> set[str]:
+    def list_payload_index_fields(self, collection_name: str) -> Set[str]:
         return set(self._payload_indexes.get(collection_name, set()))
 
-=======
-<<<<<<< HEAD
-    def list_payload_index_fields(self, collection_name: str) -> set[str]:
-        return set(self._payload_indexes.get(collection_name, set()))
-
-=======
->>>>>>> demo
->>>>>>> main
     def get_collection(self, collection_name: str) -> QdrantCollectionAdapter:
         self.ensure_collection(collection_name)
         return QdrantCollectionAdapter(self, collection_name)
@@ -178,26 +160,12 @@ class QdrantBackend:
             for field in index_fields:
                 if field in created:
                     continue
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> main
                 if not self._in_memory:
                     self.client.create_payload_index(
                         collection_name=collection_name,
                         field_name=field,
                         field_schema=models.PayloadSchemaType.KEYWORD,
                     )
-<<<<<<< HEAD
-=======
-=======
-                self.client.create_payload_index(
-                    collection_name=collection_name,
-                    field_name=field,
-                    field_schema=models.PayloadSchemaType.KEYWORD,
-                )
->>>>>>> demo
->>>>>>> main
                 created.add(field)
 
     def ensure_vector_index(
@@ -344,10 +312,6 @@ class QdrantBackend:
                 "QdrantBackend.vector_search currently supports `alias_text_embedding` "
                 "as the logical vector field."
             )
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> main
         if not query.query_vector:
             return []
         vector_name, expected_size = self._vector_config.get(
@@ -358,12 +322,6 @@ class QdrantBackend:
                 f"Query vector length {len(query.query_vector)} does not match "
                 f"collection '{query.collection_name}' size {expected_size}."
             )
-<<<<<<< HEAD
-=======
-=======
-        vector_name, _ = self._vector_config.get(query.collection_name, (None, 1))
->>>>>>> demo
->>>>>>> main
         if vector_name and query.index_name and query.index_name != vector_name:
             raise ValueError(
                 f"Vector index '{query.index_name}' is not configured for collection "
