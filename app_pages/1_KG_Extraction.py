@@ -136,13 +136,13 @@ if trigger:
         ) = inference_with_db.extract_triplets_with_ontology_filtering_and_add_to_db(
             text=input_text, sample_id=user_id, source_text_id=None
         )
-        logger.info("Initial triplets: ", initial_triplets)
+        logger.info("Initial triplets: %s", initial_triplets)
         logger.info("-" * 100)
-        logger.info("Refined triplets: ", final_triplets)
+        logger.info("Refined triplets: %s", final_triplets)
         logger.info("-" * 100)
-        logger.info("filtered_triplets: ", filtered_triplets)
+        logger.info("filtered_triplets: %s", filtered_triplets)
         logger.info("-" * 100)
-        logger.info("ontology_filtered_triplets: ", ontology_filtered_triplets)
+        logger.info("ontology_filtered_triplets: %s", ontology_filtered_triplets)
         logger.info("-" * 100)
         new_entities = {t["subject"] for t in final_triplets} | {
             t["object"] for t in final_triplets

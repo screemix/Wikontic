@@ -7,6 +7,9 @@ from dotenv import load_dotenv, find_dotenv
 
 load_dotenv(find_dotenv())
 
+from streamlit_session import get_inference, get_user_id
+from streamlit_kg_viz import visualize_knowledge_graph
+
 from src.wikontic.logging_config import get_logger
 from src.wikontic.utils.structured_aligner import Aligner
 from src.wikontic.utils.openai_utils import LLMTripletExtractor
