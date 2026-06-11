@@ -72,7 +72,7 @@ class BaseInferenceWithDB:
             similar_entities = self.retrieve_similar_entity_names(
                 entity_name=ent, k=10, sample_id=sample_id
             )
-            logger.log(logging.DEBUG, "Similar entities: %s" % (str(similar_entities)))
+            logger.debug("Similar entities: %s", similar_entities)
 
             exact_entity_match = [e for e in similar_entities if e == ent]
             if len(exact_entity_match) > 0:
@@ -80,13 +80,8 @@ class BaseInferenceWithDB:
             else:
                 identified_entities.extend(similar_entities)
 
-        logger.log(
-            logging.DEBUG,
-            "Identified entities from question: %s" % (str(identified_entities)),
-        )
-        logger.log(
-            logging.DEBUG, "Linked entities from question: %s" % (str(linked_entities))
-        )
+        logger.debug("Identified entities from question: %s", identified_entities)
+        logger.debug("Linked entities from question: %s", linked_entities)
         if use_entity_types:
             linked_identified_entities = self.extractor.identify_relevant_entities(
                 question=question, entity_list=identified_entities
@@ -99,10 +94,7 @@ class BaseInferenceWithDB:
             )
         linked_entities.extend([e["entity"] for e in linked_identified_entities])
 
-        logger.log(
-            logging.DEBUG,
-            "Linked entities after refinement: %s" % (str(linked_entities)),
-        )
+        logger.debug("Linked entities after refinement: %s", linked_entities)
         return linked_entities
 
     def get_1_hop_supporting_triplets(
@@ -164,10 +156,7 @@ class BaseInferenceWithDB:
                 }
                 for item in results
             ]
-        logger.log(
-            logging.DEBUG,
-            "Supporting triplets: %s\n%s" % (str(supporting_triplets), "-" * 100),
-        )
+        logger.debug("Supporting triplets: %s\n%s", supporting_triplets, "-" * 100)
         return supporting_triplets
 
     def answer_question_with_llm(
@@ -190,7 +179,7 @@ class BaseInferenceWithDB:
         Returns:
             A tuple of (supporting_triplets, answer), where supporting_triplets is a list of dictionaries with the subject, relation, object, qualifiers, and source_text_id (may be None if missing), and answer is the LLM-generated answer to the question.
         """
-        logger.log(logging.DEBUG, "Linked entities: %s" % (str(linked_entities)))
+        logger.debug("Linked entities: %s", linked_entities)
 
         entity_set = {e for e in linked_entities}
         entities4search = list(entity_set)
@@ -238,10 +227,7 @@ class BaseInferenceWithDB:
                 }
                 for item in supporting_triplets
             ]
-        logger.log(
-            logging.DEBUG,
-            "Supporting triplets: %s\n%s" % (str(supporting_triplets), "-" * 100),
-        )
+        logger.debug("Supporting triplets: %s\n%s", supporting_triplets, "-" * 100)
 
         ans = self.extractor.answer_question(
             question=question, triplets=supporting_triplets
@@ -271,19 +257,15 @@ class BaseInferenceWithDB:
         collapsed_question_sequence = []
         collapsed_answer_sequence = []
 
-        logger.log(logging.DEBUG, "Question: %s" % (str(question)))
+        logger.debug("Question: %s", question)
         collapsed_question = self.extractor.decompose_question(question)
 
         for i in range(max_attempts):
             extracted_entities = self.extractor.extract_entities_from_question(
                 collapsed_question
             )
-            logger.log(
-                logging.DEBUG, "Collapsed question: %s" % (str(collapsed_question))
-            )
-            logger.log(
-                logging.DEBUG, "Extracted entities: %s" % (str(extracted_entities))
-            )
+            logger.debug("Collapsed question: %s", collapsed_question)
+            logger.debug("Extracted entities: %s", extracted_entities)
 
             if len(collapsed_question_answer) > 0:
                 extracted_entities.append(collapsed_question_answer)
@@ -296,16 +278,13 @@ class BaseInferenceWithDB:
                 entities4search.extend([e for e in similar_entities])
 
             entities4search = list(set(entities4search))
-            logger.log(logging.DEBUG, "Similar entities: %s" % (str(entities4search)))
+            logger.debug("Similar entities: %s", entities4search)
 
             supporting_triplets = self.get_1_hop_supporting_triplets(
                 entities4search, sample_id, use_qualifiers, use_filtered_triplets
             )
 
-            logger.log(
-                logging.DEBUG,
-                "Supporting triplets length: %s" % (str(len(supporting_triplets))),
-            )
+            logger.debug("Supporting triplets length: %s", len(supporting_triplets))
 
             collapsed_question_answer = self.extractor.answer_question(
                 collapsed_question, supporting_triplets
@@ -313,13 +292,8 @@ class BaseInferenceWithDB:
             collapsed_question_sequence.append(collapsed_question)
             collapsed_answer_sequence.append(collapsed_question_answer)
 
-            logger.log(
-                logging.DEBUG, "Collapsed question: %s" % (str(collapsed_question))
-            )
-            logger.log(
-                logging.DEBUG,
-                "Collapsed question answer: %s" % (str(collapsed_question_answer)),
-            )
+            logger.debug("Collapsed question: %s", collapsed_question)
+            logger.debug("Collapsed question answer: %s", collapsed_question_answer)
 
             is_answered = self.extractor.check_if_question_is_answered(
                 question, collapsed_question_sequence, collapsed_answer_sequence
@@ -336,8 +310,8 @@ class BaseInferenceWithDB:
                 )
                 continue
             else:
-                logger.log(logging.DEBUG, "Final answer: %s" % (str(is_answered)))
+                logger.debug("Final answer: %s", is_answered)
                 return is_answered
 
-        logger.log(logging.DEBUG, "Final answer: %s" % (str(collapsed_question_answer)))
+        logger.debug("Final answer: %s", collapsed_question_answer)
         return collapsed_question_answer
