@@ -1,5 +1,12 @@
 import streamlit as st
-from pyvis.network import Network
+from streamlit_session import (
+    EXTRACTION_MODEL,
+    get_extractor,
+    get_inference,
+    get_triplets_db,
+    USE_UNIDECODE,
+)
+from streamlit_kg_viz import TRIPLET_FIELDS, visualize_knowledge_graph
 
 # import networkx as nx
 import tempfile
@@ -18,23 +25,9 @@ import base64
 
 logger = get_logger("PersonalKG")
 
-
-st.set_page_config(
-    page_title="Wikontic", page_icon="media/wikotic-wo-text.png", layout="wide"
-)
-
-WIKIDATA_ONTOLOGY_DB_NAME = "wikidata_ontology"
-TRIPLETS_DB_NAME = "demo"
-# --- Mongo Setup ---
-_ = load_dotenv(find_dotenv())
-mongo_client = MongoClient(os.getenv("MONGO_URI"))
-api_key = os.getenv("KEY")
-proxy_url = os.getenv("PROXY_URL")
-ontology_db = mongo_client.get_database(WIKIDATA_ONTOLOGY_DB_NAME)
-triplets_db = mongo_client.get_database(TRIPLETS_DB_NAME)
-
-
-aligner = Aligner(ontology_db=ontology_db, triplets_db=triplets_db)
+extractor = get_extractor()
+inference_with_db = get_inference()
+triplets_db = get_triplets_db()
 
 
 def fetch_related_triplets(entities):
@@ -43,42 +36,8 @@ def fetch_related_triplets(entities):
         "$or": [{"subject": {"$in": entities}}, {"object": {"$in": entities}}],
         "sample_id": "personal_kg",
     }
-    results = collection.find(
-        query, {"_id": 0, "subject": 1, "relation": 1, "object": 1}
-    )
-    return [(doc["subject"], doc["relation"], doc["object"]) for doc in results]
-
-
-# --- Visualize ---
-def visualize_knowledge_graph(triplets, highlight_entities=None):
-    net = Network(
-        height="600px",
-        width="100%",
-        bgcolor="#ffffff",
-        font_color="black",
-        directed=True,
-    )
-    highlight_entities = highlight_entities or set()
-    added_nodes = set()
-
-    for s, r, o in triplets:
-        for node in [s, o]:
-            if node not in added_nodes:
-                net.add_node(
-                    node,
-                    label=node,
-                    color="#B2CD9C" if node in highlight_entities else "#C7C8CC",
-                )
-                added_nodes.add(node)
-        net.add_edge(s, o, label=r, color="#000000")
-
-    with tempfile.NamedTemporaryFile(delete=False, suffix=".html") as tmp_file:
-        net.save_graph(tmp_file.name)
-        html_path = tmp_file.name
-    with open(html_path, "r", encoding="utf-8") as f:
-
-        st.components.v1.html(f.read(), height=600, scrolling=True)
-    os.remove(html_path)
+    results = collection.find(query, TRIPLET_FIELDS)
+    return list(results)
 
 
 # --- UI ---
@@ -91,61 +50,47 @@ st.markdown(
     f"""
     <div style="display: flex; align-items: center;">
         <img src="data:image/png;base64,{encoded}" width="50" style="margin-right: 15px;">
-        <h1 style="margin: 0;">Build your personal Knowledge Graph!</h1>
+        <h1 style="margin: 0;">Постройте свой персональный граф знаний!</h1>
     </div>
     """,
     unsafe_allow_html=True,
 )
 
-model_options = ["gpt-4.1", "gpt-4o-mini", "gpt-4.1-mini"]
-selected_model = st.selectbox(
-    "Choose a model for KG extraction:", model_options, index=0
-)
-
-
 # Initialize session state
 st.session_state.input_text = ""
 
-st.subheader("Input name and surname of the person you want to extract KG for")
+st.subheader("Введите имя и фамилию человека, для которого вы хотите построить граф знаний")
 input_text = st.text_area(
-    "Enter name and surname:",
+    "Введите имя и фамилию:",
     value=st.session_state.input_text,
-    placeholder="Enter name and surname of the person you want to extract KG for",
+    placeholder="Введите имя и фамилию человека, для которого вы хотите построить граф знаний",
     height=68,
     key="name_surname",
 )
 
-trigger = st.button("Extract and Visualize KG for the person")
+trigger = st.button("Построить и визуализировать граф знаний для человека")
 
 if trigger:
     if not input_text:
         st.warning(
-            "Please enter name and surname of the person you want to extract KG for."
+            "Пожалуйста, введите имя и фамилию человека, для которого вы хотите построить граф знаний."
         )
-    elif not selected_model:
-        st.warning("Please select a model for KG extraction for the person.")
     else:
-        extractor = LLMTripletExtractor(
-            model=selected_model, api_key=api_key, proxy=proxy_url
-        )
         response = extractor.client.responses.create(
-            model="gpt-4.1",
+            model=EXTRACTION_MODEL,
             tools=[{"type": "web_search"}],
-            input=f"Search recent and relevant info about {input_text} in the internet and return a paragraph that summarizes the info on the person. Return only the paragraph, no other text.",
+            input=f"Найдите и извлеките из интернета свежую и актуальную информацию о {input_text} и верните параграф, который суммирует эту информацию. Верните только параграф, никакого другого текста.",
         )
         personal_text = response.output_text
 
         logger.info(f"Personal text: {personal_text}")
-        inference_with_db = StructuredInferenceWithDB(
-            extractor=extractor, aligner=aligner, triplets_db=triplets_db
-        )
         (
             initial_triplets,
             final_triplets,
             filtered_triplets,
             ontology_filtered_triplets,
         ) = inference_with_db.extract_triplets_with_ontology_filtering_and_add_to_db(
-            text=personal_text, sample_id="personal_kg", source_text_id=None
+            text=personal_text, sample_id="personal_kg", source_text_id=None, use_unidecode=USE_UNIDECODE
         )
         logger.info(f"Initial triplets: {initial_triplets}")
         logger.info("-" * 100)
@@ -160,11 +105,16 @@ if trigger:
         }
         subgraph = fetch_related_triplets(list(new_entities))
         st.success(
-            f"✅ Extracted {len(final_triplets)} triplets and visualized {len(subgraph)} related ones."
+            f"✅ Найдено {len(final_triplets)} триплетов и визуализировано {len(subgraph)} связанных."
         )
 
-        st.subheader("Expanded KG Subgraph")
-        visualize_knowledge_graph(subgraph, highlight_entities=new_entities)
+        st.subheader("Дополненный новыми триплетами граф знаний")
+        visualize_knowledge_graph(
+            subgraph,
+            highlight_entities=new_entities,
+            highlight_color="#2fbeac",
+            entity_color="#C7C8CC",
+        )
 
 st.markdown(
     """

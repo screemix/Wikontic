@@ -111,7 +111,7 @@ class BaseInferenceWithDB:
             use_qualifiers: Whether to use qualifiers.
             use_filtered_triplets: Whether to use the triplets that violate the ontology constraints along with the valid triplets.
         Returns:
-            A list of dictionaries with the subject, relation, object, and qualifiers that correspond to the 1-hop supporting triplets for the given entities.
+            A list of dictionaries with the subject, relation, object, qualifiers, and source_text_id (may be None if missing) that correspond to the 1-hop supporting triplets for the given entities.
         """
         if len(entities4search) == 0:
             return []
@@ -139,6 +139,7 @@ class BaseInferenceWithDB:
                     "relation": item["relation"],
                     "object": item["object"],
                     "qualifiers": item["qualifiers"],
+                    "source_text_id": item.get("source_text_id"),
                 }
                 for item in results
             ]
@@ -148,6 +149,7 @@ class BaseInferenceWithDB:
                     "subject": item["subject"],
                     "relation": item["relation"],
                     "object": item["object"],
+                    "source_text_id": item.get("source_text_id"),
                 }
                 for item in results
             ]
@@ -175,7 +177,7 @@ class BaseInferenceWithDB:
             use_filtered_triplets: Whether to use filtered triplets.
             use_qualifiers: Whether to use qualifiers.
         Returns:
-            The answer to the question.
+            A tuple of (supporting_triplets, answer), where supporting_triplets is a list of dictionaries with the subject, relation, object, qualifiers, and source_text_id (may be None if missing), and answer is the LLM-generated answer to the question.
         """
         logger.log(logging.DEBUG, "Linked entities: %s" % (str(linked_entities)))
 
@@ -211,6 +213,7 @@ class BaseInferenceWithDB:
                     "relation": item["relation"],
                     "object": item["object"],
                     "qualifiers": item["qualifiers"],
+                    "source_text_id": item.get("source_text_id"),
                 }
                 for item in supporting_triplets
             ]
@@ -220,6 +223,7 @@ class BaseInferenceWithDB:
                     "subject": item["subject"],
                     "relation": item["relation"],
                     "object": item["object"],
+                    "source_text_id": item.get("source_text_id"),
                 }
                 for item in supporting_triplets
             ]

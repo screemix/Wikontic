@@ -13,3 +13,5 @@ lib/
 */graphs/
 *.json
 *.html
+models/
+test.ipynb
