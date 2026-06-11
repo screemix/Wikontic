@@ -59,6 +59,10 @@ class InferenceWithDB(BaseInferenceWithDB):
         initial_triplets = []
 
         extracted_triplets = self.extractor.extract_triplets_from_text(text)
+        if not 'triplets' in extracted_triplets:
+            logger.error(f"Failed to parse triplets from text: {text}, {extracted_triplets}")
+            return [], [], []
+            
         for triplet in extracted_triplets["triplets"]:
             triplet["prompt_token_num"], triplet["completion_token_num"] = (
                 self.extractor.calculate_used_tokens()
