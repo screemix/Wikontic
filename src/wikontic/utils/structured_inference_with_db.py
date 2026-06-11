@@ -352,14 +352,13 @@ class StructuredInferenceWithDB(BaseInferenceWithDB):
         self.extractor.reset_error_state()
 
         extracted_triplets = self.extractor.extract_triplets_from_text(text)
-
-        if not 'triplets' in extracted_triplets:
-            logger.error(f"Failed to parse triplets from text: {text}, {extracted_triplets}")
+        triplets = self._parse_extracted_triplets(extracted_triplets, text)
+        if triplets is None:
             return [], [], [], []
-        
+
         initial_triplets = []
-        logger.debug(f"Extracted triplets: {extracted_triplets}")
-        for triplet in extracted_triplets["triplets"]:
+        logger.debug("Extracted triplets: %s", extracted_triplets)
+        for triplet in triplets:
             triplet["prompt_token_num"], triplet["completion_token_num"] = (
                 self.extractor.calculate_used_tokens()
             )
@@ -371,7 +370,7 @@ class StructuredInferenceWithDB(BaseInferenceWithDB):
         filtered_triplets = []
         ontology_filtered_triplets = []
 
-        for triplet in extracted_triplets["triplets"]:
+        for triplet in triplets:
             self.extractor.reset_tokens()
             try:
                 logger.log(logging.DEBUG, "Triplet: %s\n%s" % (str(triplet), "-" * 100))

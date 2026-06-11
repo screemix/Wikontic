@@ -28,6 +28,27 @@ class BaseInferenceWithDB:
         self.language = normalize_language(language)
         self.use_unidecode = use_unidecode_for_language(self.language)
 
+    def _parse_extracted_triplets(
+        self, extracted: object, text: str
+    ) -> Optional[List[dict]]:
+        """Return triplet list from LLM extraction output, or None if invalid."""
+        if not isinstance(extracted, dict):
+            logger.error(
+                "Triplet extraction response is not a dict for text: %s, got: %r",
+                text,
+                extracted,
+            )
+            return None
+        triplets = extracted.get("triplets")
+        if not isinstance(triplets, list):
+            logger.error(
+                "Triplet extraction response missing 'triplets' list for text: %s, got: %r",
+                text,
+                extracted,
+            )
+            return None
+        return triplets
+
     def retrieve_similar_entity_names(
         self, entity_name: str, k: int, sample_id: Optional[str] = None
     ) -> List[Dict[str, str]]:
