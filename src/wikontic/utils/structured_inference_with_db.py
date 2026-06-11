@@ -346,6 +346,10 @@ class StructuredInferenceWithDB(BaseInferenceWithDB):
 
         extracted_triplets = self.extractor.extract_triplets_from_text(text)
 
+        if not 'triplets' in extracted_triplets:
+            logger.error(f"Failed to parse triplets from text: {text}, {extracted_triplets}")
+            return [], [], [], []
+        
         initial_triplets = []
         logger.debug(f"Extracted triplets: {extracted_triplets}")
         for triplet in extracted_triplets["triplets"]:
