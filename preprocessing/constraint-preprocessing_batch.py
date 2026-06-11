@@ -13,7 +13,6 @@ from tenacity import retry, stop_after_attempt, wait_random_exponential
 from tqdm import tqdm
 import urllib.request
 
-
 from wikontic.logging_config import get_logger
 
 logger = get_logger("ConstraintPreprocessingBatch")

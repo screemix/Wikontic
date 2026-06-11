@@ -431,6 +431,22 @@ For LangChain tool bindings, see [`tutorial.ipynb`](tutorial.ipynb).
 | `structured_inference_with_db` | `StructuredInferenceWithDB` | Ontology-aware pipeline + QA |
 | `db.factory` | `create_backend` | Create MongoDB or Qdrant backend |
 
+## Backend Selection (`mongodb` or `qdrant`)
+
+`inference_and_eval/configs/*.yaml` now supports:
+
+- `vector_db_backend`: `mongodb` or `qdrant`
+- `qdrant_url`: set to `:memory:` for pure in-memory mode
+- `qdrant_api_key`: optional (for remote Qdrant)
+
+Example (in-memory Qdrant):
+
+```yaml
+vector_db_backend: "qdrant"
+qdrant_url: ":memory:"
+qdrant_api_key: null
+```
+
 ---
 
 ## Tests

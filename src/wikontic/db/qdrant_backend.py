@@ -137,8 +137,12 @@ class QdrantCollectionAdapter:
 
 class QdrantBackend:
     def __init__(self, qdrant_url: str = ":memory:", api_key: Optional[str] = None):
+<<<<<<< HEAD
         self._in_memory = qdrant_url == ":memory:"
         if self._in_memory:
+=======
+        if qdrant_url == ":memory:":
+>>>>>>> demo
             self.client = QdrantClient(":memory:")
         else:
             self.client = QdrantClient(url=qdrant_url, api_key=api_key)
@@ -146,9 +150,12 @@ class QdrantBackend:
         self._vector_config: Dict[str, Tuple[Optional[str], int]] = {}
         self._payload_indexes: Dict[str, set] = {}
 
+<<<<<<< HEAD
     def list_payload_index_fields(self, collection_name: str) -> set[str]:
         return set(self._payload_indexes.get(collection_name, set()))
 
+=======
+>>>>>>> demo
     def get_collection(self, collection_name: str) -> QdrantCollectionAdapter:
         self.ensure_collection(collection_name)
         return QdrantCollectionAdapter(self, collection_name)
@@ -160,12 +167,20 @@ class QdrantBackend:
             for field in index_fields:
                 if field in created:
                     continue
+<<<<<<< HEAD
                 if not self._in_memory:
                     self.client.create_payload_index(
                         collection_name=collection_name,
                         field_name=field,
                         field_schema=models.PayloadSchemaType.KEYWORD,
                     )
+=======
+                self.client.create_payload_index(
+                    collection_name=collection_name,
+                    field_name=field,
+                    field_schema=models.PayloadSchemaType.KEYWORD,
+                )
+>>>>>>> demo
                 created.add(field)
 
     def ensure_vector_index(
@@ -312,6 +327,7 @@ class QdrantBackend:
                 "QdrantBackend.vector_search currently supports `alias_text_embedding` "
                 "as the logical vector field."
             )
+<<<<<<< HEAD
         if not query.query_vector:
             return []
         vector_name, expected_size = self._vector_config.get(
@@ -322,6 +338,9 @@ class QdrantBackend:
                 f"Query vector length {len(query.query_vector)} does not match "
                 f"collection '{query.collection_name}' size {expected_size}."
             )
+=======
+        vector_name, _ = self._vector_config.get(query.collection_name, (None, 1))
+>>>>>>> demo
         if vector_name and query.index_name and query.index_name != vector_name:
             raise ValueError(
                 f"Vector index '{query.index_name}' is not configured for collection "
