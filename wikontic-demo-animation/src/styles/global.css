@@ -1371,16 +1371,17 @@ body,
 
 .syntheticDatasetFlow {
   position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  display: grid;
-  grid-template-columns: 1fr auto 330px;
+  left: 50%;
+  bottom: 24px;
+  width: min(980px, calc(100% - 96px));
+  display: flex;
+  justify-content: center;
   align-items: center;
-  gap: 28px;
 }
 
 .syntheticDatasetStack {
+  width: 100%;
+  max-width: 900px;
   padding: 28px 30px;
   border: 1px solid #cbd9ff;
   border-radius: 8px;
@@ -1412,28 +1413,4 @@ body,
   font-size: 20px;
   font-weight: 780;
   text-align: center;
-}
-
-.syntheticFlowArrow {
-  color: #2f6df6;
-}
-
-.syntheticModelHero {
-  height: 210px;
-  padding: 24px;
-  border: 1px solid #cbd9ff;
-  border-radius: 8px;
-  background: linear-gradient(180deg, #ffffff, #eef4ff);
-  color: #1748b5;
-  display: grid;
-  place-items: center;
-  gap: 12px;
-  text-align: center;
-  box-shadow: 0 22px 58px rgba(47, 109, 246, 0.14);
-}
-
-.syntheticModelHero strong {
-  max-width: 250px;
-  font-size: 25px;
-  line-height: 1.16;
 }

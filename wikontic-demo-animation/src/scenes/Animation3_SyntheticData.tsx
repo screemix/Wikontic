@@ -1,17 +1,13 @@
 import React from 'react';
 import {AbsoluteFill, Sequence, interpolate, useCurrentFrame} from 'remotion';
-import {Brain, DatabaseZap, Layers3, Network, Send, Waypoints} from 'lucide-react';
+import {DatabaseZap, Layers3, Network, Waypoints} from 'lucide-react';
 import {GraphView} from '../components/GraphView';
 import {PathHighlight} from '../components/PathHighlight';
 import {colors, font} from '../theme';
-import {
-  datasetLabels,
-  naturalQACards,
-  syntheticAnswerNodeId,
-  syntheticGraphEdges,
-  syntheticGraphNodes,
-  syntheticPaths,
-} from '../data/animation3';
+import {getAnimation3Content} from '../data/animation3';
+import type {Animation3Content} from '../data/animation3';
+import type {GraphEdge, GraphNode} from '../data/graphBefore';
+import type {Locale} from '../i18n/types';
 
 const clamp = (value: number) => Math.max(0, Math.min(1, value));
 const progress = (frame: number, from: number, to: number) =>
@@ -46,11 +42,6 @@ const syntheticLayout: Record<string, {x: number; y: number}> = {
   risks: {x: 0.9, y: 0.22},
 };
 
-const graphNodes = syntheticGraphNodes.map((node) => ({
-  ...node,
-  ...(syntheticLayout[node.id] ?? {}),
-}));
-
 const pathColors: Record<string, string> = {
   'one-hop': colors.green,
   'two-hop': colors.blue,
@@ -64,12 +55,15 @@ const pathOffsets: Record<string, number> = {
 };
 
 const answerColor = colors.violet;
-const answerFill = colors.violetSoft;
 
-const nodeById = new Map(graphNodes.map((node) => [node.id, node]));
-const edgeById = new Map(syntheticGraphEdges.map((edge) => [edge.id, edge]));
-
-const answerNode = nodeById.get(syntheticAnswerNodeId)!;
+type SyntheticGraph = {
+  nodes: GraphNode[];
+  edges: GraphEdge[];
+  paths: Animation3Content['syntheticPaths'];
+  answerNode: GraphNode;
+  nodeById: Map<string, GraphNode>;
+  edgeById: Map<string, GraphEdge>;
+};
 
 const labelLines = (label: string) => {
   const words = label.split(' ');
@@ -160,6 +154,7 @@ const Header: React.FC<{
 );
 
 const GraphStage: React.FC<{
+  graph: SyntheticGraph;
   reveal: number;
   muted?: boolean;
   highlightedNodeIds?: string[];
@@ -170,6 +165,7 @@ const GraphStage: React.FC<{
   softReveal?: boolean;
   overlay?: React.ReactNode;
 }> = ({
+  graph,
   reveal,
   muted = false,
   highlightedNodeIds = [],
@@ -195,8 +191,8 @@ const GraphStage: React.FC<{
     }}
   >
     <GraphView
-      nodes={graphNodes}
-      edges={syntheticGraphEdges}
+      nodes={graph.nodes}
+      edges={graph.edges}
       reveal={reveal}
       softReveal={softReveal}
       transparentBg
@@ -218,14 +214,15 @@ const GraphStage: React.FC<{
 );
 
 const endpoint = (
+  graph: SyntheticGraph,
   sourceId: string,
   targetId: string,
   graphHeight: number,
   trimFromSource: boolean,
   offset: number,
 ) => {
-  const source = nodeById.get(sourceId)!;
-  const target = nodeById.get(targetId)!;
+  const source = graph.nodeById.get(sourceId)!;
+  const target = graph.nodeById.get(targetId)!;
   const sx = source.x * GRAPH_W;
   const sy = source.y * graphHeight;
   const tx = target.x * GRAPH_W;
@@ -246,11 +243,13 @@ const endpoint = (
   };
 };
 
-const AnswerNodeOverlay: React.FC<{progress?: number; graphHeight: number; showType?: boolean}> = ({
+const AnswerNodeOverlay: React.FC<{graph: SyntheticGraph; progress?: number; graphHeight: number; showType?: boolean}> = ({
+  graph,
   progress: p = 1,
   graphHeight,
   showType = true,
 }) => {
+  const {answerNode} = graph;
   const x = answerNode.x * GRAPH_W;
   const y = answerNode.y * graphHeight;
   const lines = labelLines(answerNode.label);
@@ -330,20 +329,24 @@ const GraphOverlaySvg: React.FC<{children: React.ReactNode; graphHeight: number}
   </svg>
 );
 
-const MultiPathOverlay: React.FC<{progress: number; graphHeight: number}> = ({progress: p, graphHeight}) => (
+const MultiPathOverlay: React.FC<{graph: SyntheticGraph; progress: number; graphHeight: number}> = ({
+  graph,
+  progress: p,
+  graphHeight,
+}) => (
   <GraphOverlaySvg graphHeight={graphHeight}>
-    {syntheticPaths.map((path, pathIndex) => {
+    {graph.paths.map((path, pathIndex) => {
       const color = pathColors[path.id];
       const offset = pathOffsets[path.id];
       return (
         <g key={path.id} opacity={clamp(p * 1.3 - pathIndex * 0.16)}>
           {path.edgeIds.map((edgeId) => {
-            const edge = edgeById.get(edgeId);
+            const edge = graph.edgeById.get(edgeId);
             if (!edge) {
               return null;
             }
-            const start = endpoint(edge.source, edge.target, graphHeight, true, offset);
-            const end = endpoint(edge.source, edge.target, graphHeight, false, offset);
+            const start = endpoint(graph, edge.source, edge.target, graphHeight, true, offset);
+            const end = endpoint(graph, edge.source, edge.target, graphHeight, false, offset);
             const len = Math.hypot(end.x - start.x, end.y - start.y);
             return (
               <line
@@ -364,17 +367,21 @@ const MultiPathOverlay: React.FC<{progress: number; graphHeight: number}> = ({pr
         </g>
       );
     })}
-    <AnswerNodeOverlay graphHeight={graphHeight} showType={false} />
+    <AnswerNodeOverlay graph={graph} graphHeight={graphHeight} showType={false} />
   </GraphOverlaySvg>
 );
 
-const AnswerOnlyOverlay: React.FC<{progress: number; graphHeight: number}> = ({progress: p, graphHeight}) => (
+const AnswerOnlyOverlay: React.FC<{graph: SyntheticGraph; progress: number; graphHeight: number}> = ({
+  graph,
+  progress: p,
+  graphHeight,
+}) => (
   <GraphOverlaySvg graphHeight={graphHeight}>
-    <AnswerNodeOverlay progress={p} graphHeight={graphHeight} />
+    <AnswerNodeOverlay graph={graph} progress={p} graphHeight={graphHeight} />
   </GraphOverlaySvg>
 );
 
-const AnswerCallout: React.FC<{progress: number; bottom?: number}> = ({progress: p, bottom = 58}) => (
+const AnswerCallout: React.FC<{progress: number; label: string; bottom?: number}> = ({progress: p, label, bottom = 58}) => (
   <div
     style={{
       position: 'absolute',
@@ -395,36 +402,37 @@ const AnswerCallout: React.FC<{progress: number; bottom?: number}> = ({progress:
     }}
   >
     <Layers3 size={28} />
-    <span>ответ: инженерные сети</span>
+    <span>{label}</span>
   </div>
 );
 
-const GraphPhase: React.FC = () => {
+const GraphPhase: React.FC<{content: Animation3Content; graph: SyntheticGraph}> = ({content, graph}) => {
   const frame = useCurrentFrame();
   const headerIn = progress(frame, 6, 36);
   const answerIn = progress(frame, 82, 138);
   return (
     <Phase duration={PHASES.graph}>
       <Header
-        eyebrow="Синтетические данные"
-        title="Граф становится источником данных для обучения"
-        subtitle="Выбираем вершину-ответ в графе знаний"
+        eyebrow={content.labels.graphEyebrow}
+        title={content.labels.graphTitle}
+        subtitle={content.labels.graphSubtitle}
         icon={<DatabaseZap size={56} />}
         progress={headerIn}
       />
       <div style={{position: 'relative'}}>
         <GraphStage
+          graph={graph}
           reveal={1}
           muted={answerIn > 0.25}
-          overlay={<AnswerOnlyOverlay progress={answerIn} graphHeight={GRAPH_H} />}
+          overlay={<AnswerOnlyOverlay graph={graph} progress={answerIn} graphHeight={GRAPH_H} />}
         />
-        <AnswerCallout progress={answerIn} />
+        <AnswerCallout progress={answerIn} label={content.labels.answerCallout} />
       </div>
     </Phase>
   );
 };
 
-const PathPhase: React.FC = () => {
+const PathPhase: React.FC<{content: Animation3Content; graph: SyntheticGraph}> = ({content, graph}) => {
   const frame = useCurrentFrame();
   const headerIn = progress(frame, 6, 34);
   const pathsIn = progress(frame, 46, 118);
@@ -434,23 +442,24 @@ const PathPhase: React.FC = () => {
   return (
     <Phase duration={PHASES.paths}>
       <Header
-        eyebrow="Контроль сложности"
-        title="Выбираем пути разной длины"
-        subtitle="Один и тот же ответ можно получить через 1-hop, 2-hop или 3-hop пути"
+        eyebrow={content.labels.pathsEyebrow}
+        title={content.labels.pathsTitle}
+        subtitle={content.labels.pathsSubtitle}
         icon={<Waypoints size={58} />}
         progress={headerIn}
       />
       <div style={{position: 'relative', width: STAGE_W}}>
         <div style={{position: 'relative'}}>
           <GraphStage
+            graph={graph}
             reveal={1}
             muted
             stageHeight={525}
             graphHeight={pathGraphHeight}
             showTypes={false}
-            overlay={<MultiPathOverlay progress={pathsIn} graphHeight={pathGraphHeight} />}
+            overlay={<MultiPathOverlay graph={graph} progress={pathsIn} graphHeight={pathGraphHeight} />}
           />
-          <AnswerCallout progress={pathsIn} bottom={36} />
+          <AnswerCallout progress={pathsIn} label={content.labels.answerCallout} bottom={36} />
         </div>
         <div
           className="syntheticPathGrid"
@@ -460,7 +469,7 @@ const PathPhase: React.FC = () => {
             marginTop: 20,
           }}
         >
-          {syntheticPaths.map((path) => (
+          {content.syntheticPaths.map((path) => (
             <div key={path.id} className="syntheticPathCard" style={{borderColor: pathColors[path.id]}}>
               <div className="syntheticPathCardTop">
                 <span style={{background: pathColors[path.id]}} />
@@ -499,19 +508,18 @@ const DataCard: React.FC<{
   </div>
 );
 
-const DataPhase: React.FC = () => {
+const DataPhase: React.FC<{content: Animation3Content}> = ({content}) => {
   const frame = useCurrentFrame();
   const headerIn = progress(frame, 6, 36);
   const cardsIn = progress(frame, 38, 142);
   const datasetIn = progress(frame, 138, 206);
-  const modelIn = progress(frame, 190, 250);
 
   return (
     <Phase duration={PHASES.data}>
       <Header
-        eyebrow="Генерация"
-        title="Пути по графу превращаются в QA-примеры"
-        subtitle="Путь объясняет ответ на вопрос"
+        eyebrow={content.labels.dataEyebrow}
+        title={content.labels.dataTitle}
+        subtitle={content.labels.dataSubtitle}
         icon={<Network size={58} />}
         progress={headerIn}
       />
@@ -525,7 +533,7 @@ const DataPhase: React.FC = () => {
             transformOrigin: 'center top',
           }}
         >
-          {naturalQACards.map((card, index) => (
+          {content.naturalQACards.map((card, index) => (
             <DataCard
               key={card.question}
               {...card}
@@ -538,32 +546,21 @@ const DataPhase: React.FC = () => {
           className="syntheticDatasetFlow"
           style={{
             opacity: datasetIn,
-            transform: `translateY(${(1 - datasetIn) * 40}px)`,
+            transform: `translate(-50%, ${(1 - datasetIn) * 40}px)`,
           }}
         >
           <div className="syntheticDatasetStack">
             <div className="syntheticDatasetTitle">
               <DatabaseZap size={30} />
-              <span>Проверяемая синтетика</span>
+              <span>{content.labels.syntheticDataset}</span>
             </div>
             <div className="syntheticDatasetLabels">
-              {datasetLabels.map((label, index) => (
+              {content.datasetLabels.map((label, index) => (
                 <span key={label} style={{opacity: clamp(datasetIn * 1.4 - index * 0.16)}}>
                   {label}
                 </span>
               ))}
             </div>
-          </div>
-          <Send className="syntheticFlowArrow" size={44} />
-          <div
-            className="syntheticModelHero"
-            style={{
-              opacity: modelIn,
-              transform: `scale(${0.9 + modelIn * 0.1})`,
-            }}
-          >
-            <Brain size={58} />
-            <strong>малая доменная модель</strong>
           </div>
         </div>
       </div>
@@ -571,17 +568,34 @@ const DataPhase: React.FC = () => {
   );
 };
 
-export const Animation3_SyntheticData: React.FC = () => {
+type Animation3Props = {
+  locale?: Locale;
+};
+
+export const Animation3_SyntheticData: React.FC<Animation3Props> = ({locale = 'ru'}) => {
+  const content = getAnimation3Content(locale);
+  const nodes = content.syntheticGraphNodes.map((node) => ({
+    ...node,
+    ...(syntheticLayout[node.id] ?? {}),
+  }));
+  const graph: SyntheticGraph = {
+    nodes,
+    edges: content.syntheticGraphEdges,
+    paths: content.syntheticPaths,
+    answerNode: nodes.find((node) => node.id === content.syntheticAnswerNodeId)!,
+    nodeById: new Map(nodes.map((node) => [node.id, node])),
+    edgeById: new Map(content.syntheticGraphEdges.map((edge) => [edge.id, edge])),
+  };
   return (
     <AbsoluteFill style={{background: '#ffffff', fontFamily: font.family}}>
       <Sequence from={GRAPH_FROM} durationInFrames={PHASES.graph}>
-        <GraphPhase />
+        <GraphPhase content={content} graph={graph} />
       </Sequence>
       <Sequence from={PATHS_FROM} durationInFrames={PHASES.paths}>
-        <PathPhase />
+        <PathPhase content={content} graph={graph} />
       </Sequence>
       <Sequence from={DATA_FROM} durationInFrames={PHASES.data}>
-        <DataPhase />
+        <DataPhase content={content} />
       </Sequence>
     </AbsoluteFill>
   );

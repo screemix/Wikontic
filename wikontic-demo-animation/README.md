@@ -38,6 +38,14 @@ Open:
 http://localhost:5173/presentation.html
 ```
 
+English is the default. Open the Russian version with:
+
+```text
+http://localhost:5173/presentation.html?lang=ru
+```
+
+The viewer also has an `EN` / `RU` language toggle in the sidebar.
+
 If port `5173` is already busy, Vite may choose another port. You can also specify one explicitly:
 
 ```bash
@@ -69,31 +77,55 @@ This opens Remotion Studio for the compositions registered in `src/Root.tsx`.
 Current composition IDs:
 
 - `TextToGraph`
+- `TextToGraphRU`
+- `TextToGraphEN`
 - `RagVsWikontic`
+- `RagVsWikonticRU`
+- `RagVsWikonticEN`
 - `SyntheticDataFactory`
+- `SyntheticDataFactoryRU`
+- `SyntheticDataFactoryEN`
 
 ## Render Videos
 
-Render all three standalone MP4 files:
+Render all three standalone MP4 files in English:
 
 ```bash
 npm run render:all
+```
+
+Render all three standalone MP4 files in Russian:
+
+```bash
+npm run render:all:ru
 ```
 
 Render one animation at a time:
 
 ```bash
 npm run render:text-to-graph
+npm run render:text-to-graph:en
+npm run render:text-to-graph:ru
 npm run render:rag-vs-wikontic
+npm run render:rag-vs-wikontic:en
+npm run render:rag-vs-wikontic:ru
 npm run render:synthetic-data
+npm run render:synthetic-data:en
+npm run render:synthetic-data:ru
 ```
 
 Outputs are written to:
 
 ```text
 out/text-to-graph.mp4
+out/text-to-graph-en.mp4
+out/text-to-graph-ru.mp4
 out/rag-vs-wikontic.mp4
+out/rag-vs-wikontic-en.mp4
+out/rag-vs-wikontic-ru.mp4
 out/synthetic-data-factory.mp4
+out/synthetic-data-factory-en.mp4
+out/synthetic-data-factory-ru.mp4
 ```
 
 The `out/` folder is treated as generated output and should not be committed.
@@ -127,14 +159,35 @@ Animation scenes:
 Presentation viewer:
 
 - `src/presentation/PresentationApp.tsx`: slide-deck UI, Remotion Player, controls, final metrics slide.
-- `src/presentation/presentationConfig.ts`: slide list, component references, durations, chapter frame markers.
+- `src/presentation/presentationConfig.ts`: localized slide list, component references, durations, chapter frame markers.
 - `src/presentation/presentation.css`: presentation-only styling.
+- `src/i18n/types.ts`: shared locale type and locale normalization helper.
 
 Data:
 
-- `src/data/animation1.ts`: deterministic document, facts, triplets, ontology checks, compact graph.
-- `src/data/animation2.ts`: natural business question, RAG chunks, internal graph path, answer.
-- `src/data/animation3.ts`: answer node, sampled paths, natural QA cards, dataset labels.
+- `src/data/animation1.ts`: localized deterministic document, facts, triplets, ontology checks, compact graph.
+- `src/data/animation2.ts`: localized natural business question, RAG chunks, internal graph path, answer.
+- `src/data/animation3.ts`: localized answer node, sampled paths, natural QA cards, dataset labels.
+
+## Maintaining Two Languages
+
+English is the default language. Russian is selected in the viewer with `?lang=ru` or the `RU` toggle.
+
+When changing demo content:
+
+- Edit animation copy/data in `src/data/animation1.ts`, `src/data/animation2.ts`, and `src/data/animation3.ts`.
+- Edit slide titles, subtitles, and chapter labels in `src/presentation/presentationConfig.ts`.
+- Edit final metrics slide copy and viewer UI labels in `src/presentation/PresentationApp.tsx`.
+- Keep graph node IDs, edge IDs, path IDs, and card counts identical across `en` and `ru`; translate only visible labels, questions, answers, paths, and display text.
+- If changing layout, timing, or animation behavior, do it once in the scene/CSS files and verify both languages still fit.
+
+After bilingual edits, run:
+
+```bash
+npm run check
+```
+
+For visual changes, spot-check representative stills in both English and Russian.
 
 Shared visual components:
 
@@ -174,5 +227,5 @@ Expected constraints:
 - deterministic hardcoded data only
 - no backend requests
 - no external API calls
-- Russian labels remain readable at 1920x1080
+- Russian and English labels remain readable at 1920x1080
 - presentation viewer does not modify the animation scene files

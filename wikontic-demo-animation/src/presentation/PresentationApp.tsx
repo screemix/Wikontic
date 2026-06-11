@@ -3,33 +3,99 @@ import {Player} from '@remotion/player';
 import type {CallbackListener, PlayerRef} from '@remotion/player';
 import {ChevronLeft, ChevronRight, Maximize2, Pause, Play, RotateCcw, SkipBack, SkipForward} from 'lucide-react';
 import {MetricBadge} from '../components/MetricBadge';
-import {presentationSlides, presentationVideo} from './presentationConfig';
+import {getPresentationSlides, presentationVideo} from './presentationConfig';
 import type {AnimationSlide} from './presentationConfig';
+import {normalizeLocale} from '../i18n/types';
+import type {Locale} from '../i18n/types';
 
 const clampFrame = (frame: number, slide: AnimationSlide) =>
   Math.max(0, Math.min(slide.durationInFrames - 1, Math.round(frame)));
 
 const formatTime = (frame: number, duration: number) => `${frame} / ${duration - 1}`;
 
-const MetricsSlide: React.FC = () => (
+const presentationCopy: Record<Locale, {
+  metrics: {
+    title: string;
+    subtitle: string;
+    badges: {value: string; label: string; tone: 'blue' | 'green' | 'amber'}[];
+  };
+  controls: {
+    back: string;
+    pause: string;
+    continue: string;
+    restart: string;
+    next: string;
+    finalNote: string;
+    hints: string[];
+  };
+}> = {
+  ru: {
+    metrics: {
+      title: 'из документов в проверяемую базу фактов',
+      subtitle: 'Интерпретируемость · Multi-hop reasoning · Генерация синтетических данных',
+      badges: [
+        {value: '84-86%', label: 'извлеченных фактов (MINE-1)', tone: 'blue'},
+        {value: '76.0 F1', label: 'QA только по графу (HotpotQA)', tone: 'green'},
+        {value: 'x20 экономия токенов', label: 'по сравнению с GraphRAG', tone: 'blue'},
+      ],
+    },
+    controls: {
+      back: 'Назад',
+      pause: 'Пауза',
+      continue: 'Продолжить',
+      restart: 'Сначала',
+      next: 'Далее',
+      finalNote: 'Финальный слайд статичен: используйте стрелки, чтобы вернуться к анимациям.',
+      hints: ['Space: play/pause', '← / →: slide', 'R: restart', ', / .: ±15 frames'],
+    },
+  },
+  en: {
+    metrics: {
+      title: 'from documents to a verifiable fact base',
+      subtitle: 'Interpretability · Multi-hop reasoning · Synthetic data generation',
+      badges: [
+        {value: '84-86%', label: 'fact retention (MINE-1)', tone: 'blue'},
+        {value: '76.0 F1', label: 'graph-only QA (HotpotQA)', tone: 'green'},
+        {value: 'x20 token economy', label: 'compared with GraphRAG', tone: 'blue'},
+      ],
+    },
+    controls: {
+      back: 'Back',
+      pause: 'Pause',
+      continue: 'Continue',
+      restart: 'Restart',
+      next: 'Next',
+      finalNote: 'The final slide is static: use arrows to return to the animations.',
+      hints: ['Space: play/pause', '← / →: slide', 'R: restart', ', / .: ±15 frames'],
+    },
+  },
+};
+
+const MetricsSlide: React.FC<{locale: Locale}> = ({locale}) => {
+  const copy = presentationCopy[locale].metrics;
+  return (
   <div className="metricsSlide">
     <div className="metricsGridTexture" aria-hidden />
     <div className="metricsContent">
       <img src="/assets/wikontic.png" alt="Wikontic" className="metricsLogo" />
       <div>
-        <h1>из документов в проверяемую базу фактов</h1>
-        <p>Интерпретируемость · Multi-hop reasoning · Генерация синтетических данных</p>
+        <h1>{copy.title}</h1>
+        <p>{copy.subtitle}</p>
       </div>
       <div className="metricsBadges">
-        <MetricBadge value="84-86%" label="извлеченных фактов (MINE-1)" tone="blue" />
-        <MetricBadge value="76.0 F1" label="QA только по графу (HotpotQA)" tone="green" />
-        <MetricBadge value="x20 экономия токенов" label="по сравнению с GraphRAG" tone="blue" />
+        {copy.badges.map((badge) => (
+          <MetricBadge key={`${badge.value}-${badge.label}`} {...badge} />
+        ))}
       </div>
     </div>
   </div>
-);
+  );
+};
 
 export const PresentationApp: React.FC = () => {
+  const [locale, setLocale] = useState<Locale>(() => normalizeLocale(new URLSearchParams(window.location.search).get('lang')));
+  const presentationSlides = getPresentationSlides(locale);
+  const copy = presentationCopy[locale].controls;
   const [activeIndex, setActiveIndex] = useState(0);
   const [currentFrame, setCurrentFrame] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -47,6 +113,26 @@ export const PresentationApp: React.FC = () => {
     playerRef.current?.pause();
     setIsPlaying(false);
   }, []);
+
+  const changeLocale = useCallback(
+    (nextLocale: Locale) => {
+      if (nextLocale === locale) {
+        return;
+      }
+      pause();
+      setCurrentFrame(0);
+      setLocale(nextLocale);
+
+      const url = new URL(window.location.href);
+      if (nextLocale === 'en') {
+        url.searchParams.delete('lang');
+      } else {
+        url.searchParams.set('lang', nextLocale);
+      }
+      window.history.replaceState(null, '', `${url.pathname}${url.search}${url.hash}`);
+    },
+    [locale, pause],
+  );
 
   const play = useCallback(() => {
     if (!activeAnimation) {
@@ -83,7 +169,7 @@ export const PresentationApp: React.FC = () => {
       setActiveIndex(Math.max(0, Math.min(presentationSlides.length - 1, nextIndex)));
       setCurrentFrame(0);
     },
-    [pause],
+    [pause, presentationSlides.length],
   );
 
   const togglePlayback = useCallback(() => {
@@ -192,6 +278,23 @@ export const PresentationApp: React.FC = () => {
           </div>
         </div>
 
+        <div className="localeToggle" aria-label="Presentation language">
+          <button
+            type="button"
+            className={locale === 'en' ? 'activeLocale' : undefined}
+            onClick={() => changeLocale('en')}
+          >
+            EN
+          </button>
+          <button
+            type="button"
+            className={locale === 'ru' ? 'activeLocale' : undefined}
+            onClick={() => changeLocale('ru')}
+          >
+            RU
+          </button>
+        </div>
+
         <nav className="slideList" aria-label="Presentation slides">
           {presentationSlides.map((slide, index) => (
             <button
@@ -208,10 +311,9 @@ export const PresentationApp: React.FC = () => {
         </nav>
 
         <div className="keyboardHints">
-          <span>Space: play/pause</span>
-          <span>← / →: slide</span>
-          <span>R: restart</span>
-          <span>, / .: ±15 frames</span>
+          {copy.hints.map((hint) => (
+            <span key={hint}>{hint}</span>
+          ))}
         </div>
       </aside>
 
@@ -233,9 +335,10 @@ export const PresentationApp: React.FC = () => {
           <div className="stageFrame">
             {activeAnimation ? (
               <Player
-                key={activeAnimation.id}
+                key={`${activeAnimation.id}-${locale}`}
                 ref={setPlayerRef}
                 component={activeAnimation.component}
+                inputProps={{locale}}
                 durationInFrames={activeAnimation.durationInFrames}
                 fps={presentationVideo.fps}
                 compositionWidth={presentationVideo.width}
@@ -251,7 +354,7 @@ export const PresentationApp: React.FC = () => {
                 style={{width: '100%', height: '100%'}}
               />
             ) : (
-              <MetricsSlide />
+              <MetricsSlide locale={locale} />
             )}
           </div>
         </div>
@@ -260,15 +363,15 @@ export const PresentationApp: React.FC = () => {
           <div className="transportControls">
             <button type="button" onClick={() => goToSlide(activeIndex - 1)} disabled={activeIndex === 0}>
               <ChevronLeft size={20} />
-              Назад
+              {copy.back}
             </button>
             <button type="button" onClick={togglePlayback} disabled={!activeAnimation}>
               {isPlaying ? <Pause size={20} /> : <Play size={20} />}
-              {isPlaying ? 'Пауза' : 'Продолжить'}
+              {isPlaying ? copy.pause : copy.continue}
             </button>
             <button type="button" onClick={restart} disabled={!activeAnimation}>
               <RotateCcw size={20} />
-              Сначала
+              {copy.restart}
             </button>
             <button type="button" onClick={() => seekTo(currentFrame - 15)} disabled={!activeAnimation}>
               <SkipBack size={20} />
@@ -287,7 +390,7 @@ export const PresentationApp: React.FC = () => {
               onClick={() => goToSlide(activeIndex + 1)}
               disabled={activeIndex === presentationSlides.length - 1}
             >
-              Далее
+              {copy.next}
               <ChevronRight size={20} />
             </button>
           </div>
@@ -324,7 +427,7 @@ export const PresentationApp: React.FC = () => {
             </>
           ) : (
             <div className="chapterControls finalSlideNote">
-              Финальный слайд статичен: используйте стрелки, чтобы вернуться к анимациям.
+              {copy.finalNote}
             </div>
           )}
         </div>

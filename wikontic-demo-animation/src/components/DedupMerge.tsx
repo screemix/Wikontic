@@ -4,23 +4,36 @@ import {colors} from '../theme';
 
 type DedupMergeProps = {
   progress: number;
+  title?: string;
+  aliases?: {label: string; x: number; y: number}[];
+  canonical?: string;
+  aliasTags?: string[];
+  aliasesPrefix?: string;
+  footer?: string;
 };
 
 const lerp = (from: number, to: number, progress: number) => from + (to - from) * progress;
 
-export const DedupMerge: React.FC<DedupMergeProps> = ({progress}) => {
-  const p = Math.max(0, Math.min(1, progress));
-  const aliases = [
+export const DedupMerge: React.FC<DedupMergeProps> = ({
+  progress,
+  title = 'Очистка и дедупликация',
+  aliases = [
     {label: 'ЖК', x: 190, y: 155},
     {label: 'жилой комплекс', x: 380, y: 82},
     {label: 'объект', x: 560, y: 155},
-  ];
+  ],
+  canonical = 'жилой комплекс',
+  aliasTags = ['ЖК', 'объект'],
+  aliasesPrefix = 'aliases:',
+  footer = 'Синонимы объединены в одну сущность',
+}) => {
+  const p = Math.max(0, Math.min(1, progress));
   const target = {x: 380, y: 255};
   return (
     <div className="dedupPanel">
       <div className="dedupHeader">
         <GitMerge size={25} />
-        <span>Очистка и дедупликация</span>
+        <span>{title}</span>
       </div>
       <svg viewBox="0 0 760 430" className="dedupSvg" role="img">
         <defs>
@@ -57,15 +70,15 @@ export const DedupMerge: React.FC<DedupMergeProps> = ({progress}) => {
             strokeWidth="4"
           />
           <text x={target.x} y={target.y - 2} textAnchor="middle" className="mergeCanonical">
-            жилой комплекс
+            {canonical}
           </text>
           <text x={target.x} y={target.y + 26} textAnchor="middle" className="mergeTags">
-            aliases: ЖК · объект
+            {aliasesPrefix} {aliasTags.join(' · ')}
           </text>
         </g>
         <g opacity={Math.max(0, p - 0.35) / 0.65}>
           <text x="380" y="370" textAnchor="middle" className="mergeFooter">
-            Синонимы объединены в одну сущность
+            {footer}
           </text>
         </g>
       </svg>

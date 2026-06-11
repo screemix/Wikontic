@@ -7,14 +7,8 @@ import {GraphView} from '../components/GraphView';
 import {OntologyPass} from '../components/OntologyPass';
 import {Panel, SceneLayout} from '../components/SceneLayout';
 import {TripletCard} from '../components/TripletCard';
-import {
-  compactGraphEdges,
-  compactGraphNodes,
-  highlightedFacts,
-  methodDocument,
-  methodTriplets,
-  ontologyChecks,
-} from '../data/animation1';
+import {getAnimation1Content} from '../data/animation1';
+import type {Locale} from '../i18n/types';
 
 const clamp = (value: number) => Math.max(0, Math.min(1, value));
 const progress = (frame: number, from: number, to: number) =>
@@ -34,24 +28,21 @@ const finalGraphLayout: Record<string, {x: number; y: number}> = {
   networks:     {x: 0.74, y: 0.5},
   risks:        {x: 0.91, y: 0.25},
 };
-const finalGraphNodes = compactGraphNodes.map((node) => ({
-  ...node,
-  ...(finalGraphLayout[node.id] ?? {}),
-}));
-
-const graphBenefits = [
-  'Интерпретируемость',
-  'Верифицируемость',
-  'Редактируемость',
-  'Компактность',
-];
-
 export const TEXT_TO_GRAPH_FRAMES = 870;
 
-export const Animation1_TextToGraph: React.FC = () => {
+type Animation1Props = {
+  locale?: Locale;
+};
+
+export const Animation1_TextToGraph: React.FC<Animation1Props> = ({locale = 'ru'}) => {
+  const content = getAnimation1Content(locale);
+  const finalGraphNodes = content.compactGraphNodes.map((node) => ({
+    ...node,
+    ...(finalGraphLayout[node.id] ?? {}),
+  }));
   const frame = useCurrentFrame();
-  const activeFactCount = Math.min(highlightedFacts.length, Math.floor(frame / 22) + 1);
-  const activeFactIds = highlightedFacts.slice(0, activeFactCount).map((fact) => fact.id);
+  const activeFactCount = Math.min(content.highlightedFacts.length, Math.floor(frame / 22) + 1);
+  const activeFactIds = content.highlightedFacts.slice(0, activeFactCount).map((fact) => fact.id);
   const factsRemain = progress(frame, 110, 150);
   const tripletsIn = progress(frame, 120, 180);
   const ontologyIn = progress(frame, 270, 455);
@@ -62,14 +53,14 @@ export const Animation1_TextToGraph: React.FC = () => {
   const graphReveal = progress(frame, 605, 770);
   const title =
     frame < 120
-      ? 'Документы содержат факты'
+      ? content.titles.document
       : frame < 270
-        ? '1. Из текста извлекаются триплеты-кандидаты'
+        ? content.titles.triplets
         : frame < 455
-          ? '2. Верификация и согласование графа с онтологией'
+          ? content.titles.ontology
           : frame < 625
-            ? '3. Очистка и дедупликация графа'
-            : 'Информация сохранена в компактном и проверяемом графе знаний';
+            ? content.titles.dedup
+            : content.titles.final;
 
   // During step 2 (ontologyIn): document fades out and triplets slide left
   const docFadeForOntology = progress(frame, 265, 300);
@@ -88,7 +79,7 @@ export const Animation1_TextToGraph: React.FC = () => {
 
   return (
     <SceneLayout
-      eyebrow="Метод"
+      eyebrow={content.labels.eyebrow}
       title={title}
     >
       <div className="methodStage">
@@ -100,10 +91,12 @@ export const Animation1_TextToGraph: React.FC = () => {
           }}
         >
           <DocumentView
-            lines={methodDocument}
+            lines={content.methodDocument}
             activeFactIds={activeFactIds}
             dimNonFacts={factsRemain > 0.45}
             closeup={1 - progress(frame, 40, 130)}
+            toolbarLabel={content.labels.documentToolbar}
+            heading={content.labels.documentHeading}
           />
         </div>
 
@@ -116,7 +109,7 @@ export const Animation1_TextToGraph: React.FC = () => {
             transformOrigin: 'top left',
           }}
         >
-          {methodTriplets.map((triplet, index) => (
+          {content.methodTriplets.map((triplet, index) => (
             <TripletCard
               key={`${triplet.subject}-${triplet.object}`}
               {...triplet}
@@ -134,7 +127,7 @@ export const Animation1_TextToGraph: React.FC = () => {
             transformOrigin: 'top left',
           }}
         >
-          <OntologyPass checks={ontologyChecks} progress={ontologyIn} />
+          <OntologyPass checks={content.ontologyChecks} progress={ontologyIn} title={content.labels.ontologyTitle} />
         </div>
 
         <div
@@ -144,7 +137,19 @@ export const Animation1_TextToGraph: React.FC = () => {
             transform: `translateY(${(1 - dedupFadeIn) * 24}px)`,
           }}
         >
-          <DedupMerge progress={dedupIn} />
+          <DedupMerge
+            progress={dedupIn}
+            title={content.labels.dedupTitle}
+            aliases={content.dedupGroups[0].aliases.map((label, index) => [
+              {label, x: 190, y: 155},
+              {label, x: 380, y: 82},
+              {label, x: 560, y: 155},
+            ][index])}
+            canonical={content.dedupGroups[0].canonical}
+            aliasTags={[content.dedupGroups[0].aliases[0], content.dedupGroups[0].aliases[2]]}
+            aliasesPrefix={content.labels.dedupAliasesPrefix}
+            footer={content.labels.dedupFooter}
+          />
         </div>
 
         <div
@@ -160,24 +165,26 @@ export const Animation1_TextToGraph: React.FC = () => {
                 <div className="finalDocumentPanel">
                   <div className="panelTitleRow compactTitleRow">
                     <CheckCircle2 size={22} />
-                    <span>Исходный текст</span>
+                    <span>{content.labels.sourceText}</span>
                   </div>
                   <div className="finalDocumentCompact">
                     <DocumentView
-                      lines={methodDocument}
-                      activeFactIds={highlightedFacts.map((fact) => fact.id)}
+                      lines={content.methodDocument}
+                      activeFactIds={content.highlightedFacts.map((fact) => fact.id)}
                       closeup={0}
+                      toolbarLabel={content.labels.documentToolbar}
+                      heading={content.labels.documentHeading}
                     />
                   </div>
                 </div>
                 <div className="finalGraphColumn">
                   <div className="panelTitleRow compactTitleRow">
                     <CheckCircle2 size={22} />
-                    <span>Граф знаний</span>
+                    <span>{content.labels.graph}</span>
                   </div>
                   <GraphView
                     nodes={finalGraphNodes}
-                    edges={compactGraphEdges}
+                    edges={content.compactGraphEdges}
                     reveal={graphReveal}
                     showTypes={graphReveal > 0.55}
                     softReveal={true}
@@ -194,24 +201,24 @@ export const Animation1_TextToGraph: React.FC = () => {
               </div>
               <div className="metricTransform">
                 <div className="metricTransformBlock metricBefore">
-                  <span>Было</span>
+                  <span>{content.labels.before}</span>
                   <strong>420</strong>
-                  <em>токенов</em>
+                  <em>{content.labels.tokens}</em>
                 </div>
                 <div className="metricTransformArrow">→</div>
                 <div className="metricTransformBlock metricAfter">
-                  <span>Стало</span>
+                  <span>{content.labels.after}</span>
                   <div className="structuredMetrics">
                     <strong>9</strong>
-                    <em>сущностей и</em>
+                    <em>{content.labels.entitiesAnd}</em>
                     <strong>12</strong>
-                    <em>триплетов</em>
+                    <em>{content.labels.triplets}</em>
                   </div>
                 </div>
               </div>
             </Panel>
             <div className="finalGraphBenefits">
-              {graphBenefits.map((benefit, index) => {
+              {content.graphBenefits.map((benefit, index) => {
                 const itemIn = clamp(graphReveal * 1.45 - index * 0.16);
                 return (
                   <div

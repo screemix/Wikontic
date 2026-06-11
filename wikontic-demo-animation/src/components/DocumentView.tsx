@@ -8,6 +8,8 @@ type DocumentViewProps = {
   dimNonFacts?: boolean;
   progress?: number;
   closeup?: number;
+  toolbarLabel?: string;
+  heading?: string;
 };
 
 const toneByFact: Record<string, string> = {
@@ -24,6 +26,8 @@ export const DocumentView: React.FC<DocumentViewProps> = ({
   dimNonFacts = false,
   progress = 1,
   closeup = 0,
+  toolbarLabel = 'Документ',
+  heading = 'Проектные требования к объекту',
 }) => {
   const active = new Set(activeFactIds);
   return (
@@ -36,9 +40,9 @@ export const DocumentView: React.FC<DocumentViewProps> = ({
     >
       <div className="documentToolbar">
         <FileText size={22} />
-        <span>Документ</span>
+        <span>{toolbarLabel}</span>
       </div>
-      <div className="documentHeading">Проектные требования к объекту</div>
+      <div className="documentHeading">{heading}</div>
       <div className="documentText">
         {lines.map((line, lineIndex) => (
           <p key={`line-${lineIndex}`}>
@@ -73,4 +77,3 @@ export const DocumentView: React.FC<DocumentViewProps> = ({
     </div>
   );
 };
-

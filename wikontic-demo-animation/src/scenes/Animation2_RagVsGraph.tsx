@@ -7,12 +7,10 @@ import {colors, font} from '../theme';
 import {
   answerPathEdgeIds,
   answerPathNodeIds,
-  internalPathText,
-  ragChunks,
-  ragQuestion,
-  ragVsGraphEdges,
-  ragVsGraphNodes,
+  getAnimation2Content,
 } from '../data/animation2';
+import type {Animation2Content, Animation2Segment} from '../data/animation2';
+import type {Locale} from '../i18n/types';
 
 const clamp = (value: number) => Math.max(0, Math.min(1, value));
 const progress = (frame: number, from: number, to: number) =>
@@ -77,10 +75,6 @@ const BigIcon: React.FC<{tone: 'muted' | 'wikontic'; children: React.ReactNode}>
   );
 };
 
-// Fragment 2 is the relevant fragment RAG fails to retrieve — shown afterwards
-// in pastel red to motivate the conclusion.
-const missedChunk = ragChunks.find((chunk) => chunk.title === 'Фрагмент 2')!;
-
 // Three semantic "themes" that emphasise the key words of the question.
 type Tone = 'blue' | 'green' | 'violet';
 const toneRgb: Record<Tone, {bg: string; line: string}> = {
@@ -89,7 +83,7 @@ const toneRgb: Record<Tone, {bg: string; line: string}> = {
   violet: {bg: '238,233,255', line: '122,92,255'},
 };
 
-type Seg = {t: string; tone?: Tone};
+type Seg = Animation2Segment;
 
 // `on` (0→1) very gently fades in the tint + colored underline so the links
 // read as a soft hint, not a hard highlight.
@@ -120,16 +114,6 @@ const SemText: React.FC<{segments: Seg[]; on: number; size: number; weight: numb
     )}
   </span>
 );
-
-const questionSegments: Seg[] = [
-  {t: 'Что важно '},
-  {t: 'проверить', tone: 'violet'},
-  {t: ' перед вводом '},
-  {t: 'жилого комплекса', tone: 'blue'},
-  {t: ' в '},
-  {t: 'эксплуатацию', tone: 'green'},
-  {t: '?'},
-];
 
 // --- Filtering beat -------------------------------------------------------
 // A corpus of identical grey document boxes (no titles), linked by arrows that
@@ -170,30 +154,13 @@ const GRID_W = 300;
 // Relevant fragments sit on different rows AND columns; arrows connect the ones
 // that share an entity (объект, система мониторинга, инженерные сети). The lost
 // fragment is the bridge between фрагмент 1 and фрагмент 3.
-const corpusGrid: Omit<CorpusBox, 'sx' | 'sy' | 'sw'>[] = [
-  {text: 'Требования к объекту утверждены проектной командой в 2024 году.', col: 0, row: 0, slot: 2,
-    segments: [{t: 'Требования', tone: 'violet'}, {t: ' к '}, {t: 'объекту', tone: 'blue'}, {t: ' утверждены проектной командой в 2024 году.'}]},
-  {text: 'Объект включает систему мониторинга.', col: 1, row: 0, slot: 0,
-    segments: [{t: 'Объект', tone: 'blue'}, {t: ' включает систему мониторинга.'}]},
-  {text: 'Система мониторинга контролирует инженерные сети.', col: 2, row: 1, lost: true, tx: 1, ty: 1},
-  {text: 'Инженерные сети связаны с эксплуатационными рисками.', col: 0, row: 2, slot: 1,
-    segments: [{t: 'Инженерные сети связаны с '}, {t: 'эксплуатационными', tone: 'green'}, {t: ' рисками.'}]},
-  {text: 'Подземный паркинг рассчитан на 120 машино-мест.', col: 2, row: 0, tx: 1, ty: -1},
-  {text: 'Фасадные работы завершены в третьем квартале.', col: 3, row: 0, tx: 1, ty: -1},
-  {text: 'Договор подряда подписан с генеральным подрядчиком.', col: 1, row: 1, tx: -1, ty: 0},
-  {text: 'Высота типового этажа составляет три метра.', col: 3, row: 1, tx: 1, ty: 0},
-  {text: 'Озеленение территории запланировано на весну.', col: 1, row: 2, tx: 1, ty: 1},
-  {text: 'Гарантийный срок на кровлю — десять лет.', col: 3, row: 2, tx: 1, ty: 1},
-  {text: 'Лифтовое оборудование поставлено зарубежным производителем.', col: 0, row: 1, tx: -1, ty: 0},
-  {text: 'Система пожарной сигнализации принята в эксплуатацию.', col: 2, row: 2, tx: 1, ty: 1},
-];
-
-const corpus: CorpusBox[] = corpusGrid.map((b) => ({
-  ...b,
-  sx: GRID_COLS[b.col],
-  sy: GRID_ROWS[b.row],
-  sw: GRID_W,
-}));
+const buildCorpus = (content: Animation2Content): CorpusBox[] =>
+  content.corpusGrid.map((b) => ({
+    ...b,
+    sx: GRID_COLS[b.col],
+    sy: GRID_ROWS[b.row],
+    sw: GRID_W,
+  }));
 
 // Arrows connect entity-sharing fragments, clipped to box edges so the heads
 // land in the gaps (фрагмент 4 → 1 → 2(lost) → 3).
@@ -212,37 +179,39 @@ const edgePoint = (b: CorpusBox, dx: number, dy: number) => {
 // Arrows by corpus index. `strong` marks the relevant chain through the lost
 // bridge (slot2 → slot0 → lost → slot1); the rest is the surrounding mesh that
 // shows the documents — and especially the lost one — are all connected.
-const idxBySlot = (s: number) => corpus.findIndex((b) => b.slot === s);
-const idxLost = corpus.findIndex((b) => b.lost);
-const arrowSpecs: {from: number; to: number; strong?: boolean}[] = [
-  // relevant chain — passes through the lost document
-  {from: idxBySlot(2), to: idxBySlot(0), strong: true},
-  {from: idxBySlot(0), to: idxLost, strong: true},
-  {from: idxLost, to: idxBySlot(1), strong: true},
-  // the lost document is connected to several neighbours
-  {from: 4, to: idxLost},
-  {from: 6, to: idxLost},
-  {from: idxLost, to: 7},
-  {from: idxLost, to: 11},
-  // wider mesh so the corpus reads as an interconnected set
-  {from: idxBySlot(0), to: 4},
-  {from: 10, to: 6},
-  {from: 5, to: 7},
-  {from: 8, to: 11},
-  {from: idxBySlot(1), to: 8},
-];
-const arrows = arrowSpecs.map(({from, to, strong}) => {
-  const a = corpus[from];
-  const b = corpus[to];
-  const ca = boxCenter(a);
-  const cb = boxCenter(b);
-  const p1 = edgePoint(a, cb.x - ca.x, cb.y - ca.y);
-  const p2 = edgePoint(b, ca.x - cb.x, ca.y - cb.y);
-  return {p1, p2, len: Math.hypot(p2.x - p1.x, p2.y - p1.y), strong: strong === true};
-});
+const buildArrows = (corpus: CorpusBox[]) => {
+  const idxBySlot = (s: number) => corpus.findIndex((b) => b.slot === s);
+  const idxLost = corpus.findIndex((b) => b.lost);
+  const arrowSpecs: {from: number; to: number; strong?: boolean}[] = [
+    {from: idxBySlot(2), to: idxBySlot(0), strong: true},
+    {from: idxBySlot(0), to: idxLost, strong: true},
+    {from: idxLost, to: idxBySlot(1), strong: true},
+    {from: 4, to: idxLost},
+    {from: 6, to: idxLost},
+    {from: idxLost, to: 7},
+    {from: idxLost, to: 11},
+    {from: idxBySlot(0), to: 4},
+    {from: 10, to: 6},
+    {from: 5, to: 7},
+    {from: 8, to: 11},
+    {from: idxBySlot(1), to: 8},
+  ];
+  return arrowSpecs.map(({from, to, strong}) => {
+    const a = corpus[from];
+    const b = corpus[to];
+    const ca = boxCenter(a);
+    const cb = boxCenter(b);
+    const p1 = edgePoint(a, cb.x - ca.x, cb.y - ca.y);
+    const p2 = edgePoint(b, ca.x - cb.x, ca.y - cb.y);
+    return {p1, p2, len: Math.hypot(p2.x - p1.x, p2.y - p1.y), strong: strong === true};
+  });
+};
 
-const RagPhase: React.FC = () => {
+const RagPhase: React.FC<{content: Animation2Content}> = ({content}) => {
   const frame = useCurrentFrame();
+  const corpus = buildCorpus(content);
+  const arrows = buildArrows(corpus);
+  const missedChunk = content.ragChunks[1];
   const headerIn = progress(frame, 6, 30);
   const allIn = progress(frame, 24, 84); // all boxes appear (identical grey)
   const arrowsIn = progress(frame, 92, 150); // links between fragments
@@ -288,9 +257,9 @@ const RagPhase: React.FC = () => {
               letterSpacing: '0.06em',
             }}
           >
-            Вопрос
+            {content.labels.question}
           </div>
-          <SemText segments={questionSegments} on={linkIn} size={28} weight={760} />
+          <SemText segments={content.questionSegments} on={linkIn} size={28} weight={760} />
         </div>
       </div>
 
@@ -398,8 +367,9 @@ const RagPhase: React.FC = () => {
                       transform: `translateY(${(1 - lostMark) * -8}px)`,
                     }}
                   >
-                    Не найден!
-                    Нет прямой связи с вопросом.
+                    {content.labels.notFound}
+                    <br />
+                    {content.labels.noDirectLink}
                   </div>
                 </>
               ) : null}
@@ -456,7 +426,7 @@ const RagPhase: React.FC = () => {
         >
           <div style={{display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8, color: '#a82626', fontSize: 26}}>
             <Split size={24} />
-            <strong style={{fontWeight: 900}}>Релевантный фрагмент не найден</strong>
+            <strong style={{fontWeight: 900}}>{content.labels.relevantNotFound}</strong>
           </div>
           <p style={{margin: 0, color: '#a82626', fontSize: 29, lineHeight: 1.3, fontWeight: 700}}>
             {missedChunk.text}
@@ -484,7 +454,7 @@ const RagPhase: React.FC = () => {
           }}
         >
           <Split size={28} />
-          <span>RAG смотрит только на близость к вопросу, а не на взаимосвязь между фактами.</span>
+          <span>{content.labels.ragNote}</span>
         </div>
       </div>
     </Phase>
@@ -498,11 +468,6 @@ const RagPhase: React.FC = () => {
 const DOC_COLS = [70, 490, 910, 1330];
 const DOC_ROWS = [40, 235, 430];
 const DOC_W = 320;
-const docScatter = corpus.map((box, i) => ({
-  text: box.text,
-  x: DOC_COLS[i % 4],
-  y: DOC_ROWS[Math.floor(i / 4)],
-}));
 
 // Clean, evenly-spaced layout tuned for this wide canvas (1180x470) so bubbles
 // never overlap. Overrides only x/y; node identity/labels stay from the data.
@@ -517,11 +482,6 @@ const wikonticLayout: Record<string, {x: number; y: number}> = {
   networks: {x: 0.735, y: 0.5},
   risks: {x: 0.95, y: 0.5},
 };
-const wikonticGraphNodes = ragVsGraphNodes.map((node) => ({
-  ...node,
-  ...(wikonticLayout[node.id] ?? {}),
-}));
-
 const GRAPH_W = 1740;
 const GRAPH_H = 560;
 
@@ -534,8 +494,18 @@ const PROJECT_SY = wikonticLayout.project.y * GRAPH_H;
 const DOT_SCALE = 0.05;
 const DOT_HALF = (DOC_W * DOT_SCALE) / 2;
 
-const WikonticPhase: React.FC = () => {
+const WikonticPhase: React.FC<{content: Animation2Content}> = ({content}) => {
   const frame = useCurrentFrame();
+  const corpus = buildCorpus(content);
+  const docScatter = corpus.map((box, i) => ({
+    text: box.text,
+    x: DOC_COLS[i % 4],
+    y: DOC_ROWS[Math.floor(i / 4)],
+  }));
+  const wikonticGraphNodes = content.ragVsGraphNodes.map((node) => ({
+    ...node,
+    ...(wikonticLayout[node.id] ?? {}),
+  }));
   const headerIn = progress(frame, 6, 40);
   const docsIn = progress(frame, 24, 96); // same corpus appears, scattered & grey
   const uniteIn = progress(frame, 124, 192); // all docs converge + squash to a single dot
@@ -580,9 +550,9 @@ const WikonticPhase: React.FC = () => {
               letterSpacing: '0.06em',
             }}
           >
-            Вопрос
+            {content.labels.question}
           </div>
-          <SemText segments={questionSegments} on={1} size={28} weight={760} />
+          <SemText segments={content.questionSegments} on={1} size={28} weight={760} />
         </div>
       </div>
 
@@ -659,13 +629,13 @@ const WikonticPhase: React.FC = () => {
             letterSpacing: '0.01em',
           }}
         >
-          Объединяем документы в граф
+          {content.labels.uniteDocuments}
         </div>
 
         <div style={{position: 'absolute', inset: 0, zIndex: 1}}>
         <GraphView
           nodes={wikonticGraphNodes}
-          edges={ragVsGraphEdges}
+          edges={content.ragVsGraphEdges}
           reveal={graphIn}
           softReveal
           transparentBg
@@ -713,9 +683,9 @@ const WikonticPhase: React.FC = () => {
               letterSpacing: '0.05em',
             }}
           >
-            В графе находим путь к ответу
+            {content.labels.pathToAnswer}
           </div>
-          <PathHighlight path={internalPathText} progress={pathIn} fontSize={30} />
+          <PathHighlight path={content.internalPathText} progress={pathIn} fontSize={30} />
         </div>
 
         {/* Answer box — slides up from the bottom to replace the path box */}
@@ -744,10 +714,10 @@ const WikonticPhase: React.FC = () => {
               letterSpacing: '0.05em',
             }}
           >
-            Ответ
+            {content.labels.answer}
           </div>
           <p style={{margin: 0, fontSize: 38, lineHeight: 1.3, fontWeight: 800, color: colors.ink}}>
-            {answerSegments.map((seg, index) =>
+            {content.answerSegments.map((seg, index) =>
               seg.tone ? (
                 <span
                   key={index}
@@ -773,23 +743,19 @@ const WikonticPhase: React.FC = () => {
   );
 };
 
-// Answer with the two key phrases highlighted, per request.
-const answerSegments: {text: string; tone?: 'blue' | 'green'}[] = [
-  {text: 'Нужно проверить '},
-  {text: 'систему мониторинга', tone: 'blue'},
-  {text: ' инженерных сетей, потому что она связана с '},
-  {text: 'эксплуатационным контролем', tone: 'green'},
-  {text: ' объекта.'},
-];
+type Animation2Props = {
+  locale?: Locale;
+};
 
-export const Animation2_RagVsGraph: React.FC = () => {
+export const Animation2_RagVsGraph: React.FC<Animation2Props> = ({locale = 'ru'}) => {
+  const content = getAnimation2Content(locale);
   return (
     <AbsoluteFill style={{background: '#ffffff', fontFamily: font.family}}>
       <Sequence from={RAG_FROM} durationInFrames={PHASES.rag}>
-        <RagPhase />
+        <RagPhase content={content} />
       </Sequence>
       <Sequence from={WIKONTIC_FROM} durationInFrames={PHASES.wikontic}>
-        <WikonticPhase />
+        <WikonticPhase content={content} />
       </Sequence>
     </AbsoluteFill>
   );

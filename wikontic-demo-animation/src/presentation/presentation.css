@@ -12,7 +12,7 @@
 
 .presentationSidebar {
   display: grid;
-  grid-template-rows: auto 1fr auto;
+  grid-template-rows: auto auto 1fr auto;
   gap: 28px;
   padding: 28px 22px;
   border-right: 1px solid #dbe3ef;
@@ -45,6 +45,38 @@
   color: #647084;
   font-size: 14px;
   font-weight: 700;
+}
+
+.localeToggle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  padding: 5px;
+  border: 1px solid #dbe3ef;
+  border-radius: 8px;
+  background: #f8fafc;
+}
+
+.localeToggle button {
+  min-height: 34px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #647084;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 850;
+  cursor: pointer;
+}
+
+.localeToggle button:hover {
+  color: #1748b5;
+}
+
+.localeToggle .activeLocale {
+  background: #ffffff;
+  color: #1748b5;
+  box-shadow: 0 8px 20px rgba(23, 32, 51, 0.1);
 }
 
 .slideList {
@@ -329,4 +361,3 @@
     display: none;
   }
 }
-

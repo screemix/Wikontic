@@ -11,6 +11,7 @@ type OntologyCheck = {
 type OntologyPassProps = {
   checks: readonly OntologyCheck[];
   progress: number;
+  title?: string;
 };
 
 const toneColor: Record<OntologyCheck['tone'], string> = {
@@ -20,13 +21,13 @@ const toneColor: Record<OntologyCheck['tone'], string> = {
   violet: colors.violet,
 };
 
-export const OntologyPass: React.FC<OntologyPassProps> = ({checks, progress}) => {
+export const OntologyPass: React.FC<OntologyPassProps> = ({checks, progress, title = 'Онтологическая проверка'}) => {
   const scannerX = Math.max(0, Math.min(1, progress)) * 100;
   return (
     <div className="ontologyPass">
       <div className="ontologyHeader">
         <ScanSearch size={26} />
-        <span>Онтологическая проверка</span>
+        <span>{title}</span>
       </div>
       <div className="ontologyGrid">
         {checks.map((check, index) => {
@@ -52,4 +53,3 @@ export const OntologyPass: React.FC<OntologyPassProps> = ({checks, progress}) =>
     </div>
   );
 };
-
