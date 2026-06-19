@@ -32,6 +32,7 @@ dependencies = [
     "accelerate",
     "langchain",
     "langchain_openai",
+    "qdrant-client",
 ]
 
 [project.urls]
@@ -51,3 +52,14 @@ wikontic = [
     "utils/ontology_mappings/*.json",
     "utils/prompts/**/*.txt",
 ]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "-v --tb=short"
+log_cli = true
+log_cli_level = "INFO"
+log_cli_format = "%(asctime)s %(levelname)-8s %(name)s — %(message)s"
+log_cli_date_format = "%H:%M:%S"

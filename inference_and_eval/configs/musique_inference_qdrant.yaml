@@ -1,0 +1,9 @@
+# Paths are resolved relative to the process working directory unless absolute.
+vector_db_backend: "qdrant"
+qdrant_url: ":memory:"
+ontology_db_name: "wikidata_ontology"
+triplets_db_name: "triplets_db"
+model_name: "gpt-4o-mini"
+preprocessing: "musique"
+num_samples: 100
+structured_inference: true

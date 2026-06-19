@@ -7,22 +7,25 @@ from unidecode import unidecode
 from pymongo.mongo_client import MongoClient
 import string
 import os
+from pathlib import Path
+
+from dotenv import load_dotenv, find_dotenv
+import jsonlines
+
+_repo_root = Path(__file__).resolve().parent.parent
+load_dotenv(_repo_root / ".env")
+load_dotenv(find_dotenv())
 
 from wikontic.utils.structured_aligner import Aligner as StructuredDBAligner
 from wikontic.utils.dynamic_aligner import Aligner as DynamicDBAligner
 from wikontic.utils.structured_inference_with_db import StructuredInferenceWithDB
 from wikontic.utils.inference_with_db import InferenceWithDB
 from wikontic.utils.openai_utils import LLMTripletExtractor
+from wikontic.logging_config import get_logger
 
-import logging
-import jsonlines
-from dotenv import load_dotenv, find_dotenv
-
-logger = logging.getLogger("QAEvalHotpot")
-logger.setLevel(logging.ERROR)
+logger = get_logger("QAEvalHotpot")
 
 warnings.filterwarnings("ignore")
-_ = load_dotenv(find_dotenv())
 
 
 def normalize(input_string):

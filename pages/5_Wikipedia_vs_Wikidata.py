@@ -7,20 +7,17 @@ import tempfile
 import os
 from dotenv import load_dotenv, find_dotenv
 
-# from neo4j import GraphDatabase
+load_dotenv(find_dotenv())
+
 from pymongo import MongoClient
+from src.wikontic.logging_config import get_logger
 from src.wikontic.utils.openai_utils import LLMTripletExtractor
 from src.wikontic.utils.structured_aligner import Aligner
 from src.wikontic.utils.structured_inference_with_db import StructuredInferenceWithDB
 import uuid
-import logging
-import sys
 import base64
 
-# Configure logging
-logging.basicConfig(stream=sys.stderr)
-logger = logging.getLogger("Wikipedia vs Wikidata")
-logger.setLevel(logging.INFO)
+logger = get_logger("Wikipedia vs Wikidata")
 
 st.set_page_config(
     page_title="Wikontic", page_icon="media/wikotic-wo-text.png", layout="wide"
