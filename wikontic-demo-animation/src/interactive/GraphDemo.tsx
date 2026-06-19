@@ -2,7 +2,7 @@ import React, {useMemo, useState} from 'react';
 import {GraphView} from '../components/GraphView';
 import type {GraphNode} from '../data/graphBefore';
 import {qaPathEdgeIds, qaPathNodeIds, refinedEdges, refinedNodes} from '../data/graphAfter';
-import {answer, question} from '../data/sampleDocument';
+import {ragQuestion as question, ragVsWikonticAnswer as answer} from '../data/animation2';
 import '../styles/global.css';
 
 const aliases: Record<string, string[]> = {

@@ -46,4 +46,3 @@ export const SmallModelIcon: React.FC<{progress?: number}> = ({progress = 1}) =>
     <strong>малая доменная модель</strong>
   </div>
 );
-

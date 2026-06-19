@@ -199,10 +199,6 @@ Shared visual components:
 - `src/components/DatasetCard.tsx`: synthetic QA card.
 - `src/components/MetricBadge.tsx`: metric badges used in final slide.
 
-Legacy files:
-
-- `src/HeroVideo.tsx` and `src/scenes/Scene01*` through `Scene07*` belong to the earlier single 90-second hero video version. The active v2 Remotion compositions are the three `Animation*` scene files listed above.
-
 ## Assets
 
 Assets are stored in:

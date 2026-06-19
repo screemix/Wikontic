@@ -9,4 +9,3 @@ createRoot(document.getElementById('presentation-root') as HTMLElement).render(
     <PresentationApp />
   </React.StrictMode>,
 );
-

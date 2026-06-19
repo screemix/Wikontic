@@ -39,4 +39,3 @@ export const PathHighlight: React.FC<PathHighlightProps> = ({
     </div>
   );
 };
-

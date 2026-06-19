@@ -23,4 +23,3 @@ export const HighlightedFact: React.FC<HighlightedFactProps> = ({
     {children}
   </div>
 );
-
