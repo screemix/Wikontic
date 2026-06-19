@@ -34,8 +34,8 @@ const presentationCopy: Record<Locale, {
       title: 'из документов в проверяемую базу фактов',
       subtitle: 'Интерпретируемость · Multi-hop reasoning · Генерация синтетических данных',
       badges: [
-        {value: '84-86%', label: 'извлеченных фактов (MINE-1)', tone: 'blue'},
-        {value: '76.0 F1', label: 'QA только по графу (HotpotQA)', tone: 'green'},
+        {value: '84-86%', label: 'извлеченных фактов на MINE-1', tone: 'blue'},
+        {value: '76.0 F1', label: 'QA только по графу на HotpotQA', tone: 'green'},
         {value: 'x20 экономия токенов', label: 'по сравнению с GraphRAG', tone: 'blue'},
       ],
     },
@@ -54,8 +54,8 @@ const presentationCopy: Record<Locale, {
       title: 'from documents to a verifiable fact base',
       subtitle: 'Interpretability · Multi-hop reasoning · Synthetic data generation',
       badges: [
-        {value: '84-86%', label: 'fact retention (MINE-1)', tone: 'blue'},
-        {value: '76.0 F1', label: 'graph-only QA (HotpotQA)', tone: 'green'},
+        {value: '84-86%', label: 'fact retention on MINE-1', tone: 'blue'},
+        {value: '76.0 F1', label: 'graph-only QA on HotpotQA', tone: 'green'},
         {value: 'x20 token economy', label: 'compared with GraphRAG', tone: 'blue'},
       ],
     },
@@ -74,21 +74,63 @@ const presentationCopy: Record<Locale, {
 const MetricsSlide: React.FC<{locale: Locale}> = ({locale}) => {
   const copy = presentationCopy[locale].metrics;
   return (
-  <div className="metricsSlide">
-    <div className="metricsGridTexture" aria-hidden />
-    <div className="metricsContent">
-      <img src="/assets/wikontic.png" alt="Wikontic" className="metricsLogo" />
-      <div>
-        <h1>{copy.title}</h1>
-        <p>{copy.subtitle}</p>
-      </div>
-      <div className="metricsBadges">
-        {copy.badges.map((badge) => (
-          <MetricBadge key={`${badge.value}-${badge.label}`} {...badge} />
-        ))}
+    <div className="metricsSlide">
+      <div className="metricsGridTexture" aria-hidden />
+      <div className="metricsContent">
+        <img src="/assets/wikontic.png" alt="Wikontic" className="metricsLogo" />
+        <div>
+          <h1>{copy.title}</h1>
+          <p>{copy.subtitle}</p>
+        </div>
+        <div className="metricsBadges">
+          {copy.badges.map((badge) => (
+            <MetricBadge key={`${badge.value}-${badge.label}`} {...badge} />
+          ))}
+        </div>
       </div>
     </div>
-  </div>
+  );
+};
+
+const StaticStage: React.FC<{children: React.ReactNode}> = ({children}) => {
+  const viewportRef = useRef<HTMLDivElement | null>(null);
+  const [size, setSize] = useState({
+    width: presentationVideo.width,
+    height: presentationVideo.height,
+  });
+
+  useEffect(() => {
+    const viewport = viewportRef.current;
+    if (!viewport) {
+      return;
+    }
+
+    const updateSize = () => {
+      const rect = viewport.getBoundingClientRect();
+      setSize({width: rect.width, height: rect.height});
+    };
+
+    updateSize();
+    const observer = new ResizeObserver(updateSize);
+    observer.observe(viewport);
+    return () => observer.disconnect();
+  }, []);
+
+  const scale = Math.min(size.width / presentationVideo.width, size.height / presentationVideo.height);
+
+  return (
+    <div className="staticStageViewport" ref={viewportRef}>
+      <div
+        className="staticStageCanvas"
+        style={{
+          width: presentationVideo.width,
+          height: presentationVideo.height,
+          transform: `translate(-50%, -50%) scale(${scale})`,
+        }}
+      >
+        {children}
+      </div>
+    </div>
   );
 };
 
@@ -354,7 +396,9 @@ export const PresentationApp: React.FC = () => {
                 style={{width: '100%', height: '100%'}}
               />
             ) : (
-              <MetricsSlide locale={locale} />
+              <StaticStage>
+                <MetricsSlide locale={locale} />
+              </StaticStage>
             )}
           </div>
         </div>
