@@ -161,7 +161,6 @@ def test_retrieve_properties_for_entity_type(structured_aligner_mongo):
 
 def test_retrieve_entity_by_type(structured_aligner_mongo):
     structured_aligner_mongo.add_entity("Paris", "city of light", "city", SAMPLE_ID)
-
     results = timed(
         "StructuredAligner.retrieve_entity_by_type",
         structured_aligner_mongo.retrieve_entity_by_type,

@@ -1,4 +1,6 @@
 streamlit==1.40.1
+Pillow
+tiktoken
 numpy
 pyvis
 python-dotenv

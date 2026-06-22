@@ -3,7 +3,7 @@ from __future__ import annotations
 import hashlib
 import uuid
 from dataclasses import dataclass
-from typing import Any, Dict, Iterable, List, Optional, Tuple, Union
+from typing import Any, Dict, Iterable, List, Optional, Set, Tuple, Union
 
 from qdrant_client import QdrantClient, models
 
@@ -146,7 +146,7 @@ class QdrantBackend:
         self._vector_config: Dict[str, Tuple[Optional[str], int]] = {}
         self._payload_indexes: Dict[str, set] = {}
 
-    def list_payload_index_fields(self, collection_name: str) -> set[str]:
+    def list_payload_index_fields(self, collection_name: str) -> Set[str]:
         return set(self._payload_indexes.get(collection_name, set()))
 
     def get_collection(self, collection_name: str) -> QdrantCollectionAdapter:

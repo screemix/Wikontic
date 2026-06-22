@@ -12,9 +12,15 @@ datasets/
 lib/
 */kg_dump/
 */graphs/
-.mp4
+
+*.json
+*.html
+models/
+test.ipynb
+
 wikontic-demo-animation/node_modules/
 wikontic-demo-animation/out/
 wikontic-demo-animation/.vite/
 wikontic-demo-animation/*.mp4
 wikontic-demo-animation/*.png
+!wikontic-demo-animation/**/*.html

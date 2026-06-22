@@ -12,10 +12,11 @@ logger = get_logger("InferenceWithDB")
 
 
 class InferenceWithDB(BaseInferenceWithDB):
-    def __init__(self, extractor, aligner, triplets_db):
+    def __init__(self, extractor, aligner, triplets_db, language: str = "en"):
         self.extractor = extractor
         self.aligner = aligner
         self.triplets_db = ensure_storage_backend(triplets_db)
+        self._init_language(language)
 
         self.extract_triplets_tool = tool(self.extract_triplets)
         self.extract_triplets_and_add_to_db_tool = tool(
@@ -59,7 +60,11 @@ class InferenceWithDB(BaseInferenceWithDB):
         initial_triplets = []
 
         extracted_triplets = self.extractor.extract_triplets_from_text(text)
-        for triplet in extracted_triplets["triplets"]:
+        triplets = self._parse_extracted_triplets(extracted_triplets, text)
+        if triplets is None:
+            return [], [], []
+
+        for triplet in triplets:
             triplet["prompt_token_num"], triplet["completion_token_num"] = (
                 self.extractor.calculate_used_tokens()
             )
@@ -70,7 +75,7 @@ class InferenceWithDB(BaseInferenceWithDB):
         final_triplets = []
         filtered_triplets = []
 
-        for triplet in extracted_triplets["triplets"]:
+        for triplet in triplets:
             self.extractor.reset_tokens()
             try:
                 logger.log(logging.DEBUG, "Triplet: %s\n%s" % (str(triplet), "-" * 100))
