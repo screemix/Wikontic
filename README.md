@@ -223,7 +223,16 @@ Default URL: `http://localhost:8501`
 | Personal KG | `app_pages/4_Personal_KG.py` | Build a personal knowledge graph |
 | Wikipedia vs Wikidata | `app_pages/5_Wikipedia_vs_Wikidata.py` | Compare extraction variants |
 
-The demo uses MongoDB databases `wikidata_ontology_ru` and `demo_ru` with `language="ru"` in [`streamlit_session.py`](streamlit_session.py). For English, use `wikidata_ontology` / `demo` and set `LANGUAGE = "en"`. Ensure databases are initialized and `.env` contains `MONGO_URI` and `KEY`.
+The demo uses MongoDB databases `wikidata_ontology_ru` and `demo_ru` with `language="ru"` in [`streamlit_session.py`](streamlit_session.py). For English, use `wikidata_ontology` / `demo` and set `LANGUAGE = "en"`. Ensure databases are initialized and `.env` contains `MONGO_URI` and an API key (`OPENROUTER_KEY` or `KEY`).
+
+For OpenRouter or another OpenAI-compatible endpoint, set:
+
+```bash
+OPENROUTER_KEY=...
+OPENROUTER_BASE_URL=https://openrouter.ai/api/v1
+```
+
+OpenRouter model names may need provider prefixes, for example `openai/gpt-4.1`. The `Personal KG` page uses the OpenAI Responses API with `web_search`; if the configured endpoint does not support that API, the page shows an error instead of running the request.
 
 ### Docker
 

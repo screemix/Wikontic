@@ -114,13 +114,10 @@ with col2:
     st.subheader("Входной текст")
     input_text = st.text_area(
         "Введите текст:",
-        value=st.session_state.input_text,
         placeholder="Введите текст или выберите текст из списка слева...",
         height=300,
-        key="text_area",
+        key="input_text",
     )
-    # Update session state when user manually edits
-    st.session_state.input_text = input_text
 
 trigger = st.button("Извлечь и визуализировать граф знаний")
 

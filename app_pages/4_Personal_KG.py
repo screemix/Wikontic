@@ -1,6 +1,7 @@
 import streamlit as st
 from streamlit_session import (
     EXTRACTION_MODEL,
+    get_base_url,
     get_extractor,
     get_inference,
     get_triplets_db,
@@ -27,6 +28,16 @@ logger = get_logger("PersonalKG")
 extractor = get_extractor()
 inference_with_db = get_inference()
 triplets_db = get_triplets_db()
+base_url = get_base_url()
+
+PERSONAL_KG_UNSUPPORTED_API_MESSAGE = (
+    "Personal KG requires the OpenAI Responses API with web_search support. "
+    "The current API endpoint does not appear to support this feature."
+)
+
+
+def supports_openai_web_search(api_base_url: str) -> bool:
+    return "api.openai.com" in (api_base_url or "").lower()
 
 
 def fetch_related_triplets(entities):
@@ -75,11 +86,21 @@ if trigger:
             "Пожалуйста, введите имя и фамилию человека, для которого вы хотите построить граф знаний."
         )
     else:
-        response = extractor.client.responses.create(
-            model=EXTRACTION_MODEL,
-            tools=[{"type": "web_search"}],
-            input=f"Найдите и извлеките из интернета свежую и актуальную информацию о {input_text} и верните параграф, который суммирует эту информацию. Верните только параграф, никакого другого текста.",
-        )
+        if not supports_openai_web_search(base_url):
+            st.error(PERSONAL_KG_UNSUPPORTED_API_MESSAGE)
+            st.stop()
+
+        try:
+            response = extractor.client.responses.create(
+                model=EXTRACTION_MODEL,
+                tools=[{"type": "web_search"}],
+                input=f"Найдите и извлеките из интернета свежую и актуальную информацию о {input_text} и верните параграф, который суммирует эту информацию. Верните только параграф, никакого другого текста.",
+            )
+        except Exception as exc:
+            logger.exception("Personal KG web search failed")
+            st.error(f"{PERSONAL_KG_UNSUPPORTED_API_MESSAGE} Details: {exc}")
+            st.stop()
+
         personal_text = response.output_text
 
         logger.info(f"Personal text: {personal_text}")
