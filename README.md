@@ -64,17 +64,16 @@ Wikontic/
 │       ├── ontology_mappings_en_en/     # English ontology variant
 │       ├── ontology_mappings_ru_en/     # Russian mappings
 │       └── prompts/ / prompts_ru/       # LLM prompt templates
-├── app_pages/                 # Streamlit page scripts (wired via st.navigation)
+├── demo_app/                  # Streamlit demo application
 ├── inference_and_eval/        # KG construction & QA evaluation
 ├── analysis/                  # KG dump, stats, visualization helpers
 ├── preprocessing/             # Dataset preprocessing scripts
 ├── tests/                     # Pytest suite (Mongo + Qdrant)
-├── Wikontic.py                # Streamlit home page
 ├── tutorial.ipynb             # LangChain integration example
 ├── conftest.py                # Shared test fixtures
 ├── requirements.txt
 ├── pyproject.toml
-├── Dockerfile                 # Dockerfile for Wikontic demo 
+├── Dockerfile                 # Dockerfile for Wikontic demo
 └── setup_mongo_db.sh          # Quick MongoDB Atlas Local bootstrap
 ```
 
@@ -208,26 +207,54 @@ See `--help` on each script for collection and index name overrides.
 
 ## Streamlit web app
 
-Launch the interactive demo:
+The interactive demo lives in [`demo_app/`](demo_app/). Detailed app setup, database initialization, configuration, and troubleshooting are documented in [`demo_app/README.md`](demo_app/README.md).
+
+Default launch from the repository root uses English UI, English Wikontic backend prompts, and ontology mode on:
 
 ```bash
-streamlit run Wikontic.py
+PYTHONPATH=src:demo_app streamlit run demo_app/Wikontic.py
 ```
 
-Default URL: `http://localhost:8501`
+Equivalent helper script:
 
-### Pages
+```bash
+./run_streamlit.sh
+```
 
-| Page | File | Description |
-|------|------|-------------|
-| Home | `Wikontic.py` | Overview and links |
-| KG Extraction | `app_pages/1_KG_Extraction.py` | Extract triplets from text, visualize initial vs enriched graph |
-| QA | `app_pages/2_QA.py` | Ask questions over the session KG |
-| Current KG | `app_pages/3_Current_KG.py` | Browse triplets stored in the demo database |
-| Personal KG | `app_pages/4_Personal_KG.py` | Build a personal knowledge graph |
-| Wikipedia vs Wikidata | `app_pages/5_Wikipedia_vs_Wikidata.py` | Compare extraction variants |
+Run with Russian UI and Russian Wikontic backend, ontology on:
 
-The demo uses MongoDB databases `wikidata_ontology_ru` and `demo_ru` with `language="ru"` in [`streamlit_session.py`](streamlit_session.py). For English, use `wikidata_ontology` / `demo` and set `LANGUAGE = "en"`. Ensure databases are initialized and `.env` contains `MONGO_URI` and an API key (`OPENROUTER_KEY` or `KEY`).
+```bash
+WIKONTIC_FRONTEND_LANGUAGE=ru \
+WIKONTIC_BACKEND_LANGUAGE=ru \
+WIKONTIC_USE_ONTOLOGY=true \
+PYTHONPATH=src:demo_app streamlit run demo_app/Wikontic.py
+```
+
+Run with English UI, Russian Wikontic backend, ontology off:
+
+```bash
+WIKONTIC_FRONTEND_LANGUAGE=en \
+WIKONTIC_BACKEND_LANGUAGE=ru \
+WIKONTIC_USE_ONTOLOGY=false \
+PYTHONPATH=src:demo_app streamlit run demo_app/Wikontic.py
+```
+
+Run from inside the app folder:
+
+```bash
+cd demo_app
+PYTHONPATH=../src:. streamlit run Wikontic.py
+```
+
+Configuration flags:
+
+| Variable | Values | Default | Purpose |
+|----------|--------|---------|---------|
+| `WIKONTIC_FRONTEND_LANGUAGE` | `en`, `ru` | `en` | Streamlit interface language |
+| `WIKONTIC_BACKEND_LANGUAGE` | `en`, `ru` | `en` | Wikontic prompts, examples, transliteration, and default DB names |
+| `WIKONTIC_USE_ONTOLOGY` | `true`, `false` | `true` | Structured ontology mode vs dynamic mode |
+| `WIKONTIC_TRIPLETS_DB_NAME` | any MongoDB database name | mode/language default | Override demo KG database |
+| `WIKONTIC_ONTOLOGY_DB_NAME` | any MongoDB database name | language default | Override ontology database in ontology mode |
 
 For OpenRouter or another OpenAI-compatible endpoint, set:
 
@@ -236,7 +263,7 @@ OPENROUTER_KEY=...
 OPENROUTER_BASE_URL=https://openrouter.ai/api/v1
 ```
 
-OpenRouter model names may need provider prefixes, for example `openai/gpt-4.1`. The `Personal KG` page uses the OpenAI Responses API with `web_search`; if the configured endpoint does not support that API, the page shows an error instead of running the request.
+The `Personal KG` page uses the OpenAI Responses API with `web_search`; if the configured endpoint does not support that API, the page shows an error instead of running the request.
 
 ### Docker
 
@@ -494,25 +521,9 @@ For LangChain tool bindings, see [`tutorial.ipynb`](tutorial.ipynb).
 | `language_config` | helpers | `prompt_folder_for_language`, `use_unidecode_for_language`, ontology mapping paths |
 | `db.factory` | `create_backend` | Create MongoDB or Qdrant backend |
 
-### Pages
+### Streamlit demo
 
-| Page | File | Description |
-|------|------|-------------|
-| Home | `Wikontic.py` | Overview and links |
-| KG Extraction | `app_pages/1_KG_Extraction.py` | Extract triplets from text, visualize initial vs enriched graph |
-| QA | `app_pages/2_QA.py` | Ask questions over the session KG |
-| Current KG | `app_pages/3_Current_KG.py` | Browse triplets stored in the demo database |
-| Personal KG | `app_pages/4_Personal_KG.py` | Build a personal knowledge graph |
-| Wikipedia vs Wikidata | `app_pages/5_Wikipedia_vs_Wikidata.py` | Compare extraction variants |
-
-The demo uses MongoDB databases `wikidata_ontology_ru` and `demo_ru` with `language="ru"` in [`streamlit_session.py`](streamlit_session.py). For English, use `wikidata_ontology` / `demo` and set `LANGUAGE = "en"`. Ensure databases are initialized and `.env` contains `MONGO_URI` and `KEY`.
-
-### Docker
-
-```bash
-docker build -t wikontic .
-docker run -p 8501:8501 --env-file .env wikontic
-```
+The Streamlit demo is maintained under [`demo_app/`](demo_app/). See [`demo_app/README.md`](demo_app/README.md) for app-specific commands, configuration, database setup, and troubleshooting.
 
 ---
 

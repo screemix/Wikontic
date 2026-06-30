@@ -1,30 +1,31 @@
 # --- File: 0_KG_Extraction.py ---
 import streamlit as st
+from streamlit_app_config import ENV_PATH, MEDIA_DIR
 from pyvis.network import Network
 
 # import networkx as nx
 import tempfile
 import os
-from dotenv import load_dotenv, find_dotenv
+from dotenv import load_dotenv
 
-load_dotenv(find_dotenv())
+load_dotenv(ENV_PATH)
 
 from pymongo import MongoClient
-from src.wikontic.logging_config import get_logger
-from src.wikontic.utils.openai_utils import LLMTripletExtractor
-from src.wikontic.utils.structured_aligner import Aligner
-from src.wikontic.utils.structured_inference_with_db import StructuredInferenceWithDB
+from wikontic.logging_config import get_logger
+from wikontic.utils.openai_utils import LLMTripletExtractor
+from wikontic.utils.structured_aligner import Aligner
+from wikontic.utils.structured_inference_with_db import StructuredInferenceWithDB
 import uuid
 import base64
 
 logger = get_logger("Wikipedia vs Wikidata")
 
 st.set_page_config(
-    page_title="Wikontic", page_icon="media/wikotic-wo-text.png", layout="wide"
+    page_title="Wikontic", page_icon=str(MEDIA_DIR / "wikotic-wo-text.png"), layout="wide"
 )
 
 # --- Mongo Setup ---
-_ = load_dotenv(find_dotenv())
+_ = load_dotenv(ENV_PATH)
 mongo_client = MongoClient(os.getenv("MONGO_URI"))
 triplets_db = mongo_client.get_database("wiki_vs_wikidata")
 
@@ -69,7 +70,7 @@ def visualize_knowledge_graph(
 
 
 # --- UI ---
-with open("media/wikontic.png", "rb") as f:
+with open(MEDIA_DIR / "wikontic.png", "rb") as f:
     img_bytes = f.read()
 encoded = base64.b64encode(img_bytes).decode()
 
