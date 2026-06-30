@@ -139,7 +139,7 @@ Wikontic uses a **storage backend abstraction** (`src/wikontic/db/`) with two im
 ```bash
 # Start MongoDB Atlas Local (see setup_mongo_db.sh)
 docker pull mongodb/mongodb-atlas-local:latest
-docker run --name text2kg_mongo -d -p 27018:27018 mongodb/mongodb-atlas-local:latest
+docker run --name text2kg_mongo -d -p 27018:27017 mongodb/mongodb-atlas-local:latest
 ```
 
 Initialize databases from the repo root (requires `pip install -e .`):
@@ -151,7 +151,11 @@ python -m wikontic.create_wikidata_ontology_db \
   --mongo_uri "mongodb://localhost:27018/?directConnection=true" \
   --database wikidata_ontology
 
-# Russian demo: same command with --language ru --database wikidata_ontology_ru
+# with Russian language support: same command with --language ru --database wikidata_ontology_ru
+python -m wikontic.create_wikidata_ontology_db \
+  --backend mongodb \
+  --mongo_uri "mongodb://localhost:27018/?directConnection=true" \
+  --database wikidata_ontology_ru --language ru
 
 # 2a. Structured KG database (with ontology_filtered_triplets)
 python -m wikontic.create_ontological_triplets_db \
