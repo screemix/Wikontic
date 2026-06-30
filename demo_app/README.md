@@ -165,6 +165,35 @@ If the selected database is missing required collections, the app shows the comm
 
 `Personal KG` requires the OpenAI Responses API with `web_search`. OpenRouter or other OpenAI-compatible endpoints may not support this API; in that case the page shows an error.
 
+### Adding Pages
+
+To add a page, create a new file in `demo_app/app_pages/`, then register it in `demo_app/streamlit_navigation.py` with `st.Page(...)`.
+
+Page files should reuse shared app resources from `streamlit_session.py`:
+
+```python
+from streamlit_session import (
+    get_aligner,
+    get_extractor,
+    get_inference,
+    get_triplets_db,
+    get_user_id,
+)
+from streamlit_i18n import t
+from streamlit_ui import render_footer, render_page_header
+```
+
+Do not instantiate `LLMTripletExtractor`, aligners, inference classes, Mongo clients, or embedding models directly inside page render code. The shared resources in `streamlit_session.py` are cached with `st.cache_resource`, so pages reuse the same embedder/model/GPU allocation and database connections.
+
+For most cases, use the global database configuration:
+
+```bash
+WIKONTIC_TRIPLETS_DB_NAME=...
+WIKONTIC_ONTOLOGY_DB_NAME=...
+```
+
+If one page truly needs a different database, add a small cached accessor in `streamlit_session.py` and call that from the page. Keep page-specific Mongo clients or inference stacks cached by database name/mode/language in `streamlit_session.py`; do not create them repeatedly in the page body.
+
 ## Docker
 
 From the repository root:
