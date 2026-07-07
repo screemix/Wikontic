@@ -4,7 +4,12 @@ from dotenv import load_dotenv, find_dotenv
 import torch
 from wikontic.db.factory import ensure_storage_backend
 from wikontic.db.interfaces import VectorQuery
-from wikontic.utils.contriever_model import load_contriever
+from wikontic.utils.embedding_model import (
+    SUPPORTED_MODELS,
+    load_embedding_model,
+    get_embedding as _get_embedding,
+    get_embeddings as _get_embeddings,
+)
 
 # os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 _ = load_dotenv(find_dotenv())
@@ -27,7 +32,12 @@ class PropertyAlias(BaseModel):
 
 
 class Aligner:
-    def __init__(self, triplets_db, device=None):
+    def __init__(self, triplets_db, device=None, embedding_model: str = "contriever"):
+        if embedding_model not in SUPPORTED_MODELS:
+            raise ValueError(
+                f"Unknown embedding model {embedding_model!r}. "
+                f"Supported values: {sorted(SUPPORTED_MODELS)}"
+            )
         self.db = ensure_storage_backend(triplets_db)
 
         self.entity_aliases_collection_name = "entity_aliases"
@@ -42,30 +52,23 @@ class Aligner:
 
         if device is None:
             device = "cuda" if torch.cuda.is_available() else "cpu"
-        self.tokenizer, self.model, self.device = load_contriever(device=str(device))
+        self.embedding_model_name = embedding_model
+        self.tokenizer, self.model, self.device = load_embedding_model(
+            embedding_model, device=str(device)
+        )
 
     def get_embedding(self, text):
-
-        def mean_pooling(token_embeddings, mask):
-            token_embeddings = token_embeddings.masked_fill(
-                ~mask[..., None].bool(), 0.0
-            )
-            denom = mask.sum(dim=1).clamp(min=1)[..., None]
-            sentence_embeddings = token_embeddings.sum(dim=1) / denom
-            return sentence_embeddings
-
-        if not text or not isinstance(text, str):
-            return None
-
-        inputs = self.tokenizer(
-            [text], padding=True, truncation=True, return_tensors="pt"
+        return _get_embedding(
+            text, self.tokenizer, self.model, self.device, self.embedding_model_name
         )
-        outputs = self.model(**inputs.to(self.device))
-        embeddings = mean_pooling(outputs[0], inputs["attention_mask"])
-        return embeddings.detach().cpu().tolist()[0]
+
+    def get_embeddings(self, texts):
+        return _get_embeddings(
+            texts, self.tokenizer, self.model, self.device, self.embedding_model_name
+        )
 
     def retrieve_similar_properties(
-        self, target_relation: str, sample_id: str, k: int = 10
+        self, target_relation: str, sample_id: str, k: int = 10, embedding: Optional[List[float]] = None
     ) -> List[str]:  # List of property labels
         """
         Retrieve and rank properties that match given relation.
@@ -73,12 +76,13 @@ class Aligner:
         Args:
             target_relation: The relation to search for
             k: Number of results to return
+            embedding: Optional precomputed embedding for target_relation, to avoid recomputing it
 
         Returns:
             List of property labels
         """
 
-        query_embedding = self.get_embedding(target_relation)
+        query_embedding = embedding if embedding is not None else self.get_embedding(target_relation)
         if query_embedding is None:
             return []
 
@@ -112,7 +116,7 @@ class Aligner:
         return unique_ranked_properties
 
     def retrieve_similar_entity_names(
-        self, entity_name: str, sample_id: Optional[str] = None, k: int = 10
+        self, entity_name: str, sample_id: Optional[str] = None, k: int = 10, embedding: Optional[List[float]] = None
     ) -> List[str]:  # List of entity labels
         """
         Retrieve and rank entities that match given entity.
@@ -120,12 +124,13 @@ class Aligner:
         Args:
             entity_name: The entity to search for
             k: Number of results to return
+            embedding: Optional precomputed embedding for entity_name, to avoid recomputing it
 
         Returns:
             List of entity labels
         """
 
-        query_embedding = self.get_embedding(entity_name)
+        query_embedding = embedding if embedding is not None else self.get_embedding(entity_name)
         if query_embedding is None:
             return []
 
@@ -163,32 +168,37 @@ class Aligner:
 
         return unique_ranked_entities
 
-    def add_entity(self, entity_name, alias, sample_id):
-        collection = self.db.get_collection(self.entity_aliases_collection_name)
-        if not collection.find_one(
-            {"label": entity_name, "alias": alias, "sample_id": sample_id}
-        ):
-
-            collection.insert_one(
+    def add_entity(self, entity_name, alias, sample_id, embedding=None):
+        if embedding is None:
+            embedding = self.get_embedding(alias)
+        self.db.upsert_many(
+            collection_name=self.entity_aliases_collection_name,
+            documents=[
                 {
                     "label": entity_name,
                     "alias": alias,
                     "sample_id": sample_id,
-                    "alias_text_embedding": self.get_embedding(alias),
+                    "alias_text_embedding": embedding,
                 }
-            )
+            ],
+            unique_fields=["label", "alias", "sample_id"],
+        )
 
-    def add_property(self, property_name, alias, sample_id):
-        collection = self.db.get_collection(self.property_aliases_collection_name)
-        if not collection.find_one({"label": property_name, "alias": alias}):
-            collection.insert_one(
+    def add_property(self, property_name, alias, sample_id, embedding=None):
+        if embedding is None:
+            embedding = self.get_embedding(alias)
+        self.db.upsert_many(
+            collection_name=self.property_aliases_collection_name,
+            documents=[
                 {
                     "label": property_name,
                     "alias": alias,
                     # "sample_id": sample_id,
-                    "alias_text_embedding": self.get_embedding(alias),
+                    "alias_text_embedding": embedding,
                 }
-            )
+            ],
+            unique_fields=["label", "alias"],
+        )
 
     def add_triplets(self, triplets_list, sample_id):
         for triple in triplets_list:

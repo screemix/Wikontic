@@ -38,12 +38,22 @@ class StructuredInferenceWithDB(BaseInferenceWithDB):
         self.answer_question_with_llm_tool = tool(self.answer_question_with_llm)
         # 1st step extraction without database
 
-    def _refine_entity_types(self, text, triplet):
+    def _refine_entity_types(self, text, triplet, embedding_cache=None):
         """
         Refine entity types using LLM.
         """
+        subject_type_embedding = (
+            embedding_cache.get(triplet["subject_type"]) if embedding_cache else None
+        )
+        object_type_embedding = (
+            embedding_cache.get(triplet["object_type"]) if embedding_cache else None
+        )
         candidate_subj_type_ids, candidate_obj_type_ids = (
-            self.aligner.retrieve_similar_entity_types(triplet=triplet)
+            self.aligner.retrieve_similar_entity_types(
+                triplet=triplet,
+                subject_type_embedding=subject_type_embedding,
+                object_type_embedding=object_type_embedding,
+            )
         )
 
         candidate_entity_type_id_2_label = self.aligner.retrieve_entity_type_labels(
@@ -120,11 +130,18 @@ class StructuredInferenceWithDB(BaseInferenceWithDB):
         )
 
     def _get_candidate_entity_properties(
-        self, triplet: Dict[str, str], subj_type_ids: List[str], obj_type_ids: List[str]
+        self,
+        triplet: Dict[str, str],
+        subj_type_ids: List[str],
+        obj_type_ids: List[str],
+        embedding_cache: Dict[str, List[float]] = None,
     ) -> Tuple[List[Tuple[str, str]], Dict[str, dict]]:
         """
         Retrieve candidate properties and their labels/constraints.
         """
+        relation_embedding = (
+            embedding_cache.get(triplet["relation"]) if embedding_cache else None
+        )
         # Get the list of tuples (<property_id>, <property_direction>)
         properties: List[Tuple[str, str]] = (
             self.aligner.retrieve_properties_for_entity_type(
@@ -132,6 +149,7 @@ class StructuredInferenceWithDB(BaseInferenceWithDB):
                 object_types=obj_type_ids,
                 subject_types=subj_type_ids,
                 k=10,
+                embedding=relation_embedding,
             )
         )
         # Get dict {<prop_id>:
@@ -146,7 +164,7 @@ class StructuredInferenceWithDB(BaseInferenceWithDB):
         return properties, prop_2_label_and_constraint
 
     def _refine_relation(
-        self, text, triplet, refined_subject_type_id, refined_object_type_id
+        self, text, triplet, refined_subject_type_id, refined_object_type_id, embedding_cache=None
     ):
         """
         Refine relation using LLM.
@@ -159,6 +177,7 @@ class StructuredInferenceWithDB(BaseInferenceWithDB):
                     triplet=triplet,
                     subj_type_ids=[refined_subject_type_id],
                     obj_type_ids=[refined_object_type_id],
+                    embedding_cache=embedding_cache,
                 )
             )
             candidate_relations = [
@@ -272,7 +291,7 @@ class StructuredInferenceWithDB(BaseInferenceWithDB):
                 return False, exception_msg
 
     def _refine_entity_name(
-        self, text, triplet, sample_id, is_object=False, use_unidecode=None
+        self, text, triplet, sample_id, is_object=False, use_unidecode=None, embedding_cache=None
     ):
         """
         Refine entity names using type constraints.
@@ -289,13 +308,15 @@ class StructuredInferenceWithDB(BaseInferenceWithDB):
             entity_type = triplet["subject_type"]
             entity_hierarchy = []
 
+        entity_embedding = embedding_cache.get(entity) if embedding_cache else None
+
         # do not change time or quantity entities (of objects!)
         if any([t in ["Q186408", "Q309314"] for t in entity_hierarchy]):
             updated_entity = entity
         else:
             # if not time or quantity entities -> retrieve similar entities by type and name similarity
             similar_entities = self.aligner.retrieve_entity_by_type(
-                entity_name=entity, entity_type=entity_type, sample_id=sample_id
+                entity_name=entity, entity_type=entity_type, sample_id=sample_id, embedding=entity_embedding
             )
             # if there are similar entities -> refine entity name
             if len(similar_entities) > 0:
@@ -325,6 +346,7 @@ class StructuredInferenceWithDB(BaseInferenceWithDB):
             alias=entity,
             entity_type=entity_type,
             sample_id=sample_id,
+            embedding=entity_embedding,
         )
 
         return updated_entity
@@ -370,6 +392,22 @@ class StructuredInferenceWithDB(BaseInferenceWithDB):
         filtered_triplets = []
         ontology_filtered_triplets = []
 
+        # Pre-embed every unique subject/object (post-unidecode)/relation/
+        # entity-type appearing across the extracted triplets in a single
+        # batched call, instead of embedding each one (and its alias, when
+        # later stored) individually below.
+        texts_to_embed = set()
+        for triplet in triplets:
+            texts_to_embed.add(unidecode(triplet["subject"]) if use_unidecode else triplet["subject"])
+            texts_to_embed.add(unidecode(triplet["object"]) if use_unidecode else triplet["object"])
+            texts_to_embed.add(triplet["relation"])
+            texts_to_embed.add(triplet["subject_type"])
+            texts_to_embed.add(triplet["object_type"])
+        texts_to_embed = list(texts_to_embed)
+        embedding_cache = dict(
+            zip(texts_to_embed, self.aligner.get_embeddings(texts_to_embed))
+        )
+
         for triplet in triplets:
             self.extractor.reset_tokens()
             try:
@@ -382,7 +420,7 @@ class StructuredInferenceWithDB(BaseInferenceWithDB):
                     refined_subject_type_id,
                     refined_object_type,
                     refined_object_type_id,
-                ) = self._refine_entity_types(text=text, triplet=triplet)
+                ) = self._refine_entity_types(text=text, triplet=triplet, embedding_cache=embedding_cache)
 
                 # ________________ Refine relation ________________
                 (
@@ -393,6 +431,7 @@ class StructuredInferenceWithDB(BaseInferenceWithDB):
                     prop_object_type_ids,
                 ) = self._refine_relation(
                     text=text,
+                    embedding_cache=embedding_cache,
                     triplet=triplet,
                     refined_subject_type_id=refined_subject_type_id,
                     refined_object_type_id=refined_object_type_id,
@@ -432,12 +471,14 @@ class StructuredInferenceWithDB(BaseInferenceWithDB):
                 backbone_triplet["qualifiers"] = triplet["qualifiers"]
                 if refined_subject_type_id:
                     backbone_triplet["subject"] = self._refine_entity_name(
-                        text, backbone_triplet, sample_id, is_object=False, use_unidecode=use_unidecode
+                        text, backbone_triplet, sample_id, is_object=False,
+                        use_unidecode=use_unidecode, embedding_cache=embedding_cache,
                     )
 
                 if refined_object_type_id:
                     backbone_triplet["object"] = self._refine_entity_name(
-                        text, backbone_triplet, sample_id, is_object=True, use_unidecode=use_unidecode
+                        text, backbone_triplet, sample_id, is_object=True,
+                        use_unidecode=use_unidecode, embedding_cache=embedding_cache,
                     )
 
                 logger.log(

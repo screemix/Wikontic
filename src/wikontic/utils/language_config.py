@@ -30,6 +30,16 @@ def use_unidecode_for_language(language: Optional[str]) -> bool:
     return normalize_language(language) == "en"
 
 
+def default_embedding_model_for_language(language: Optional[str]) -> str:
+    """Return the recommended embedding model for *language*.
+
+    * ``"ru"``  → ``"frida"``  (Russian-first T5-encoder model)
+    * ``"en"``  → ``"contriever"``
+    """
+    lang = normalize_language(language)
+    return "frida" if lang == "ru" else "contriever"
+
+
 def ontology_mappings_dir_for_language(
     language: Optional[str], fallback_language: str = "en"
 ) -> Path:

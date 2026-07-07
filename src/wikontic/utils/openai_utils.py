@@ -51,6 +51,7 @@ class LLMTripletExtractor:
         max_attempts=MAX_ATTEMPTS,
         proxy: str = None,
         base_url: str = "https://api.openai.com/v1",
+        save_messages: bool = False,
     ):
         if proxy:
             http_client = httpx.Client(proxy=proxy)
@@ -108,7 +109,7 @@ class LLMTripletExtractor:
         self.prompt_tokens_num = 0
         self.completion_tokens_num = 0
         self.current_cost = 0
-
+        self.save_messages = save_messages
         self._refine_attempt = 0
         self._prev_error = None  # store previous exception
         self.MAX_ATTEMPTS = max_attempts
@@ -160,7 +161,9 @@ class LLMTripletExtractor:
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": user_prompt},
         ]
-
+        if self.save_messages:
+            self.messages.extend(messages)
+            messages = self.messages
         response = self.client.chat.completions.create(
             model=self.model, messages=messages, temperature=0
         )
@@ -174,8 +177,10 @@ class LLMTripletExtractor:
         content = response.choices[0].message.content.strip()
         logger.debug("Output content: %s\n%s", str(content), "-" * 100)
         output = self.extract_json(content) if transform_to_json else content
+                
+        if self.save_messages:
+            self.messages.append({"role": "assistant", "content": content})
 
-        self.messages = messages + [{"role": "assistant", "content": output}]
         return output
 
     @tenacity.retry(stop=tenacity.stop_after_attempt(MAX_ATTEMPTS), reraise=True)
@@ -283,6 +288,10 @@ class LLMTripletExtractor:
         except Exception as e:
             self._prev_error = e
             logger.log(logging.ERROR, str(e))
+            logger.log(logging.ERROR, "Candidate subject types: %s", candidate_subject_types)
+            logger.log(logging.ERROR, "Candidate object types: %s", candidate_object_types)
+            logger.log(logging.ERROR, "Refined subject type: %s", output["subject_type"])
+            logger.log(logging.ERROR, "Refined object type: %s", output["object_type"])
             # do not raise an exception - save triplet in ontology filtered collection
         return output
 
@@ -343,6 +352,8 @@ class LLMTripletExtractor:
         except Exception as e:
             self._prev_error = e
             logger.log(logging.ERROR, str(e))
+            logger.log(logging.ERROR, "Candidate relations: %s", candidate_relations)
+            logger.log(logging.ERROR, "Refined relation: %s", output["relation"])
             # do not raise an exception - save triplet in ontology filtered collection
 
         return output

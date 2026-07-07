@@ -92,7 +92,7 @@ def dump_kg_from_backend(
     return output_path
 
 
-def dump_kg(db_name):
+def dump_kg(db_name, include_initial_triplets, num_samples):
 
     sample_ids = list(
         mongo_client.get_database(db_name)

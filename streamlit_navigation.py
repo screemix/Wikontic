@@ -7,6 +7,8 @@ PAGES = [
     st.Page("app_pages/2_QA.py", title="Вопрос по графу знаний"),
     st.Page("app_pages/3_Current_KG.py", title="Текущий граф"),
     st.Page("app_pages/4_Personal_KG.py", title="Персональный граф"),
+    st.Page("app_pages/6_SB_Onto.py", title="Граф с онтологией"),
+    st.Page("app_pages/7_SB_Non_Onto.py", title="Граф без онтологии"),
 ]
 
 

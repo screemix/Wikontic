@@ -262,6 +262,7 @@ class BaseInferenceWithDB:
         max_attempts=5,
         use_qualifiers=False,
         use_filtered_triplets=False,
+        
     ):
         """
         "Answer a question with QA collapsing."

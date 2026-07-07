@@ -1,11 +1,17 @@
-from typing import List, Tuple, Set, Dict
+from typing import List, Tuple, Set, Dict, Optional
 from dataclasses import dataclass
 from pydantic import BaseModel, ValidationError
 import torch
 from dotenv import load_dotenv, find_dotenv
 from wikontic.db.factory import ensure_storage_backend
 from wikontic.db.interfaces import VectorQuery
-from wikontic.utils.contriever_model import load_contriever
+from wikontic.utils.embedding_model import (
+    SUPPORTED_MODELS,
+    load_embedding_model,
+    get_embedding as _get_embedding,
+    get_embeddings as _get_embeddings,
+)
+from wikontic.utils.language_config import default_embedding_model_for_language
 
 # os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 _ = load_dotenv(find_dotenv())
@@ -27,7 +33,14 @@ class EntityAlias(BaseModel):
 
 
 class Aligner:
-    def __init__(self, ontology_db, triplets_db, device=None):
+    def __init__(self, ontology_db, triplets_db, device=None, embedding_model: str = None, language: str = None):
+        if embedding_model is None:
+            embedding_model = default_embedding_model_for_language(language)
+        if embedding_model not in SUPPORTED_MODELS:
+            raise ValueError(
+                f"Unknown embedding model {embedding_model!r}. "
+                f"Supported values: {sorted(SUPPORTED_MODELS)}"
+            )
         self.ontology_db = ensure_storage_backend(ontology_db)
         self.triplets_db = ensure_storage_backend(triplets_db)
 
@@ -48,30 +61,23 @@ class Aligner:
 
         if device is None:
             device = "cuda" if torch.cuda.is_available() else "cpu"
-        self.tokenizer, self.model, self.device = load_contriever(device=str(device))
+        self.embedding_model_name = embedding_model
+        self.tokenizer, self.model, self.device = load_embedding_model(
+            embedding_model, device=str(device)
+        )
 
     def get_embedding(self, text):
-
-        def mean_pooling(token_embeddings, mask):
-            token_embeddings = token_embeddings.masked_fill(
-                ~mask[..., None].bool(), 0.0
-            )
-            denom = mask.sum(dim=1).clamp(min=1)[..., None]
-            sentence_embeddings = token_embeddings.sum(dim=1) / denom
-            return sentence_embeddings
-
-        if not text or not isinstance(text, str):
-            return None
-
-        inputs = self.tokenizer(
-            [text], padding=True, truncation=True, return_tensors="pt"
+        return _get_embedding(
+            text, self.tokenizer, self.model, self.device, self.embedding_model_name
         )
-        outputs = self.model(**inputs.to(self.device))
-        embeddings = mean_pooling(outputs[0], inputs["attention_mask"])
-        return embeddings.detach().cpu().tolist()[0]
+
+    def get_embeddings(self, texts):
+        return _get_embeddings(
+            texts, self.tokenizer, self.model, self.device, self.embedding_model_name
+        )
 
     def _get_unique_similar_entity_types(
-        self, target_entity_type: str, k: int = 5, max_attempts: int = 10
+        self, target_entity_type: str, k: int = 5, max_attempts: int = 10, embedding: Optional[List[float]] = None
     ) -> List[str]:
         # retrieve k most similar entity types to the given triplet
         # using the entity type index
@@ -80,7 +86,7 @@ class Aligner:
         query_k = k * 2
         attempt = 0
         unique_ranked_entities: List[str] = []
-        query_embedding = self.get_embedding(target_entity_type)
+        query_embedding = embedding if embedding is not None else self.get_embedding(target_entity_type)
         if query_embedding is None:
             return []
 
@@ -108,16 +114,20 @@ class Aligner:
         return unique_ranked_entities
 
     def retrieve_similar_entity_types(
-        self, triplet: Dict[str, str], k: int = 10
+        self,
+        triplet: Dict[str, str],
+        k: int = 10,
+        subject_type_embedding: Optional[List[float]] = None,
+        object_type_embedding: Optional[List[float]] = None,
     ) -> Tuple[List[str], List[str]]:
 
         similar_subject_types = self._get_unique_similar_entity_types(
-            target_entity_type=triplet["subject_type"], k=k
+            target_entity_type=triplet["subject_type"], k=k, embedding=subject_type_embedding
         )
         if "object_type" in triplet:
 
             similar_object_types = self._get_unique_similar_entity_types(
-                target_entity_type=triplet["object_type"], k=k
+                target_entity_type=triplet["object_type"], k=k, embedding=object_type_embedding
             )
         else:
             similar_object_types = []
@@ -169,11 +179,12 @@ class Aligner:
         prop_2_direction: Dict[str, List[str]],
         target_property: str,
         k: int,
+        embedding: Optional[List[float]] = None,
     ) -> List[Tuple[str, str]]:
         """
         Rank properties based on similarity to target relation.
         """
-        query_embedding = self.get_embedding(target_property)
+        query_embedding = embedding if embedding is not None else self.get_embedding(target_property)
         if query_embedding is None:
             return []
         props = list(prop_2_direction.keys())
@@ -219,6 +230,7 @@ class Aligner:
         object_types: List[str],
         subject_types: List[str],
         k: int = 10,
+        embedding: Optional[List[float]] = None,
     ) -> List[Tuple[str, str]]:  # List of tuples (<property_id>, <property_direction>)
         """
         Retrieve and rank properties that match given entity types and relation.
@@ -228,6 +240,7 @@ class Aligner:
             object_types: List of valid object types
             subject_types: List of valid subject types
             k: Number of results to return
+            embedding: Optional precomputed embedding for target_relation, to avoid recomputing it
 
         Returns:
             List of tuples (<property_id>, <property_direction>)
@@ -265,7 +278,7 @@ class Aligner:
             else:
                 prop_id_2_direction[prop_id] = ["inverse"]
 
-        return self._get_ranked_properties(prop_id_2_direction, target_relation, k)
+        return self._get_ranked_properties(prop_id_2_direction, target_relation, k, embedding=embedding)
 
     def retrieve_properties_labels_and_constraints(
         self, property_id_list: List[str]
@@ -321,7 +334,7 @@ class Aligner:
 
         return extended_types
 
-    def retrieve_entity_by_type(self, entity_name, entity_type, sample_id, k=10):
+    def retrieve_entity_by_type(self, entity_name, entity_type, sample_id, k=10, embedding=None):
 
         collection = self.ontology_db.get_collection(self.entity_type_collection_name)
         entity_id_parent_types = collection.find_one(
@@ -343,7 +356,7 @@ class Aligner:
             self.entity_aliases_collection_name
         )
 
-        query_embedding = self.get_embedding(entity_name)
+        query_embedding = embedding if embedding is not None else self.get_embedding(entity_name)
         if query_embedding is None:
             return {}
 
@@ -371,32 +384,25 @@ class Aligner:
 
         return result_dict
 
-    def add_entity(self, entity_name, alias, entity_type, sample_id):
-
-        collection = self.triplets_db.get_collection(
-            self.entity_aliases_collection_name
-        )
+    def add_entity(self, entity_name, alias, entity_type, sample_id, embedding=None):
         if not sample_id:
             sample_id = "all"
+        if embedding is None:
+            embedding = self.get_embedding(alias)
 
-        if not collection.find_one(
-            {
-                "label": entity_name,
-                "entity_type": entity_type,
-                "alias": alias,
-                "sample_id": {"$eq": sample_id},
-            }
-        ):
-
-            collection.insert_one(
+        self.triplets_db.upsert_many(
+            collection_name=self.entity_aliases_collection_name,
+            documents=[
                 {
                     "label": entity_name,
                     "entity_type": entity_type,
                     "alias": alias,
                     "sample_id": sample_id,
-                    "alias_text_embedding": self.get_embedding(alias),
+                    "alias_text_embedding": embedding,
                 }
-            )
+            ],
+            unique_fields=["label", "entity_type", "alias", "sample_id"],
+        )
 
     def add_triplets(self, triplets_list, sample_id):
         if not sample_id:
@@ -471,31 +477,66 @@ class Aligner:
         )
 
     def retrieve_similar_entity_names(
-        self, entity_name: str, k: int = 10, sample_id: str = None
+        self, entity_name: str, k: int = 10, sample_id: str = None, embedding: Optional[List[float]] = None
     ) -> List[Dict[str, str]]:
-        embedded_query = self.get_embedding(entity_name)
+        embedded_query = embedding if embedding is not None else self.get_embedding(entity_name)
         if embedded_query is None:
             return []
-        collection = self.triplets_db.get_collection(
-            self.entity_aliases_collection_name
-        )
 
-        # First try to search with sample_id filter if provided
         if sample_id:
             search_filter = {"sample_id": {"$eq": sample_id}}
         else:
             search_filter = {}
-        result_list = self.triplets_db.vector_search(
-            VectorQuery(
-                collection_name=self.entity_aliases_collection_name,
-                index_name=self.entities_vector_index_name,
-                query_vector=embedded_query,
-                vector_field="alias_text_embedding",
-                limit=k,
-                filters=search_filter,
-                projection={"_id": 0, "label": 1, "entity_type": 1},
-            )
-        )
-        result_dict = [{"entity": item["label"]} for item in result_list]
 
-        return result_dict
+        try:
+            result_list = self.triplets_db.vector_search(
+                VectorQuery(
+                    collection_name=self.entity_aliases_collection_name,
+                    index_name=self.entities_vector_index_name,
+                    query_vector=embedded_query,
+                    vector_field="alias_text_embedding",
+                    limit=k,
+                    filters=search_filter,
+                    projection={"_id": 0, "label": 1, "entity_type": 1},
+                )
+            )
+            return [{"entity": item["label"]} for item in result_list]
+        except Exception:
+            return self._retrieve_entity_names_cosine_fallback(
+                embedded_query, k, sample_id
+            )
+
+    def _retrieve_entity_names_cosine_fallback(
+        self, query_embedding: List[float], k: int, sample_id: str = None
+    ) -> List[Dict[str, str]]:
+        """In-memory cosine-similarity fallback when $vectorSearch is unavailable."""
+        import numpy as np
+
+        mongo_query = {"sample_id": sample_id} if sample_id else {}
+        collection = self.triplets_db.get_collection(self.entity_aliases_collection_name)
+        docs = collection.find(mongo_query, {"label": 1, "alias_text_embedding": 1})
+
+        q = np.array(query_embedding, dtype=float)
+        q_norm = float(np.linalg.norm(q))
+
+        scored: List[tuple] = []
+        for doc in docs:
+            emb = doc.get("alias_text_embedding")
+            if not emb:
+                continue
+            v = np.array(emb, dtype=float)
+            v_norm = float(np.linalg.norm(v))
+            score = float(np.dot(q, v) / (q_norm * v_norm)) if q_norm and v_norm else 0.0
+            scored.append((score, doc.get("label", "")))
+
+        scored.sort(key=lambda x: x[0], reverse=True)
+
+        seen: set = set()
+        result: List[Dict[str, str]] = []
+        for _, label in scored:
+            if label and label not in seen:
+                seen.add(label)
+                result.append({"entity": label})
+            if len(result) >= k:
+                break
+        return result

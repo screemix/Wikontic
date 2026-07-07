@@ -15,3 +15,4 @@ Select the most contextually appropriate relation name from the Candidate relati
 - If an exact or semantically appropriate match for relation name is found, return the corresponding name exactly as it appears in the list.
 - If no suitable match for relation exists, return the string "None".
 - Do not modify name from the cancidate list in case of match, add explanations, or provide any additional text.
+- Preserve language of the original text (particularly, Russian) for the name of relation! Not transliteration, but original cyrillic script!

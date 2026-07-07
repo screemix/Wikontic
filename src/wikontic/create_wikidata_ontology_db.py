@@ -13,7 +13,11 @@ from pymongo.mongo_client import MongoClient
 
 from wikontic.db.bootstrap import ensure_collections
 from wikontic.db.factory import create_backend
-from wikontic.utils.contriever_model import load_contriever
+from wikontic.utils.embedding_model import (
+    EMBEDDING_DIMS,
+    load_embedding_model,
+    get_embedding as _embedding_model_get_embedding,
+)
 
 from wikontic.logging_config import get_logger
 from wikontic.utils.language_config import ontology_mappings_dir_for_language
@@ -26,14 +30,18 @@ device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cp
 
 _tokenizer = None
 _model = None
-_contriever_device = device
+_embed_device = device
+_embed_model_name: str = "contriever"
 
 
-def _ensure_contriever():
-    global _tokenizer, _model, _contriever_device
-    if _model is None:
-        _tokenizer, _model, _contriever_device = load_contriever(device=str(device))
-    return _tokenizer, _model, _contriever_device
+def _ensure_embedding_model(model_name: str = "contriever"):
+    global _tokenizer, _model, _embed_device, _embed_model_name
+    if _model is None or _embed_model_name != model_name:
+        _tokenizer, _model, _embed_device = load_embedding_model(
+            model_name, device=str(device)
+        )
+        _embed_model_name = model_name
+    return _tokenizer, _model, _embed_device
 
 
 class EntityType(BaseModel):
@@ -68,20 +76,11 @@ class PropertyAlias(BaseModel):
 
 
 def get_embedding(text):
-    if not text or not isinstance(text, str):
-        return None
-
     try:
-        tokenizer, model, embed_device = _ensure_contriever()
-        inputs = tokenizer([text], padding=True, truncation=True, return_tensors="pt")
-        inputs = inputs.to(embed_device)
-        outputs = model(**inputs)
-        mask = inputs["attention_mask"]
-        token_embeddings = outputs[0].masked_fill(~mask[..., None].bool(), 0.0)
-        denom = mask.sum(dim=1).clamp(min=1)[..., None]
-        embeddings = token_embeddings.sum(dim=1) / denom
-        return embeddings.detach().cpu().tolist()[0]
-
+        tokenizer, model, embed_device = _ensure_embedding_model(_embed_model_name)
+        return _embedding_model_get_embedding(
+            text, tokenizer, model, embed_device, _embed_model_name
+        )
     except Exception as e:
         logger.error(f"Error in get_embedding: {e}")
         return None
@@ -294,7 +293,7 @@ def create_wikidata_ontology_database(
     property_aliases_collection: str = "property_aliases",
     entity_types_index: str = "entity_type_aliases",
     property_aliases_index: str = "property_aliases",
-    embedding_dimensions: int = 768,
+    embedding_dimensions: int = None,
     drop_collections: bool = False,
     storage_backend=None,
 ):
@@ -319,6 +318,14 @@ def create_wikidata_ontology_database(
     Returns:
         Database object
     """
+
+    from wikontic.utils.language_config import default_embedding_model_for_language
+
+    embedding_model = default_embedding_model_for_language(language)
+    if embedding_dimensions is None:
+        embedding_dimensions = EMBEDDING_DIMS[embedding_model]
+    _ensure_embedding_model(embedding_model)
+    logger.info("Language: %s → embedding model: %s (%d dims)", language, embedding_model, embedding_dimensions)
 
     mappings_dir = _resolve_mappings_dir(mappings_dir, language, fallback_language)
 

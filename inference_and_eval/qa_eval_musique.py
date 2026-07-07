@@ -21,6 +21,7 @@ from wikontic.utils.dynamic_aligner import Aligner as DynamicDBAligner
 from wikontic.utils.structured_inference_with_db import StructuredInferenceWithDB
 from wikontic.utils.inference_with_db import InferenceWithDB
 from wikontic.utils.openai_utils import LLMTripletExtractor
+from wikontic.utils.language_config import default_embedding_model_for_language
 from wikontic.logging_config import get_logger
 
 logger = get_logger("QAEvalMusique")
@@ -100,6 +101,13 @@ def get_args():
         help="Do not use filtered triplets",
     )
     parser.add_argument("--run_number", type=int, default=1, help="Run number")
+    parser.add_argument(
+        "--language",
+        type=str,
+        default="en",
+        choices=["en", "ru"],
+        help="Dataset language; determines the embedding model (en→contriever, ru→frida)",
+    )
     parser.set_defaults(structured_inference=False)
     parser.set_defaults(use_qualifiers=True)
     parser.set_defaults(use_filtered_triplets=False)
@@ -123,6 +131,8 @@ if __name__ == "__main__":
     use_qualifiers = args.use_qualifiers
     use_filtered_triplets = args.use_filtered_triplets
 
+    embedding_model = default_embedding_model_for_language(args.language)
+    logger.info("Language: %s → embedding model: %s", args.language, embedding_model)
     logger.info(f"Use qualifier: {args.use_qualifiers}")
     logger.info(f"Use filtered triplets: {args.use_filtered_triplets}")
     ds = get_dataset(dataset_path)
@@ -133,10 +143,17 @@ if __name__ == "__main__":
 
     if args.structured_inference:
         logger.info("Structured inference enabled")
-        aligner = StructuredDBAligner(ontology_db=ontology_db, triplets_db=triplets_db)
+        aligner = StructuredDBAligner(
+            ontology_db=ontology_db,
+            triplets_db=triplets_db,
+            embedding_model=embedding_model,
+        )
     else:
         logger.info("Structured inference disabled, using dynamic inference")
-        aligner = DynamicDBAligner(triplets_db=triplets_db)
+        aligner = DynamicDBAligner(
+            triplets_db=triplets_db,
+            embedding_model=embedding_model,
+        )
 
     extractor = LLMTripletExtractor(model=model_name, api_key=api_key, proxy=proxy_url)
 

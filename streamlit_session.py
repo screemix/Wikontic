@@ -10,6 +10,9 @@ from src.wikontic.utils.openai_utils import LLMTripletExtractor
 from src.wikontic.utils.structured_aligner import Aligner
 from src.wikontic.utils.structured_inference_with_db import StructuredInferenceWithDB
 
+os.environ["CUDA_VISIBLE_DEVICES"] = "1"
+
+
 LANGUAGE = "ru"
 WIKIDATA_ONTOLOGY_DB_NAME = "wikidata_ontology_ru"
 TRIPLETS_DB_NAME = "demo_ru"
@@ -31,7 +34,7 @@ def init_session() -> None:
     mongo_client = MongoClient(os.getenv("MONGO_URI"))
     ontology_db = mongo_client.get_database(WIKIDATA_ONTOLOGY_DB_NAME)
     triplets_db = mongo_client.get_database(TRIPLETS_DB_NAME)
-    aligner = Aligner(ontology_db=ontology_db, triplets_db=triplets_db)
+    aligner = Aligner(ontology_db=ontology_db, triplets_db=triplets_db, language=LANGUAGE, device="cuda:1")
     extractor = LLMTripletExtractor(
         model=EXTRACTION_MODEL,
         api_key=api_key,

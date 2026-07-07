@@ -9,7 +9,7 @@ Additionally, some triplets may have **qualifiers** that provide more context (e
 You will receive a text labeled **"Text:"**. Your task is to extract meaningful triplets that represent factual relationships.
 
 ### Output Format
-Return only triplets in **JSON format** as a list of dictionaries, where each dictionary contains:
+Return only triplets in **JSON format** as a dictionary with key "triplets" and value as a list of dictionaries, where each dictionary contains:
 - "subject": Subject entity.  
 - "relation": Relation connecting subject and object.  
 - "object": Object entity.  

@@ -25,7 +25,11 @@ from wikontic.utils.inference_with_db import InferenceWithDB
 from wikontic.utils.dynamic_aligner import Aligner as DynamicDBAligner
 from wikontic.utils.structured_inference_with_db import StructuredInferenceWithDB
 from wikontic.db.factory import create_backend
-from wikontic.utils.language_config import prompt_folder_for_language
+from wikontic.utils.language_config import (
+    prompt_folder_for_language,
+    default_embedding_model_for_language,
+)
+from wikontic.utils.embedding_model import EMBEDDING_DIMS
 
 from wikontic.create_ontological_triplets_db import create_ontological_triplets_database
 from wikontic.create_triplets_db import create_triplets_database
@@ -67,6 +71,7 @@ CONFIG_DEFAULTS = {
     "proxy_env_var": None,
     "base_url_env_var": "OPENROUTER_BASE_URL",
     "api_key_env_var": "KEY",
+    "save_messages": False,
 }
 
 
@@ -100,6 +105,16 @@ def get_json_dataset(dataset_path):
         ds = json.load(f)
     return ds
 
+
+def get_jsonl_dataset(dataset_path):
+    ds = {}
+    with open(dataset_path, "r") as f:
+        for line in f.readlines():
+            line = json.loads(line)
+            name = list(line.keys())[0]
+            text = "\n".join(line[name])
+            ds[name] = [text]
+    return ds
 
 def should_dump_kg(cfg) -> bool:
     """In-memory Qdrant is ephemeral — always persist KG to JSON. Other backends: opt-in."""
@@ -135,6 +150,45 @@ def _collections_ready(backend, required):
     return required.issubset(existing)
 
 
+def _stored_embedding_dims(mongo_client, db_name: str, collection: str) -> int:
+    """Return the actual vector dimension stored in documents, or 0 if unknown.
+
+    Tries both field names used across the codebase:
+    - ``alias_text_embedding`` (ontology DBs: entity_type_aliases, property_aliases)
+    - ``text_embedding`` (triplets DBs: entity_aliases, property_aliases)
+    """
+    coll = mongo_client.get_database(db_name).get_collection(collection)
+    doc = coll.find_one({}, {"alias_text_embedding": 1, "text_embedding": 1})
+    if not doc:
+        return 0
+    for field in ("alias_text_embedding", "text_embedding"):
+        vec = doc.get(field) or []
+        if vec:
+            return len(vec)
+    return 0
+
+
+def _dims_match(mongo_client, db_name: str, collection: str, expected_dims: int) -> bool:
+    """Return True only when stored embeddings already use *expected_dims* dimensions.
+
+    If the collection is empty (not yet created) we return True so the normal
+    creation path runs.  If actual stored dims differ from expected, log a
+    warning and return False so the caller can drop and recreate the database.
+    """
+    stored = _stored_embedding_dims(mongo_client, db_name, collection)
+    if stored == 0:
+        return True
+    if stored != expected_dims:
+        logger.warning(
+            "DB '%s'.%s has stored embeddings with %d dims, but the current "
+            "embedding model requires %d dims — the database will be dropped "
+            "and recreated.",
+            db_name, collection, stored, expected_dims,
+        )
+        return False
+    return True
+
+
 def _create_qdrant_backend(cfg):
     return create_backend(
         backend_type="qdrant",
@@ -146,6 +200,12 @@ def _create_qdrant_backend(cfg):
 if __name__ == "__main__":
     args = parser.parse_args()
     cfg = load_config(args.config)
+
+    effective_embedding_model = default_embedding_model_for_language(cfg.language)
+    effective_embedding_dims = EMBEDDING_DIMS[effective_embedding_model]
+    logger.info(
+        "Embedding model: %s (%d dims)", effective_embedding_model, effective_embedding_dims
+    )
 
     triplets_db_name = (
         cfg.triplets_db_name + "_" + cfg.model_name.replace("/", "_").replace(".", "_")
@@ -162,6 +222,13 @@ if __name__ == "__main__":
 
     if cfg.structured_inference:
         if cfg.vector_db_backend == "mongodb":
+            # Drop ontology DB if stored embeddings have wrong dimensions.
+            if not _dims_match(mongo_client, cfg.ontology_db_name,
+                                "entity_type_aliases", effective_embedding_dims):
+                logger.info("Dropping ontology DB '%s' due to embedding dimension mismatch.",
+                            cfg.ontology_db_name)
+                mongo_client.drop_database(cfg.ontology_db_name)
+
             ontology_db = create_backend(
                 backend_type="mongodb",
                 mongo_db=mongo_client.get_database(cfg.ontology_db_name),
@@ -178,6 +245,14 @@ if __name__ == "__main__":
                 logger.info(
                     f"Wikidata ontology database created successfully: {cfg.ontology_db_name}"
                 )
+
+            # Drop triplets DB if stored embeddings have wrong dimensions.
+            if not _dims_match(mongo_client, triplets_db_name,
+                                "entity_aliases", effective_embedding_dims):
+                logger.info("Dropping triplets DB '%s' due to embedding dimension mismatch.",
+                            triplets_db_name)
+                mongo_client.drop_database(triplets_db_name)
+
             triplets_db = create_backend(
                 backend_type="mongodb",
                 mongo_db=mongo_client.get_database(triplets_db_name),
@@ -189,6 +264,7 @@ if __name__ == "__main__":
                     qdrant_url=cfg.qdrant_url,
                     qdrant_api_key=cfg.qdrant_api_key,
                     db_name=triplets_db_name,
+                    embedding_dimensions=effective_embedding_dims,
                 )
                 logger.info(
                     f"Ontological triplets database created successfully: {triplets_db_name}"
@@ -215,12 +291,18 @@ if __name__ == "__main__":
                     qdrant_api_key=cfg.qdrant_api_key,
                     db_name=triplets_db_name,
                     storage_backend=ontology_db,
+                    embedding_dimensions=effective_embedding_dims,
                 )
                 logger.info(
                     f"Ontological triplets collections created successfully: {triplets_db_name}"
                 )
     else:
         if cfg.vector_db_backend == "mongodb":
+            if not _dims_match(mongo_client, triplets_db_name,
+                                "entity_aliases", effective_embedding_dims):
+                logger.info("Dropping triplets DB '%s' due to embedding dimension mismatch.",
+                            triplets_db_name)
+                mongo_client.drop_database(triplets_db_name)
             triplets_db = create_backend(
                 backend_type="mongodb",
                 mongo_db=mongo_client.get_database(triplets_db_name),
@@ -232,6 +314,7 @@ if __name__ == "__main__":
                     qdrant_url=cfg.qdrant_url,
                     qdrant_api_key=cfg.qdrant_api_key,
                     db_name=triplets_db_name,
+                    embedding_dimensions=effective_embedding_dims,
                 )
                 logger.info(f"Triplets database created successfully: {triplets_db_name}")
         else:
@@ -244,6 +327,7 @@ if __name__ == "__main__":
                     qdrant_api_key=cfg.qdrant_api_key,
                     db_name=triplets_db_name,
                     storage_backend=qdrant_backend,
+                    embedding_dimensions=effective_embedding_dims,
                 )
                 logger.info(f"Triplets collections created successfully: {triplets_db_name}")
     api_key = os.getenv(cfg.api_key_env_var)
@@ -251,7 +335,7 @@ if __name__ == "__main__":
     proxy_url = os.getenv(cfg.proxy_env_var) if cfg.proxy_env_var else None
     base_url = os.getenv(cfg.base_url_env_var)
 
-    ds = get_json_dataset(cfg.dataset_path)
+    ds = get_jsonl_dataset(cfg.dataset_path)
 
     extractor = LLMTripletExtractor(
         model=cfg.model_name,
@@ -259,10 +343,15 @@ if __name__ == "__main__":
         proxy=proxy_url,
         base_url=base_url,
         prompt_folder_path=str(prompt_folder_for_language(cfg.language)),
+        save_messages=cfg.save_messages,
     )
     if cfg.structured_inference:
         logger.info("Structured inference enabled (language=%s)", cfg.language)
-        aligner = StructuredDBAligner(ontology_db=ontology_db, triplets_db=triplets_db)
+        aligner = StructuredDBAligner(
+            ontology_db=ontology_db,
+            triplets_db=triplets_db,
+            embedding_model=effective_embedding_model,
+        )
         inference_with_db = StructuredInferenceWithDB(
             extractor=extractor,
             aligner=aligner,
@@ -271,7 +360,10 @@ if __name__ == "__main__":
         )
     else:
         logger.info("Structured inference disabled, using dynamic inference (language=%s)", cfg.language)
-        aligner = DynamicDBAligner(triplets_db=triplets_db)
+        aligner = DynamicDBAligner(
+            triplets_db=triplets_db,
+            embedding_model=effective_embedding_model,
+        )
         inference_with_db = InferenceWithDB(
             extractor=extractor,
             aligner=aligner,
@@ -311,6 +403,8 @@ if __name__ == "__main__":
                             text, sample_id=sample_id, source_text_id=idx
                         )
                     )
+        if cfg.save_messages:
+            extractor.reset_messages()
         logger.info("CURRENT COST: %s", extractor.calculate_cost())
         logger.info("--------------------------------")
 

@@ -75,21 +75,36 @@ class InferenceWithDB(BaseInferenceWithDB):
         final_triplets = []
         filtered_triplets = []
 
+        # Pre-embed every unique subject/relation/object appearing in the
+        # extracted triplets in a single batched call, instead of embedding
+        # each one (and its alias, when later stored) individually below.
+        texts_to_embed = set()
+        for triplet in triplets:
+            texts_to_embed.add(self.sanitize_string(triplet["subject"]))
+            texts_to_embed.add(self.sanitize_string(triplet["object"]))
+            texts_to_embed.add(self.sanitize_string(triplet["relation"]))
+        texts_to_embed = list(texts_to_embed)
+        embedding_cache = dict(
+            zip(texts_to_embed, self.aligner.get_embeddings(texts_to_embed))
+        )
+
         for triplet in triplets:
             self.extractor.reset_tokens()
             try:
                 logger.log(logging.DEBUG, "Triplet: %s\n%s" % (str(triplet), "-" * 100))
                 refined_subject = self.refine_entity_name(
-                    text, triplet, sample_id, is_object=False
+                    text, triplet, sample_id, is_object=False, embedding_cache=embedding_cache
                 )
                 refined_object = self.refine_entity_name(
-                    text, triplet, sample_id, is_object=True
+                    text, triplet, sample_id, is_object=True, embedding_cache=embedding_cache
                 )
 
                 triplet["subject"] = refined_subject
                 triplet["object"] = refined_object
 
-                refined_relation = self.refine_relation_name(text, triplet, sample_id)
+                refined_relation = self.refine_relation_name(
+                    text, triplet, sample_id, embedding_cache=embedding_cache
+                )
                 triplet["relation"] = refined_relation
 
                 final_triplets.append(triplet)
@@ -150,7 +165,7 @@ class InferenceWithDB(BaseInferenceWithDB):
             filtered_triplets,
         )
 
-    def refine_entity_name(self, text, triplet, sample_id, is_object=False):
+    def refine_entity_name(self, text, triplet, sample_id, is_object=False, embedding_cache=None):
         """
         Refine entity names using type constraints.
         """
@@ -161,9 +176,12 @@ class InferenceWithDB(BaseInferenceWithDB):
             entity = triplet["subject"]
             # entity = unidecode(entity)
         entity = self.sanitize_string(entity)
+        entity_embedding = (
+            embedding_cache.get(entity) if embedding_cache else self.aligner.get_embedding(entity)
+        )
 
         similar_entities = self.aligner.retrieve_similar_entity_names(
-            entity_name=entity, sample_id=sample_id
+            entity_name=entity, sample_id=sample_id, embedding=entity_embedding
         )
 
         similar_entities = [self.sanitize_string(entity) for entity in similar_entities]
@@ -190,12 +208,12 @@ class InferenceWithDB(BaseInferenceWithDB):
                 updated_entity = entity
 
         self.aligner.add_entity(
-            entity_name=updated_entity, alias=entity, sample_id=sample_id
+            entity_name=updated_entity, alias=entity, sample_id=sample_id, embedding=entity_embedding
         )
 
         return updated_entity
 
-    def refine_relation_name(self, text, triplet, sample_id):
+    def refine_relation_name(self, text, triplet, sample_id, embedding_cache=None):
         """
         Refine relation names using LLM.
         """
@@ -203,9 +221,12 @@ class InferenceWithDB(BaseInferenceWithDB):
 
         # relation = unidecode(triplet['relation'])
         relation = self.sanitize_string(triplet["relation"])
+        relation_embedding = (
+            embedding_cache.get(relation) if embedding_cache else self.aligner.get_embedding(relation)
+        )
 
         similar_relations: List[str] = self.aligner.retrieve_similar_properties(
-            target_relation=relation, sample_id=sample_id
+            target_relation=relation, sample_id=sample_id, embedding=relation_embedding
         )
 
         similar_relations = [
@@ -225,7 +246,7 @@ class InferenceWithDB(BaseInferenceWithDB):
                 updated_relation = relation
 
         self.aligner.add_property(
-            property_name=updated_relation, alias=relation, sample_id=sample_id
+            property_name=updated_relation, alias=relation, sample_id=sample_id, embedding=relation_embedding
         )
 
         return updated_relation
