@@ -1,8 +1,9 @@
-FROM pytorch/pytorch:2.1.0-cuda11.8-cudnn8-runtime
+FROM pytorch/pytorch:2.4.1-cuda12.1-cudnn9-runtime
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
+ENV PYTHONPATH=/app/src:/app/demo_app
 
 WORKDIR /app
 
@@ -16,26 +17,14 @@ COPY requirements.txt .
 
 RUN pip install --upgrade pip && pip install -r requirements.txt
 
-COPY streamlit_ui.py ./streamlit_ui.py
-COPY streamlit_session.py ./streamlit_session.py
-COPY streamlit_navigation.py ./streamlit_navigation.py
-COPY streamlit_kg_viz.py ./streamlit_kg_viz.py
-COPY streamlit_token_stats.py ./streamlit_token_stats.py
+COPY src/ ./src/
+COPY demo_app/ ./demo_app/
 COPY scripts/inject_streamlit_head.py ./scripts/inject_streamlit_head.py
-RUN python scripts/inject_streamlit_head.py
-
-COPY src/wikontic/utils/ ./src/wikontic/utils/
-COPY src/wikontic/__init__.py ./src/wikontic/__init__.py
-COPY src/wikontic/create_ontological_triplets_db.py ./src/wikontic/create_ontological_triplets_db.py
-COPY src/wikontic/create_triplets_db.py ./src/wikontic/create_triplets_db.py
-COPY src/wikontic/create_wikidata_ontology_db.py ./src/wikontic/create_wikidata_ontology_db.py
-
-COPY Wikontic.py .
 COPY .streamlit/ ./.streamlit/
-COPY app_pages/ ./app_pages/
-
 COPY media/ ./media/
+
+RUN python scripts/inject_streamlit_head.py
 
 EXPOSE 8501
 
-CMD ["streamlit", "run", "Wikontic.py", "--server.port=8501", "--server.address=0.0.0.0"]
+CMD ["streamlit", "run", "demo_app/Wikontic.py", "--server.port=8501", "--server.address=0.0.0.0"]
