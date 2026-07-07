@@ -4,7 +4,7 @@
 
 **Build ontology-aware, Wikidata-aligned knowledge graphs from raw text using LLMs**
 
-Paper: [arXiv:2512.00590](https://arxiv.org/abs/2512.00590) · Tutorial: [`tutorial.ipynb`](tutorial.ipynb)
+Paper: [EACL 2026](https://aclanthology.org/2026.eacl-long.388.pdf) · Tutorial: [`tutorial.ipynb`](tutorial.ipynb)
 
 ---
 
