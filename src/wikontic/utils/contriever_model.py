@@ -58,4 +58,6 @@ def load_contriever(
     else:
         resolved_device = torch.device(device)
 
-    return tokenizer, model.to(resolved_device), resolved_device
+    model = model.to(resolved_device)
+    model.eval()
+    return tokenizer, model, resolved_device
