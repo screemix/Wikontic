@@ -18,7 +18,11 @@ from streamlit_app_config import (
     USE_ONTOLOGY,
 )
 from streamlit_i18n import t
-from wikontic.utils.language_config import prompt_folder_for_language
+from wikontic.utils.embedding_model import EMBEDDING_DIMS
+from wikontic.utils.language_config import (
+    default_embedding_model_for_language,
+    prompt_folder_for_language,
+)
 from wikontic.utils.inference_with_db import InferenceWithDB
 from wikontic.utils.openai_utils import LLMTripletExtractor
 from wikontic.utils.dynamic_aligner import Aligner as DynamicAligner
@@ -57,9 +61,10 @@ def _triplets_init_command() -> str:
         if USE_ONTOLOGY
         else "wikontic.create_triplets_db"
     )
+    embedding_dims = EMBEDDING_DIMS[default_embedding_model_for_language(BACKEND_LANGUAGE)]
     return (
         f'python -m {module} --backend mongodb --mongo_uri "{MONGO_URI}" '
-        f"--db_name {TRIPLETS_DB_NAME}"
+        f"--db_name {TRIPLETS_DB_NAME} --embedding_dimensions {embedding_dims}"
     )
 
 
@@ -98,9 +103,14 @@ def get_shared_resources(
 
     if use_ontology:
         ontology_db = mongo_client.get_database(ontology_db_name)
-        aligner = StructuredAligner(ontology_db=ontology_db, triplets_db=triplets_db)
+        aligner = StructuredAligner(
+            ontology_db=ontology_db, triplets_db=triplets_db, language=backend_language
+        )
     else:
-        aligner = DynamicAligner(triplets_db=triplets_db)
+        aligner = DynamicAligner(
+            triplets_db=triplets_db,
+            embedding_model=default_embedding_model_for_language(backend_language),
+        )
 
     return mongo_client, ontology_db, triplets_db, aligner
 
