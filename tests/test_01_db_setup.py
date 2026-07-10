@@ -2,7 +2,16 @@
 
 import pytest
 
-from conftest import MONGO_URI, TRIPLETS_DB, ONTO_TRIPLETS_DB, ONTOLOGY_DB_MONGO
+from conftest import (
+    MONGO_URI,
+    TRIPLETS_DB,
+    ONTO_TRIPLETS_DB,
+    ONTOLOGY_DB_MONGO,
+    TRIPLETS_DB_RU,
+    ONTO_TRIPLETS_DB_RU,
+    ONTOLOGY_DB_MONGO_RU,
+    EMBEDDING_DIMS_RU,
+)
 
 
 # ── helpers ────────────────────────────────────────────────────────────────────
@@ -23,6 +32,17 @@ def _has_index(mongo_db, collection_name, *fields):
 def _vector_index_names(mongo_db, collection_name):
     coll = mongo_db.get_collection(collection_name)
     return [idx.get("name") for idx in coll.list_search_indexes()]
+
+
+def _vector_index_dimensions(mongo_db, collection_name, index_name, vector_field):
+    coll = mongo_db.get_collection(collection_name)
+    for idx in coll.list_search_indexes():
+        if idx.get("name") != index_name:
+            continue
+        definition = idx.get("latestDefinition") or idx.get("definition") or {}
+        fields = definition.get("mappings", {}).get("fields", {})
+        return fields.get(vector_field, {}).get("dimensions")
+    return None
 
 
 def _qdrant_payload_fields(backend, collection_name):
@@ -227,3 +247,63 @@ def test_onto_triplets_named_vector_qdrant(onto_triplets_db_qdrant):
 ])
 def test_ontology_named_vectors_qdrant(ontology_db_qdrant, collection, index_name):
     assert index_name in _qdrant_named_vectors(ontology_db_qdrant, collection)
+
+
+# ── ru: collections, and vector index dimensions (Mongo) ──────────────────────
+# FRIDA (ru) embeds at 1536 dims vs Contriever (en) at 768 — these confirm the
+# ru vector indexes were actually provisioned at the right size, not silently
+# left at the 768-dim default.
+
+@pytest.fixture(scope="module")
+def triplets_raw_ru(mongo_client, triplets_db_mongo_ru):
+    return mongo_client.get_database(TRIPLETS_DB_RU)
+
+
+@pytest.fixture(scope="module")
+def onto_raw_ru(mongo_client, onto_triplets_db_mongo_ru):
+    return mongo_client.get_database(ONTO_TRIPLETS_DB_RU)
+
+
+@pytest.fixture(scope="module")
+def ontology_raw_ru(mongo_client, ontology_db_mongo_ru):
+    return mongo_client.get_database(ONTOLOGY_DB_MONGO_RU)
+
+
+@pytest.mark.parametrize("coll", sorted(TRIPLETS_COLLS))
+def test_triplets_db_collection_ru(triplets_db_mongo_ru, coll):
+    assert coll in triplets_db_mongo_ru.list_collection_names()
+
+
+@pytest.mark.parametrize("coll", sorted(ONTO_TRIPLETS_COLLS))
+def test_onto_triplets_db_collection_ru(onto_triplets_db_mongo_ru, coll):
+    assert coll in onto_triplets_db_mongo_ru.list_collection_names()
+
+
+@pytest.mark.parametrize("coll", sorted(ONTOLOGY_COLLS))
+def test_ontology_db_collection_ru(ontology_db_mongo_ru, coll):
+    assert coll in ontology_db_mongo_ru.list_collection_names()
+
+
+def test_triplets_vector_index_dims_ru(triplets_raw_ru):
+    assert _vector_index_dimensions(
+        triplets_raw_ru, "entity_aliases", "entity_aliases", "alias_text_embedding"
+    ) == EMBEDDING_DIMS_RU
+    assert _vector_index_dimensions(
+        triplets_raw_ru, "property_aliases", "property_aliases", "alias_text_embedding"
+    ) == EMBEDDING_DIMS_RU
+
+
+def test_onto_triplets_vector_index_dims_ru(onto_raw_ru):
+    assert _vector_index_dimensions(
+        onto_raw_ru, "entity_aliases", "entity_aliases", "alias_text_embedding"
+    ) == EMBEDDING_DIMS_RU
+
+
+@pytest.mark.parametrize("collection,index_name", [
+    ("entity_type_aliases", "entity_type_aliases"),
+    ("property_aliases",    "property_aliases"),
+])
+def test_ontology_vector_index_dims_ru(ontology_raw_ru, collection, index_name):
+    assert _vector_index_dimensions(
+        ontology_raw_ru, collection, index_name, "alias_text_embedding"
+    ) == EMBEDDING_DIMS_RU

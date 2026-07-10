@@ -16,7 +16,7 @@ from wikontic.db.factory import create_backend
 from wikontic.utils.embedding_model import (
     EMBEDDING_DIMS,
     load_embedding_model,
-    get_embedding as _embedding_model_get_embedding,
+    get_embeddings as _embedding_model_get_embeddings,
 )
 
 from wikontic.logging_config import get_logger
@@ -75,15 +75,45 @@ class PropertyAlias(BaseModel):
     alias_text_embedding: List[float]
 
 
-def get_embedding(text):
+EMBEDDING_BATCH_SIZE = 64
+
+
+def _embed_chunk_with_oom_backoff(
+    chunk: List[str], tokenizer, model, embed_device
+) -> List[Optional[List[float]]]:
+    """Embed one chunk, halving it and retrying on CUDA OOM instead of giving up.
+
+    This GPU is shared with other processes, so free memory fluctuates — a
+    chunk that fits one moment may not the next. Silently returning None for a
+    whole chunk on failure would corrupt the ontology DB (missing vectors),
+    so we only give up once we're down to a single, unembeddable text.
+    """
     try:
-        tokenizer, model, embed_device = _ensure_embedding_model(_embed_model_name)
-        return _embedding_model_get_embedding(
-            text, tokenizer, model, embed_device, _embed_model_name
+        return _embedding_model_get_embeddings(
+            chunk, tokenizer, model, embed_device, _embed_model_name
         )
-    except Exception as e:
-        logger.error(f"Error in get_embedding: {e}")
-        return None
+    except torch.cuda.OutOfMemoryError:
+        torch.cuda.empty_cache()
+        if len(chunk) == 1:
+            logger.error(f"Out of GPU memory embedding a single text: {chunk[0]!r}")
+            raise
+        mid = len(chunk) // 2
+        return _embed_chunk_with_oom_backoff(
+            chunk[:mid], tokenizer, model, embed_device
+        ) + _embed_chunk_with_oom_backoff(chunk[mid:], tokenizer, model, embed_device)
+
+
+def get_embeddings_batch(texts: List[str]) -> List[Optional[List[float]]]:
+    """Embed many texts in one pass each, chunked so a single forward pass
+    doesn't have to hold every alias in the ontology in memory at once."""
+    tokenizer, model, embed_device = _ensure_embedding_model(_embed_model_name)
+    embeddings: List[Optional[List[float]]] = []
+    for start in tqdm(range(0, len(texts), EMBEDDING_BATCH_SIZE)):
+        chunk = texts[start : start + EMBEDDING_BATCH_SIZE]
+        embeddings.extend(
+            _embed_chunk_with_oom_backoff(chunk, tokenizer, model, embed_device)
+        )
+    return embeddings
 
 
 def get_mongo_client(mongo_uri):
@@ -138,6 +168,7 @@ def populate_entity_types(
         records = [EntityType(**record).model_dump() for record in entity_metadata_list]
     except ValidationError as e:
         logger.error(f"Validation error while populating {collection_name}: {e}")
+        raise
 
     collection = db.get_collection(collection_name)
     collection.insert_many(records)
@@ -148,38 +179,37 @@ def populate_entity_type_aliases(
     ENTITY_2_LABEL, ENTITY_2_ALIASES, db, collection_name="entity_type_aliases"
 ):
     logger.info(f"Starting to populate {collection_name} collection")
-    entity_types_list = []
-    id_count = 0
 
-    for e, aliases in tqdm(ENTITY_2_ALIASES.items()):
-        alias_embedding = get_embedding(ENTITY_2_LABEL[e])
-        entity_types_list.append(
-            {
-                "_id": id_count,
-                "entity_type_id": e,
-                "alias_label": ENTITY_2_LABEL[e],
-                "alias_text_embedding": alias_embedding,
-            }
-        )
-        id_count += 1
-
+    entity_ids = []
+    alias_labels = []
+    for e, aliases in ENTITY_2_ALIASES.items():
+        entity_ids.append(e)
+        alias_labels.append(ENTITY_2_LABEL[e])
         for alias in aliases:
-            alias_embedding = get_embedding(alias)
-            entity_types_list.append(
-                {
-                    "_id": id_count,
-                    "entity_type_id": e,
-                    "alias_label": alias,
-                    "alias_text_embedding": alias_embedding,
-                }
-            )
-            id_count += 1
+            entity_ids.append(e)
+            alias_labels.append(alias)
+
+    logger.info(f"Embedding {len(alias_labels)} entity type aliases in batches of {EMBEDDING_BATCH_SIZE}")
+    embeddings = get_embeddings_batch(alias_labels)
+
+    entity_types_list = [
+        {
+            "_id": id_count,
+            "entity_type_id": entity_id,
+            "alias_label": alias_label,
+            "alias_text_embedding": embedding,
+        }
+        for id_count, (entity_id, alias_label, embedding) in enumerate(
+            zip(entity_ids, alias_labels, embeddings)
+        )
+    ]
     try:
         records = [
             EntityTypeAlias(**record).model_dump() for record in entity_types_list
         ]
     except ValidationError as e:
         logger.error(f"Validation error while populating {collection_name}: {e}")
+        raise
 
     collection = db.get_collection(collection_name)
     collection.insert_many(records)
@@ -211,6 +241,7 @@ def populate_properties(
         records = [Property(**record).model_dump() for record in property_list]
     except ValidationError as e:
         logger.error(f"Validation error while populating {collection_name}: {e}")
+        raise
 
     collection = db.get_collection(collection_name)
     collection.insert_many(records)
@@ -221,38 +252,37 @@ def populate_property_aliases(
     PROP_2_LABEL, PROP_2_ALIASES, db, collection_name="property_aliases"
 ):
     logger.info(f"Starting to populate {collection_name} collection")
-    relation_alias_id_pairs = []
-    id_count = 0
 
-    for r, aliases in tqdm(PROP_2_ALIASES.items()):
-        alias_embedding = get_embedding(PROP_2_LABEL[r])
-        relation_alias_id_pairs.append(
-            {
-                "_id": id_count,
-                "relation_id": r,
-                "alias_label": PROP_2_LABEL[r],
-                "alias_text_embedding": alias_embedding,
-            }
-        )
-        id_count += 1
-
+    relation_ids = []
+    alias_labels = []
+    for r, aliases in PROP_2_ALIASES.items():
+        relation_ids.append(r)
+        alias_labels.append(PROP_2_LABEL[r])
         for alias in aliases:
-            alias_embedding = get_embedding(alias)
-            relation_alias_id_pairs.append(
-                {
-                    "_id": id_count,
-                    "relation_id": r,
-                    "alias_label": alias,
-                    "alias_text_embedding": alias_embedding,
-                }
-            )
-            id_count += 1
+            relation_ids.append(r)
+            alias_labels.append(alias)
+
+    logger.info(f"Embedding {len(alias_labels)} property aliases in batches of {EMBEDDING_BATCH_SIZE}")
+    embeddings = get_embeddings_batch(alias_labels)
+
+    relation_alias_id_pairs = [
+        {
+            "_id": id_count,
+            "relation_id": relation_id,
+            "alias_label": alias_label,
+            "alias_text_embedding": embedding,
+        }
+        for id_count, (relation_id, alias_label, embedding) in enumerate(
+            zip(relation_ids, alias_labels, embeddings)
+        )
+    ]
     try:
         records = [
             PropertyAlias(**record).model_dump() for record in relation_alias_id_pairs
         ]
     except ValidationError as e:
         logger.error(f"Validation error while populating {collection_name}: {e}")
+        raise
 
     collection = db.get_collection(collection_name)
     collection.insert_many(records)
