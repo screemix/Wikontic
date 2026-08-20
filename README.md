@@ -58,6 +58,7 @@ Wikontic/
 │       ├── structured_aligner.py        # Ontology-aware alignment
 │       ├── inference_with_db.py         # Dynamic extraction + QA
 │       ├── structured_inference_with_db.py
+│       ├── structured_inference_with_db_doc_parallelized.py  # Thread-parallel structured pipeline
 │       ├── base_inference_with_db.py    # Shared QA logic
 │       ├── language_config.py           # en/ru prompts, transliteration, ontology paths
 │       ├── ontology_mappings/           # Wikidata JSON mappings
@@ -509,6 +510,54 @@ initial, final, filtered, onto_filtered = (
 
 For LangChain tool bindings, see [`tutorial.ipynb`](tutorial.ipynb).
 
+### Parallel mode (thread-parallel structured inference)
+
+`ParallelStructuredInferenceWithDB` (in [`structured_inference_with_db_doc_parallelized.py`](src/wikontic/utils/structured_inference_with_db_doc_parallelized.py)) is a drop-in, thread-parallel replacement for `StructuredInferenceWithDB` — same method names and return contract, but a single document's triplets are refined concurrently (type refinement, relation refinement, and deduplicated/hierarchy-partitioned entity-name resolution all run across a thread pool) instead of one triplet at a time. Use it when a document extracts many triplets and refinement latency (not extraction) dominates.
+
+```python
+from pymongo import MongoClient
+from wikontic.utils.language_config import prompt_folder_for_language
+from wikontic.utils.openai_utils import LLMTripletExtractor
+from wikontic.utils.structured_aligner import Aligner
+from wikontic.utils.structured_inference_with_db_doc_parallelized import (
+    ParallelStructuredInferenceWithDB,
+)
+
+client = MongoClient("mongodb://localhost:27018/?directConnection=true")
+ontology_db = client["wikidata_ontology"]
+triplets_db = client["my_triplets_db"]
+
+aligner = Aligner(ontology_db=ontology_db, triplets_db=triplets_db)
+
+
+def extractor_factory():
+    return LLMTripletExtractor(
+        model="gpt-4o-mini",
+        api_key="...",
+        prompt_folder_path=str(prompt_folder_for_language("en")),
+    )
+
+
+inference = ParallelStructuredInferenceWithDB(
+    extractor_factory, aligner, triplets_db, language="en", max_workers=8,
+)
+
+initial, final, filtered, onto_filtered = (
+    inference.extract_triplets_with_ontology_filtering_and_add_to_db(
+        text="Paris is the capital of France.",
+        sample_id="demo_1",
+        source_text_id=0,
+    )
+)
+```
+
+Notes:
+
+- `max_workers` (default `8`) bounds the thread pool used for per-triplet and per-entity-group work within one document; it does not itself parallelize *across* documents.
+- Parallelism is scoped to a single document/call — call it once per document (e.g. from `dataset_inference.py`-style loops) rather than sharing one call across documents.
+- Entity-name resolution is deduplicated by `(entity_name, entity_type)` and partitioned by ontology type hierarchy so that two entities that could ever be merge-candidates for each other are always resolved sequentially, never concurrently.wq
+- Works with either storage backend (MongoDB or Qdrant), since aligner reads used during parallel refinement are read-only.
+
 ### Key classes
 
 | Module | Class | Role |
@@ -518,6 +567,7 @@ For LangChain tool bindings, see [`tutorial.ipynb`](tutorial.ipynb).
 | `structured_aligner` | `Aligner` | Wikidata type/property alignment |
 | `inference_with_db` | `InferenceWithDB` | Dynamic pipeline + QA (`language` param) |
 | `structured_inference_with_db` | `StructuredInferenceWithDB` | Ontology-aware pipeline + QA (`language` param) |
+| `structured_inference_with_db_doc_parallelized` | `ParallelStructuredInferenceWithDB` | Thread-parallel structured pipeline, drop-in for `StructuredInferenceWithDB` (`extractor_factory`, `max_workers` params) |
 | `language_config` | helpers | `prompt_folder_for_language`, `use_unidecode_for_language`, ontology mapping paths |
 | `db.factory` | `create_backend` | Create MongoDB or Qdrant backend |
 

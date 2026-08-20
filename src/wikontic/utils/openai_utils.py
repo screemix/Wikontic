@@ -208,8 +208,7 @@ class LLMTripletExtractor:
             self._prev_error = e
             # if json from output is broken after 3 attempts  - raise an exception
             logger.log(logging.ERROR, str(e))
-            if attempt > self.MAX_ATTEMPTS:
-                raise e
+            raise e
 
     @tenacity.retry(stop=tenacity.stop_after_attempt(MAX_ATTEMPTS), reraise=True)
     def refine_entity_types(
@@ -261,9 +260,7 @@ class LLMTripletExtractor:
         except Exception as e:
             self._prev_error = e
             logger.log(logging.ERROR, str(e))
-            # if json from output is broken after 3 attempts  - raise an exception
-            if attempt > self.MAX_ATTEMPTS:
-                raise e
+            raise e
 
         logger.log(
             logging.DEBUG,
@@ -334,9 +331,7 @@ class LLMTripletExtractor:
         except Exception as e:
             self._prev_error = e
             logger.log(logging.ERROR, str(e))
-            # if json from output is broken after 3 attempts  - raise an exception
-            if attempt > self.MAX_ATTEMPTS:
-                raise e
+            raise e
 
         logger.log(
             logging.DEBUG,
@@ -396,9 +391,7 @@ class LLMTripletExtractor:
         except Exception as e:
             self._prev_error = e
             logger.log(logging.ERROR, str(e))
-            # if json from output is broken after 3 attempts  - raise an exception
-            if self._refine_attempt > self.MAX_ATTEMPTS:
-                raise e
+            raise e
 
     def refine_relation_and_entity_types(
         self, text: str, triplet: dict, candidate_triplets: List[dict]
@@ -456,9 +449,7 @@ class LLMTripletExtractor:
         except Exception as e:
             self._prev_error = e
             logger.log(logging.ERROR, str(e))
-            # if json from output is broken after 3 attempts  - raise an exception
-            if attempt > self.MAX_ATTEMPTS:
-                raise e
+            raise e
 
     def extract_entities_from_question(self, question: str) -> dict:
         """Extract entities from a question."""

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import hashlib
+import threading
 import uuid
 from dataclasses import dataclass
 from typing import Any, Dict, Iterable, List, Optional, Set, Tuple, Union
@@ -8,6 +9,35 @@ from typing import Any, Dict, Iterable, List, Optional, Set, Tuple, Union
 from qdrant_client import QdrantClient, models
 
 from .interfaces import VectorQuery
+
+
+class _SerializedQdrantClient:
+    """Wraps a qdrant-client `:memory:` instance so every method call is
+    serialized behind one lock.
+
+    qdrant-client's local (`:memory:`) mode is a pure-Python/numpy
+    simulator with no internal synchronization of its own -- concurrent
+    calls from multiple threads (e.g. a vector_search racing an upsert)
+    can corrupt its internal bookkeeping arrays. 
+    A real Qdrant server (local docker or remote)
+    handles concurrent requests correctly on its own and does not need
+    this -- only `:memory:` mode is ever wrapped with this class.
+    """
+
+    def __init__(self, client: QdrantClient):
+        self._client = client
+        self._lock = threading.Lock()
+
+    def __getattr__(self, name: str) -> Any:
+        attr = getattr(self._client, name)
+        if not callable(attr):
+            return attr
+
+        def _locked_call(*args: Any, **kwargs: Any) -> Any:
+            with self._lock:
+                return attr(*args, **kwargs)
+
+        return _locked_call
 
 
 def _deterministic_id(collection_name: str, payload: Dict[str, Any]) -> Union[str, int]:
@@ -139,7 +169,7 @@ class QdrantBackend:
     def __init__(self, qdrant_url: str = ":memory:", api_key: Optional[str] = None):
         self._in_memory = qdrant_url == ":memory:"
         if self._in_memory:
-            self.client = QdrantClient(":memory:")
+            self.client = _SerializedQdrantClient(QdrantClient(":memory:"))
         else:
             self.client = QdrantClient(url=qdrant_url, api_key=api_key)
         # collection_name -> (named_vector_name | None, vector_size)
