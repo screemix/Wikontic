@@ -61,7 +61,7 @@ CONFIG_DEFAULTS = {
     "ontology_db_name": "wikidata_ontology",
     "triplets_db_name": "triplets_db",
     "model_name": "gpt-4o-mini",
-    "dataset_path": "datasets/musique_200_test_preprocessed.json",
+    "dataset_path": "datasets/musique_200_test.json",
     "preprocessing": "musique",
     "sample_start_index": 0,
     "num_samples": 50,
