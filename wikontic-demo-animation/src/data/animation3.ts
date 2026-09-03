@@ -1,5 +1,5 @@
-import {compactGraphEdges, compactGraphNodes, getAnimation1Content} from './animation1';
-import type {Locale} from '../i18n/types';
+import { compactGraphEdges, compactGraphNodes, getAnimation1Content } from './animation1';
+import type { Locale } from '../i18n/types';
 
 export const syntheticGraphNodes = compactGraphNodes;
 export const syntheticGraphEdges = compactGraphEdges;
@@ -74,6 +74,22 @@ export type Animation3Content = {
     dataSubtitle: string;
     syntheticDataset: string;
     smallModel: string;
+    statsEyebrow: string;
+    statsTitle: string;
+    statsSubtitle: string;
+    statsSingleHop: string;
+    statsMhAnsw: string;
+    statsMhAbst: string;
+    statsQaPairs: string;
+    statsTokensB: string;
+    statsKgNote: string;
+    metricsEyebrow: string;
+    metricsTitle: string;
+    metricsSubtitle: string;
+    metricsShOnly: string;
+    metricsMhSC: string;
+    metricsMhMC: string;
+    metricsKgNote: string;
   };
 };
 
@@ -145,6 +161,22 @@ export const animation3Content: Record<Locale, Animation3Content> = {
       dataSubtitle: 'Путь объясняет ответ на вопрос',
       syntheticDataset: 'Проверяемая синтетика',
       smallModel: 'малая доменная модель',
+      statsEyebrow: 'Масштаб датасета',
+      statsTitle: '3.25M QA-пар в трёх подмножествах',
+      statsSubtitle: 'Данные, требующие нескольких шагов рассуждения, сгенерированы с помощью KG Wikontic',
+      statsSingleHop: 'Простые одношаговые вопросы',
+      statsMhAnsw: 'Данные, требующие нескольких шагов рассуждения (с ответом)',
+      statsMhAbst: 'Данные, требующие нескольких шагов рассуждения (без ответа)',
+      statsQaPairs: 'QA-пар',
+      statsTokensB: 'Токенов',
+      statsKgNote: 'Сгенерировано с помощью Wikontic',
+      metricsEyebrow: 'QA-бенчмарки',
+      metricsTitle: 'KG-данные улучшают метрики на сложных задачах',
+      metricsSubtitle: 'Данные, требующие нескольких шагов рассуждения, сгенерированные Wikontic последовательно повышают качество',
+      metricsShOnly: 'SH only',
+      metricsMhSC: '+ MH SC',
+      metricsMhMC: '+ MH MC',
+      metricsKgNote: 'Данные, требующие нескольких шагов рассуждения, сгенерированы с помощью Wikontic',
     },
   },
   en: {
@@ -167,6 +199,22 @@ export const animation3Content: Record<Locale, Animation3Content> = {
       dataSubtitle: 'The path explains the answer to the question',
       syntheticDataset: 'Verifiable synthetic data',
       smallModel: 'small domain model',
+      statsEyebrow: 'Dataset Scale',
+      statsTitle: '3.25M QA pairs across three subsets',
+      statsSubtitle: 'Multi-hop data generated with Wikontic knowledge graphs',
+      statsSingleHop: 'Single-hop',
+      statsMhAnsw: 'Multi-hop (answerable)',
+      statsMhAbst: 'Multi-hop (abstain)',
+      statsQaPairs: 'QA Pairs',
+      statsTokensB: 'Tokens (B)',
+      statsKgNote: 'KG-generated',
+      metricsEyebrow: 'QA Benchmarks',
+      metricsTitle: 'KG data improves performance on complex tasks',
+      metricsSubtitle: 'Wikontic multi-hop data consistently boosts metrics',
+      metricsShOnly: 'SH only',
+      metricsMhSC: '+ MH SC',
+      metricsMhMC: '+ MH MC',
+      metricsKgNote: 'Multi-hop generated with Wikontic KGs',
     },
   },
 };

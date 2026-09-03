@@ -1,6 +1,6 @@
 import React from 'react';
 import {AbsoluteFill, Sequence, interpolate, useCurrentFrame} from 'remotion';
-import {DatabaseZap, Layers3, Network, Waypoints} from 'lucide-react';
+import {BarChart2, DatabaseZap, Layers3, Network, TrendingUp, Waypoints} from 'lucide-react';
 import {GraphView} from '../components/GraphView';
 import {PathHighlight} from '../components/PathHighlight';
 import {colors, font} from '../theme';
@@ -18,13 +18,34 @@ const PHASES = {
   graph: 210,
   paths: 240,
   data: 270,
+  stats: 270,
+  metrics: 300,
 } as const;
 
 const GRAPH_FROM = 0;
 const PATHS_FROM = GRAPH_FROM + PHASES.graph;
 const DATA_FROM = PATHS_FROM + PHASES.paths;
+const STATS_FROM = DATA_FROM + PHASES.data;
+const METRICS_FROM = STATS_FROM + PHASES.stats;
 
-export const SYNTHETIC_DATA_FRAMES = DATA_FROM + PHASES.data;
+export const SYNTHETIC_DATA_FRAMES = METRICS_FROM + PHASES.metrics;
+
+const STATS_ROWS = [
+  {id: 'sh', qaPairs: 2_780_000, qaPairsLabel: '2.78M', tokens: 7.8, tokensLabel: '7.8B', kgGenerated: false},
+  {id: 'mh-ans', qaPairs: 428_238, qaPairsLabel: '428K', tokens: 0.25, tokensLabel: '0.25B', kgGenerated: true},
+  {id: 'mh-abs', qaPairs: 43_333, qaPairsLabel: '43.3K', tokens: 0.018, tokensLabel: '0.018B', kgGenerated: true},
+];
+const MAX_QA = STATS_ROWS[0].qaPairs;
+const MAX_TOK = STATS_ROWS[0].tokens;
+const sqrtRatio = (val: number, max: number) => Math.sqrt(val / max);
+
+const BENCHMARKS = [
+  {id: 'hotpot', name: 'HotpotQA', metric: 'In-Acc', values: [43.2, 51.2, 57.5]},
+  {id: 'musique', name: 'MuSiQue', metric: 'In-Acc', values: [11.2, 21.1, 34.8]},
+  {id: 'tatqa', name: 'TAT-QA', metric: 'F1', values: [72.1, 75.5, 73.9]},
+  {id: 'confiqa', name: 'ConFiQA', metric: 'In-Acc', values: [58.5, 71.9, 71.7]},
+];
+const COL_COLORS = ['#f2a900', '#2f6df6', '#19a974'];
 
 const STAGE_W = 1540;
 const GRAPH_W = 1420;
@@ -568,6 +589,224 @@ const DataPhase: React.FC<{content: Animation3Content}> = ({content}) => {
   );
 };
 
+const StatsPhase: React.FC<{content: Animation3Content}> = ({content}) => {
+  const frame = useCurrentFrame();
+  const headerIn = progress(frame, 6, 36);
+  const rowLabels = [content.labels.statsSingleHop, content.labels.statsMhAnsw, content.labels.statsMhAbst];
+
+  return (
+    <Phase duration={PHASES.stats}>
+      <Header
+        eyebrow={content.labels.statsEyebrow}
+        title={content.labels.statsTitle}
+        subtitle={content.labels.statsSubtitle}
+        icon={<BarChart2 size={58} />}
+        progress={headerIn}
+      />
+      <div
+        style={{
+          width: STAGE_W,
+          background: '#ffffff',
+          border: '1px solid #dbe3ef',
+          borderRadius: 8,
+          boxShadow: '0 24px 70px rgba(23,32,51,0.1)',
+          overflow: 'hidden',
+        }}
+      >
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: '300px 1fr 1fr',
+            gap: 14,
+            padding: '16px 28px',
+            background: '#f8fafc',
+            borderBottom: '1px solid #dbe3ef',
+          }}
+        >
+          <span />
+          <span style={{fontSize: 17, fontWeight: 760, color: '#647084', textTransform: 'uppercase', letterSpacing: '0.05em'}}>
+            {content.labels.statsQaPairs}
+          </span>
+          <span style={{fontSize: 17, fontWeight: 760, color: '#647084', textTransform: 'uppercase', letterSpacing: '0.05em'}}>
+            {content.labels.statsTokensB}
+          </span>
+        </div>
+        {STATS_ROWS.map((row, index) => {
+          const rowIn = clamp(progress(frame, 48 + index * 30, 90 + index * 30));
+          const qaFill = `${sqrtRatio(row.qaPairs, MAX_QA) * 100 * rowIn}%`;
+          const tokFill = `${sqrtRatio(row.tokens, MAX_TOK) * 100 * rowIn}%`;
+          return (
+            <div
+              key={row.id}
+              style={{
+                display: 'grid',
+                gridTemplateColumns: '300px 1fr 1fr',
+                gap: 14,
+                padding: '22px 28px',
+                borderBottom: index < STATS_ROWS.length - 1 ? '1px solid #edf1f6' : 'none',
+                opacity: rowIn,
+                transform: `translateX(${(1 - rowIn) * -20}px)`,
+              }}
+            >
+              <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 8}}>
+                <span style={{fontSize: 23, fontWeight: 820, color: '#172033', lineHeight: 1.15}}>
+                  {rowLabels[index]}
+                </span>
+                {row.kgGenerated && (
+                  <span
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      padding: '3px 9px',
+                      borderRadius: 5,
+                      background: '#eee9ff',
+                      color: '#5637c8',
+                      fontSize: 14,
+                      fontWeight: 760,
+                      width: 'fit-content',
+                    }}
+                  >
+                    {content.labels.statsKgNote}
+                  </span>
+                )}
+              </div>
+              <div style={{display: 'flex', alignItems: 'center', gap: 12}}>
+                <div style={{position: 'relative', height: 38, flex: 1, background: '#f4f7fb', borderRadius: 6, overflow: 'hidden'}}>
+                  <div style={{position: 'absolute', left: 0, top: 0, height: '100%', width: qaFill, background: '#2f6df6', borderRadius: 6}} />
+                </div>
+                <span style={{fontSize: 22, fontWeight: 840, color: '#172033', minWidth: 68, textAlign: 'right'}}>
+                  {row.qaPairsLabel}
+                </span>
+              </div>
+              <div style={{display: 'flex', alignItems: 'center', gap: 12}}>
+                <div style={{position: 'relative', height: 38, flex: 1, background: '#f4f7fb', borderRadius: 6, overflow: 'hidden'}}>
+                  <div style={{position: 'absolute', left: 0, top: 0, height: '100%', width: tokFill, background: '#19a974', borderRadius: 6}} />
+                </div>
+                <span style={{fontSize: 22, fontWeight: 840, color: '#172033', minWidth: 74, textAlign: 'right'}}>
+                  {row.tokensLabel}
+                </span>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </Phase>
+  );
+};
+
+const MetricsPhase: React.FC<{content: Animation3Content}> = ({content}) => {
+  const frame = useCurrentFrame();
+  const headerIn = progress(frame, 6, 36);
+  const cardsIn = clamp(progress(frame, 40, 76));
+  const col0In = clamp(progress(frame, 60, 96));
+  const col1In = clamp(progress(frame, 100, 136));
+  const col2In = clamp(progress(frame, 140, 176));
+  const deltaIn = clamp(progress(frame, 184, 220));
+  const noteIn = clamp(progress(frame, 215, 248));
+  const colProgress = [col0In, col1In, col2In];
+  const colLabels = [content.labels.metricsShOnly, content.labels.metricsMhSC, content.labels.metricsMhMC];
+
+  return (
+    <Phase duration={PHASES.metrics}>
+      <Header
+        eyebrow={content.labels.metricsEyebrow}
+        title={content.labels.metricsTitle}
+        subtitle={content.labels.metricsSubtitle}
+        icon={<TrendingUp size={58} />}
+        progress={headerIn}
+      />
+      <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, width: STAGE_W}}>
+        {BENCHMARKS.map((bench) => {
+          const delta = bench.values[2] - bench.values[0];
+          return (
+            <div
+              key={bench.id}
+              style={{
+                padding: '20px 22px',
+                border: '1px solid #dbe3ef',
+                borderRadius: 8,
+                background: '#ffffff',
+                boxShadow: '0 18px 46px rgba(23,32,51,0.1)',
+                opacity: cardsIn,
+                transform: `translateY(${(1 - cardsIn) * 20}px)`,
+              }}
+            >
+              <div style={{display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 16}}>
+                <div>
+                  <div style={{fontSize: 26, fontWeight: 860, color: '#172033', lineHeight: 1.15}}>{bench.name}</div>
+                  <div style={{fontSize: 17, fontWeight: 720, color: '#647084', marginTop: 3}}>{bench.metric}</div>
+                </div>
+                <div
+                  style={{
+                    opacity: deltaIn,
+                    transform: `translateY(${(1 - deltaIn) * 8}px)`,
+                    padding: '7px 12px',
+                    borderRadius: 7,
+                    background: delta >= 0 ? '#dff8ec' : '#fff2cc',
+                    color: delta >= 0 ? '#08724d' : '#8a5c00',
+                    fontSize: 20,
+                    fontWeight: 860,
+                    lineHeight: 1,
+                  }}
+                >
+                  {delta >= 0 ? '+' : ''}{delta.toFixed(1)}
+                </div>
+              </div>
+              {bench.values.map((val, colIdx) => (
+                <div
+                  key={colIdx}
+                  style={{display: 'flex', alignItems: 'center', gap: 10, marginBottom: colIdx < 2 ? 10 : 0}}
+                >
+                  <div style={{width: 86, fontSize: 16, fontWeight: 760, color: COL_COLORS[colIdx], flexShrink: 0, lineHeight: 1}}>
+                    {colLabels[colIdx]}
+                  </div>
+                  <div style={{position: 'relative', height: 30, flex: 1, background: '#f4f7fb', borderRadius: 5, overflow: 'hidden'}}>
+                    <div
+                      style={{
+                        position: 'absolute',
+                        left: 0,
+                        top: 0,
+                        height: '100%',
+                        width: `${val * colProgress[colIdx]}%`,
+                        background: COL_COLORS[colIdx],
+                        borderRadius: 5,
+                        opacity: 0.85,
+                      }}
+                    />
+                  </div>
+                  <span style={{fontSize: 20, fontWeight: 840, color: COL_COLORS[colIdx], minWidth: 48, textAlign: 'right'}}>
+                    {val}
+                  </span>
+                </div>
+              ))}
+            </div>
+          );
+        })}
+      </div>
+      <div
+        style={{
+          marginTop: 16,
+          width: STAGE_W,
+          opacity: noteIn,
+          transform: `translateY(${(1 - noteIn) * 12}px)`,
+          display: 'flex',
+          alignItems: 'center',
+          gap: 10,
+          padding: '11px 16px',
+          borderRadius: 8,
+          background: '#eee9ff',
+          color: '#5637c8',
+          fontSize: 20,
+          fontWeight: 760,
+        }}
+      >
+        <Network size={20} />
+        <span>{content.labels.metricsKgNote}</span>
+      </div>
+    </Phase>
+  );
+};
+
 type Animation3Props = {
   locale?: Locale;
 };
@@ -596,6 +835,12 @@ export const Animation3_SyntheticData: React.FC<Animation3Props> = ({locale = 'r
       </Sequence>
       <Sequence from={DATA_FROM} durationInFrames={PHASES.data}>
         <DataPhase content={content} />
+      </Sequence>
+      <Sequence from={STATS_FROM} durationInFrames={PHASES.stats}>
+        <StatsPhase content={content} />
+      </Sequence>
+      <Sequence from={METRICS_FROM} durationInFrames={PHASES.metrics}>
+        <MetricsPhase content={content} />
       </Sequence>
     </AbsoluteFill>
   );
