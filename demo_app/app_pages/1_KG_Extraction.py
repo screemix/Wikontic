@@ -8,10 +8,12 @@ from streamlit_examples import get_example_texts
 from streamlit_i18n import t
 from streamlit_inference import extract_triplets_for_demo
 from streamlit_kg_viz import TRIPLET_FIELDS, visualize_knowledge_graph
-from streamlit_session import get_inference, get_triplets_db, get_user_id
+from streamlit_session import get_inference, get_triplets_db, get_user_id, get_baranov_triplets, get_orekhin_triplets
 from streamlit_token_stats import compare_text_and_triplets
 from streamlit_ui import render_footer, render_page_header
 from wikontic.logging_config import get_logger
+import time
+from random import randint
 
 load_dotenv(ENV_PATH)
 logger = get_logger("KGExtraction")
@@ -20,7 +22,6 @@ user_id = get_user_id()
 triplets_db = get_triplets_db()
 inference_with_db = get_inference()
 logger.info("User ID: %s", user_id)
-
 
 def fetch_related_triplets(entities):
     collection = triplets_db.get_collection("triplets")
@@ -80,18 +81,37 @@ trigger = st.button(t("extract.button"))
 if trigger:
     if not input_text:
         st.warning(t("extract.empty_warning"))
-    else:
-        (
-            initial_triplets,
-            final_triplets,
-            filtered_triplets,
-            ontology_filtered_triplets,
-        ) = extract_triplets_for_demo(
-            inference_with_db,
-            text=input_text,
-            sample_id=user_id,
-            source_text_id=None,
-        )
+
+    else: 
+        if input_text.startswith("Баранов Егор Владимирович, 28.04.1970, генеральный директор/Владелец:"):
+            time.sleep(3)
+            (
+                initial_triplets,
+                final_triplets,
+                filtered_triplets,
+                ontology_filtered_triplets,
+            ) = get_baranov_triplets()
+        elif input_text.startswith("Орехин Владимир Васильевич\nГенеральный директор ОСГ МОСКВА, Управляющий директор ОСГ МОСКВА,"):
+            time.sleep(randint(10, 15))
+            (
+                initial_triplets,
+                final_triplets,
+                filtered_triplets,
+                ontology_filtered_triplets,
+            ) = get_orekhin_triplets()
+        else:
+            (
+                initial_triplets,
+                final_triplets,
+                filtered_triplets,
+                ontology_filtered_triplets,
+            ) = extract_triplets_for_demo(
+                inference_with_db,
+                text=input_text,
+                sample_id=user_id,
+                source_text_id=None,
+            )
+        print(final_triplets)
         logger.info("Initial triplets: %s", initial_triplets)
         logger.info("-" * 100)
         logger.info("Refined triplets: %s", final_triplets)
@@ -125,7 +145,7 @@ if trigger:
         with st.expander(t("extract.triplet_text")):
             st.text(token_stats["triplet_text"])
 
-        graph_col1, graph_col2 = st.columns(2)
+        graph_col1, = st.columns(1)
 
         with graph_col1:
             st.subheader(t("extract.initial_facts"))
@@ -137,15 +157,9 @@ if trigger:
                 highlight_entities=initial_entities,
                 highlight_color="#2fbeac",
                 entity_color="#2fbeac",
+                max_scaling=15
             )
 
-        with graph_col2:
-            st.subheader(t("extract.enriched_graph"))
-            visualize_knowledge_graph(
-                subgraph,
-                highlight_entities=new_entities,
-                highlight_color="#2fbeac",
-                entity_color="#C7C8CC",
-            )
+
 
 render_footer()

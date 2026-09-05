@@ -100,6 +100,7 @@ class BaseInferenceWithDB:
                 linked_entities.extend(exact_entity_match)
             else:
                 identified_entities.extend(similar_entities)
+        print(similar_entities)
 
         logger.debug("Identified entities from question: %s", identified_entities)
         logger.debug("Linked entities from question: %s", linked_entities)
@@ -116,6 +117,7 @@ class BaseInferenceWithDB:
         linked_entities.extend([e["entity"] for e in linked_identified_entities])
 
         logger.debug("Linked entities after refinement: %s", linked_entities)
+        print(linked_entities)
         return linked_entities
 
     def get_1_hop_supporting_triplets(

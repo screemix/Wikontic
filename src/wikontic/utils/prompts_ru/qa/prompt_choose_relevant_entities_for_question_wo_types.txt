@@ -12,5 +12,5 @@ Selection Criteria:
 Response Format:
     Always return at least one relevant entity. It is guaranteed that there is at least one.
     The output must be a JSON list of dictionaries, where each dictionary contains:
-        "entity": the name of the chosen relevant entity
+        "entity": the name of the chosen relevant entity (in Russian)
         Do not return an empty list. Select the best possible options.

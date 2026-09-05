@@ -12,7 +12,6 @@ PAGES = [
     st.Page(str(PAGES_DIR / "1_KG_Extraction.py"), title=t("nav.extract")),
     st.Page(str(PAGES_DIR / "2_QA.py"), title=t("nav.qa")),
     st.Page(str(PAGES_DIR / "3_Current_KG.py"), title=t("nav.current")),
-    st.Page(str(PAGES_DIR / "4_Personal_KG.py"), title=t("nav.personal")),
 ]
 
 

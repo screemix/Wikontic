@@ -29,15 +29,15 @@ def _read_bool(name: str, default: bool = True) -> bool:
     return raw_value.strip().lower() in {"1", "true", "yes", "on"}
 
 
-FRONTEND_LANGUAGE = _read_language("WIKONTIC_FRONTEND_LANGUAGE", "en")
-BACKEND_LANGUAGE = _read_language("WIKONTIC_BACKEND_LANGUAGE", "en")
+FRONTEND_LANGUAGE = _read_language("WIKONTIC_FRONTEND_LANGUAGE", "ru")
+BACKEND_LANGUAGE = _read_language("WIKONTIC_BACKEND_LANGUAGE", "ru")
 USE_ONTOLOGY = _read_bool("WIKONTIC_USE_ONTOLOGY", True)
 
 MONGO_URI = os.getenv("MONGO_URI", DEFAULT_MONGO_URI)
-API_KEY = os.getenv("OPENROUTER_KEY") or os.getenv("KEY")
-BASE_URL = os.getenv("OPENROUTER_BASE_URL") or DEFAULT_BASE_URL
-PROXY_URL = os.getenv("PROXY_URL")
-EXTRACTION_MODEL = os.getenv("WIKONTIC_MODEL", "gpt-4.1")
+API_KEY = os.getenv("AIRI_KEY") or os.getenv("KEY")
+BASE_URL = os.getenv("AIRI_BASE_URL") or DEFAULT_BASE_URL
+PROXY_URL = os.getenv("PROXY_URI")
+EXTRACTION_MODEL = os.getenv("WIKONTIC_MODEL", "Qwen/Qwen3-Next-80B-A3B-Instruct")
 
 
 def _default_ontology_db_name(language: str) -> str:

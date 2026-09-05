@@ -20,18 +20,56 @@ def query_kg(inferer, question_text):
     identified_entities = inferer.identify_relevant_entities_from_question_with_llm(
         question_text, sample_id=user_id
     )
+    print(identified_entities)
     supporting_triplets, ans = inferer.answer_question_with_llm(
         question_text,
         identified_entities,
         sample_id=user_id,
         use_qualifiers=True,
     )
+    print(supporting_triplets)
     return identified_entities, supporting_triplets, ans
 
 
 render_page_header(t("qa.title"))
 
-question = st.text_input(t("qa.input_label"))
+EXAMPLE_QUESTIONS = [
+    "Как связаны Ветров и Орехин?",
+    "Кто владеет организацией, соседствующей с СК БУМ?",
+    "Где проживает брат Жены Орехина?",
+    "С какими странами сотрудничает Орехин?",
+    "Кто является управляющим дочерних компаний Steel River?",
+]
+
+custom_question_label = t("qa.custom_question")
+
+if "qa_question" not in st.session_state:
+    st.session_state.qa_question = ""
+if "qa_selected_predefined" not in st.session_state:
+    st.session_state.qa_selected_predefined = None
+
+# st.subheader(t("qa.examples_header"))
+predefined_options = [custom_question_label] + EXAMPLE_QUESTIONS
+
+if st.session_state.qa_selected_predefined in predefined_options:
+    initial_index = predefined_options.index(st.session_state.qa_selected_predefined)
+else:
+    initial_index = 0
+
+selected_predefined = st.radio(
+    t("qa.choose_question"),
+    predefined_options,
+    index=initial_index,
+    key="qa_predefined_selector",
+)
+
+if selected_predefined != st.session_state.qa_selected_predefined:
+    st.session_state.qa_selected_predefined = selected_predefined
+    if selected_predefined != custom_question_label:
+        st.session_state.qa_question = selected_predefined
+        st.rerun()
+
+question = st.text_input(t("qa.input_label"), key="qa_question")
 trigger = st.button(t("qa.button"))
 
 if trigger:

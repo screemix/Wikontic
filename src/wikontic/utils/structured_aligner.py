@@ -404,6 +404,42 @@ class Aligner:
             unique_fields=["label", "entity_type", "alias", "sample_id"],
         )
 
+    def add_entities(self, entities):
+        """Batched add_entity: dedupes (entity_name, alias, entity_type,
+        sample_id) tuples, embeds every unique alias in one call, and
+        upserts all of them in a single round trip -- for indexing many
+        entities at once (e.g. backfilling entity_aliases for a batch of
+        already-extracted triplets) without one model call and one DB round
+        trip per entity.
+
+        entities: iterable of (entity_name, alias, entity_type, sample_id).
+        """
+        unique = {}
+        for entity_name, alias, entity_type, sample_id in entities:
+            unique[(entity_name, alias, entity_type, sample_id or "all")] = None
+        keys = list(unique.keys())
+        if not keys:
+            return
+
+        aliases = [alias for _, alias, _, _ in keys]
+        embeddings = self.get_embeddings(aliases)
+
+        documents = [
+            {
+                "label": entity_name,
+                "entity_type": entity_type,
+                "alias": alias,
+                "sample_id": sample_id,
+                "alias_text_embedding": embedding,
+            }
+            for (entity_name, alias, entity_type, sample_id), embedding in zip(keys, embeddings)
+        ]
+        self.triplets_db.upsert_many(
+            collection_name=self.entity_aliases_collection_name,
+            documents=documents,
+            unique_fields=["label", "entity_type", "alias", "sample_id"],
+        )
+
     def add_triplets(self, triplets_list, sample_id):
         if not sample_id:
             sample_id = "all"

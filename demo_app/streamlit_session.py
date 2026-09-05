@@ -1,8 +1,10 @@
+from __future__ import annotations
+
 import uuid
 
 import streamlit as st
 from dotenv import load_dotenv
-from pymongo import MongoClient
+from pymongo import MongoClient, UpdateOne
 
 from streamlit_app_config import (
     ENV_PATH,
@@ -45,7 +47,6 @@ ONTOLOGY_COLLECTIONS = {
     "properties",
     "property_aliases",
 }
-
 
 def _format_missing_collections_message(db_name: str, missing: list[str]) -> str:
     return t(
@@ -116,6 +117,7 @@ def get_shared_resources(
 
 
 def init_session() -> None:
+    
     if "user_id" not in st.session_state:
         st.session_state.user_id = str(uuid.uuid4())
 
@@ -144,7 +146,6 @@ def init_session() -> None:
             ONTOLOGY_COLLECTIONS,
             _ontology_init_command(),
         )
-
     extractor = LLMTripletExtractor(
         model=EXTRACTION_MODEL,
         api_key=API_KEY,
@@ -180,6 +181,22 @@ def init_session() -> None:
     st.session_state.use_ontology = USE_ONTOLOGY
     st.session_state.inference_mode = INFERENCE_MODE
     st.session_state[_INIT_KEY] = True
+        
+    sb_db = mongo_client.get_database("triplets_db_sb_rewritten_Openai_Gpt-oss-120b_onto")
+    other_triplets = list(sb_db['triplets'].find({"$nor": [{"sample_id": "ЮЛ - СК БУМ", "source_text_id": 3}, {"sample_id": "ЮЛ - СК БУМ", "source_text_id": 1}]}, {"_id": 0}))
+    operations = []
+    entities = []
+    for document in other_triplets:
+        document["sample_id"] = get_user_id()
+        filter_query = {field: document.get(field) for field in document.keys()}
+        operations.append(
+        UpdateOne(filter_query, {"$setOnInsert": document}, upsert=True)
+    )
+        entities.append((document["subject"], document["subject"], document["subject_type"], document["sample_id"]))
+        entities.append((document["object"], document["object"], document["object_type"], document["sample_id"]))
+    if operations:
+        triplets_db['triplets'].bulk_write(operations)
+    aligner.add_entities(entities)
 
 
 def get_user_id() -> str:
@@ -187,6 +204,55 @@ def get_user_id() -> str:
     return st.session_state.user_id
 
 
+def _copy_triplets_and_index_entities(sample_id: str, source_text_id: int):
+    """Copy pre-extracted triplets for one sb_rewritten passage into the
+    demo's live triplets DB under the current user's sample_id, and also
+    index their subject/object entities into entity_aliases (with
+    embeddings) via the aligner -- the same bookkeeping normal extraction
+    does in _refine_entity_name, and required for QA's entity-linking step
+    (retrieve_similar_entity_names), which reads only entity_aliases and
+    never triplets directly.
+    """
+    mongo_client, _, triplets_db, aligner = get_shared_resources(
+        MONGO_URI,
+        ONTOLOGY_DB_NAME,
+        TRIPLETS_DB_NAME,
+        USE_ONTOLOGY,
+        BACKEND_LANGUAGE,
+        EXTRACTION_MODEL,
+    )
+    sb_db = mongo_client.get_database("triplets_db_sb_rewritten_Openai_Gpt-oss-120b_onto")
+
+    initial_triplets = list(sb_db["initial_triplets"].find({"sample_id": sample_id, "source_text_id": source_text_id}))
+    triplets = list(sb_db["triplets"].find({"sample_id": sample_id, "source_text_id": source_text_id}, {"_id": 0}))
+
+    user_id = get_user_id()
+    operations = []
+    entities = []
+    for document in triplets:
+        document["sample_id"] = user_id
+        filter_query = {field: document.get(field) for field in document.keys()}
+        operations.append(
+            UpdateOne(filter_query, {"$setOnInsert": document}, upsert=True)
+        )
+        entities.append((document["subject"], document["subject"], document["subject_type"], user_id))
+        entities.append((document["object"], document["object"], document["object_type"], user_id))
+    if operations:
+        triplets_db["triplets"].bulk_write(operations)
+    aligner.add_entities(entities)
+
+    return initial_triplets, triplets, None, None
+
+
+def get_baranov_triplets():
+    return _copy_triplets_and_index_entities("ЮЛ - СК БУМ", 1)
+
+
+def get_orekhin_triplets():
+    return _copy_triplets_and_index_entities("ЮЛ - СК БУМ", 3)
+
+
+    
 def get_triplets_db():
     init_session()
     return st.session_state.triplets_db
