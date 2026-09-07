@@ -417,13 +417,23 @@ export const PresentationApp: React.FC = () => {
               <RotateCcw size={20} />
               {copy.restart}
             </button>
-            <button type="button" onClick={() => seekTo(currentFrame - 15)} disabled={!activeAnimation}>
+            <button
+              type="button"
+              onClick={() => seekTo(currentFrame - 15)}
+              disabled={!activeAnimation}
+              aria-label={locale === 'ru' ? 'Назад на 15 кадров' : 'Back 15 frames'}
+              title={locale === 'ru' ? 'Назад на 15 кадров' : 'Back 15 frames'}
+            >
               <SkipBack size={20} />
-              15f
             </button>
-            <button type="button" onClick={() => seekTo(currentFrame + 15)} disabled={!activeAnimation}>
+            <button
+              type="button"
+              onClick={() => seekTo(currentFrame + 15)}
+              disabled={!activeAnimation}
+              aria-label={locale === 'ru' ? 'Вперёд на 15 кадров' : 'Forward 15 frames'}
+              title={locale === 'ru' ? 'Вперёд на 15 кадров' : 'Forward 15 frames'}
+            >
               <SkipForward size={20} />
-              15f
             </button>
             <button type="button" onClick={() => playerRef.current?.requestFullscreen()} disabled={!activeAnimation}>
               <Maximize2 size={20} />
@@ -447,6 +457,8 @@ export const PresentationApp: React.FC = () => {
                 min={0}
                 max={activeAnimation.durationInFrames - 1}
                 value={currentFrame}
+                aria-label={locale === 'ru' ? 'Прогресс анимации' : 'Animation progress'}
+                style={{'--progress': `${currentFrame / Math.max(1, activeAnimation.durationInFrames - 1) * 100}%`} as React.CSSProperties}
                 onChange={(event) => {
                   pause();
                   seekTo(Number(event.currentTarget.value));

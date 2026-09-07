@@ -1,16 +1,19 @@
 #presentation-root {
-  min-height: 100vh;
+  height: 100dvh;
 }
 
 .presentationShell {
-  min-height: 100vh;
+  height: 100%;
+  min-height: 0;
   display: grid;
   grid-template-columns: 330px minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
   background: #eef3f9;
   color: #172033;
 }
 
 .presentationSidebar {
+  min-height: 0;
   display: grid;
   grid-template-rows: auto auto 1fr auto;
   gap: 28px;
@@ -143,6 +146,7 @@
 
 .presentationMain {
   min-width: 0;
+  min-height: 0;
   display: grid;
   grid-template-rows: auto minmax(0, 1fr) auto;
   gap: 18px;
@@ -180,24 +184,29 @@
 
 .frameCounter {
   min-width: 150px;
-  padding: 10px 12px;
-  border: 1px solid #dbe3ef;
+  padding: 5px 12px;
+  border: 1px solid #dce4ee;
   border-radius: 8px;
-  background: #ffffff;
-  color: #647084;
-  font-size: 15px;
-  font-weight: 800;
+  background: #f3f6fa;
+  color: #526075;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
   text-align: center;
 }
 
 .stageOuter {
+  min-width: 0;
   min-height: 0;
   display: grid;
   place-items: center;
+  /* Measure the space left after the header and wrapped controls are laid out. */
+  container-type: size;
 }
 
 .stageFrame {
-  width: min(100%, calc((100vh - 230px) * 16 / 9));
+  width: min(100cqw, calc(100cqh * 16 / 9));
   aspect-ratio: 16 / 9;
   border: 1px solid #cfd9e8;
   border-radius: 8px;
@@ -208,11 +217,11 @@
 
 .presentationControls {
   display: grid;
-  gap: 13px;
-  padding: 16px;
-  border: 1px solid #dbe3ef;
+  gap: 6px;
+  padding: 10px 12px;
+  border: 1px solid #dce4ee;
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.92);
+  background: #f3f6fa;
 }
 
 .transportControls,
@@ -228,16 +237,24 @@
   align-items: center;
   justify-content: center;
   gap: 7px;
-  min-height: 40px;
-  padding: 9px 12px;
-  border: 1px solid #dbe3ef;
+  min-height: 32px;
+  padding: 5px 12px;
+  border: 1px solid #dce4ee;
   border-radius: 8px;
-  background: #ffffff;
-  color: #172033;
+  background: transparent;
+  color: #526075;
   font: inherit;
   font-size: 14px;
-  font-weight: 800;
+  line-height: 20px;
+  font-weight: 500;
   cursor: pointer;
+}
+
+.transportControls svg {
+  width: 16px;
+  height: 16px;
+  stroke-width: 1.5;
+  flex-shrink: 0;
 }
 
 .transportControls button:disabled,
@@ -248,37 +265,77 @@
 
 .transportControls button:hover:not(:disabled),
 .chapterControls button:hover:not(:disabled) {
-  border-color: #2f6df6;
+  background: #e7edf5;
+  border-color: #c3cfde;
+  color: #34445b;
 }
 
 .chapterControls button span {
   display: inline-grid;
   place-items: center;
-  width: 22px;
-  height: 22px;
-  border-radius: 6px;
-  background: #eef4ff;
-  color: #1748b5;
+  width: 18px;
+  height: 18px;
+  color: #68778c;
   font-size: 12px;
+  font-weight: 400;
 }
 
 .chapterControls .activeChapter {
-  border-color: #2f6df6;
-  background: #eef4ff;
-  color: #1748b5;
+  border-color: transparent;
+  background: #e5edf8;
+  color: #38577d;
 }
 
 .frameScrubber {
+  appearance: none;
   width: 100%;
-  accent-color: #2f6df6;
+  height: 12px;
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.frameScrubber::-webkit-slider-runnable-track {
+  height: 3px;
+  border-radius: 2px;
+  background: linear-gradient(to right, #7893b8 0%, #7893b8 var(--progress, 0%), #d8e0eb var(--progress, 0%), #d8e0eb 100%);
+}
+
+.frameScrubber::-webkit-slider-thumb {
+  appearance: none;
+  width: 10px;
+  height: 10px;
+  margin-top: -3.5px;
+  border-radius: 50%;
+  background: #6d89b0;
+}
+
+.frameScrubber::-moz-range-track {
+  height: 3px;
+  border-radius: 2px;
+  background: #d8e0eb;
+}
+
+.frameScrubber::-moz-range-progress {
+  height: 3px;
+  border-radius: 2px;
+  background: #7893b8;
+}
+
+.frameScrubber::-moz-range-thumb {
+  width: 10px;
+  height: 10px;
+  border: 0;
+  border-radius: 50%;
+  background: #6d89b0;
 }
 
 .finalSlideNote {
-  min-height: 40px;
+  min-height: 32px;
   align-items: center;
   color: #647084;
   font-size: 15px;
-  font-weight: 760;
+  font-weight: 500;
 }
 
 .staticStageViewport {
@@ -378,9 +435,66 @@
   line-height: 1.25;
 }
 
+@media (min-width: 1101px) and (max-height: 800px) {
+  .presentationSidebar {
+    gap: 14px;
+    padding: 16px;
+  }
+
+  .slideList {
+    gap: 8px;
+  }
+
+  .slideList button {
+    padding: 10px 12px;
+  }
+
+  .presentationMain {
+    gap: 12px;
+    padding: 16px 22px;
+  }
+
+}
+
+@media (min-width: 1101px) and (max-height: 700px) {
+  .presentationSidebar {
+    gap: 10px;
+    padding: 12px;
+  }
+
+  .presentationBrand img {
+    width: 36px;
+    height: 36px;
+  }
+
+  .slideList button {
+    padding: 8px 10px;
+  }
+
+  .slideList button strong {
+    font-size: 16px;
+  }
+
+  .slideList button small {
+    font-size: 12px;
+  }
+
+  .keyboardHints {
+    gap: 5px;
+    padding: 10px;
+  }
+
+  .presentationTopbar h1 {
+    font-size: 28px;
+  }
+}
+
 @media (max-width: 1100px) {
   .presentationShell {
+    height: auto;
+    min-height: 100%;
     grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
   }
 
   .presentationSidebar {
@@ -389,5 +503,13 @@
 
   .keyboardHints {
     display: none;
+  }
+
+  .stageOuter {
+    container-type: normal;
+  }
+
+  .stageFrame {
+    width: 100%;
   }
 }
