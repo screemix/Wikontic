@@ -481,7 +481,7 @@ class LLMTripletExtractor:
         return self.get_completion(
             system_prompt=self.prompts["qa"],
             user_prompt=f'Question: {question}\n\nTriplets: "{triplets}"',
-            transform_to_json=False,
+            transform_to_json=True,
         )
 
     def collapse_question(

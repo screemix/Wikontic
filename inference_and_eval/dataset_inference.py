@@ -112,8 +112,7 @@ def get_jsonl_dataset(dataset_path):
         for line in f.readlines():
             line = json.loads(line)
             name = list(line.keys())[0]
-            text = "\n".join(line[name])
-            ds[name] = [text]
+            ds[name] = line[name]
     return ds
 
 def should_dump_kg(cfg) -> bool:

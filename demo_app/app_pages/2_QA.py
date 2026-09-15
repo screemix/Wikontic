@@ -20,15 +20,14 @@ def query_kg(inferer, question_text):
     identified_entities = inferer.identify_relevant_entities_from_question_with_llm(
         question_text, sample_id=user_id
     )
-    print(identified_entities)
-    supporting_triplets, ans = inferer.answer_question_with_llm(
+    neighbour_triplets, supporting_triplets, ans = inferer.answer_question_with_llm(
         question_text,
         identified_entities,
         sample_id=user_id,
         use_qualifiers=True,
     )
-    print(supporting_triplets)
-    return identified_entities, supporting_triplets, ans
+    identified_entities = identified_entities + [t['subject'] for t in supporting_triplets] +  [t['object'] for t in supporting_triplets]
+    return neighbour_triplets, identified_entities, ans
 
 
 render_page_header(t("qa.title"))
@@ -37,6 +36,7 @@ EXAMPLE_QUESTIONS = [
     "Как связаны Ветров и Орехин?",
     "Кто владеет организацией, соседствующей с СК БУМ?",
     "Где проживает брат Жены Орехина?",
+    "Где проживают близкие родственники Орехина?",
     "С какими странами сотрудничает Орехин?",
     "Кто является управляющим дочерних компаний Steel River?",
 ]
@@ -77,17 +77,17 @@ if trigger:
         st.warning(t("qa.empty_warning"))
     else:
         st.markdown("#### " + t("qa.result", question=question))
-        identified_entities_names, supporting_triplets, ans = query_kg(
+        neighbour_triplets, identified_entities, ans = query_kg(
             inference, question
         )
-
-        st.success("✅ " + t("qa.success", count=len(supporting_triplets)))
+        print(neighbour_triplets)
+        st.success("✅ " + t("qa.success", count=len(neighbour_triplets)))
 
         st.subheader(t("qa.graph_header"))
         st.markdown(t("qa.legend"), unsafe_allow_html=True)
         visualize_knowledge_graph(
-            supporting_triplets,
-            highlight_entities=set(identified_entities_names),
+            neighbour_triplets,
+            highlight_entities=set(identified_entities),
             highlight_color="#2fbeac",
             entity_color="#C7C8CC",
         )

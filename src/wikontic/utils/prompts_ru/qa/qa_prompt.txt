@@ -1,5 +1,9 @@
 Your task is to answer a question based on facts written in a form of triplet (subject, relation, object, qualifiers) from knowledge graph. 
 
 The input question and triplet facts are denoted as "Question:" and "Triplets:" correspondingly.
-Be concise and provide an answer to the specified question based on the provided triplets (in Russian).
-In case you cannot formulate answer to the provided question based on the triplets, return None.
+You should answer the question and return triplets based on which the answer was deduced.
+There can be several answers to the question, provide all of them. But be concise and provide an answer to the specified question based on the provided triplets (in Russian).
+You should return a json with the following keys:
+"answer": answer to the question
+"triplets": chosen triplets (in dictionary format with keys "subject", "relation", "object") based on which you deduced the answer
+No markdown, no additional formatting, just a dictionary with these fields.

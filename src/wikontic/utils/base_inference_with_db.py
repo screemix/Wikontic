@@ -229,6 +229,7 @@ class BaseInferenceWithDB:
 
             entities4search = list(set(new_entities4search))
 
+
         if use_qualifiers:
             supporting_triplets = [
                 {
@@ -255,7 +256,10 @@ class BaseInferenceWithDB:
         ans = self.extractor.answer_question(
             question=question, triplets=supporting_triplets
         )
-        return supporting_triplets, ans
+        answer = ans["answer"]
+        triplets = ans['triplets']
+        return supporting_triplets, triplets, answer
+
 
     def answer_with_qa_collapsing(
         self,
