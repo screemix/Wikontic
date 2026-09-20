@@ -165,7 +165,7 @@ class LLMTripletExtractor:
             self.messages.extend(messages)
             messages = self.messages
         response = self.client.chat.completions.create(
-            model=self.model, messages=messages, temperature=0
+            model=self.model, messages=messages, temperature=0, seed=42
         )
         self.completion_tokens_num += response.usage.completion_tokens
         self.prompt_tokens_num += response.usage.prompt_tokens

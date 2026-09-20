@@ -37,7 +37,8 @@ MONGO_URI = os.getenv("MONGO_URI", DEFAULT_MONGO_URI)
 API_KEY = os.getenv("AIRI_KEY") or os.getenv("KEY")
 BASE_URL = os.getenv("AIRI_BASE_URL") or DEFAULT_BASE_URL
 PROXY_URL = os.getenv("PROXY_URI")
-EXTRACTION_MODEL = os.getenv("WIKONTIC_MODEL", "Qwen/Qwen3-Next-80B-A3B-Instruct")
+EXTRACTION_MODEL = os.getenv("WIKONTIC_MODEL", "Qwen/Qwen3.5-122B-A10B")
+# EXTRACTION_MODEL = os.getenv("WIKONTIC_MODEL", "openai/gpt-oss-120b")
 
 
 def _default_ontology_db_name(language: str) -> str:

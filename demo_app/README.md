@@ -62,7 +62,7 @@ For OpenAI directly, use `KEY` or `OPENROUTER_KEY` with the default OpenAI base 
 | `WIKONTIC_FRONTEND_LANGUAGE` | `en`, `ru` | `en` | Streamlit interface language |
 | `WIKONTIC_BACKEND_LANGUAGE` | `en`, `ru` | `en` | Wikontic prompts, examples, transliteration, and default DB names |
 | `WIKONTIC_USE_ONTOLOGY` | `true`, `false` | `true` | Structured ontology mode vs dynamic mode |
-| `WIKONTIC_MODEL` | model id | `gpt-4.1` | LLM model used by the demo |
+| `WIKONTIC_MODEL` | model id | `Qwen/Qwen3-Next-80B-A3B-Instruct` | LLM model used by the demo. Must be a model your API key/base URL actually serves — check with the provider's `/v1/models` (e.g. `client.models.list()`) before relying on the default; provider catalogs change. |
 | `WIKONTIC_TRIPLETS_DB_NAME` | database name | mode/language default | Override demo KG database |
 | `WIKONTIC_ONTOLOGY_DB_NAME` | database name | language default | Override ontology DB in ontology mode |
 
