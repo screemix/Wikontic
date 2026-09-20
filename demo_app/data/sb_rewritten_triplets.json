@@ -1,0 +1,3547 @@
+{
+  "triplets": [
+    {
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "relation": "место регистрации",
+      "object": "Приморский край, г. Находка, ул. Находский проспект, д. 96",
+      "object_type": "местонахождение",
+      "subject": "ЮЛ Южная Газовая Станция",
+      "subject_type": "юридическое лицо",
+      "completion_token_num": 494,
+      "prompt_token_num": 2599,
+      "qualifiers": [],
+      "source_text_id": 0
+    },
+    {
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "relation": "область деятельности",
+      "object": "транспорт грузов",
+      "object_type": "отрасль экономики",
+      "subject": "ЮЛ Южная Газовая Станция",
+      "subject_type": "юридическое лицо",
+      "completion_token_num": 460,
+      "prompt_token_num": 2692,
+      "qualifiers": [],
+      "source_text_id": 0
+    },
+    {
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "relation": "руководящий орган",
+      "object": "Локтев Юрий Сергеевич",
+      "object_type": "человек",
+      "subject": "ЮЛ Южная Газовая Станция",
+      "subject_type": "юридическое лицо",
+      "completion_token_num": 139,
+      "prompt_token_num": 962,
+      "qualifiers": [
+        {
+          "relation": "должность",
+          "object": "генеральный директор"
+        }
+      ],
+      "source_text_id": 0
+    },
+    {
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "relation": "владелец",
+      "object": "Ветров Евгений Викторович",
+      "object_type": "человек",
+      "subject": "ЮЛ Южная Газовая Станция",
+      "subject_type": "юридическое лицо",
+      "completion_token_num": 323,
+      "prompt_token_num": 1874,
+      "qualifiers": [],
+      "source_text_id": 0
+    },
+    {
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "relation": "(оплаченный) уставный капитал",
+      "object": "14 700 000 ₽",
+      "object_type": "валюта",
+      "subject": "ЮЛ Южная Газовая Станция",
+      "subject_type": "юридическое лицо",
+      "completion_token_num": 446,
+      "prompt_token_num": 2562,
+      "qualifiers": [
+        {
+          "relation": "момент времени",
+          "object": "08.09.2005"
+        }
+      ],
+      "source_text_id": 0
+    },
+    {
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "relation": "размер команды на момент старта",
+      "object": "75 чел.",
+      "object_type": "количество",
+      "subject": "ЮЛ Южная Газовая Станция",
+      "subject_type": "юридическое лицо",
+      "completion_token_num": 764,
+      "prompt_token_num": 2681,
+      "qualifiers": [
+        {
+          "relation": "момент времени",
+          "object": "31.12.2025"
+        }
+      ],
+      "source_text_id": 0
+    },
+    {
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "relation": "доход на душу населения",
+      "object": "2 983 790 000 ₽",
+      "object_type": "валюта",
+      "subject": "ЮЛ Южная Газовая Станция",
+      "subject_type": "юридическое лицо",
+      "completion_token_num": 726,
+      "prompt_token_num": 2540,
+      "qualifiers": [
+        {
+          "relation": "год",
+          "object": "2024"
+        }
+      ],
+      "source_text_id": 0
+    },
+    {
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "relation": "операционные расходы",
+      "object": "1 380 567 000 ₽",
+      "object_type": "валюта",
+      "subject": "ЮЛ Южная Газовая Станция",
+      "subject_type": "юридическое лицо",
+      "completion_token_num": 548,
+      "prompt_token_num": 2519,
+      "qualifiers": [
+        {
+          "relation": "год",
+          "object": "2024"
+        }
+      ],
+      "source_text_id": 0
+    },
+    {
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "relation": "операционные расходы",
+      "object": "2 390 162 000 ₽",
+      "object_type": "разменная денежная единица",
+      "subject": "ЮЛ Южная Газовая Станция",
+      "subject_type": "юридическое лицо",
+      "completion_token_num": 861,
+      "prompt_token_num": 2576,
+      "qualifiers": [
+        {
+          "relation": "год",
+          "object": "2024"
+        }
+      ],
+      "source_text_id": 0
+    },
+    {
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "relation": "ключевой показатель эффективности",
+      "object": "1 986 195 000 ₽",
+      "object_type": "разменная денежная единица",
+      "subject": "ЮЛ Южная Газовая Станция",
+      "subject_type": "юридическое лицо",
+      "completion_token_num": 561,
+      "prompt_token_num": 2578,
+      "qualifiers": [
+        {
+          "relation": "год",
+          "object": "2024"
+        }
+      ],
+      "source_text_id": 0
+    },
+    {
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "relation": "активы под управлением",
+      "object": "4 717 635 000 ₽",
+      "object_type": "разменная денежная единица",
+      "subject": "ЮЛ Южная Газовая Станция",
+      "subject_type": "юридическое лицо",
+      "completion_token_num": 606,
+      "prompt_token_num": 2584,
+      "qualifiers": [
+        {
+          "relation": "год",
+          "object": "2024"
+        }
+      ],
+      "source_text_id": 0
+    },
+    {
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "relation": "активы под управлением",
+      "object": "892 665 000 ₽",
+      "object_type": "валюта",
+      "subject": "ЮЛ Южная Газовая Станция",
+      "subject_type": "юридическое лицо",
+      "completion_token_num": 691,
+      "prompt_token_num": 2582,
+      "qualifiers": [
+        {
+          "relation": "год",
+          "object": "2024"
+        }
+      ],
+      "source_text_id": 0
+    },
+    {
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "relation": "наличные средства",
+      "object": "74 947 000 ₽",
+      "object_type": "валюта",
+      "subject": "ЮЛ Южная Газовая Станция",
+      "subject_type": "юридическое лицо",
+      "completion_token_num": 605,
+      "prompt_token_num": 2568,
+      "qualifiers": [
+        {
+          "relation": "год",
+          "object": "2024"
+        }
+      ],
+      "source_text_id": 0
+    },
+    {
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "relation": "операционные расходы",
+      "object": "552 662 602 ₽",
+      "object_type": "валюта",
+      "subject": "ЮЛ Южная Газовая Станция",
+      "subject_type": "юридическое лицо",
+      "completion_token_num": 593,
+      "prompt_token_num": 2530,
+      "qualifiers": [
+        {
+          "relation": "год",
+          "object": "2024"
+        }
+      ],
+      "source_text_id": 0
+    },
+    {
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "relation": "максимальный размер или ёмкость",
+      "object": "1 297 810 000 ₽",
+      "object_type": "валюта",
+      "subject": "ЮЛ Южная Газовая Станция",
+      "subject_type": "юридическое лицо",
+      "completion_token_num": 668,
+      "prompt_token_num": 2571,
+      "qualifiers": [
+        {
+          "relation": "год",
+          "object": "2024"
+        }
+      ],
+      "source_text_id": 0
+    },
+    {
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "relation": "число объектов",
+      "object": "8",
+      "object_type": "количество",
+      "subject": "ЮЛ Южная Газовая Станция",
+      "subject_type": "юридическое лицо",
+      "completion_token_num": 301,
+      "prompt_token_num": 950,
+      "qualifiers": [],
+      "source_text_id": 0
+    },
+    {
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "relation": "статус ограничения доступа",
+      "object": "нет действующих решений",
+      "object_type": "правовой статус",
+      "subject": "ЮЛ Южная Газовая Станция",
+      "subject_type": "юридическое лицо",
+      "completion_token_num": 551,
+      "prompt_token_num": 2884,
+      "qualifiers": [
+        {
+          "relation": "момент времени",
+          "object": "20.12.2025"
+        }
+      ],
+      "source_text_id": 0
+    },
+    {
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "relation": "получатель",
+      "object": "ЮЛ Южная Газовая Станция",
+      "object_type": "юридическое лицо",
+      "subject": "sgt@sgtdv.ru",
+      "subject_type": "сообщение",
+      "completion_token_num": 650,
+      "prompt_token_num": 2464,
+      "qualifiers": [],
+      "source_text_id": 0
+    },
+    {
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "relation": "онлайн-сервис",
+      "object": "https://sgtdv.ru",
+      "object_type": "сайт",
+      "subject": "ЮЛ Южная Газовая Станция",
+      "subject_type": "юридическое лицо",
+      "completion_token_num": 495,
+      "prompt_token_num": 2482,
+      "qualifiers": [],
+      "source_text_id": 0
+    },
+    {
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "relation": "представитель",
+      "object": "ЮЛ Южная Газовая Станция",
+      "object_type": "юридическое лицо",
+      "subject": "Ветров Евгений Викторович",
+      "subject_type": "человек",
+      "completion_token_num": 420,
+      "prompt_token_num": 962,
+      "qualifiers": [],
+      "source_text_id": 0
+    },
+    {
+      "object_type": "календарная дата",
+      "object": "05.12.1977",
+      "relation": "дата рождения",
+      "subject": "Ветров Евгений Викторович",
+      "subject_type": "человек",
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "completion_token_num": 261,
+      "prompt_token_num": 1513,
+      "qualifiers": [],
+      "source_text_id": 0
+    },
+    {
+      "subject": "Ветров Евгений Викторович",
+      "object_type": "телефонный номер",
+      "object": "79865693564",
+      "relation": "список номеров",
+      "subject_type": "человек",
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "completion_token_num": 396,
+      "prompt_token_num": 2554,
+      "qualifiers": [],
+      "source_text_id": 0
+    },
+    {
+      "object_type": "мобильный телефон",
+      "object": "79157944631",
+      "relation": "список номеров",
+      "subject": "Ветров Евгений Викторович",
+      "subject_type": "человек",
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "completion_token_num": 415,
+      "prompt_token_num": 2552,
+      "qualifiers": [],
+      "source_text_id": 0
+    },
+    {
+      "subject": "Ветров Евгений Викторович",
+      "object_type": "человек",
+      "object": "Ветров Виктор",
+      "relation": "родственник",
+      "subject_type": "человек",
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "completion_token_num": 583,
+      "prompt_token_num": 1887,
+      "qualifiers": [
+        {
+          "relation": "причина смерти",
+          "object": "убит в 2002 году"
+        }
+      ],
+      "source_text_id": 0
+    },
+    {
+      "subject_type": "человек",
+      "object_type": "место",
+      "object": "гор. Кизел, Пермского края",
+      "relation": "место рождения",
+      "subject": "Ветров Евгений Викторович",
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "completion_token_num": 0,
+      "prompt_token_num": 0,
+      "qualifiers": [],
+      "source_text_id": 1
+    },
+    {
+      "object_type": "жилище",
+      "object": "г. Москва, Литовский Бульвар, д. 28",
+      "relation": "место жительства",
+      "subject_type": "человек",
+      "subject": "Ветров Евгений Викторович",
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "completion_token_num": 461,
+      "prompt_token_num": 3484,
+      "qualifiers": [],
+      "source_text_id": 1
+    },
+    {
+      "subject_type": "человек",
+      "object_type": "местонахождение",
+      "object": "г. Москва, Дохтуровский, д. 8",
+      "relation": "место регистрации",
+      "subject": "Ветров Евгений Викторович",
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "completion_token_num": 494,
+      "prompt_token_num": 4928,
+      "qualifiers": [],
+      "source_text_id": 1
+    },
+    {
+      "object_type": "местонахождение",
+      "object": "Приморский край, г. Находка, ул. Находский проспект, д. 96",
+      "relation": "место регистрации",
+      "subject_type": "человек",
+      "subject": "Ветров Евгений Викторович",
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "completion_token_num": 705,
+      "prompt_token_num": 5006,
+      "qualifiers": [],
+      "source_text_id": 1
+    },
+    {
+      "subject_type": "человек",
+      "object_type": "социальная сеть",
+      "object": "https://vk.com/id87877856325",
+      "relation": "учётная запись в социальных медиа",
+      "subject": "Ветров Евгений Викторович",
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "completion_token_num": 285,
+      "prompt_token_num": 2927,
+      "qualifiers": [],
+      "source_text_id": 1
+    },
+    {
+      "subject_type": "человек",
+      "object_type": "ранжированный список",
+      "object": "ТОП 100 Богатейших людей Приморья",
+      "relation": "занял место в",
+      "subject": "Ветров Евгений Викторович",
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "completion_token_num": 373,
+      "prompt_token_num": 3446,
+      "qualifiers": [
+        {
+          "relation": "позиция",
+          "object": "54"
+        },
+        {
+          "relation": "год",
+          "object": "2021"
+        },
+        {
+          "relation": "сумма активов",
+          "object": "2 705 545 600 ₽"
+        },
+        {
+          "relation": "выручка",
+          "object": "543 100 000 ₽"
+        },
+        {
+          "relation": "чистая прибыль",
+          "object": "98 054 400 ₽"
+        }
+      ],
+      "source_text_id": 1
+    },
+    {
+      "object_type": "должность",
+      "object": "Фрахтовальщик",
+      "relation": "должность",
+      "subject_type": "человек",
+      "subject": "Ветров Евгений Викторович",
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "completion_token_num": 0,
+      "prompt_token_num": 0,
+      "qualifiers": [
+        {
+          "relation": "организация",
+          "object": "Компания Дитра"
+        },
+        {
+          "relation": "начало",
+          "object": "2000"
+        }
+      ],
+      "source_text_id": 1
+    },
+    {
+      "subject_type": "человек",
+      "object_type": "должность",
+      "object": "Старший специалист",
+      "relation": "должность",
+      "subject": "Ветров Евгений Викторович",
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "completion_token_num": 193,
+      "prompt_token_num": 1392,
+      "qualifiers": [
+        {
+          "relation": "организация",
+          "object": "ОАО «Сельфлот»"
+        },
+        {
+          "relation": "начало",
+          "object": "2000"
+        },
+        {
+          "relation": "конец",
+          "object": "2002"
+        }
+      ],
+      "source_text_id": 1
+    },
+    {
+      "object_type": "должность",
+      "object": "Заместитель начальника портово‑фрахтового отдела",
+      "relation": "должность",
+      "subject_type": "человек",
+      "subject": "Ветров Евгений Викторович",
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "completion_token_num": 104,
+      "prompt_token_num": 1411,
+      "qualifiers": [
+        {
+          "relation": "организация",
+          "object": "ЗАО «Южникель»"
+        },
+        {
+          "relation": "начало",
+          "object": "2002"
+        },
+        {
+          "relation": "конец",
+          "object": "2005"
+        }
+      ],
+      "source_text_id": 1
+    },
+    {
+      "subject_type": "человек",
+      "object_type": "должность",
+      "object": "Директор по корпоративной политике и финансам",
+      "relation": "должность",
+      "subject": "Ветров Евгений Викторович",
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "completion_token_num": 120,
+      "prompt_token_num": 1411,
+      "qualifiers": [
+        {
+          "relation": "организация",
+          "object": "ООО «Трансхим»"
+        },
+        {
+          "relation": "начало",
+          "object": "2005"
+        },
+        {
+          "relation": "конец",
+          "object": "2006"
+        }
+      ],
+      "source_text_id": 1
+    },
+    {
+      "object_type": "должность",
+      "object": "Генеральный директор",
+      "relation": "должность",
+      "subject_type": "человек",
+      "subject": "Ветров Евгений Викторович",
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "completion_token_num": 90,
+      "prompt_token_num": 1415,
+      "qualifiers": [
+        {
+          "relation": "организация",
+          "object": "ООО «Наливгруз порт»"
+        },
+        {
+          "relation": "начало",
+          "object": "2007"
+        },
+        {
+          "relation": "конец",
+          "object": "2012"
+        }
+      ],
+      "source_text_id": 1
+    },
+    {
+      "subject_type": "человек",
+      "object_type": "должность",
+      "object": "Председатель Совета директоров",
+      "relation": "должность",
+      "subject": "Ветров Евгений Викторович",
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "completion_token_num": 99,
+      "prompt_token_num": 1432,
+      "qualifiers": [
+        {
+          "relation": "организация",
+          "object": "ООО «Южная Газовая Станция»"
+        },
+        {
+          "relation": "начало",
+          "object": "2012"
+        }
+      ],
+      "source_text_id": 1
+    },
+    {
+      "object_type": "должность",
+      "object": "Главный советник",
+      "relation": "должность",
+      "subject_type": "человек",
+      "subject": "Ветров Евгений Викторович",
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "completion_token_num": 197,
+      "prompt_token_num": 1433,
+      "qualifiers": [
+        {
+          "relation": "организация",
+          "object": "ЗАО «Южникель»"
+        },
+        {
+          "relation": "начало",
+          "object": "2015"
+        }
+      ],
+      "source_text_id": 1
+    },
+    {
+      "object_type": "организация",
+      "object": "ООО «Южная Газовая Станция»",
+      "relation": "владелец",
+      "subject_type": "человек",
+      "subject": "Ветров Евгений Викторович",
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "completion_token_num": 0,
+      "prompt_token_num": 0,
+      "qualifiers": [
+        {
+          "relation": "начало владения",
+          "object": "11.2012"
+        },
+        {
+          "relation": "владелец с",
+          "object": "02.2020"
+        }
+      ],
+      "source_text_id": 1
+    },
+    {
+      "subject_type": "человек",
+      "object_type": "человек",
+      "object": "Орехина Елена Викторовна",
+      "relation": "брат/сестра",
+      "subject": "Ветров Евгений Викторович",
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "completion_token_num": 219,
+      "prompt_token_num": 2970,
+      "qualifiers": [
+        {
+          "relation": "дата рождения",
+          "object": "31.11.1988"
+        },
+        {
+          "relation": "должность",
+          "object": "член правления «Южной Газовой Станции»"
+        }
+      ],
+      "source_text_id": 1
+    },
+    {
+      "object_type": "человек",
+      "object": "Ветров Виктор",
+      "relation": "отец",
+      "subject_type": "человек",
+      "subject": "Ветров Евгений Викторович",
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "completion_token_num": 147,
+      "prompt_token_num": 1418,
+      "qualifiers": [
+        {
+          "relation": "дата рождения",
+          "object": "23.02.1947"
+        },
+        {
+          "relation": "должность",
+          "object": "Генеральный директор ОАО «Южный терминал»"
+        },
+        {
+          "relation": "начало",
+          "object": "1998"
+        },
+        {
+          "relation": "конец",
+          "object": "2001"
+        },
+        {
+          "relation": "смерть",
+          "object": "2002"
+        }
+      ],
+      "source_text_id": 1
+    },
+    {
+      "subject_type": "человек",
+      "object_type": "человек",
+      "object": "Ветрова Лариса Ивановна",
+      "relation": "мать",
+      "subject": "Ветров Евгений Викторович",
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "completion_token_num": 107,
+      "prompt_token_num": 1432,
+      "qualifiers": [
+        {
+          "relation": "дата рождения",
+          "object": "17.10.1948"
+        },
+        {
+          "relation": "совладелец",
+          "object": "ООО «ВОСТОК‑ТРАНС»"
+        },
+        {
+          "relation": "конец совместного владения",
+          "object": "2006"
+        }
+      ],
+      "source_text_id": 1
+    },
+    {
+      "sample_id": "ЮЛ - СК БУМ",
+      "relation": "место регистрации",
+      "object": "г. Москва, ул. Молотовская, д. 8, стр. 3, помещ. 10БА",
+      "object_type": "географическое местоположение",
+      "subject_type": "юридическое лицо",
+      "subject": "ЮЛ - СК БУМ",
+      "completion_token_num": 563,
+      "prompt_token_num": 2297,
+      "qualifiers": [],
+      "source_text_id": 0
+    },
+    {
+      "sample_id": "ЮЛ - СК БУМ",
+      "relation": "место регистрации",
+      "object": "1177757900290",
+      "object_type": "идентификатор",
+      "subject": "ЮЛ - СК БУМ",
+      "subject_type": "юридическое лицо",
+      "completion_token_num": 324,
+      "prompt_token_num": 881,
+      "qualifiers": [],
+      "source_text_id": 0
+    },
+    {
+      "sample_id": "ЮЛ - СК БУМ",
+      "relation": "область деятельности",
+      "object": "Торговля оптовая бумагой и картоном",
+      "object_type": "экономическая деятельность",
+      "subject_type": "юридическое лицо",
+      "subject": "ЮЛ - СК БУМ",
+      "completion_token_num": 608,
+      "prompt_token_num": 2501,
+      "qualifiers": [],
+      "source_text_id": 0
+    },
+    {
+      "sample_id": "ЮЛ - СК БУМ",
+      "relation": "креативный директор",
+      "object": "Баранов Егор Владимирович",
+      "object_type": "человек",
+      "subject": "ЮЛ - СК БУМ",
+      "subject_type": "юридическое лицо",
+      "completion_token_num": 318,
+      "prompt_token_num": 842,
+      "qualifiers": [
+        {
+          "relation": "ИНН",
+          "object": "7720357487662"
+        }
+      ],
+      "source_text_id": 0
+    },
+    {
+      "sample_id": "ЮЛ - СК БУМ",
+      "relation": "организационно-правовая форма",
+      "object": "ЮЛ - СК БУМ",
+      "object_type": "юридическое лицо",
+      "subject_type": "предприятие",
+      "subject": "Малые предприятия",
+      "completion_token_num": 749,
+      "prompt_token_num": 3085,
+      "qualifiers": [],
+      "source_text_id": 0
+    },
+    {
+      "sample_id": "ЮЛ - СК БУМ",
+      "relation": "число объектов",
+      "object": "17 чел.",
+      "object_type": "количество",
+      "subject": "ЮЛ - СК БУМ",
+      "subject_type": "юридическое лицо",
+      "completion_token_num": 516,
+      "prompt_token_num": 2369,
+      "qualifiers": [
+        {
+          "relation": "момент времени",
+          "object": "31.12.2025"
+        }
+      ],
+      "source_text_id": 0
+    },
+    {
+      "sample_id": "ЮЛ - СК БУМ",
+      "relation": "(оплаченный) уставный капитал",
+      "object": "35 000 руб.",
+      "object_type": "валюта",
+      "subject_type": "юридическое лицо",
+      "subject": "ЮЛ - СК БУМ",
+      "completion_token_num": 504,
+      "prompt_token_num": 2279,
+      "qualifiers": [
+        {
+          "relation": "момент времени",
+          "object": "08.2016"
+        }
+      ],
+      "source_text_id": 0
+    },
+    {
+      "sample_id": "ЮЛ - СК БУМ",
+      "relation": "оклад",
+      "object": "545 418 000 руб.",
+      "object_type": "валюта",
+      "subject": "ЮЛ - СК БУМ",
+      "subject_type": "юридическое лицо",
+      "completion_token_num": 743,
+      "prompt_token_num": 2255,
+      "qualifiers": [
+        {
+          "relation": "момент времени",
+          "object": "2025"
+        }
+      ],
+      "source_text_id": 0
+    },
+    {
+      "sample_id": "ЮЛ - СК БУМ",
+      "relation": "операционные расходы",
+      "object": "470 087 000 руб.",
+      "object_type": "валюта",
+      "subject_type": "юридическое лицо",
+      "subject": "ЮЛ - СК БУМ",
+      "completion_token_num": 537,
+      "prompt_token_num": 2236,
+      "qualifiers": [
+        {
+          "relation": "момент времени",
+          "object": "2025"
+        }
+      ],
+      "source_text_id": 0
+    },
+    {
+      "sample_id": "ЮЛ - СК БУМ",
+      "relation": "ставка налога на доходы физических лиц",
+      "object": "1 695 453 руб.",
+      "object_type": "разменная денежная единица",
+      "subject": "ЮЛ - СК БУМ",
+      "subject_type": "юридическое лицо",
+      "completion_token_num": 701,
+      "prompt_token_num": 2255,
+      "qualifiers": [
+        {
+          "relation": "момент времени",
+          "object": "2025"
+        }
+      ],
+      "source_text_id": 0
+    },
+    {
+      "sample_id": "ЮЛ - СК БУМ",
+      "relation": "максимальный размер или ёмкость",
+      "object": "3 340 000 руб.",
+      "object_type": "разменная денежная единица",
+      "subject_type": "юридическое лицо",
+      "subject": "ЮЛ - СК БУМ",
+      "completion_token_num": 655,
+      "prompt_token_num": 2292,
+      "qualifiers": [],
+      "source_text_id": 0
+    },
+    {
+      "sample_id": "ЮЛ - СК БУМ",
+      "relation": "продано единиц",
+      "object": "450 455 000 руб.",
+      "object_type": "валюта",
+      "subject": "ЮЛ - СК БУМ",
+      "subject_type": "юридическое лицо",
+      "completion_token_num": 850,
+      "prompt_token_num": 2297,
+      "qualifiers": [
+        {
+          "relation": "момент времени",
+          "object": "2025"
+        }
+      ],
+      "source_text_id": 0
+    },
+    {
+      "sample_id": "ЮЛ - СК БУМ",
+      "relation": "ключевой показатель эффективности",
+      "object": "6 889 000 руб.",
+      "object_type": "разменная денежная единица",
+      "subject_type": "юридическое лицо",
+      "subject": "ЮЛ - СК БУМ",
+      "completion_token_num": 603,
+      "prompt_token_num": 2299,
+      "qualifiers": [
+        {
+          "relation": "момент времени",
+          "object": "2025"
+        }
+      ],
+      "source_text_id": 0
+    },
+    {
+      "sample_id": "ЮЛ - СК БУМ",
+      "relation": "активы под управлением",
+      "object": "32 789 000 руб.",
+      "object_type": "валюта",
+      "subject": "ЮЛ - СК БУМ",
+      "subject_type": "юридическое лицо",
+      "completion_token_num": 683,
+      "prompt_token_num": 2305,
+      "qualifiers": [
+        {
+          "relation": "момент времени",
+          "object": "2025"
+        }
+      ],
+      "source_text_id": 0
+    },
+    {
+      "sample_id": "ЮЛ - СК БУМ",
+      "relation": "стоимость",
+      "object": "15 189 000 руб.",
+      "object_type": "валюта",
+      "subject_type": "юридическое лицо",
+      "subject": "ЮЛ - СК БУМ",
+      "completion_token_num": 815,
+      "prompt_token_num": 2307,
+      "qualifiers": [
+        {
+          "relation": "момент времени",
+          "object": "2025"
+        }
+      ],
+      "source_text_id": 0
+    },
+    {
+      "sample_id": "ЮЛ - СК БУМ",
+      "relation": "наличные средства",
+      "object": "-1 152 000 руб.",
+      "object_type": "разменная денежная единица",
+      "subject": "ЮЛ - СК БУМ",
+      "subject_type": "юридическое лицо",
+      "completion_token_num": 619,
+      "prompt_token_num": 2293,
+      "qualifiers": [
+        {
+          "relation": "момент времени",
+          "object": "2024"
+        }
+      ],
+      "source_text_id": 0
+    },
+    {
+      "sample_id": "ЮЛ - СК БУМ",
+      "relation": "получатель",
+      "object": "ЮЛ - СК БУМ",
+      "object_type": "юридическое лицо",
+      "subject_type": "письмо (письменное сообщение для передачи от одного субъекта к другому)",
+      "subject": "bumsk@yandex.ru",
+      "completion_token_num": 606,
+      "prompt_token_num": 2679,
+      "qualifiers": [],
+      "source_text_id": 0
+    },
+    {
+      "sample_id": "ЮЛ - СК БУМ",
+      "relation": "онлайн-сервис",
+      "object": "https://www.bumsk.ru/",
+      "object_type": "сайт",
+      "subject": "ЮЛ - СК БУМ",
+      "subject_type": "юридическое лицо",
+      "completion_token_num": 506,
+      "prompt_token_num": 2196,
+      "qualifiers": [],
+      "source_text_id": 0
+    },
+    {
+      "subject": "Баранов Егор Владимирович",
+      "object_type": "календарная дата",
+      "object": "28.04.1970",
+      "relation": "дата рождения",
+      "subject_type": "человек",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 164,
+      "prompt_token_num": 1306,
+      "qualifiers": [],
+      "source_text_id": 1
+    },
+    {
+      "object_type": "получатель",
+      "object": "bumsk@yandex.ru",
+      "relation": "получатель передачи",
+      "subject": "Баранов Егор Владимирович",
+      "subject_type": "человек",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 736,
+      "prompt_token_num": 2246,
+      "qualifiers": [],
+      "source_text_id": 1
+    },
+    {
+      "subject": "Баранов Егор Владимирович",
+      "object_type": "местонахождение",
+      "object": "г. Москва, ул. Речная, д. 5",
+      "relation": "место регистрации",
+      "subject_type": "человек",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 452,
+      "prompt_token_num": 2029,
+      "qualifiers": [],
+      "source_text_id": 1
+    },
+    {
+      "object_type": "жилище",
+      "object": "г. Москва, ул. Островная, д. 78",
+      "relation": "место жительства",
+      "subject": "Баранов Егор Владимирович",
+      "subject_type": "человек",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 537,
+      "prompt_token_num": 2013,
+      "qualifiers": [],
+      "source_text_id": 1
+    },
+    {
+      "subject": "генеральный директор",
+      "object_type": "человек",
+      "object": "Баранов Егор Владимирович",
+      "relation": "должность занимает",
+      "subject_type": "должность",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 100,
+      "prompt_token_num": 762,
+      "qualifiers": [
+        {
+          "relation": "организация",
+          "object": "ООО \"БУМ 2000\""
+        },
+        {
+          "relation": "момент начала",
+          "object": "03.2001"
+        },
+        {
+          "relation": "момент окончания",
+          "object": "12.2010"
+        }
+      ],
+      "source_text_id": 1
+    },
+    {
+      "sample_id": "ЮЛ - СК БУМ",
+      "relation": "должность занимает",
+      "object": "Баранов Егор Владимирович",
+      "object_type": "человек",
+      "subject": "владелец",
+      "subject_type": "должность",
+      "completion_token_num": 342,
+      "prompt_token_num": 1410,
+      "qualifiers": [
+        {
+          "relation": "организация",
+          "object": "ООО \"ЭКОЛАЙТ\""
+        },
+        {
+          "relation": "момент начала",
+          "object": "11.2009"
+        },
+        {
+          "relation": "момент окончания",
+          "object": "01.2016"
+        }
+      ],
+      "source_text_id": 1
+    },
+    {
+      "sample_id": "ЮЛ - СК БУМ",
+      "relation": "владелец",
+      "object": "ОГРНИП Баранов Е.В.(Сбор неопасных отходов)",
+      "object_type": "компания",
+      "subject": "Баранов Егор Владимирович",
+      "subject_type": "человек",
+      "completion_token_num": 0,
+      "prompt_token_num": 0,
+      "qualifiers": [
+        {
+          "relation": "момент начала",
+          "object": "05.2024"
+        },
+        {
+          "relation": "момент окончания",
+          "object": "н.в."
+        }
+      ],
+      "source_text_id": 1
+    },
+    {
+      "sample_id": "ЮЛ - СК БУМ",
+      "relation": "материнская организация (компания, учреждение)",
+      "object": "STEEL RIVER Inc. (США)",
+      "object_type": "компания",
+      "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+      "subject_type": "компания",
+      "completion_token_num": 214,
+      "prompt_token_num": 1695,
+      "qualifiers": [],
+      "source_text_id": 2
+    },
+    {
+      "sample_id": "ЮЛ - СК БУМ",
+      "relation": "место регистрации",
+      "object": "г. Москва, ул. Молотовская, д. 8, стр. 3, помещ. 10БА",
+      "object_type": "location",
+      "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+      "subject_type": "компания",
+      "completion_token_num": 305,
+      "prompt_token_num": 2303,
+      "qualifiers": [],
+      "source_text_id": 2
+    },
+    {
+      "sample_id": "ЮЛ - СК БУМ",
+      "relation": "место регистрации",
+      "object": "1077766764213",
+      "object_type": "идентификатор",
+      "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+      "subject_type": "компания",
+      "completion_token_num": 557,
+      "prompt_token_num": 1601,
+      "qualifiers": [],
+      "source_text_id": 2
+    },
+    {
+      "sample_id": "ЮЛ - СК БУМ",
+      "relation": "область деятельности",
+      "object": "Деятельность библиотек и архивов",
+      "object_type": "область деятельности",
+      "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+      "subject_type": "компания",
+      "completion_token_num": 458,
+      "prompt_token_num": 2451,
+      "qualifiers": [],
+      "source_text_id": 2
+    },
+    {
+      "sample_id": "ЮЛ - СК БУМ",
+      "relation": "генеральный директор",
+      "object": "Орехин Владимир Васильевич",
+      "object_type": "человек",
+      "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+      "subject_type": "компания",
+      "completion_token_num": 72,
+      "prompt_token_num": 752,
+      "qualifiers": [],
+      "source_text_id": 2
+    },
+    {
+      "sample_id": "ЮЛ - СК БУМ",
+      "relation": "владелец",
+      "object": "OSG CENTER MANAGEMENT EUROPE (Кипр)",
+      "object_type": "компания",
+      "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+      "subject_type": "компания",
+      "completion_token_num": 145,
+      "prompt_token_num": 805,
+      "qualifiers": [
+        {
+          "relation": "дата начала владения",
+          "object": "08.2009 г."
+        }
+      ],
+      "source_text_id": 2
+    },
+    {
+      "sample_id": "ЮЛ - СК БУМ",
+      "relation": "находится в пользовании у",
+      "object": "v.orehin@mcmgmt.ru",
+      "object_type": "письмо (письменное сообщение для передачи от одного субъекта к другому)",
+      "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+      "subject_type": "компания",
+      "completion_token_num": 831,
+      "prompt_token_num": 3419,
+      "qualifiers": [],
+      "source_text_id": 2
+    },
+    {
+      "sample_id": "ЮЛ - СК БУМ",
+      "relation": "онлайн-сервис",
+      "object": "www.musmgmt.com",
+      "object_type": "сайт",
+      "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+      "subject_type": "компания",
+      "completion_token_num": 475,
+      "prompt_token_num": 2905,
+      "qualifiers": [],
+      "source_text_id": 2
+    },
+    {
+      "sample_id": "ЮЛ - СК БУМ",
+      "relation": "список номеров",
+      "object": "749556261514",
+      "object_type": "телефонный номер",
+      "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+      "subject_type": "компания",
+      "completion_token_num": 690,
+      "prompt_token_num": 3068,
+      "qualifiers": [],
+      "source_text_id": 2
+    },
+    {
+      "sample_id": "ЮЛ - СК БУМ",
+      "relation": "место регистрации",
+      "object": "Кипр, г. Пафос, ул. Агиоу Антониу, д. 17",
+      "object_type": "location",
+      "subject": "OSG CENTER MANAGEMENT EUROPE (Кипр)",
+      "subject_type": "компания",
+      "completion_token_num": 701,
+      "prompt_token_num": 3779,
+      "qualifiers": [],
+      "source_text_id": 2
+    },
+    {
+      "sample_id": "ЮЛ - СК БУМ",
+      "relation": "менеджер/директор",
+      "object": "Nikos Antoniou",
+      "object_type": "человек",
+      "subject": "OSG CENTER MANAGEMENT EUROPE (Кипр)",
+      "subject_type": "компания",
+      "completion_token_num": 321,
+      "prompt_token_num": 1558,
+      "qualifiers": [
+        {
+          "relation": "иная трудовая деятельность",
+          "object": "STEEL RIVER HOLDINGS"
+        }
+      ],
+      "source_text_id": 2
+    },
+    {
+      "sample_id": "ЮЛ - СК БУМ",
+      "relation": "число сотрудников",
+      "object": "8",
+      "object_type": "количество",
+      "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+      "subject_type": "компания",
+      "completion_token_num": 86,
+      "prompt_token_num": 811,
+      "qualifiers": [],
+      "source_text_id": 2
+    },
+    {
+      "sample_id": "ЮЛ - СК БУМ",
+      "relation": "общая выручка",
+      "object": "2 389 145",
+      "object_type": "валюта",
+      "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+      "subject_type": "компания",
+      "completion_token_num": 435,
+      "prompt_token_num": 2230,
+      "qualifiers": [
+        {
+          "relation": "валюта",
+          "object": "USD"
+        }
+      ],
+      "source_text_id": 2
+    },
+    {
+      "sample_id": "ЮЛ - СК БУМ",
+      "relation": "число членов",
+      "object": "156",
+      "object_type": "количество",
+      "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+      "subject_type": "компания",
+      "completion_token_num": 302,
+      "prompt_token_num": 813,
+      "qualifiers": [],
+      "source_text_id": 2
+    },
+    {
+      "sample_id": "ЮЛ - СК БУМ",
+      "relation": "уровень выше",
+      "object": "5",
+      "object_type": "уровень",
+      "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+      "subject_type": "компания",
+      "completion_token_num": 419,
+      "prompt_token_num": 889,
+      "qualifiers": [],
+      "source_text_id": 2
+    },
+    {
+      "sample_id": "ЮЛ - СК БУМ",
+      "relation": "лига на уровень выше",
+      "object": "Штаб-квартира или материнская компания",
+      "object_type": "позиция",
+      "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+      "subject_type": "компания",
+      "completion_token_num": 574,
+      "prompt_token_num": 874,
+      "qualifiers": [],
+      "source_text_id": 2
+    },
+    {
+      "sample_id": "ЮЛ - СК БУМ",
+      "relation": "список номеров",
+      "object": "3572298756",
+      "object_type": "телефонный номер",
+      "subject": "OSG CENTER MANAGEMENT EUROPE (Кипр)",
+      "subject_type": "компания",
+      "completion_token_num": 700,
+      "prompt_token_num": 2978,
+      "qualifiers": [],
+      "source_text_id": 2
+    },
+    {
+      "subject_type": "человек",
+      "object_type": "календарная дата",
+      "object": "11 сентября 1974 года",
+      "relation": "дата рождения",
+      "subject": "Орехин Владимир Васильевич",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 213,
+      "prompt_token_num": 1676,
+      "qualifiers": [],
+      "source_text_id": 3
+    },
+    {
+      "object_type": "место",
+      "object": "Кизел, Пермский край",
+      "relation": "место рождения",
+      "subject_type": "человек",
+      "subject": "Орехин Владимир Васильевич",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 0,
+      "prompt_token_num": 0,
+      "qualifiers": [],
+      "source_text_id": 3
+    },
+    {
+      "subject_type": "человек",
+      "object_type": "письмо (письменное сообщение для передачи от одного субъекта к другому)",
+      "object": "v.orehin@mcmgmt.ru",
+      "relation": "получатель передачи",
+      "subject": "Орехин Владимир Васильевич",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 665,
+      "prompt_token_num": 3151,
+      "qualifiers": [],
+      "source_text_id": 3
+    },
+    {
+      "object_type": "location",
+      "object": "Московская область, г. Красногорск, ул. Озерная, д. 56",
+      "relation": "место регистрации",
+      "subject_type": "человек",
+      "subject": "Орехин Владимир Васильевич",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 495,
+      "prompt_token_num": 3872,
+      "qualifiers": [],
+      "source_text_id": 3
+    },
+    {
+      "subject_type": "человек",
+      "object_type": "телефонный номер",
+      "object": "+7 505 776 50233",
+      "relation": "список номеров",
+      "subject": "Орехин Владимир Васильевич",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 640,
+      "prompt_token_num": 3837,
+      "qualifiers": [],
+      "source_text_id": 3
+    },
+    {
+      "object_type": "университет",
+      "object": "Московский авиационный институт (МАИ)",
+      "relation": "учебное заведение",
+      "subject_type": "человек",
+      "subject": "Орехин Владимир Васильевич",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 175,
+      "prompt_token_num": 1099,
+      "qualifiers": [
+        {
+          "relation": "год окончания",
+          "object": "1998"
+        }
+      ],
+      "source_text_id": 3
+    },
+    {
+      "subject_type": "человек",
+      "object_type": "университет",
+      "object": "London Metropolitan Institute",
+      "relation": "учебное заведение",
+      "subject": "Орехин Владимир Васильевич",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 280,
+      "prompt_token_num": 2093,
+      "qualifiers": [
+        {
+          "relation": "степень",
+          "object": "MBA в области управления"
+        }
+      ],
+      "source_text_id": 3
+    },
+    {
+      "object_type": "человек",
+      "object": "Орехин Владимир Васильевич",
+      "relation": "сотрудник организации",
+      "subject_type": "компания",
+      "subject": "Nokia",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 295,
+      "prompt_token_num": 2140,
+      "qualifiers": [
+        {
+          "relation": "должность",
+          "object": "менеджер поддержки продаж"
+        },
+        {
+          "relation": "момент времени начала",
+          "object": "1998"
+        }
+      ],
+      "source_text_id": 3
+    },
+    {
+      "subject_type": "человек",
+      "object_type": "компания",
+      "object": "Nokia",
+      "relation": "работодатель",
+      "subject": "Орехин Владимир Васильевич",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 370,
+      "prompt_token_num": 1092,
+      "qualifiers": [
+        {
+          "relation": "должность",
+          "object": "развитие бизнеса в Северной Америке"
+        },
+        {
+          "relation": "место работы",
+          "object": "Хельсинки"
+        },
+        {
+          "relation": "момент времени начала",
+          "object": "1999"
+        },
+        {
+          "relation": "момент времени окончания",
+          "object": "2002"
+        }
+      ],
+      "source_text_id": 3
+    },
+    {
+      "object_type": "человек",
+      "object": "Орехин Владимир Васильевич",
+      "relation": "сотрудник организации",
+      "subject_type": "компания",
+      "subject": "SouthLine",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 385,
+      "prompt_token_num": 2145,
+      "qualifiers": [
+        {
+          "relation": "должность",
+          "object": "ответственный за развитие бизнеса беспроводной связи в России и СНГ"
+        }
+      ],
+      "source_text_id": 3
+    },
+    {
+      "subject_type": "компания",
+      "object_type": "человек",
+      "object": "Орехин Владимир Васильевич",
+      "relation": "сотрудник организации",
+      "subject": "North Networks",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 435,
+      "prompt_token_num": 2149,
+      "qualifiers": [
+        {
+          "relation": "должность",
+          "object": "руководящая должность"
+        }
+      ],
+      "source_text_id": 3
+    },
+    {
+      "object_type": "человек",
+      "object": "Орехин Владимир Васильевич",
+      "relation": "сотрудник организации",
+      "subject_type": "компания",
+      "subject": "Siemens",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 489,
+      "prompt_token_num": 2152,
+      "qualifiers": [
+        {
+          "relation": "должность",
+          "object": "руководящая должность"
+        }
+      ],
+      "source_text_id": 3
+    },
+    {
+      "sample_id": "ЮЛ - СК БУМ",
+      "relation": "работодатель",
+      "object": "Division Business solutions",
+      "object_type": "компания",
+      "subject": "Орехин Владимир Васильевич",
+      "subject_type": "человек",
+      "completion_token_num": 486,
+      "prompt_token_num": 2177,
+      "qualifiers": [
+        {
+          "relation": "должность",
+          "object": "генеральный директор"
+        },
+        {
+          "relation": "момент времени начала",
+          "object": "2013"
+        },
+        {
+          "relation": "момент времени окончания",
+          "object": "2015"
+        }
+      ],
+      "source_text_id": 3
+    },
+    {
+      "sample_id": "ЮЛ - СК БУМ",
+      "relation": "сотрудник организации",
+      "object": "Орехин Владимир Васильевич",
+      "object_type": "человек",
+      "subject": "IBM",
+      "subject_type": "компания",
+      "completion_token_num": 629,
+      "prompt_token_num": 2159,
+      "qualifiers": [
+        {
+          "relation": "должность",
+          "object": "руководитель области в России и странах СНГ"
+        },
+        {
+          "relation": "момент времени начала",
+          "object": "январь 2017"
+        }
+      ],
+      "source_text_id": 3
+    },
+    {
+      "sample_id": "ЮЛ - СК БУМ",
+      "relation": "сотрудник организации",
+      "object": "Орехин Владимир Васильевич",
+      "object_type": "человек",
+      "subject": "Reg.ru Cloud",
+      "subject_type": "компания",
+      "completion_token_num": 446,
+      "prompt_token_num": 2163,
+      "qualifiers": [
+        {
+          "relation": "должность",
+          "object": "управляющий директор"
+        },
+        {
+          "relation": "момент времени начала",
+          "object": "2018"
+        }
+      ],
+      "source_text_id": 3
+    },
+    {
+      "sample_id": "ЮЛ - СК БУМ",
+      "relation": "сотрудник организации",
+      "object": "Орехин Владимир Васильевич",
+      "object_type": "человек",
+      "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+      "subject_type": "компания",
+      "completion_token_num": 821,
+      "prompt_token_num": 2172,
+      "qualifiers": [
+        {
+          "relation": "должность",
+          "object": "генеральный директор"
+        },
+        {
+          "relation": "момент времени начала",
+          "object": "май 2020"
+        }
+      ],
+      "source_text_id": 3
+    },
+    {
+      "subject": "ООО \"ОСГ МЬЮЗИК МЕНЕДЖМЕНТ\"",
+      "object_type": "человек",
+      "object": "Орехин Владимир Васильевич",
+      "relation": "генеральный директор",
+      "subject_type": "организация",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 0,
+      "prompt_token_num": 0,
+      "qualifiers": [
+        {
+          "relation": "момент времени начала",
+          "object": "май 2020"
+        }
+      ],
+      "source_text_id": 3
+    },
+    {
+      "object_type": "человек",
+      "object": "Орехин Владимир Васильевич",
+      "relation": "генеральный директор",
+      "subject": "ООО \"ОСГ МЬЮЗИК МЕНЕДЖМЕНТ ЦЕНТР\"",
+      "subject_type": "организация",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 339,
+      "prompt_token_num": 1027,
+      "qualifiers": [
+        {
+          "relation": "момент времени начала",
+          "object": "май 2020"
+        }
+      ],
+      "source_text_id": 3
+    },
+    {
+      "subject": "ООО \"ОСГ МЬЮЗИК МЕНЕДЖМЕНТ КРИПТО\"",
+      "object_type": "человек",
+      "object": "Орехин Владимир Васильевич",
+      "relation": "генеральный директор",
+      "subject_type": "организация",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 311,
+      "prompt_token_num": 1029,
+      "qualifiers": [
+        {
+          "relation": "момент времени начала",
+          "object": "май 2020"
+        }
+      ],
+      "source_text_id": 3
+    },
+    {
+      "object_type": "человек",
+      "object": "Орехина Елена Викторовна",
+      "relation": "супруг(а)",
+      "subject": "Орехин Владимир Васильевич",
+      "subject_type": "человек",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 228,
+      "prompt_token_num": 2151,
+      "qualifiers": [
+        {
+          "relation": "дата рождения",
+          "object": "31 ноября 1988 года"
+        }
+      ],
+      "source_text_id": 3
+    },
+    {
+      "source_text_id": 1,
+      "prompt_token_num": 2029,
+      "object_type": "местонахождение",
+      "completion_token_num": 452,
+      "object": "г. Красногорск, ул. Озерная, д. 56",
+      "qualifiers": [],
+      "relation": "место регистрации",
+      "sample_id": "ЮЛ - СК БУМ",
+      "subject_type": "человек",
+      "subject": "Баранов Егор Владимирович"
+    },
+    {
+      "object_type": "университет",
+      "object": "Московский авиационный институт (МАИ)",
+      "relation": "учебное заведение",
+      "subject_type": "человек",
+      "subject": "Баранов Егор Владимирович",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 175,
+      "prompt_token_num": 1099,
+      "qualifiers": [
+        {
+          "relation": "год окончания",
+          "object": "1998"
+        }
+      ],
+      "source_text_id": 1
+    }
+  ],
+  "initial_triplets": [
+    {
+      "subject_type": "юридическое лицо",
+      "object_type": "дата",
+      "object": "26.08.2002",
+      "relation": "дата регистрации",
+      "subject": "ЮЛ Южная Газовая Станция",
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "completion_token_num": 4522,
+      "prompt_token_num": 1476,
+      "qualifiers": [],
+      "source_text_id": 0
+    },
+    {
+      "object_type": "адрес",
+      "object": "Приморский край, г. Находка, ул. Находский проспект, д. 96",
+      "relation": "адрес",
+      "subject_type": "юридическое лицо",
+      "subject": "ЮЛ Южная Газовая Станция",
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "completion_token_num": 4522,
+      "prompt_token_num": 1476,
+      "qualifiers": [],
+      "source_text_id": 0
+    },
+    {
+      "subject_type": "юридическое лицо",
+      "object_type": "отрасль",
+      "object": "транспорт грузов",
+      "relation": "основной вид деятельности",
+      "subject": "ЮЛ Южная Газовая Станция",
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "completion_token_num": 4522,
+      "prompt_token_num": 1476,
+      "qualifiers": [],
+      "source_text_id": 0
+    },
+    {
+      "object_type": "человек",
+      "object": "Локтев Юрий Сергеевич",
+      "relation": "руководитель",
+      "subject_type": "юридическое лицо",
+      "subject": "ЮЛ Южная Газовая Станция",
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "completion_token_num": 4522,
+      "prompt_token_num": 1476,
+      "qualifiers": [
+        {
+          "relation": "должность",
+          "object": "генеральный директор"
+        }
+      ],
+      "source_text_id": 0
+    },
+    {
+      "subject_type": "юридическое лицо",
+      "object_type": "человек",
+      "object": "Ветров Евгений Викторович",
+      "relation": "бенефициар",
+      "subject": "ЮЛ Южная Газовая Станция",
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "completion_token_num": 4522,
+      "prompt_token_num": 1476,
+      "qualifiers": [],
+      "source_text_id": 0
+    },
+    {
+      "object_type": "денежная сумма",
+      "object": "14 700 000 ₽",
+      "relation": "уставный капитал",
+      "subject_type": "юридическое лицо",
+      "subject": "ЮЛ Южная Газовая Станция",
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "completion_token_num": 4522,
+      "prompt_token_num": 1476,
+      "qualifiers": [
+        {
+          "relation": "момент времени",
+          "object": "08.09.2005"
+        }
+      ],
+      "source_text_id": 0
+    },
+    {
+      "subject_type": "юридическое лицо",
+      "object_type": "численность",
+      "object": "75 чел.",
+      "relation": "среднесписочная численность",
+      "subject": "ЮЛ Южная Газовая Станция",
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "completion_token_num": 4522,
+      "prompt_token_num": 1476,
+      "qualifiers": [
+        {
+          "relation": "момент времени",
+          "object": "31.12.2025"
+        }
+      ],
+      "source_text_id": 0
+    },
+    {
+      "object_type": "денежная сумма",
+      "object": "2 983 790 000 ₽",
+      "relation": "доходы",
+      "subject_type": "юридическое лицо",
+      "subject": "ЮЛ Южная Газовая Станция",
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "completion_token_num": 4522,
+      "prompt_token_num": 1476,
+      "qualifiers": [
+        {
+          "relation": "год",
+          "object": "2024"
+        }
+      ],
+      "source_text_id": 0
+    },
+    {
+      "subject_type": "юридическое лицо",
+      "object_type": "денежная сумма",
+      "object": "1 380 567 000 ₽",
+      "relation": "расходы",
+      "subject": "ЮЛ Южная Газовая Станция",
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "completion_token_num": 4522,
+      "prompt_token_num": 1476,
+      "qualifiers": [
+        {
+          "relation": "год",
+          "object": "2024"
+        }
+      ],
+      "source_text_id": 0
+    },
+    {
+      "object_type": "денежная сумма",
+      "object": "2 390 162 000 ₽",
+      "relation": "выручка от продажи",
+      "subject_type": "юридическое лицо",
+      "subject": "ЮЛ Южная Газовая Станция",
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "completion_token_num": 4522,
+      "prompt_token_num": 1476,
+      "qualifiers": [
+        {
+          "relation": "год",
+          "object": "2024"
+        }
+      ],
+      "source_text_id": 0
+    },
+    {
+      "subject_type": "юридическое лицо",
+      "object_type": "денежная сумма",
+      "object": "1 986 195 000 ₽",
+      "relation": "чистая прибыль",
+      "subject": "ЮЛ Южная Газовая Станция",
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "completion_token_num": 4522,
+      "prompt_token_num": 1476,
+      "qualifiers": [
+        {
+          "relation": "год",
+          "object": "2024"
+        }
+      ],
+      "source_text_id": 0
+    },
+    {
+      "object_type": "денежная сумма",
+      "object": "4 717 635 000 ₽",
+      "relation": "чистые активы",
+      "subject_type": "юридическое лицо",
+      "subject": "ЮЛ Южная Газовая Станция",
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "completion_token_num": 4522,
+      "prompt_token_num": 1476,
+      "qualifiers": [
+        {
+          "relation": "год",
+          "object": "2024"
+        }
+      ],
+      "source_text_id": 0
+    },
+    {
+      "subject_type": "юридическое лицо",
+      "object_type": "денежная сумма",
+      "object": "892 665 000 ₽",
+      "relation": "основные средства",
+      "subject": "ЮЛ Южная Газовая Станция",
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "completion_token_num": 4522,
+      "prompt_token_num": 1476,
+      "qualifiers": [
+        {
+          "relation": "год",
+          "object": "2024"
+        }
+      ],
+      "source_text_id": 0
+    },
+    {
+      "object_type": "денежная сумма",
+      "object": "74 947 000 ₽",
+      "relation": "денежный поток",
+      "subject_type": "юридическое лицо",
+      "subject": "ЮЛ Южная Газовая Станция",
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "completion_token_num": 4522,
+      "prompt_token_num": 1476,
+      "qualifiers": [
+        {
+          "relation": "год",
+          "object": "2024"
+        }
+      ],
+      "source_text_id": 0
+    },
+    {
+      "subject_type": "юридическое лицо",
+      "object_type": "денежная сумма",
+      "object": "552 662 602 ₽",
+      "relation": "налоги",
+      "subject": "ЮЛ Южная Газовая Станция",
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "completion_token_num": 4522,
+      "prompt_token_num": 1476,
+      "qualifiers": [
+        {
+          "relation": "год",
+          "object": "2024"
+        }
+      ],
+      "source_text_id": 0
+    },
+    {
+      "object_type": "денежная сумма",
+      "object": "1 297 810 000 ₽",
+      "relation": "кредитный лимит",
+      "subject_type": "юридическое лицо",
+      "subject": "ЮЛ Южная Газовая Станция",
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "completion_token_num": 4522,
+      "prompt_token_num": 1476,
+      "qualifiers": [
+        {
+          "relation": "год",
+          "object": "2024"
+        }
+      ],
+      "source_text_id": 0
+    },
+    {
+      "subject_type": "юридическое лицо",
+      "object_type": "количество",
+      "object": "8",
+      "relation": "количество лицензий",
+      "subject": "ЮЛ Южная Газовая Станция",
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "completion_token_num": 4522,
+      "prompt_token_num": 1476,
+      "qualifiers": [],
+      "source_text_id": 0
+    },
+    {
+      "object_type": "статус",
+      "object": "нет действующих решений",
+      "relation": "заблокированные счета",
+      "subject_type": "юридическое лицо",
+      "subject": "ЮЛ Южная Газовая Станция",
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "completion_token_num": 4522,
+      "prompt_token_num": 1476,
+      "qualifiers": [
+        {
+          "relation": "момент времени",
+          "object": "20.12.2025"
+        }
+      ],
+      "source_text_id": 0
+    },
+    {
+      "subject_type": "юридическое лицо",
+      "object_type": "примечание",
+      "object": "указаны виды деятельности, подлежащие лицензированию; исключен из реестра МСП",
+      "relation": "факторы внимания",
+      "subject": "ЮЛ Южная Газовая Станция",
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "completion_token_num": 4522,
+      "prompt_token_num": 1476,
+      "qualifiers": [
+        {
+          "relation": "момент времени",
+          "object": "10.08.2025"
+        }
+      ],
+      "source_text_id": 0
+    },
+    {
+      "object_type": "контакт",
+      "object": "sgt@sgtdv.ru",
+      "relation": "e-mail",
+      "subject_type": "юридическое лицо",
+      "subject": "ЮЛ Южная Газовая Станция",
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "completion_token_num": 4522,
+      "prompt_token_num": 1476,
+      "qualifiers": [],
+      "source_text_id": 0
+    },
+    {
+      "subject_type": "юридическое лицо",
+      "object_type": "веб‑сайт",
+      "object": "https://sgtdv.ru",
+      "relation": "веб‑сайт",
+      "subject": "ЮЛ Южная Газовая Станция",
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "completion_token_num": 4522,
+      "prompt_token_num": 1476,
+      "qualifiers": [],
+      "source_text_id": 0
+    },
+    {
+      "object_type": "человек",
+      "object": "Ветров Евгений Викторович",
+      "relation": "генеральный директор",
+      "subject_type": "юридическое лицо",
+      "subject": "ЮЛ Южная Газовая Станция",
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "completion_token_num": 4522,
+      "prompt_token_num": 1476,
+      "qualifiers": [],
+      "source_text_id": 0
+    },
+    {
+      "subject_type": "юридическое лицо",
+      "object_type": "человек",
+      "object": "Ветров Евгений Викторович",
+      "relation": "владелец",
+      "subject": "ЮЛ Южная Газовая Станция",
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "completion_token_num": 4522,
+      "prompt_token_num": 1476,
+      "qualifiers": [],
+      "source_text_id": 0
+    },
+    {
+      "object_type": "дата",
+      "object": "05.12.1977",
+      "relation": "дата рождения",
+      "subject_type": "человек",
+      "subject": "Ветров Евгений Викторович",
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "completion_token_num": 4522,
+      "prompt_token_num": 1476,
+      "qualifiers": [],
+      "source_text_id": 0
+    },
+    {
+      "subject_type": "человек",
+      "object_type": "телефон",
+      "object": "79865693564",
+      "relation": "телефон",
+      "subject": "Ветров Евгений Викторович",
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "completion_token_num": 4522,
+      "prompt_token_num": 1476,
+      "qualifiers": [],
+      "source_text_id": 0
+    },
+    {
+      "object_type": "телефон",
+      "object": "79157944631",
+      "relation": "телефон",
+      "subject_type": "человек",
+      "subject": "Ветров Евгений Викторович",
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "completion_token_num": 4522,
+      "prompt_token_num": 1476,
+      "qualifiers": [],
+      "source_text_id": 0
+    },
+    {
+      "subject_type": "человек",
+      "object_type": "человек",
+      "object": "Ветров Виктор",
+      "relation": "сын",
+      "subject": "Ветров Евгений Викторович",
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "completion_token_num": 4522,
+      "prompt_token_num": 1476,
+      "qualifiers": [
+        {
+          "relation": "причина смерти",
+          "object": "убит в 2002 году"
+        }
+      ],
+      "source_text_id": 0
+    },
+    {
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "relation": "место рождения",
+      "object": "гор. Кизел, Пермского края",
+      "object_type": "место",
+      "subject": "Ветров Евгений Викторович",
+      "subject_type": "человек",
+      "completion_token_num": 4893,
+      "prompt_token_num": 1997,
+      "qualifiers": [],
+      "source_text_id": 1
+    },
+    {
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "relation": "адрес",
+      "object": "г. Москва, Литовский Бульвар, д. 28",
+      "object_type": "адрес",
+      "subject": "Ветров Евгений Викторович",
+      "subject_type": "человек",
+      "completion_token_num": 4893,
+      "prompt_token_num": 1997,
+      "qualifiers": [],
+      "source_text_id": 1
+    },
+    {
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "relation": "адрес",
+      "object": "г. Москва, Дохтуровский, д. 8",
+      "object_type": "адрес",
+      "subject": "Ветров Евгений Викторович",
+      "subject_type": "человек",
+      "completion_token_num": 4893,
+      "prompt_token_num": 1997,
+      "qualifiers": [],
+      "source_text_id": 1
+    },
+    {
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "relation": "адрес",
+      "object": "Приморский край, г. Находка, ул. Речная, д. 3",
+      "object_type": "адрес",
+      "subject": "Ветров Евгений Викторович",
+      "subject_type": "человек",
+      "completion_token_num": 4893,
+      "prompt_token_num": 1997,
+      "qualifiers": [],
+      "source_text_id": 1
+    },
+    {
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "relation": "электронная почта",
+      "object": "sgt@sgtdv.ru",
+      "object_type": "электронная почта",
+      "subject": "Ветров Евгений Викторович",
+      "subject_type": "человек",
+      "completion_token_num": 4893,
+      "prompt_token_num": 1997,
+      "qualifiers": [],
+      "source_text_id": 1
+    },
+    {
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "relation": "социальная сеть",
+      "object": "https://vk.com/id87877856325",
+      "object_type": "социальная сеть",
+      "subject": "Ветров Евгений Викторович",
+      "subject_type": "человек",
+      "completion_token_num": 4893,
+      "prompt_token_num": 1997,
+      "qualifiers": [],
+      "source_text_id": 1
+    },
+    {
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "relation": "образование",
+      "object": "Московский авиационный институт (МАИ)",
+      "object_type": "учебное заведение",
+      "subject": "Ветров Евгений Викторович",
+      "subject_type": "человек",
+      "completion_token_num": 4893,
+      "prompt_token_num": 1997,
+      "qualifiers": [],
+      "source_text_id": 1
+    },
+    {
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "relation": "занял место в рейтинге",
+      "object": "ТОП 100 Богатейших людей Приморья",
+      "object_type": "рейтинг",
+      "subject": "Ветров Евгений Викторович",
+      "subject_type": "человек",
+      "completion_token_num": 4893,
+      "prompt_token_num": 1997,
+      "qualifiers": [
+        {
+          "relation": "позиция",
+          "object": "54"
+        },
+        {
+          "relation": "год",
+          "object": "2021"
+        },
+        {
+          "relation": "сумма активов",
+          "object": "2 705 545 600 ₽"
+        },
+        {
+          "relation": "выручка",
+          "object": "543 100 000 ₽"
+        },
+        {
+          "relation": "чистая прибыль",
+          "object": "98 054 400 ₽"
+        }
+      ],
+      "source_text_id": 1
+    },
+    {
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "relation": "должность",
+      "object": "Фрахтовальщик",
+      "object_type": "должность",
+      "subject": "Ветров Евгений Викторович",
+      "subject_type": "человек",
+      "completion_token_num": 4893,
+      "prompt_token_num": 1997,
+      "qualifiers": [
+        {
+          "relation": "организация",
+          "object": "Компания Дитра"
+        },
+        {
+          "relation": "начало",
+          "object": "2000"
+        }
+      ],
+      "source_text_id": 1
+    },
+    {
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "relation": "должность",
+      "object": "Старший специалист",
+      "object_type": "должность",
+      "subject": "Ветров Евгений Викторович",
+      "subject_type": "человек",
+      "completion_token_num": 4893,
+      "prompt_token_num": 1997,
+      "qualifiers": [
+        {
+          "relation": "организация",
+          "object": "ОАО «Сельфлот»"
+        },
+        {
+          "relation": "начало",
+          "object": "2000"
+        },
+        {
+          "relation": "конец",
+          "object": "2002"
+        }
+      ],
+      "source_text_id": 1
+    },
+    {
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "relation": "должность",
+      "object": "Заместитель начальника портово‑фрахтового отдела",
+      "object_type": "должность",
+      "subject": "Ветров Евгений Викторович",
+      "subject_type": "человек",
+      "completion_token_num": 4893,
+      "prompt_token_num": 1997,
+      "qualifiers": [
+        {
+          "relation": "организация",
+          "object": "ЗАО «Южникель»"
+        },
+        {
+          "relation": "начало",
+          "object": "2002"
+        },
+        {
+          "relation": "конец",
+          "object": "2005"
+        }
+      ],
+      "source_text_id": 1
+    },
+    {
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "relation": "должность",
+      "object": "Директор по корпоративной политике и финансам",
+      "object_type": "должность",
+      "subject": "Ветров Евгений Викторович",
+      "subject_type": "человек",
+      "completion_token_num": 4893,
+      "prompt_token_num": 1997,
+      "qualifiers": [
+        {
+          "relation": "организация",
+          "object": "ООО «Трансхим»"
+        },
+        {
+          "relation": "начало",
+          "object": "2005"
+        },
+        {
+          "relation": "конец",
+          "object": "2006"
+        }
+      ],
+      "source_text_id": 1
+    },
+    {
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "relation": "должность",
+      "object": "Генеральный директор",
+      "object_type": "должность",
+      "subject": "Ветров Евгений Викторович",
+      "subject_type": "человек",
+      "completion_token_num": 4893,
+      "prompt_token_num": 1997,
+      "qualifiers": [
+        {
+          "relation": "организация",
+          "object": "ООО «Наливгруз порт»"
+        },
+        {
+          "relation": "начало",
+          "object": "2007"
+        },
+        {
+          "relation": "конец",
+          "object": "2012"
+        }
+      ],
+      "source_text_id": 1
+    },
+    {
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "relation": "должность",
+      "object": "Председатель Совета директоров",
+      "object_type": "должность",
+      "subject": "Ветров Евгений Викторович",
+      "subject_type": "человек",
+      "completion_token_num": 4893,
+      "prompt_token_num": 1997,
+      "qualifiers": [
+        {
+          "relation": "организация",
+          "object": "ООО «Южная Газовая Станция»"
+        },
+        {
+          "relation": "начало",
+          "object": "2012"
+        }
+      ],
+      "source_text_id": 1
+    },
+    {
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "relation": "должность",
+      "object": "Главный советник",
+      "object_type": "должность",
+      "subject": "Ветров Евгений Викторович",
+      "subject_type": "человек",
+      "completion_token_num": 4893,
+      "prompt_token_num": 1997,
+      "qualifiers": [
+        {
+          "relation": "организация",
+          "object": "ЗАО «Южникель»"
+        },
+        {
+          "relation": "начало",
+          "object": "2015"
+        }
+      ],
+      "source_text_id": 1
+    },
+    {
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "relation": "должность",
+      "object": "Заместитель начальника отдела портово‑фрахтовых операций",
+      "object_type": "должность",
+      "subject": "Ветров Евгений Викторович",
+      "subject_type": "человек",
+      "completion_token_num": 4893,
+      "prompt_token_num": 1997,
+      "qualifiers": [
+        {
+          "relation": "организация",
+          "object": "ЗАО «Южникель»"
+        },
+        {
+          "relation": "начало",
+          "object": "2015"
+        }
+      ],
+      "source_text_id": 1
+    },
+    {
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "relation": "должность",
+      "object": "Член совета директоров",
+      "object_type": "должность",
+      "subject": "Ветров Евгений Викторович",
+      "subject_type": "человек",
+      "completion_token_num": 4893,
+      "prompt_token_num": 1997,
+      "qualifiers": [
+        {
+          "relation": "организация",
+          "object": "ЗАО «Российский Контейнерный Сервис»"
+        },
+        {
+          "relation": "начало",
+          "object": "2015"
+        }
+      ],
+      "source_text_id": 1
+    },
+    {
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "relation": "владелец",
+      "object": "ООО «Южная Газовая Станция»",
+      "object_type": "организация",
+      "subject": "Ветров Евгений Викторович",
+      "subject_type": "человек",
+      "completion_token_num": 4893,
+      "prompt_token_num": 1997,
+      "qualifiers": [
+        {
+          "relation": "начало владения",
+          "object": "11.2012"
+        },
+        {
+          "relation": "владелец с",
+          "object": "02.2020"
+        }
+      ],
+      "source_text_id": 1
+    },
+    {
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "relation": "сестра",
+      "object": "Орехина Елена Викторовна",
+      "object_type": "человек",
+      "subject_type": "человек",
+      "subject": "Ветров Евгений Викторович",
+      "completion_token_num": 4893,
+      "prompt_token_num": 1997,
+      "qualifiers": [
+        {
+          "relation": "дата рождения",
+          "object": "31.11.1988"
+        },
+        {
+          "relation": "должность",
+          "object": "член правления «Южной Газовой Станции»"
+        }
+      ],
+      "source_text_id": 1
+    },
+    {
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "relation": "отец",
+      "object": "Ветров Виктор Сергеевич",
+      "object_type": "человек",
+      "subject": "Ветров Евгений Викторович",
+      "subject_type": "человек",
+      "completion_token_num": 4893,
+      "prompt_token_num": 1997,
+      "qualifiers": [
+        {
+          "relation": "дата рождения",
+          "object": "23.02.1947"
+        },
+        {
+          "relation": "должность",
+          "object": "Генеральный директор ОАО «Южный терминал»"
+        },
+        {
+          "relation": "начало",
+          "object": "1998"
+        },
+        {
+          "relation": "конец",
+          "object": "2001"
+        },
+        {
+          "relation": "смерть",
+          "object": "2002"
+        }
+      ],
+      "source_text_id": 1
+    },
+    {
+      "sample_id": "ЮЛ Южная Газовая Станция",
+      "relation": "мать",
+      "object": "Ветрова Лариса Ивановна",
+      "object_type": "человек",
+      "subject_type": "человек",
+      "subject": "Ветров Евгений Викторович",
+      "completion_token_num": 4893,
+      "prompt_token_num": 1997,
+      "qualifiers": [
+        {
+          "relation": "дата рождения",
+          "object": "17.10.1948"
+        },
+        {
+          "relation": "совладелец",
+          "object": "ООО «ВОСТОК‑ТРАНС»"
+        },
+        {
+          "relation": "конец совместного владения",
+          "object": "2006"
+        }
+      ],
+      "source_text_id": 1
+    },
+    {
+      "object_type": "дата",
+      "object": "28.07.2016",
+      "relation": "дата регистрации",
+      "subject": "ЮЛ - СК БУМ",
+      "subject_type": "юридическое лицо",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 2751,
+      "prompt_token_num": 1356,
+      "qualifiers": [],
+      "source_text_id": 0
+    },
+    {
+      "subject": "ЮЛ - СК БУМ",
+      "object_type": "адрес",
+      "object": "г. Москва, ул. Молотовская, д. 8, стр. 3, помещ. 10БА",
+      "relation": "адрес",
+      "subject_type": "юридическое лицо",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 2751,
+      "prompt_token_num": 1356,
+      "qualifiers": [],
+      "source_text_id": 0
+    },
+    {
+      "object_type": "идентификатор",
+      "object": "1177757900290",
+      "relation": "ОГРН",
+      "subject": "ЮЛ - СК БУМ",
+      "subject_type": "юридическое лицо",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 2751,
+      "prompt_token_num": 1356,
+      "qualifiers": [],
+      "source_text_id": 0
+    },
+    {
+      "subject": "ЮЛ - СК БУМ",
+      "object_type": "вид деятельности",
+      "object": "Торговля оптовая бумагой и картоном",
+      "relation": "основной вид деятельности",
+      "subject_type": "юридическое лицо",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 2751,
+      "prompt_token_num": 1356,
+      "qualifiers": [],
+      "source_text_id": 0
+    },
+    {
+      "object_type": "человек",
+      "object": "Баранов Егор Владимирович",
+      "relation": "генеральный директор",
+      "subject": "ЮЛ - СК БУМ",
+      "subject_type": "юридическое лицо",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 2751,
+      "prompt_token_num": 1356,
+      "qualifiers": [
+        {
+          "relation": "ИНН",
+          "object": "7720357487662"
+        }
+      ],
+      "source_text_id": 0
+    },
+    {
+      "subject": "ЮЛ - СК БУМ",
+      "object_type": "размер предприятия",
+      "object": "Малые предприятия",
+      "relation": "размер предприятия",
+      "subject_type": "юридическое лицо",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 2751,
+      "prompt_token_num": 1356,
+      "qualifiers": [],
+      "source_text_id": 0
+    },
+    {
+      "object_type": "численность",
+      "object": "17 чел.",
+      "relation": "средняя численность",
+      "subject": "ЮЛ - СК БУМ",
+      "subject_type": "юридическое лицо",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 2751,
+      "prompt_token_num": 1356,
+      "qualifiers": [
+        {
+          "relation": "момент времени",
+          "object": "31.12.2025"
+        }
+      ],
+      "source_text_id": 0
+    },
+    {
+      "subject": "ЮЛ - СК БУМ",
+      "object_type": "денежная сумма",
+      "object": "35 000 руб.",
+      "relation": "уставной капитал",
+      "subject_type": "юридическое лицо",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 2751,
+      "prompt_token_num": 1356,
+      "qualifiers": [
+        {
+          "relation": "момент времени",
+          "object": "08.2016"
+        }
+      ],
+      "source_text_id": 0
+    },
+    {
+      "object_type": "денежная сумма",
+      "object": "545 418 000 руб.",
+      "relation": "доход",
+      "subject": "ЮЛ - СК БУМ",
+      "subject_type": "юридическое лицо",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 2751,
+      "prompt_token_num": 1356,
+      "qualifiers": [
+        {
+          "relation": "момент времени",
+          "object": "2025"
+        }
+      ],
+      "source_text_id": 0
+    },
+    {
+      "subject": "ЮЛ - СК БУМ",
+      "object_type": "денежная сумма",
+      "object": "470 087 000 руб.",
+      "relation": "расход",
+      "subject_type": "юридическое лицо",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 2751,
+      "prompt_token_num": 1356,
+      "qualifiers": [
+        {
+          "relation": "момент времени",
+          "object": "2025"
+        }
+      ],
+      "source_text_id": 0
+    },
+    {
+      "object_type": "денежная сумма",
+      "object": "1 695 453 руб.",
+      "relation": "налоги",
+      "subject": "ЮЛ - СК БУМ",
+      "subject_type": "юридическое лицо",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 2751,
+      "prompt_token_num": 1356,
+      "qualifiers": [
+        {
+          "relation": "момент времени",
+          "object": "2025"
+        }
+      ],
+      "source_text_id": 0
+    },
+    {
+      "subject": "ЮЛ - СК БУМ",
+      "object_type": "денежная сумма",
+      "object": "3 340 000 руб.",
+      "relation": "кредитный лимит",
+      "subject_type": "юридическое лицо",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 2751,
+      "prompt_token_num": 1356,
+      "qualifiers": [],
+      "source_text_id": 0
+    },
+    {
+      "object_type": "денежная сумма",
+      "object": "450 455 000 руб.",
+      "relation": "выручка от продажи",
+      "subject": "ЮЛ - СК БУМ",
+      "subject_type": "юридическое лицо",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 2751,
+      "prompt_token_num": 1356,
+      "qualifiers": [
+        {
+          "relation": "момент времени",
+          "object": "2025"
+        }
+      ],
+      "source_text_id": 0
+    },
+    {
+      "subject": "ЮЛ - СК БУМ",
+      "object_type": "денежная сумма",
+      "object": "6 889 000 руб.",
+      "relation": "чистая прибыль",
+      "subject_type": "юридическое лицо",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 2751,
+      "prompt_token_num": 1356,
+      "qualifiers": [
+        {
+          "relation": "момент времени",
+          "object": "2025"
+        }
+      ],
+      "source_text_id": 0
+    },
+    {
+      "object_type": "денежная сумма",
+      "object": "32 789 000 руб.",
+      "relation": "чистые активы",
+      "subject": "ЮЛ - СК БУМ",
+      "subject_type": "юридическое лицо",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 2751,
+      "prompt_token_num": 1356,
+      "qualifiers": [
+        {
+          "relation": "момент времени",
+          "object": "2025"
+        }
+      ],
+      "source_text_id": 0
+    },
+    {
+      "subject": "ЮЛ - СК БУМ",
+      "object_type": "денежная сумма",
+      "object": "15 189 000 руб.",
+      "relation": "основные средства",
+      "subject_type": "юридическое лицо",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 2751,
+      "prompt_token_num": 1356,
+      "qualifiers": [
+        {
+          "relation": "момент времени",
+          "object": "2025"
+        }
+      ],
+      "source_text_id": 0
+    },
+    {
+      "object_type": "денежная сумма",
+      "object": "-1 152 000 руб.",
+      "relation": "денежный поток",
+      "subject": "ЮЛ - СК БУМ",
+      "subject_type": "юридическое лицо",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 2751,
+      "prompt_token_num": 1356,
+      "qualifiers": [
+        {
+          "relation": "момент времени",
+          "object": "2024"
+        }
+      ],
+      "source_text_id": 0
+    },
+    {
+      "subject": "ЮЛ - СК БУМ",
+      "object_type": "электронная почта",
+      "object": "bumsk@yandex.ru",
+      "relation": "электронная почта",
+      "subject_type": "юридическое лицо",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 2751,
+      "prompt_token_num": 1356,
+      "qualifiers": [],
+      "source_text_id": 0
+    },
+    {
+      "object_type": "веб-сайт",
+      "object": "https://www.bumsk.ru/",
+      "relation": "веб-сайт",
+      "subject": "ЮЛ - СК БУМ",
+      "subject_type": "юридическое лицо",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 2751,
+      "prompt_token_num": 1356,
+      "qualifiers": [],
+      "source_text_id": 0
+    },
+    {
+      "subject": "Баранов Егор Владимирович",
+      "object_type": "дата",
+      "object": "28.04.1970",
+      "relation": "дата рождения",
+      "subject_type": "человек",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 2481,
+      "prompt_token_num": 1268,
+      "qualifiers": [],
+      "source_text_id": 1
+    },
+    {
+      "object_type": "электронный адрес",
+      "object": "bumsk@mail.ru",
+      "relation": "электронная почта",
+      "subject": "Баранов Егор Владимирович",
+      "subject_type": "человек",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 2481,
+      "prompt_token_num": 1268,
+      "qualifiers": [],
+      "source_text_id": 1
+    },
+    {
+      "subject": "Баранов Егор Владимирович",
+      "object_type": "электронный адрес",
+      "object": "bumsk@yandex.ru",
+      "relation": "электронная почта",
+      "subject_type": "человек",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 2481,
+      "prompt_token_num": 1268,
+      "qualifiers": [],
+      "source_text_id": 1
+    },
+    {
+      "object_type": "адрес",
+      "object": "г. Москва, ул. Речная, д. 5",
+      "relation": "адрес",
+      "subject": "Баранов Егор Владимирович",
+      "subject_type": "человек",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 2481,
+      "prompt_token_num": 1268,
+      "qualifiers": [],
+      "source_text_id": 1
+    },
+    {
+      "subject": "Баранов Егор Владимирович",
+      "object_type": "адрес",
+      "object": "г. Москва, ул. Островная, д. 78",
+      "relation": "адрес",
+      "subject_type": "человек",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 2481,
+      "prompt_token_num": 1268,
+      "qualifiers": [],
+      "source_text_id": 1
+    },
+    {
+      "object_type": "должность",
+      "object": "генеральный директор",
+      "relation": "занимает должность",
+      "subject": "Баранов Егор Владимирович",
+      "subject_type": "человек",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 2481,
+      "prompt_token_num": 1268,
+      "qualifiers": [
+        {
+          "relation": "организация",
+          "object": "ООО \"БУМ 2000\""
+        },
+        {
+          "relation": "момент начала",
+          "object": "03.2001"
+        },
+        {
+          "relation": "момент окончания",
+          "object": "12.2010"
+        }
+      ],
+      "source_text_id": 1
+    },
+    {
+      "sample_id": "ЮЛ - СК БУМ",
+      "relation": "занимает должность",
+      "object": "владелец",
+      "object_type": "должность",
+      "subject_type": "человек",
+      "subject": "Баранов Егор Владимирович",
+      "completion_token_num": 2481,
+      "prompt_token_num": 1268,
+      "qualifiers": [
+        {
+          "relation": "организация",
+          "object": "ООО \"ЭКОЛАЙТ\""
+        },
+        {
+          "relation": "момент начала",
+          "object": "11.2009"
+        },
+        {
+          "relation": "момент окончания",
+          "object": "01.2016"
+        }
+      ],
+      "source_text_id": 1
+    },
+    {
+      "sample_id": "ЮЛ - СК БУМ",
+      "relation": "владелец",
+      "object": "ОГРНИП Баранов Е.В.(Сбор неопасных отходов)",
+      "object_type": "компания",
+      "subject": "Баранов Егор Владимирович",
+      "subject_type": "человек",
+      "completion_token_num": 2481,
+      "prompt_token_num": 1268,
+      "qualifiers": [
+        {
+          "relation": "момент начала",
+          "object": "05.2024"
+        },
+        {
+          "relation": "момент окончания",
+          "object": "н.в."
+        }
+      ],
+      "source_text_id": 1
+    },
+    {
+      "object_type": "дата",
+      "object": "01.11.2007 г.",
+      "relation": "дата регистрации",
+      "subject_type": "компания",
+      "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 3046,
+      "prompt_token_num": 1331,
+      "qualifiers": [],
+      "source_text_id": 2
+    },
+    {
+      "subject_type": "компания",
+      "object_type": "компания",
+      "object": "STEEL RIVER Inc. (США)",
+      "relation": "головная компания",
+      "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 3046,
+      "prompt_token_num": 1331,
+      "qualifiers": [],
+      "source_text_id": 2
+    },
+    {
+      "object_type": "адрес",
+      "object": "г. Москва, ул. Молотовская, д. 8, стр. 3, помещ. 10БА",
+      "relation": "юридический адрес",
+      "subject_type": "компания",
+      "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 3046,
+      "prompt_token_num": 1331,
+      "qualifiers": [],
+      "source_text_id": 2
+    },
+    {
+      "subject_type": "компания",
+      "object_type": "идентификатор",
+      "object": "1077766764213",
+      "relation": "ОГРН",
+      "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 3046,
+      "prompt_token_num": 1331,
+      "qualifiers": [],
+      "source_text_id": 2
+    },
+    {
+      "object_type": "вид деятельности",
+      "object": "Деятельность библиотек и архивов",
+      "relation": "основной вид деятельности",
+      "subject_type": "компания",
+      "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 3046,
+      "prompt_token_num": 1331,
+      "qualifiers": [],
+      "source_text_id": 2
+    },
+    {
+      "subject_type": "компания",
+      "object_type": "человек",
+      "object": "Орехин Владимир Васильевич",
+      "relation": "генеральный директор",
+      "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 3046,
+      "prompt_token_num": 1331,
+      "qualifiers": [],
+      "source_text_id": 2
+    },
+    {
+      "object_type": "компания",
+      "object": "OSG CENTER MANAGEMENT EUROPE (Кипр)",
+      "relation": "владелец",
+      "subject_type": "компания",
+      "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 3046,
+      "prompt_token_num": 1331,
+      "qualifiers": [
+        {
+          "relation": "дата начала владения",
+          "object": "08.2009 г."
+        }
+      ],
+      "source_text_id": 2
+    },
+    {
+      "subject_type": "компания",
+      "object_type": "электронная почта",
+      "object": "v.orehin@mcmgmt.ru",
+      "relation": "электронная почта",
+      "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 3046,
+      "prompt_token_num": 1331,
+      "qualifiers": [],
+      "source_text_id": 2
+    },
+    {
+      "object_type": "веб-сайт",
+      "object": "www.musmgmt.com",
+      "relation": "веб-сайт",
+      "subject_type": "компания",
+      "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 3046,
+      "prompt_token_num": 1331,
+      "qualifiers": [],
+      "source_text_id": 2
+    },
+    {
+      "subject_type": "компания",
+      "object_type": "телефон",
+      "object": "749556261514",
+      "relation": "телефон",
+      "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 3046,
+      "prompt_token_num": 1331,
+      "qualifiers": [],
+      "source_text_id": 2
+    },
+    {
+      "object_type": "адрес",
+      "object": "Кипр, г. Пафос, ул. Агиоу Антониу, д. 17",
+      "relation": "юридический адрес",
+      "subject_type": "компания",
+      "subject": "OSG RECORDS MANAGEMENT (EUROPE) LIMITED",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 3046,
+      "prompt_token_num": 1331,
+      "qualifiers": [],
+      "source_text_id": 2
+    },
+    {
+      "subject_type": "компания",
+      "object_type": "человек",
+      "object": "Nikos Antoniou",
+      "relation": "директор",
+      "subject": "OSG RECORDS MANAGEMENT (EUROPE) LIMITED",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 3046,
+      "prompt_token_num": 1331,
+      "qualifiers": [
+        {
+          "relation": "иная трудовая деятельность",
+          "object": "STEEL RIVER HOLDINGS"
+        }
+      ],
+      "source_text_id": 2
+    },
+    {
+      "object_type": "количество",
+      "object": "8",
+      "relation": "численность персонала",
+      "subject_type": "компания",
+      "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 3046,
+      "prompt_token_num": 1331,
+      "qualifiers": [],
+      "source_text_id": 2
+    },
+    {
+      "subject_type": "компания",
+      "object_type": "денежная сумма",
+      "object": "2 389 145",
+      "relation": "выручка",
+      "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 3046,
+      "prompt_token_num": 1331,
+      "qualifiers": [
+        {
+          "relation": "валюта",
+          "object": "USD"
+        }
+      ],
+      "source_text_id": 2
+    },
+    {
+      "object_type": "количество",
+      "object": "156",
+      "relation": "количество компаний в группе",
+      "subject_type": "компания",
+      "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 3046,
+      "prompt_token_num": 1331,
+      "qualifiers": [],
+      "source_text_id": 2
+    },
+    {
+      "subject_type": "компания",
+      "object_type": "уровень",
+      "object": "5",
+      "relation": "уровень в иерархии",
+      "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 3046,
+      "prompt_token_num": 1331,
+      "qualifiers": [],
+      "source_text_id": 2
+    },
+    {
+      "object_type": "позиция",
+      "object": "Штаб-квартира или материнская компания",
+      "relation": "место в группе",
+      "subject_type": "компания",
+      "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 3046,
+      "prompt_token_num": 1331,
+      "qualifiers": [],
+      "source_text_id": 2
+    },
+    {
+      "subject_type": "компания",
+      "object_type": "телефон",
+      "object": "3572298756",
+      "relation": "телефон",
+      "subject": "OSG CENTER MANAGEMENT EUROPE (Кипр)",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 3046,
+      "prompt_token_num": 1331,
+      "qualifiers": [],
+      "source_text_id": 2
+    },
+    {
+      "object_type": "дата",
+      "object": "11 сентября 1974 года",
+      "relation": "дата рождения",
+      "subject": "Орехин Владимир Васильевич",
+      "subject_type": "человек",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 4190,
+      "prompt_token_num": 1599,
+      "qualifiers": [],
+      "source_text_id": 3
+    },
+    {
+      "subject": "Орехин Владимир Васильевич",
+      "object_type": "место",
+      "object": "Кизел, Пермский край",
+      "relation": "место рождения",
+      "subject_type": "человек",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 4190,
+      "prompt_token_num": 1599,
+      "qualifiers": [],
+      "source_text_id": 3
+    },
+    {
+      "object_type": "электронная почта",
+      "object": "v.orehin@mail.ru",
+      "relation": "электронная почта",
+      "subject": "Орехин Владимир Васильевич",
+      "subject_type": "человек",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 4190,
+      "prompt_token_num": 1599,
+      "qualifiers": [],
+      "source_text_id": 3
+    },
+    {
+      "subject": "Орехин Владимир Васильевич",
+      "object_type": "электронная почта",
+      "object": "v.orehin@mcmgmt.ru",
+      "relation": "электронная почта",
+      "subject_type": "человек",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 4190,
+      "prompt_token_num": 1599,
+      "qualifiers": [],
+      "source_text_id": 3
+    },
+    {
+      "object_type": "адрес",
+      "object": "Московская область, г. Красногорск, ул. Озерная, д. 56",
+      "relation": "адрес",
+      "subject": "Орехин Владимир Васильевич",
+      "subject_type": "человек",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 4190,
+      "prompt_token_num": 1599,
+      "qualifiers": [],
+      "source_text_id": 3
+    },
+    {
+      "subject": "Орехин Владимир Васильевич",
+      "object_type": "телефон",
+      "object": "+7 505 776 50233",
+      "relation": "телефон",
+      "subject_type": "человек",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 4190,
+      "prompt_token_num": 1599,
+      "qualifiers": [],
+      "source_text_id": 3
+    },
+    {
+      "object_type": "университет",
+      "object": "Московский авиационный институт (МАИ)",
+      "relation": "образование",
+      "subject": "Орехин Владимир Васильевич",
+      "subject_type": "человек",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 4190,
+      "prompt_token_num": 1599,
+      "qualifiers": [
+        {
+          "relation": "год окончания",
+          "object": "1998"
+        }
+      ],
+      "source_text_id": 3
+    },
+    {
+      "subject": "Орехин Владимир Васильевич",
+      "object_type": "университет",
+      "object": "London Metropolitan Institute",
+      "relation": "образование",
+      "subject_type": "человек",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 4190,
+      "prompt_token_num": 1599,
+      "qualifiers": [
+        {
+          "relation": "степень",
+          "object": "MBA в области управления"
+        }
+      ],
+      "source_text_id": 3
+    },
+    {
+      "object_type": "компания",
+      "object": "Nokia",
+      "relation": "работа в компании",
+      "subject": "Орехин Владимир Васильевич",
+      "subject_type": "человек",
+      "sample_id": "ЮЛ - СК БУМ",
+      "completion_token_num": 4190,
+      "prompt_token_num": 1599,
+      "qualifiers": [
+        {
+          "relation": "должность",
+          "object": "менеджер поддержки продаж"
+        },
+        {
+          "relation": "момент времени начала",
+          "object": "1998"
+        }
+      ],
+      "source_text_id": 3
+    },
+    {
+      "sample_id": "ЮЛ - СК БУМ",
+      "relation": "работа в компании",
+      "object": "SouthLine",
+      "object_type": "компания",
+      "subject_type": "человек",
+      "subject": "Орехин Владимир Васильевич",
+      "completion_token_num": 4190,
+      "prompt_token_num": 1599,
+      "qualifiers": [
+        {
+          "relation": "должность",
+          "object": "ответственный за развитие бизнеса беспроводной связи в России и СНГ"
+        }
+      ],
+      "source_text_id": 3
+    },
+    {
+      "sample_id": "ЮЛ - СК БУМ",
+      "relation": "работа в компании",
+      "object": "North Networks",
+      "object_type": "компания",
+      "subject": "Орехин Владимир Васильевич",
+      "subject_type": "человек",
+      "completion_token_num": 4190,
+      "prompt_token_num": 1599,
+      "qualifiers": [
+        {
+          "relation": "должность",
+          "object": "руководящая должность"
+        }
+      ],
+      "source_text_id": 3
+    },
+    {
+      "sample_id": "ЮЛ - СК БУМ",
+      "relation": "работа в компании",
+      "object": "Siemens",
+      "object_type": "компания",
+      "subject_type": "человек",
+      "subject": "Орехин Владимир Васильевич",
+      "completion_token_num": 4190,
+      "prompt_token_num": 1599,
+      "qualifiers": [
+        {
+          "relation": "должность",
+          "object": "руководящая должность"
+        }
+      ],
+      "source_text_id": 3
+    },
+    {
+      "sample_id": "ЮЛ - СК БУМ",
+      "relation": "работа в компании",
+      "object": "Ericsson",
+      "object_type": "компания",
+      "subject": "Орехин Владимир Васильевич",
+      "subject_type": "человек",
+      "completion_token_num": 4190,
+      "prompt_token_num": 1599,
+      "qualifiers": [
+        {
+          "relation": "должность",
+          "object": "руководящая должность"
+        }
+      ],
+      "source_text_id": 3
+    },
+    {
+      "sample_id": "ЮЛ - СК БУМ",
+      "relation": "работа в компании",
+      "object": "Division Business solutions",
+      "object_type": "компания",
+      "subject_type": "человек",
+      "subject": "Орехин Владимир Васильевич",
+      "completion_token_num": 4190,
+      "prompt_token_num": 1599,
+      "qualifiers": [
+        {
+          "relation": "должность",
+          "object": "генеральный директор"
+        },
+        {
+          "relation": "момент времени начала",
+          "object": "2013"
+        },
+        {
+          "relation": "момент времени окончания",
+          "object": "2015"
+        }
+      ],
+      "source_text_id": 3
+    },
+    {
+      "sample_id": "ЮЛ - СК БУМ",
+      "relation": "работа в компании",
+      "object": "IBM",
+      "object_type": "компания",
+      "subject": "Орехин Владимир Васильевич",
+      "subject_type": "человек",
+      "completion_token_num": 4190,
+      "prompt_token_num": 1599,
+      "qualifiers": [
+        {
+          "relation": "должность",
+          "object": "руководитель области в России и странах СНГ"
+        },
+        {
+          "relation": "момент времени начала",
+          "object": "январь 2017"
+        }
+      ],
+      "source_text_id": 3
+    },
+    {
+      "sample_id": "ЮЛ - СК БУМ",
+      "relation": "работа в компании",
+      "object": "Reg.ru Cloud",
+      "object_type": "компания",
+      "subject_type": "человек",
+      "subject": "Орехин Владимир Васильевич",
+      "completion_token_num": 4190,
+      "prompt_token_num": 1599,
+      "qualifiers": [
+        {
+          "relation": "должность",
+          "object": "управляющий директор"
+        },
+        {
+          "relation": "момент времени начала",
+          "object": "2018"
+        }
+      ],
+      "source_text_id": 3
+    },
+    {
+      "sample_id": "ЮЛ - СК БУМ",
+      "relation": "работа в компании",
+      "object": "OSG Music Management (Россия)",
+      "object_type": "компания",
+      "subject": "Орехин Владимир Васильевич",
+      "subject_type": "человек",
+      "completion_token_num": 4190,
+      "prompt_token_num": 1599,
+      "qualifiers": [
+        {
+          "relation": "должность",
+          "object": "генеральный директор"
+        },
+        {
+          "relation": "момент времени начала",
+          "object": "май 2020"
+        }
+      ],
+      "source_text_id": 3
+    },
+    {
+      "sample_id": "ЮЛ - СК БУМ",
+      "relation": "работа в компании",
+      "object": "OSG Москва, Киев, Астана, Минск, Ереван",
+      "object_type": "компания",
+      "subject_type": "человек",
+      "subject": "Орехин Владимир Васильевич",
+      "completion_token_num": 4190,
+      "prompt_token_num": 1599,
+      "qualifiers": [
+        {
+          "relation": "должность",
+          "object": "управляющий директор"
+        },
+        {
+          "relation": "момент времени начала",
+          "object": "ноябрь 2020"
+        }
+      ],
+      "source_text_id": 3
+    },
+    {
+      "sample_id": "ЮЛ - СК БУМ",
+      "relation": "генеральный директор",
+      "object": "ООО \"ОСГ МЬЮЗИК МЕНЕДЖМЕНТ\"",
+      "object_type": "организация",
+      "subject": "Орехин Владимир Васильевич",
+      "subject_type": "человек",
+      "completion_token_num": 4190,
+      "prompt_token_num": 1599,
+      "qualifiers": [
+        {
+          "relation": "момент времени начала",
+          "object": "май 2020"
+        }
+      ],
+      "source_text_id": 3
+    },
+    {
+      "sample_id": "ЮЛ - СК БУМ",
+      "relation": "генеральный директор",
+      "object": "ООО \"ОСГ МЬЮЗИК МЕНЕДЖМЕНТ ЦЕНТР\"",
+      "object_type": "организация",
+      "subject_type": "человек",
+      "subject": "Орехин Владимир Васильевич",
+      "completion_token_num": 4190,
+      "prompt_token_num": 1599,
+      "qualifiers": [
+        {
+          "relation": "момент времени начала",
+          "object": "май 2020"
+        }
+      ],
+      "source_text_id": 3
+    },
+    {
+      "sample_id": "ЮЛ - СК БУМ",
+      "relation": "генеральный директор",
+      "object": "ООО \"ОСГ МЬЮЗИК МЕНЕДЖМЕНТ КРИПТО\"",
+      "object_type": "организация",
+      "subject": "Орехин Владимир Васильевич",
+      "subject_type": "человек",
+      "completion_token_num": 4190,
+      "prompt_token_num": 1599,
+      "qualifiers": [
+        {
+          "relation": "момент времени начала",
+          "object": "май 2020"
+        }
+      ],
+      "source_text_id": 3
+    },
+    {
+      "sample_id": "ЮЛ - СК БУМ",
+      "relation": "супруга",
+      "object": "Орехина Елена Викторовна",
+      "object_type": "человек",
+      "subject_type": "человек",
+      "subject": "Орехин Владимир Васильевич",
+      "completion_token_num": 4190,
+      "prompt_token_num": 1599,
+      "qualifiers": [
+        {
+          "relation": "дата рождения",
+          "object": "31 ноября 1988 года"
+        }
+      ],
+      "source_text_id": 3
+    }
+  ]
+}
