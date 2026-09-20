@@ -14,6 +14,7 @@ lib/
 */graphs/
 
 *.json
+!demo_app/data/sb_rewritten_triplets.json
 *.html
 models/
 test.ipynb
