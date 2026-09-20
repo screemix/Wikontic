@@ -1,7 +1,11 @@
+import json
+import time
+from random import uniform
+
 import streamlit as st
 from dotenv import load_dotenv
 
-from streamlit_app_config import ENV_PATH
+from streamlit_app_config import DEMO_APP_DIR, ENV_PATH
 from streamlit_i18n import t
 from streamlit_kg_viz import visualize_knowledge_graph
 from streamlit_session import get_inference, get_user_id
@@ -14,6 +18,13 @@ logger = get_logger("QA")
 user_id = get_user_id()
 inference = get_inference()
 logger.info("User ID: %s", user_id)
+
+QA_MOCK_ANSWERS_PATH = DEMO_APP_DIR / "data" / "qa_mock_answers.json"
+QA_MOCK_ANSWERS = (
+    json.loads(QA_MOCK_ANSWERS_PATH.read_text(encoding="utf-8"))
+    if QA_MOCK_ANSWERS_PATH.is_file()
+    else {}
+)
 
 
 def query_kg(inferer, question_text):
@@ -28,6 +39,12 @@ def query_kg(inferer, question_text):
     )
     identified_entities = identified_entities + [t['subject'] for t in supporting_triplets] +  [t['object'] for t in supporting_triplets]
     return neighbour_triplets, identified_entities, ans
+
+
+def query_kg_mocked(question_text):
+    mock = QA_MOCK_ANSWERS[question_text]
+    time.sleep(uniform(2, 5))
+    return mock["neighbour_triplets"], mock["highlighted_entities"], mock["answer"]
 
 
 render_page_header(t("qa.title"))
@@ -76,10 +93,12 @@ if trigger:
         st.warning(t("qa.empty_warning"))
     else:
         st.markdown("#### " + t("qa.result", question=question))
-        neighbour_triplets, identified_entities, ans = query_kg(
-            inference, question
-        )
-        print(neighbour_triplets)
+        if question in QA_MOCK_ANSWERS:
+            neighbour_triplets, identified_entities, ans = query_kg_mocked(question)
+        else:
+            neighbour_triplets, identified_entities, ans = query_kg(
+                inference, question
+            )
         st.success("✅ " + t("qa.success", count=len(neighbour_triplets)))
 
         st.subheader(t("qa.graph_header"))

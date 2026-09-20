@@ -15,6 +15,7 @@ lib/
 
 *.json
 !demo_app/data/sb_rewritten_triplets.json
+!add demo_app/data/qa_mock_answers.json
 *.html
 models/
 test.ipynb

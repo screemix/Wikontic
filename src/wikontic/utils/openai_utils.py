@@ -162,7 +162,6 @@ class LLMTripletExtractor:
             return self.client.chat.completions.create(
                 model=self.model,
                 messages=messages,
-                temperature=0,
                 seed=42,
                 extra_body=self._reasoning_extra_body,
             )
@@ -171,7 +170,6 @@ class LLMTripletExtractor:
             response = self.client.chat.completions.create(
                 model=self.model,
                 messages=messages,
-                temperature=0,
                 seed=42,
                 extra_body={"reasoning": {"enabled": False}},
             )
@@ -184,7 +182,6 @@ class LLMTripletExtractor:
             return self.client.chat.completions.create(
                 model=self.model,
                 messages=messages,
-                temperature=0,
                 seed=42,
                 extra_body=self._reasoning_extra_body,
             )
