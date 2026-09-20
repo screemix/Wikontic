@@ -34,11 +34,10 @@ BACKEND_LANGUAGE = _read_language("WIKONTIC_BACKEND_LANGUAGE", "ru")
 USE_ONTOLOGY = _read_bool("WIKONTIC_USE_ONTOLOGY", True)
 
 MONGO_URI = os.getenv("MONGO_URI", DEFAULT_MONGO_URI)
-API_KEY = os.getenv("AIRI_KEY") or os.getenv("KEY")
-BASE_URL = os.getenv("AIRI_BASE_URL") or DEFAULT_BASE_URL
-PROXY_URL = os.getenv("PROXY_URI")
+API_KEY = os.getenv("OPENROUTER_KEY") or os.getenv("AIRI_KEY") or os.getenv("KEY")
+BASE_URL = os.getenv("OPENROUTER_BASE_URL") or os.getenv("AIRI_BASE_URL") or DEFAULT_BASE_URL
+PROXY_URL = os.getenv("PROXY_URL") or os.getenv("PROXY_URI")
 EXTRACTION_MODEL = os.getenv("WIKONTIC_MODEL", "Qwen/Qwen3.5-122B-A10B")
-# EXTRACTION_MODEL = os.getenv("WIKONTIC_MODEL", "openai/gpt-oss-120b")
 
 
 def _default_ontology_db_name(language: str) -> str:

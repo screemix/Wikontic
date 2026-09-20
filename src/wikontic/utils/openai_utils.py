@@ -39,6 +39,8 @@ class LLMTripletExtractor:
         "qwen/qwen3-32b": {"input": 0.05, "output": 0.2},
         "Openai/Gpt-oss-120b": {"input": 0.05, "output": 0.2},
         "Qwen/Qwen3-32B": {"input": 0.05, "output": 0.2},
+        "openai/gpt-5": {"input": 1.25, "output": 10.0},
+        "openai/gpt-5-mini": {"input": 0.25, "output": 2.0},
         # "openai/gpt-oss-120b": {"input": 0.05, "output": 0.2},
     }
 
@@ -113,6 +115,7 @@ class LLMTripletExtractor:
         self._refine_attempt = 0
         self._prev_error = None  # store previous exception
         self.MAX_ATTEMPTS = max_attempts
+        self._reasoning_extra_body = None
 
         # Set pricing
         if model not in self.MODEL_PRICES:
@@ -146,6 +149,46 @@ class LLMTripletExtractor:
 
         return text
 
+    def _create_completion(self, messages):
+        """Call chat.completions.create with reasoning turned off.
+
+        Some models (Qwen) accept reasoning.enabled=False outright; others
+        (GPT-5 family, gpt-oss) reject it with "Reasoning is mandatory for
+        this endpoint" and only accept reasoning.effort=minimal instead. The
+        working variant is detected once per extractor instance and cached,
+        so later calls don't pay for a failed attempt every time.
+        """
+        if self._reasoning_extra_body is not None:
+            return self.client.chat.completions.create(
+                model=self.model,
+                messages=messages,
+                temperature=0,
+                seed=42,
+                extra_body=self._reasoning_extra_body,
+            )
+
+        try:
+            response = self.client.chat.completions.create(
+                model=self.model,
+                messages=messages,
+                temperature=0,
+                seed=42,
+                extra_body={"reasoning": {"enabled": False}},
+            )
+            self._reasoning_extra_body = {"reasoning": {"enabled": False}}
+            return response
+        except openai.BadRequestError as e:
+            if "Reasoning is mandatory" not in str(e):
+                raise
+            self._reasoning_extra_body = {"reasoning": {"effort": "minimal"}}
+            return self.client.chat.completions.create(
+                model=self.model,
+                messages=messages,
+                temperature=0,
+                seed=42,
+                extra_body=self._reasoning_extra_body,
+            )
+
     @retry(
         wait=wait_random_exponential(multiplier=1, max=60),
         before_sleep=before_sleep_log(logger, logging.ERROR),
@@ -164,9 +207,7 @@ class LLMTripletExtractor:
         if self.save_messages:
             self.messages.extend(messages)
             messages = self.messages
-        response = self.client.chat.completions.create(
-            model=self.model, messages=messages, temperature=0, seed=42
-        )
+        response = self._create_completion(messages)
         self.completion_tokens_num += response.usage.completion_tokens
         self.prompt_tokens_num += response.usage.prompt_tokens
         self.current_cost += (
