@@ -1,0 +1,5966 @@
+{
+  "Есть ли конфликт интересов между Ветровым и Орехиным?": {
+    "neighbour_triplets": [
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "родственник",
+        "object": "Ветров Виктор",
+        "qualifiers": [
+          {
+            "relation": "причина смерти",
+            "object": "убит в 2002 году"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "отец",
+        "object": "Ветров Виктор",
+        "qualifiers": [
+          {
+            "relation": "дата рождения",
+            "object": "23.02.1947"
+          },
+          {
+            "relation": "должность",
+            "object": "Генеральный директор ОАО «Южный терминал»"
+          },
+          {
+            "relation": "начало",
+            "object": "1998"
+          },
+          {
+            "relation": "конец",
+            "object": "2001"
+          },
+          {
+            "relation": "смерть",
+            "object": "2002"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "генеральный директор",
+        "object": "Орехин Владимир Васильевич",
+        "qualifiers": [],
+        "source_text_id": 2
+      },
+      {
+        "subject": "Орехин Владимир Васильевич",
+        "relation": "дата рождения",
+        "object": "11 сентября 1974 года",
+        "qualifiers": [],
+        "source_text_id": 3
+      },
+      {
+        "subject": "Орехин Владимир Васильевич",
+        "relation": "место рождения",
+        "object": "Кизел, Пермский край",
+        "qualifiers": [],
+        "source_text_id": 3
+      },
+      {
+        "subject": "Орехин Владимир Васильевич",
+        "relation": "получатель передачи",
+        "object": "v.orehin@mcmgmt.ru",
+        "qualifiers": [],
+        "source_text_id": 3
+      },
+      {
+        "subject": "Орехин Владимир Васильевич",
+        "relation": "место регистрации",
+        "object": "Московская область, г. Красногорск, ул. Озерная, д. 56",
+        "qualifiers": [],
+        "source_text_id": 3
+      },
+      {
+        "subject": "Орехин Владимир Васильевич",
+        "relation": "список номеров",
+        "object": "+7 505 776 50233",
+        "qualifiers": [],
+        "source_text_id": 3
+      },
+      {
+        "subject": "Орехин Владимир Васильевич",
+        "relation": "учебное заведение",
+        "object": "Московский авиационный институт (МАИ)",
+        "qualifiers": [
+          {
+            "relation": "год окончания",
+            "object": "1998"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "Орехин Владимир Васильевич",
+        "relation": "учебное заведение",
+        "object": "London Metropolitan Institute",
+        "qualifiers": [
+          {
+            "relation": "степень",
+            "object": "MBA в области управления"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "Nokia",
+        "relation": "сотрудник организации",
+        "object": "Орехин Владимир Васильевич",
+        "qualifiers": [
+          {
+            "relation": "должность",
+            "object": "менеджер поддержки продаж"
+          },
+          {
+            "relation": "момент времени начала",
+            "object": "1998"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "Орехин Владимир Васильевич",
+        "relation": "работодатель",
+        "object": "Nokia",
+        "qualifiers": [
+          {
+            "relation": "должность",
+            "object": "развитие бизнеса в Северной Америке"
+          },
+          {
+            "relation": "место работы",
+            "object": "Хельсинки"
+          },
+          {
+            "relation": "момент времени начала",
+            "object": "1999"
+          },
+          {
+            "relation": "момент времени окончания",
+            "object": "2002"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "SouthLine",
+        "relation": "сотрудник организации",
+        "object": "Орехин Владимир Васильевич",
+        "qualifiers": [
+          {
+            "relation": "должность",
+            "object": "ответственный за развитие бизнеса беспроводной связи в России и СНГ"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "North Networks",
+        "relation": "сотрудник организации",
+        "object": "Орехин Владимир Васильевич",
+        "qualifiers": [
+          {
+            "relation": "должность",
+            "object": "руководящая должность"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "Siemens",
+        "relation": "сотрудник организации",
+        "object": "Орехин Владимир Васильевич",
+        "qualifiers": [
+          {
+            "relation": "должность",
+            "object": "руководящая должность"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "Орехин Владимир Васильевич",
+        "relation": "работодатель",
+        "object": "Division Business solutions",
+        "qualifiers": [
+          {
+            "relation": "должность",
+            "object": "генеральный директор"
+          },
+          {
+            "relation": "момент времени начала",
+            "object": "2013"
+          },
+          {
+            "relation": "момент времени окончания",
+            "object": "2015"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "IBM",
+        "relation": "сотрудник организации",
+        "object": "Орехин Владимир Васильевич",
+        "qualifiers": [
+          {
+            "relation": "должность",
+            "object": "руководитель области в России и странах СНГ"
+          },
+          {
+            "relation": "момент времени начала",
+            "object": "январь 2017"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "Reg.ru Cloud",
+        "relation": "сотрудник организации",
+        "object": "Орехин Владимир Васильевич",
+        "qualifiers": [
+          {
+            "relation": "должность",
+            "object": "управляющий директор"
+          },
+          {
+            "relation": "момент времени начала",
+            "object": "2018"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "сотрудник организации",
+        "object": "Орехин Владимир Васильевич",
+        "qualifiers": [
+          {
+            "relation": "должность",
+            "object": "генеральный директор"
+          },
+          {
+            "relation": "момент времени начала",
+            "object": "май 2020"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "ООО \"ОСГ МЬЮЗИК МЕНЕДЖМЕНТ\"",
+        "relation": "генеральный директор",
+        "object": "Орехин Владимир Васильевич",
+        "qualifiers": [
+          {
+            "relation": "момент времени начала",
+            "object": "май 2020"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "ООО \"ОСГ МЬЮЗИК МЕНЕДЖМЕНТ ЦЕНТР\"",
+        "relation": "генеральный директор",
+        "object": "Орехин Владимир Васильевич",
+        "qualifiers": [
+          {
+            "relation": "момент времени начала",
+            "object": "май 2020"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "ООО \"ОСГ МЬЮЗИК МЕНЕДЖМЕНТ КРИПТО\"",
+        "relation": "генеральный директор",
+        "object": "Орехин Владимир Васильевич",
+        "qualifiers": [
+          {
+            "relation": "момент времени начала",
+            "object": "май 2020"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "Орехин Владимир Васильевич",
+        "relation": "супруг(а)",
+        "object": "Орехина Елена Викторовна",
+        "qualifiers": [
+          {
+            "relation": "дата рождения",
+            "object": "31 ноября 1988 года"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "владелец",
+        "object": "Ветров Евгений Викторович",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "представитель",
+        "object": "ЮЛ Южная Газовая Станция",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "дата рождения",
+        "object": "05.12.1977",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "список номеров",
+        "object": "79865693564",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "список номеров",
+        "object": "79157944631",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "место рождения",
+        "object": "гор. Кизел, Пермского края",
+        "qualifiers": [],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "место жительства",
+        "object": "г. Москва, Литовский Бульвар, д. 28",
+        "qualifiers": [],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "место регистрации",
+        "object": "г. Москва, Дохтуровский, д. 8",
+        "qualifiers": [],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "место регистрации",
+        "object": "Приморский край, г. Находка, ул. Находский проспект, д. 96",
+        "qualifiers": [],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "учётная запись в социальных медиа",
+        "object": "https://vk.com/id87877856325",
+        "qualifiers": [],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "занял место в",
+        "object": "ТОП 100 Богатейших людей Приморья",
+        "qualifiers": [
+          {
+            "relation": "позиция",
+            "object": "54"
+          },
+          {
+            "relation": "год",
+            "object": "2021"
+          },
+          {
+            "relation": "сумма активов",
+            "object": "2 705 545 600 ₽"
+          },
+          {
+            "relation": "выручка",
+            "object": "543 100 000 ₽"
+          },
+          {
+            "relation": "чистая прибыль",
+            "object": "98 054 400 ₽"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "должность",
+        "object": "Фрахтовальщик",
+        "qualifiers": [
+          {
+            "relation": "организация",
+            "object": "Компания Дитра"
+          },
+          {
+            "relation": "начало",
+            "object": "2000"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "должность",
+        "object": "Старший специалист",
+        "qualifiers": [
+          {
+            "relation": "организация",
+            "object": "ОАО «Сельфлот»"
+          },
+          {
+            "relation": "начало",
+            "object": "2000"
+          },
+          {
+            "relation": "конец",
+            "object": "2002"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "должность",
+        "object": "Заместитель начальника портово‑фрахтового отдела",
+        "qualifiers": [
+          {
+            "relation": "организация",
+            "object": "ЗАО «Южникель»"
+          },
+          {
+            "relation": "начало",
+            "object": "2002"
+          },
+          {
+            "relation": "конец",
+            "object": "2005"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "должность",
+        "object": "Директор по корпоративной политике и финансам",
+        "qualifiers": [
+          {
+            "relation": "организация",
+            "object": "ООО «Трансхим»"
+          },
+          {
+            "relation": "начало",
+            "object": "2005"
+          },
+          {
+            "relation": "конец",
+            "object": "2006"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "должность",
+        "object": "Генеральный директор",
+        "qualifiers": [
+          {
+            "relation": "организация",
+            "object": "ООО «Наливгруз порт»"
+          },
+          {
+            "relation": "начало",
+            "object": "2007"
+          },
+          {
+            "relation": "конец",
+            "object": "2012"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "должность",
+        "object": "Председатель Совета директоров",
+        "qualifiers": [
+          {
+            "relation": "организация",
+            "object": "ООО «Южная Газовая Станция»"
+          },
+          {
+            "relation": "начало",
+            "object": "2012"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "должность",
+        "object": "Главный советник",
+        "qualifiers": [
+          {
+            "relation": "организация",
+            "object": "ЗАО «Южникель»"
+          },
+          {
+            "relation": "начало",
+            "object": "2015"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "владелец",
+        "object": "ООО «Южная Газовая Станция»",
+        "qualifiers": [
+          {
+            "relation": "начало владения",
+            "object": "11.2012"
+          },
+          {
+            "relation": "владелец с",
+            "object": "02.2020"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "брат/сестра",
+        "object": "Орехина Елена Викторовна",
+        "qualifiers": [
+          {
+            "relation": "дата рождения",
+            "object": "31.11.1988"
+          },
+          {
+            "relation": "должность",
+            "object": "член правления «Южной Газовой Станции»"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "мать",
+        "object": "Ветрова Лариса Ивановна",
+        "qualifiers": [
+          {
+            "relation": "дата рождения",
+            "object": "17.10.1948"
+          },
+          {
+            "relation": "совладелец",
+            "object": "ООО «ВОСТОК‑ТРАНС»"
+          },
+          {
+            "relation": "конец совместного владения",
+            "object": "2006"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "материнская организация (компания, учреждение)",
+        "object": "STEEL RIVER Inc. (США)",
+        "qualifiers": [],
+        "source_text_id": 2
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "место регистрации",
+        "object": "г. Москва, ул. Молотовская, д. 8, стр. 3, помещ. 10БА",
+        "qualifiers": [],
+        "source_text_id": 2
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "место регистрации",
+        "object": "1077766764213",
+        "qualifiers": [],
+        "source_text_id": 2
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "область деятельности",
+        "object": "Деятельность библиотек и архивов",
+        "qualifiers": [],
+        "source_text_id": 2
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "владелец",
+        "object": "OSG CENTER MANAGEMENT EUROPE (Кипр)",
+        "qualifiers": [
+          {
+            "relation": "дата начала владения",
+            "object": "08.2009 г."
+          }
+        ],
+        "source_text_id": 2
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "находится в пользовании у",
+        "object": "v.orehin@mcmgmt.ru",
+        "qualifiers": [],
+        "source_text_id": 2
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "онлайн-сервис",
+        "object": "www.musmgmt.com",
+        "qualifiers": [],
+        "source_text_id": 2
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "список номеров",
+        "object": "749556261514",
+        "qualifiers": [],
+        "source_text_id": 2
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "число сотрудников",
+        "object": "8",
+        "qualifiers": [],
+        "source_text_id": 2
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "общая выручка",
+        "object": "2 389 145",
+        "qualifiers": [
+          {
+            "relation": "валюта",
+            "object": "USD"
+          }
+        ],
+        "source_text_id": 2
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "число членов",
+        "object": "156",
+        "qualifiers": [],
+        "source_text_id": 2
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "уровень выше",
+        "object": "5",
+        "qualifiers": [],
+        "source_text_id": 2
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "лига на уровень выше",
+        "object": "Штаб-квартира или материнская компания",
+        "qualifiers": [],
+        "source_text_id": 2
+      },
+      {
+        "subject": "генеральный директор",
+        "relation": "должность занимает",
+        "object": "Баранов Егор Владимирович",
+        "qualifiers": [
+          {
+            "relation": "организация",
+            "object": "ООО \"БУМ 2000\""
+          },
+          {
+            "relation": "момент начала",
+            "object": "03.2001"
+          },
+          {
+            "relation": "момент окончания",
+            "object": "12.2010"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Баранов Егор Владимирович",
+        "relation": "учебное заведение",
+        "object": "Московский авиационный институт (МАИ)",
+        "qualifiers": [
+          {
+            "relation": "год окончания",
+            "object": "1998"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "место регистрации",
+        "object": "Приморский край, г. Находка, ул. Находский проспект, д. 96",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "область деятельности",
+        "object": "транспорт грузов",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "руководящий орган",
+        "object": "Локтев Юрий Сергеевич",
+        "qualifiers": [
+          {
+            "relation": "должность",
+            "object": "генеральный директор"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "(оплаченный) уставный капитал",
+        "object": "14 700 000 ₽",
+        "qualifiers": [
+          {
+            "relation": "момент времени",
+            "object": "08.09.2005"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "размер команды на момент старта",
+        "object": "75 чел.",
+        "qualifiers": [
+          {
+            "relation": "момент времени",
+            "object": "31.12.2025"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "доход на душу населения",
+        "object": "2 983 790 000 ₽",
+        "qualifiers": [
+          {
+            "relation": "год",
+            "object": "2024"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "операционные расходы",
+        "object": "1 380 567 000 ₽",
+        "qualifiers": [
+          {
+            "relation": "год",
+            "object": "2024"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "операционные расходы",
+        "object": "2 390 162 000 ₽",
+        "qualifiers": [
+          {
+            "relation": "год",
+            "object": "2024"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "ключевой показатель эффективности",
+        "object": "1 986 195 000 ₽",
+        "qualifiers": [
+          {
+            "relation": "год",
+            "object": "2024"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "активы под управлением",
+        "object": "4 717 635 000 ₽",
+        "qualifiers": [
+          {
+            "relation": "год",
+            "object": "2024"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "активы под управлением",
+        "object": "892 665 000 ₽",
+        "qualifiers": [
+          {
+            "relation": "год",
+            "object": "2024"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "наличные средства",
+        "object": "74 947 000 ₽",
+        "qualifiers": [
+          {
+            "relation": "год",
+            "object": "2024"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "операционные расходы",
+        "object": "552 662 602 ₽",
+        "qualifiers": [
+          {
+            "relation": "год",
+            "object": "2024"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "максимальный размер или ёмкость",
+        "object": "1 297 810 000 ₽",
+        "qualifiers": [
+          {
+            "relation": "год",
+            "object": "2024"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "число объектов",
+        "object": "8",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "статус ограничения доступа",
+        "object": "нет действующих решений",
+        "qualifiers": [
+          {
+            "relation": "момент времени",
+            "object": "20.12.2025"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "sgt@sgtdv.ru",
+        "relation": "получатель",
+        "object": "ЮЛ Южная Газовая Станция",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "онлайн-сервис",
+        "object": "https://sgtdv.ru",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "место регистрации",
+        "object": "г. Москва, ул. Молотовская, д. 8, стр. 3, помещ. 10БА",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "креативный директор",
+        "object": "Баранов Егор Владимирович",
+        "qualifiers": [
+          {
+            "relation": "ИНН",
+            "object": "7720357487662"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "OSG CENTER MANAGEMENT EUROPE (Кипр)",
+        "relation": "место регистрации",
+        "object": "Кипр, г. Пафос, ул. Агиоу Антониу, д. 17",
+        "qualifiers": [],
+        "source_text_id": 2
+      },
+      {
+        "subject": "OSG CENTER MANAGEMENT EUROPE (Кипр)",
+        "relation": "менеджер/директор",
+        "object": "Nikos Antoniou",
+        "qualifiers": [
+          {
+            "relation": "иная трудовая деятельность",
+            "object": "STEEL RIVER HOLDINGS"
+          }
+        ],
+        "source_text_id": 2
+      },
+      {
+        "subject": "OSG CENTER MANAGEMENT EUROPE (Кипр)",
+        "relation": "список номеров",
+        "object": "3572298756",
+        "qualifiers": [],
+        "source_text_id": 2
+      },
+      {
+        "subject": "Баранов Егор Владимирович",
+        "relation": "дата рождения",
+        "object": "28.04.1970",
+        "qualifiers": [],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Баранов Егор Владимирович",
+        "relation": "получатель передачи",
+        "object": "bumsk@yandex.ru",
+        "qualifiers": [],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Баранов Егор Владимирович",
+        "relation": "место регистрации",
+        "object": "г. Москва, ул. Речная, д. 5",
+        "qualifiers": [],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Баранов Егор Владимирович",
+        "relation": "место жительства",
+        "object": "г. Москва, ул. Островная, д. 78",
+        "qualifiers": [],
+        "source_text_id": 1
+      },
+      {
+        "subject": "владелец",
+        "relation": "должность занимает",
+        "object": "Баранов Егор Владимирович",
+        "qualifiers": [
+          {
+            "relation": "организация",
+            "object": "ООО \"ЭКОЛАЙТ\""
+          },
+          {
+            "relation": "момент начала",
+            "object": "11.2009"
+          },
+          {
+            "relation": "момент окончания",
+            "object": "01.2016"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Баранов Егор Владимирович",
+        "relation": "владелец",
+        "object": "ОГРНИП Баранов Е.В.(Сбор неопасных отходов)",
+        "qualifiers": [
+          {
+            "relation": "момент начала",
+            "object": "05.2024"
+          },
+          {
+            "relation": "момент окончания",
+            "object": "н.в."
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Баранов Егор Владимирович",
+        "relation": "место регистрации",
+        "object": "г. Красногорск, ул. Озерная, д. 56",
+        "qualifiers": [],
+        "source_text_id": 1
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "место регистрации",
+        "object": "1177757900290",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "область деятельности",
+        "object": "Торговля оптовая бумагой и картоном",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "Малые предприятия",
+        "relation": "организационно-правовая форма",
+        "object": "ЮЛ - СК БУМ",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "число объектов",
+        "object": "17 чел.",
+        "qualifiers": [
+          {
+            "relation": "момент времени",
+            "object": "31.12.2025"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "(оплаченный) уставный капитал",
+        "object": "35 000 руб.",
+        "qualifiers": [
+          {
+            "relation": "момент времени",
+            "object": "08.2016"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "оклад",
+        "object": "545 418 000 руб.",
+        "qualifiers": [
+          {
+            "relation": "момент времени",
+            "object": "2025"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "операционные расходы",
+        "object": "470 087 000 руб.",
+        "qualifiers": [
+          {
+            "relation": "момент времени",
+            "object": "2025"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "ставка налога на доходы физических лиц",
+        "object": "1 695 453 руб.",
+        "qualifiers": [
+          {
+            "relation": "момент времени",
+            "object": "2025"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "максимальный размер или ёмкость",
+        "object": "3 340 000 руб.",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "продано единиц",
+        "object": "450 455 000 руб.",
+        "qualifiers": [
+          {
+            "relation": "момент времени",
+            "object": "2025"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "ключевой показатель эффективности",
+        "object": "6 889 000 руб.",
+        "qualifiers": [
+          {
+            "relation": "момент времени",
+            "object": "2025"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "активы под управлением",
+        "object": "32 789 000 руб.",
+        "qualifiers": [
+          {
+            "relation": "момент времени",
+            "object": "2025"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "стоимость",
+        "object": "15 189 000 руб.",
+        "qualifiers": [
+          {
+            "relation": "момент времени",
+            "object": "2025"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "наличные средства",
+        "object": "-1 152 000 руб.",
+        "qualifiers": [
+          {
+            "relation": "момент времени",
+            "object": "2024"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "bumsk@yandex.ru",
+        "relation": "получатель",
+        "object": "ЮЛ - СК БУМ",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "онлайн-сервис",
+        "object": "https://www.bumsk.ru/",
+        "qualifiers": [],
+        "source_text_id": 0
+      }
+    ],
+    "highlighted_entities": [
+      "Ветров Виктор",
+      "Орехин Владимир Васильевич",
+      "Ветров Евгений Викторович",
+      "Орехин Владимир Васильевич",
+      "Орехина Елена Викторовна",
+      "Орехина Елена Викторовна"
+    ],
+    "answer": "Да, конфликт интересов может быть, так как Орехин Владимир Васильевич является супругом Елены Викторовны Орехиной, которая приходится сестрой Ветрову Евгению Викторовичу. Таким образом, Орехин является шурином Ветрова."
+  },
+  "Могут ли быть знакомы Орехин и Баранов?": {
+    "neighbour_triplets": [
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "креативный директор",
+        "object": "Баранов Егор Владимирович",
+        "qualifiers": [
+          {
+            "relation": "ИНН",
+            "object": "7720357487662"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "генеральный директор",
+        "object": "Орехин Владимир Васильевич",
+        "qualifiers": [],
+        "source_text_id": 2
+      },
+      {
+        "subject": "Баранов Егор Владимирович",
+        "relation": "дата рождения",
+        "object": "28.04.1970",
+        "qualifiers": [],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Баранов Егор Владимирович",
+        "relation": "получатель передачи",
+        "object": "bumsk@yandex.ru",
+        "qualifiers": [],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Баранов Егор Владимирович",
+        "relation": "место регистрации",
+        "object": "г. Москва, ул. Речная, д. 5",
+        "qualifiers": [],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Баранов Егор Владимирович",
+        "relation": "место жительства",
+        "object": "г. Москва, ул. Островная, д. 78",
+        "qualifiers": [],
+        "source_text_id": 1
+      },
+      {
+        "subject": "генеральный директор",
+        "relation": "должность занимает",
+        "object": "Баранов Егор Владимирович",
+        "qualifiers": [
+          {
+            "relation": "организация",
+            "object": "ООО \"БУМ 2000\""
+          },
+          {
+            "relation": "момент начала",
+            "object": "03.2001"
+          },
+          {
+            "relation": "момент окончания",
+            "object": "12.2010"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "владелец",
+        "relation": "должность занимает",
+        "object": "Баранов Егор Владимирович",
+        "qualifiers": [
+          {
+            "relation": "организация",
+            "object": "ООО \"ЭКОЛАЙТ\""
+          },
+          {
+            "relation": "момент начала",
+            "object": "11.2009"
+          },
+          {
+            "relation": "момент окончания",
+            "object": "01.2016"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Баранов Егор Владимирович",
+        "relation": "владелец",
+        "object": "ОГРНИП Баранов Е.В.(Сбор неопасных отходов)",
+        "qualifiers": [
+          {
+            "relation": "момент начала",
+            "object": "05.2024"
+          },
+          {
+            "relation": "момент окончания",
+            "object": "н.в."
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Баранов Егор Владимирович",
+        "relation": "место регистрации",
+        "object": "г. Красногорск, ул. Озерная, д. 56",
+        "qualifiers": [],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Баранов Егор Владимирович",
+        "relation": "учебное заведение",
+        "object": "Московский авиационный институт (МАИ)",
+        "qualifiers": [
+          {
+            "relation": "год окончания",
+            "object": "1998"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Орехин Владимир Васильевич",
+        "relation": "дата рождения",
+        "object": "11 сентября 1974 года",
+        "qualifiers": [],
+        "source_text_id": 3
+      },
+      {
+        "subject": "Орехин Владимир Васильевич",
+        "relation": "место рождения",
+        "object": "Кизел, Пермский край",
+        "qualifiers": [],
+        "source_text_id": 3
+      },
+      {
+        "subject": "Орехин Владимир Васильевич",
+        "relation": "получатель передачи",
+        "object": "v.orehin@mcmgmt.ru",
+        "qualifiers": [],
+        "source_text_id": 3
+      },
+      {
+        "subject": "Орехин Владимир Васильевич",
+        "relation": "место регистрации",
+        "object": "Московская область, г. Красногорск, ул. Озерная, д. 56",
+        "qualifiers": [],
+        "source_text_id": 3
+      },
+      {
+        "subject": "Орехин Владимир Васильевич",
+        "relation": "список номеров",
+        "object": "+7 505 776 50233",
+        "qualifiers": [],
+        "source_text_id": 3
+      },
+      {
+        "subject": "Орехин Владимир Васильевич",
+        "relation": "учебное заведение",
+        "object": "Московский авиационный институт (МАИ)",
+        "qualifiers": [
+          {
+            "relation": "год окончания",
+            "object": "1998"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "Орехин Владимир Васильевич",
+        "relation": "учебное заведение",
+        "object": "London Metropolitan Institute",
+        "qualifiers": [
+          {
+            "relation": "степень",
+            "object": "MBA в области управления"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "Nokia",
+        "relation": "сотрудник организации",
+        "object": "Орехин Владимир Васильевич",
+        "qualifiers": [
+          {
+            "relation": "должность",
+            "object": "менеджер поддержки продаж"
+          },
+          {
+            "relation": "момент времени начала",
+            "object": "1998"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "Орехин Владимир Васильевич",
+        "relation": "работодатель",
+        "object": "Nokia",
+        "qualifiers": [
+          {
+            "relation": "должность",
+            "object": "развитие бизнеса в Северной Америке"
+          },
+          {
+            "relation": "место работы",
+            "object": "Хельсинки"
+          },
+          {
+            "relation": "момент времени начала",
+            "object": "1999"
+          },
+          {
+            "relation": "момент времени окончания",
+            "object": "2002"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "SouthLine",
+        "relation": "сотрудник организации",
+        "object": "Орехин Владимир Васильевич",
+        "qualifiers": [
+          {
+            "relation": "должность",
+            "object": "ответственный за развитие бизнеса беспроводной связи в России и СНГ"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "North Networks",
+        "relation": "сотрудник организации",
+        "object": "Орехин Владимир Васильевич",
+        "qualifiers": [
+          {
+            "relation": "должность",
+            "object": "руководящая должность"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "Siemens",
+        "relation": "сотрудник организации",
+        "object": "Орехин Владимир Васильевич",
+        "qualifiers": [
+          {
+            "relation": "должность",
+            "object": "руководящая должность"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "Орехин Владимир Васильевич",
+        "relation": "работодатель",
+        "object": "Division Business solutions",
+        "qualifiers": [
+          {
+            "relation": "должность",
+            "object": "генеральный директор"
+          },
+          {
+            "relation": "момент времени начала",
+            "object": "2013"
+          },
+          {
+            "relation": "момент времени окончания",
+            "object": "2015"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "IBM",
+        "relation": "сотрудник организации",
+        "object": "Орехин Владимир Васильевич",
+        "qualifiers": [
+          {
+            "relation": "должность",
+            "object": "руководитель области в России и странах СНГ"
+          },
+          {
+            "relation": "момент времени начала",
+            "object": "январь 2017"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "Reg.ru Cloud",
+        "relation": "сотрудник организации",
+        "object": "Орехин Владимир Васильевич",
+        "qualifiers": [
+          {
+            "relation": "должность",
+            "object": "управляющий директор"
+          },
+          {
+            "relation": "момент времени начала",
+            "object": "2018"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "сотрудник организации",
+        "object": "Орехин Владимир Васильевич",
+        "qualifiers": [
+          {
+            "relation": "должность",
+            "object": "генеральный директор"
+          },
+          {
+            "relation": "момент времени начала",
+            "object": "май 2020"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "ООО \"ОСГ МЬЮЗИК МЕНЕДЖМЕНТ\"",
+        "relation": "генеральный директор",
+        "object": "Орехин Владимир Васильевич",
+        "qualifiers": [
+          {
+            "relation": "момент времени начала",
+            "object": "май 2020"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "ООО \"ОСГ МЬЮЗИК МЕНЕДЖМЕНТ ЦЕНТР\"",
+        "relation": "генеральный директор",
+        "object": "Орехин Владимир Васильевич",
+        "qualifiers": [
+          {
+            "relation": "момент времени начала",
+            "object": "май 2020"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "ООО \"ОСГ МЬЮЗИК МЕНЕДЖМЕНТ КРИПТО\"",
+        "relation": "генеральный директор",
+        "object": "Орехин Владимир Васильевич",
+        "qualifiers": [
+          {
+            "relation": "момент времени начала",
+            "object": "май 2020"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "Орехин Владимир Васильевич",
+        "relation": "супруг(а)",
+        "object": "Орехина Елена Викторовна",
+        "qualifiers": [
+          {
+            "relation": "дата рождения",
+            "object": "31 ноября 1988 года"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "брат/сестра",
+        "object": "Орехина Елена Викторовна",
+        "qualifiers": [
+          {
+            "relation": "дата рождения",
+            "object": "31.11.1988"
+          },
+          {
+            "relation": "должность",
+            "object": "член правления «Южной Газовой Станции»"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "место регистрации",
+        "object": "г. Москва, ул. Молотовская, д. 8, стр. 3, помещ. 10БА",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "место регистрации",
+        "object": "1177757900290",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "область деятельности",
+        "object": "Торговля оптовая бумагой и картоном",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "Малые предприятия",
+        "relation": "организационно-правовая форма",
+        "object": "ЮЛ - СК БУМ",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "число объектов",
+        "object": "17 чел.",
+        "qualifiers": [
+          {
+            "relation": "момент времени",
+            "object": "31.12.2025"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "(оплаченный) уставный капитал",
+        "object": "35 000 руб.",
+        "qualifiers": [
+          {
+            "relation": "момент времени",
+            "object": "08.2016"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "оклад",
+        "object": "545 418 000 руб.",
+        "qualifiers": [
+          {
+            "relation": "момент времени",
+            "object": "2025"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "операционные расходы",
+        "object": "470 087 000 руб.",
+        "qualifiers": [
+          {
+            "relation": "момент времени",
+            "object": "2025"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "ставка налога на доходы физических лиц",
+        "object": "1 695 453 руб.",
+        "qualifiers": [
+          {
+            "relation": "момент времени",
+            "object": "2025"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "максимальный размер или ёмкость",
+        "object": "3 340 000 руб.",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "продано единиц",
+        "object": "450 455 000 руб.",
+        "qualifiers": [
+          {
+            "relation": "момент времени",
+            "object": "2025"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "ключевой показатель эффективности",
+        "object": "6 889 000 руб.",
+        "qualifiers": [
+          {
+            "relation": "момент времени",
+            "object": "2025"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "активы под управлением",
+        "object": "32 789 000 руб.",
+        "qualifiers": [
+          {
+            "relation": "момент времени",
+            "object": "2025"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "стоимость",
+        "object": "15 189 000 руб.",
+        "qualifiers": [
+          {
+            "relation": "момент времени",
+            "object": "2025"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "наличные средства",
+        "object": "-1 152 000 руб.",
+        "qualifiers": [
+          {
+            "relation": "момент времени",
+            "object": "2024"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "bumsk@yandex.ru",
+        "relation": "получатель",
+        "object": "ЮЛ - СК БУМ",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "онлайн-сервис",
+        "object": "https://www.bumsk.ru/",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "материнская организация (компания, учреждение)",
+        "object": "STEEL RIVER Inc. (США)",
+        "qualifiers": [],
+        "source_text_id": 2
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "место регистрации",
+        "object": "г. Москва, ул. Молотовская, д. 8, стр. 3, помещ. 10БА",
+        "qualifiers": [],
+        "source_text_id": 2
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "место регистрации",
+        "object": "1077766764213",
+        "qualifiers": [],
+        "source_text_id": 2
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "область деятельности",
+        "object": "Деятельность библиотек и архивов",
+        "qualifiers": [],
+        "source_text_id": 2
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "владелец",
+        "object": "OSG CENTER MANAGEMENT EUROPE (Кипр)",
+        "qualifiers": [
+          {
+            "relation": "дата начала владения",
+            "object": "08.2009 г."
+          }
+        ],
+        "source_text_id": 2
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "находится в пользовании у",
+        "object": "v.orehin@mcmgmt.ru",
+        "qualifiers": [],
+        "source_text_id": 2
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "онлайн-сервис",
+        "object": "www.musmgmt.com",
+        "qualifiers": [],
+        "source_text_id": 2
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "список номеров",
+        "object": "749556261514",
+        "qualifiers": [],
+        "source_text_id": 2
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "число сотрудников",
+        "object": "8",
+        "qualifiers": [],
+        "source_text_id": 2
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "общая выручка",
+        "object": "2 389 145",
+        "qualifiers": [
+          {
+            "relation": "валюта",
+            "object": "USD"
+          }
+        ],
+        "source_text_id": 2
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "число членов",
+        "object": "156",
+        "qualifiers": [],
+        "source_text_id": 2
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "уровень выше",
+        "object": "5",
+        "qualifiers": [],
+        "source_text_id": 2
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "лига на уровень выше",
+        "object": "Штаб-квартира или материнская компания",
+        "qualifiers": [],
+        "source_text_id": 2
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "владелец",
+        "object": "Ветров Евгений Викторович",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "число объектов",
+        "object": "8",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "представитель",
+        "object": "ЮЛ Южная Газовая Станция",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "дата рождения",
+        "object": "05.12.1977",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "список номеров",
+        "object": "79865693564",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "список номеров",
+        "object": "79157944631",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "родственник",
+        "object": "Ветров Виктор",
+        "qualifiers": [
+          {
+            "relation": "причина смерти",
+            "object": "убит в 2002 году"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "место рождения",
+        "object": "гор. Кизел, Пермского края",
+        "qualifiers": [],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "место жительства",
+        "object": "г. Москва, Литовский Бульвар, д. 28",
+        "qualifiers": [],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "место регистрации",
+        "object": "г. Москва, Дохтуровский, д. 8",
+        "qualifiers": [],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "место регистрации",
+        "object": "Приморский край, г. Находка, ул. Находский проспект, д. 96",
+        "qualifiers": [],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "учётная запись в социальных медиа",
+        "object": "https://vk.com/id87877856325",
+        "qualifiers": [],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "занял место в",
+        "object": "ТОП 100 Богатейших людей Приморья",
+        "qualifiers": [
+          {
+            "relation": "позиция",
+            "object": "54"
+          },
+          {
+            "relation": "год",
+            "object": "2021"
+          },
+          {
+            "relation": "сумма активов",
+            "object": "2 705 545 600 ₽"
+          },
+          {
+            "relation": "выручка",
+            "object": "543 100 000 ₽"
+          },
+          {
+            "relation": "чистая прибыль",
+            "object": "98 054 400 ₽"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "должность",
+        "object": "Фрахтовальщик",
+        "qualifiers": [
+          {
+            "relation": "организация",
+            "object": "Компания Дитра"
+          },
+          {
+            "relation": "начало",
+            "object": "2000"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "должность",
+        "object": "Старший специалист",
+        "qualifiers": [
+          {
+            "relation": "организация",
+            "object": "ОАО «Сельфлот»"
+          },
+          {
+            "relation": "начало",
+            "object": "2000"
+          },
+          {
+            "relation": "конец",
+            "object": "2002"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "должность",
+        "object": "Заместитель начальника портово‑фрахтового отдела",
+        "qualifiers": [
+          {
+            "relation": "организация",
+            "object": "ЗАО «Южникель»"
+          },
+          {
+            "relation": "начало",
+            "object": "2002"
+          },
+          {
+            "relation": "конец",
+            "object": "2005"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "должность",
+        "object": "Директор по корпоративной политике и финансам",
+        "qualifiers": [
+          {
+            "relation": "организация",
+            "object": "ООО «Трансхим»"
+          },
+          {
+            "relation": "начало",
+            "object": "2005"
+          },
+          {
+            "relation": "конец",
+            "object": "2006"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "должность",
+        "object": "Генеральный директор",
+        "qualifiers": [
+          {
+            "relation": "организация",
+            "object": "ООО «Наливгруз порт»"
+          },
+          {
+            "relation": "начало",
+            "object": "2007"
+          },
+          {
+            "relation": "конец",
+            "object": "2012"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "должность",
+        "object": "Председатель Совета директоров",
+        "qualifiers": [
+          {
+            "relation": "организация",
+            "object": "ООО «Южная Газовая Станция»"
+          },
+          {
+            "relation": "начало",
+            "object": "2012"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "должность",
+        "object": "Главный советник",
+        "qualifiers": [
+          {
+            "relation": "организация",
+            "object": "ЗАО «Южникель»"
+          },
+          {
+            "relation": "начало",
+            "object": "2015"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "владелец",
+        "object": "ООО «Южная Газовая Станция»",
+        "qualifiers": [
+          {
+            "relation": "начало владения",
+            "object": "11.2012"
+          },
+          {
+            "relation": "владелец с",
+            "object": "02.2020"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "отец",
+        "object": "Ветров Виктор",
+        "qualifiers": [
+          {
+            "relation": "дата рождения",
+            "object": "23.02.1947"
+          },
+          {
+            "relation": "должность",
+            "object": "Генеральный директор ОАО «Южный терминал»"
+          },
+          {
+            "relation": "начало",
+            "object": "1998"
+          },
+          {
+            "relation": "конец",
+            "object": "2001"
+          },
+          {
+            "relation": "смерть",
+            "object": "2002"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "мать",
+        "object": "Ветрова Лариса Ивановна",
+        "qualifiers": [
+          {
+            "relation": "дата рождения",
+            "object": "17.10.1948"
+          },
+          {
+            "relation": "совладелец",
+            "object": "ООО «ВОСТОК‑ТРАНС»"
+          },
+          {
+            "relation": "конец совместного владения",
+            "object": "2006"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "OSG CENTER MANAGEMENT EUROPE (Кипр)",
+        "relation": "место регистрации",
+        "object": "Кипр, г. Пафос, ул. Агиоу Антониу, д. 17",
+        "qualifiers": [],
+        "source_text_id": 2
+      },
+      {
+        "subject": "OSG CENTER MANAGEMENT EUROPE (Кипр)",
+        "relation": "менеджер/директор",
+        "object": "Nikos Antoniou",
+        "qualifiers": [
+          {
+            "relation": "иная трудовая деятельность",
+            "object": "STEEL RIVER HOLDINGS"
+          }
+        ],
+        "source_text_id": 2
+      },
+      {
+        "subject": "OSG CENTER MANAGEMENT EUROPE (Кипр)",
+        "relation": "список номеров",
+        "object": "3572298756",
+        "qualifiers": [],
+        "source_text_id": 2
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "место регистрации",
+        "object": "Приморский край, г. Находка, ул. Находский проспект, д. 96",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "область деятельности",
+        "object": "транспорт грузов",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "руководящий орган",
+        "object": "Локтев Юрий Сергеевич",
+        "qualifiers": [
+          {
+            "relation": "должность",
+            "object": "генеральный директор"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "(оплаченный) уставный капитал",
+        "object": "14 700 000 ₽",
+        "qualifiers": [
+          {
+            "relation": "момент времени",
+            "object": "08.09.2005"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "размер команды на момент старта",
+        "object": "75 чел.",
+        "qualifiers": [
+          {
+            "relation": "момент времени",
+            "object": "31.12.2025"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "доход на душу населения",
+        "object": "2 983 790 000 ₽",
+        "qualifiers": [
+          {
+            "relation": "год",
+            "object": "2024"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "операционные расходы",
+        "object": "1 380 567 000 ₽",
+        "qualifiers": [
+          {
+            "relation": "год",
+            "object": "2024"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "операционные расходы",
+        "object": "2 390 162 000 ₽",
+        "qualifiers": [
+          {
+            "relation": "год",
+            "object": "2024"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "ключевой показатель эффективности",
+        "object": "1 986 195 000 ₽",
+        "qualifiers": [
+          {
+            "relation": "год",
+            "object": "2024"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "активы под управлением",
+        "object": "4 717 635 000 ₽",
+        "qualifiers": [
+          {
+            "relation": "год",
+            "object": "2024"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "активы под управлением",
+        "object": "892 665 000 ₽",
+        "qualifiers": [
+          {
+            "relation": "год",
+            "object": "2024"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "наличные средства",
+        "object": "74 947 000 ₽",
+        "qualifiers": [
+          {
+            "relation": "год",
+            "object": "2024"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "операционные расходы",
+        "object": "552 662 602 ₽",
+        "qualifiers": [
+          {
+            "relation": "год",
+            "object": "2024"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "максимальный размер или ёмкость",
+        "object": "1 297 810 000 ₽",
+        "qualifiers": [
+          {
+            "relation": "год",
+            "object": "2024"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "статус ограничения доступа",
+        "object": "нет действующих решений",
+        "qualifiers": [
+          {
+            "relation": "момент времени",
+            "object": "20.12.2025"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "sgt@sgtdv.ru",
+        "relation": "получатель",
+        "object": "ЮЛ Южная Газовая Станция",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "онлайн-сервис",
+        "object": "https://sgtdv.ru",
+        "qualifiers": [],
+        "source_text_id": 0
+      }
+    ],
+    "highlighted_entities": [
+      "Орехин Владимир Васильевич",
+      "Баранов Егор Владимирович",
+      "Баранов Егор Владимирович",
+      "Орехин Владимир Васильевич",
+      "Московский авиационный институт (МАИ)",
+      "Московский авиационный институт (МАИ)"
+    ],
+    "answer": "Да, Орехин и Баранов могут быть знакомы, так как они оба являются выпускниками Московского авиационного института (МАИ) в 1998 году."
+  },
+  "Кто является управляющим дочерних компаний Steel River?": {
+    "neighbour_triplets": [
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "материнская организация (компания, учреждение)",
+        "object": "STEEL RIVER Inc. (США)",
+        "qualifiers": [],
+        "source_text_id": 2
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "место регистрации",
+        "object": "г. Москва, ул. Молотовская, д. 8, стр. 3, помещ. 10БА",
+        "qualifiers": [],
+        "source_text_id": 2
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "место регистрации",
+        "object": "1077766764213",
+        "qualifiers": [],
+        "source_text_id": 2
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "область деятельности",
+        "object": "Деятельность библиотек и архивов",
+        "qualifiers": [],
+        "source_text_id": 2
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "генеральный директор",
+        "object": "Орехин Владимир Васильевич",
+        "qualifiers": [],
+        "source_text_id": 2
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "владелец",
+        "object": "OSG CENTER MANAGEMENT EUROPE (Кипр)",
+        "qualifiers": [
+          {
+            "relation": "дата начала владения",
+            "object": "08.2009 г."
+          }
+        ],
+        "source_text_id": 2
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "находится в пользовании у",
+        "object": "v.orehin@mcmgmt.ru",
+        "qualifiers": [],
+        "source_text_id": 2
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "онлайн-сервис",
+        "object": "www.musmgmt.com",
+        "qualifiers": [],
+        "source_text_id": 2
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "список номеров",
+        "object": "749556261514",
+        "qualifiers": [],
+        "source_text_id": 2
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "число сотрудников",
+        "object": "8",
+        "qualifiers": [],
+        "source_text_id": 2
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "общая выручка",
+        "object": "2 389 145",
+        "qualifiers": [
+          {
+            "relation": "валюта",
+            "object": "USD"
+          }
+        ],
+        "source_text_id": 2
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "число членов",
+        "object": "156",
+        "qualifiers": [],
+        "source_text_id": 2
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "уровень выше",
+        "object": "5",
+        "qualifiers": [],
+        "source_text_id": 2
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "лига на уровень выше",
+        "object": "Штаб-квартира или материнская компания",
+        "qualifiers": [],
+        "source_text_id": 2
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "сотрудник организации",
+        "object": "Орехин Владимир Васильевич",
+        "qualifiers": [
+          {
+            "relation": "должность",
+            "object": "генеральный директор"
+          },
+          {
+            "relation": "момент времени начала",
+            "object": "май 2020"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "число объектов",
+        "object": "8",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "место регистрации",
+        "object": "г. Москва, ул. Молотовская, д. 8, стр. 3, помещ. 10БА",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "OSG CENTER MANAGEMENT EUROPE (Кипр)",
+        "relation": "место регистрации",
+        "object": "Кипр, г. Пафос, ул. Агиоу Антониу, д. 17",
+        "qualifiers": [],
+        "source_text_id": 2
+      },
+      {
+        "subject": "OSG CENTER MANAGEMENT EUROPE (Кипр)",
+        "relation": "менеджер/директор",
+        "object": "Nikos Antoniou",
+        "qualifiers": [
+          {
+            "relation": "иная трудовая деятельность",
+            "object": "STEEL RIVER HOLDINGS"
+          }
+        ],
+        "source_text_id": 2
+      },
+      {
+        "subject": "OSG CENTER MANAGEMENT EUROPE (Кипр)",
+        "relation": "список номеров",
+        "object": "3572298756",
+        "qualifiers": [],
+        "source_text_id": 2
+      },
+      {
+        "subject": "генеральный директор",
+        "relation": "должность занимает",
+        "object": "Баранов Егор Владимирович",
+        "qualifiers": [
+          {
+            "relation": "организация",
+            "object": "ООО \"БУМ 2000\""
+          },
+          {
+            "relation": "момент начала",
+            "object": "03.2001"
+          },
+          {
+            "relation": "момент окончания",
+            "object": "12.2010"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Орехин Владимир Васильевич",
+        "relation": "дата рождения",
+        "object": "11 сентября 1974 года",
+        "qualifiers": [],
+        "source_text_id": 3
+      },
+      {
+        "subject": "Орехин Владимир Васильевич",
+        "relation": "место рождения",
+        "object": "Кизел, Пермский край",
+        "qualifiers": [],
+        "source_text_id": 3
+      },
+      {
+        "subject": "Орехин Владимир Васильевич",
+        "relation": "получатель передачи",
+        "object": "v.orehin@mcmgmt.ru",
+        "qualifiers": [],
+        "source_text_id": 3
+      },
+      {
+        "subject": "Орехин Владимир Васильевич",
+        "relation": "место регистрации",
+        "object": "Московская область, г. Красногорск, ул. Озерная, д. 56",
+        "qualifiers": [],
+        "source_text_id": 3
+      },
+      {
+        "subject": "Орехин Владимир Васильевич",
+        "relation": "список номеров",
+        "object": "+7 505 776 50233",
+        "qualifiers": [],
+        "source_text_id": 3
+      },
+      {
+        "subject": "Орехин Владимир Васильевич",
+        "relation": "учебное заведение",
+        "object": "Московский авиационный институт (МАИ)",
+        "qualifiers": [
+          {
+            "relation": "год окончания",
+            "object": "1998"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "Орехин Владимир Васильевич",
+        "relation": "учебное заведение",
+        "object": "London Metropolitan Institute",
+        "qualifiers": [
+          {
+            "relation": "степень",
+            "object": "MBA в области управления"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "Nokia",
+        "relation": "сотрудник организации",
+        "object": "Орехин Владимир Васильевич",
+        "qualifiers": [
+          {
+            "relation": "должность",
+            "object": "менеджер поддержки продаж"
+          },
+          {
+            "relation": "момент времени начала",
+            "object": "1998"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "Орехин Владимир Васильевич",
+        "relation": "работодатель",
+        "object": "Nokia",
+        "qualifiers": [
+          {
+            "relation": "должность",
+            "object": "развитие бизнеса в Северной Америке"
+          },
+          {
+            "relation": "место работы",
+            "object": "Хельсинки"
+          },
+          {
+            "relation": "момент времени начала",
+            "object": "1999"
+          },
+          {
+            "relation": "момент времени окончания",
+            "object": "2002"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "SouthLine",
+        "relation": "сотрудник организации",
+        "object": "Орехин Владимир Васильевич",
+        "qualifiers": [
+          {
+            "relation": "должность",
+            "object": "ответственный за развитие бизнеса беспроводной связи в России и СНГ"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "North Networks",
+        "relation": "сотрудник организации",
+        "object": "Орехин Владимир Васильевич",
+        "qualifiers": [
+          {
+            "relation": "должность",
+            "object": "руководящая должность"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "Siemens",
+        "relation": "сотрудник организации",
+        "object": "Орехин Владимир Васильевич",
+        "qualifiers": [
+          {
+            "relation": "должность",
+            "object": "руководящая должность"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "Орехин Владимир Васильевич",
+        "relation": "работодатель",
+        "object": "Division Business solutions",
+        "qualifiers": [
+          {
+            "relation": "должность",
+            "object": "генеральный директор"
+          },
+          {
+            "relation": "момент времени начала",
+            "object": "2013"
+          },
+          {
+            "relation": "момент времени окончания",
+            "object": "2015"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "IBM",
+        "relation": "сотрудник организации",
+        "object": "Орехин Владимир Васильевич",
+        "qualifiers": [
+          {
+            "relation": "должность",
+            "object": "руководитель области в России и странах СНГ"
+          },
+          {
+            "relation": "момент времени начала",
+            "object": "январь 2017"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "Reg.ru Cloud",
+        "relation": "сотрудник организации",
+        "object": "Орехин Владимир Васильевич",
+        "qualifiers": [
+          {
+            "relation": "должность",
+            "object": "управляющий директор"
+          },
+          {
+            "relation": "момент времени начала",
+            "object": "2018"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "ООО \"ОСГ МЬЮЗИК МЕНЕДЖМЕНТ\"",
+        "relation": "генеральный директор",
+        "object": "Орехин Владимир Васильевич",
+        "qualifiers": [
+          {
+            "relation": "момент времени начала",
+            "object": "май 2020"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "ООО \"ОСГ МЬЮЗИК МЕНЕДЖМЕНТ ЦЕНТР\"",
+        "relation": "генеральный директор",
+        "object": "Орехин Владимир Васильевич",
+        "qualifiers": [
+          {
+            "relation": "момент времени начала",
+            "object": "май 2020"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "ООО \"ОСГ МЬЮЗИК МЕНЕДЖМЕНТ КРИПТО\"",
+        "relation": "генеральный директор",
+        "object": "Орехин Владимир Васильевич",
+        "qualifiers": [
+          {
+            "relation": "момент времени начала",
+            "object": "май 2020"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "Орехин Владимир Васильевич",
+        "relation": "супруг(а)",
+        "object": "Орехина Елена Викторовна",
+        "qualifiers": [
+          {
+            "relation": "дата рождения",
+            "object": "31 ноября 1988 года"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "место регистрации",
+        "object": "Приморский край, г. Находка, ул. Находский проспект, д. 96",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "область деятельности",
+        "object": "транспорт грузов",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "руководящий орган",
+        "object": "Локтев Юрий Сергеевич",
+        "qualifiers": [
+          {
+            "relation": "должность",
+            "object": "генеральный директор"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "владелец",
+        "object": "Ветров Евгений Викторович",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "(оплаченный) уставный капитал",
+        "object": "14 700 000 ₽",
+        "qualifiers": [
+          {
+            "relation": "момент времени",
+            "object": "08.09.2005"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "размер команды на момент старта",
+        "object": "75 чел.",
+        "qualifiers": [
+          {
+            "relation": "момент времени",
+            "object": "31.12.2025"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "доход на душу населения",
+        "object": "2 983 790 000 ₽",
+        "qualifiers": [
+          {
+            "relation": "год",
+            "object": "2024"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "операционные расходы",
+        "object": "1 380 567 000 ₽",
+        "qualifiers": [
+          {
+            "relation": "год",
+            "object": "2024"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "операционные расходы",
+        "object": "2 390 162 000 ₽",
+        "qualifiers": [
+          {
+            "relation": "год",
+            "object": "2024"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "ключевой показатель эффективности",
+        "object": "1 986 195 000 ₽",
+        "qualifiers": [
+          {
+            "relation": "год",
+            "object": "2024"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "активы под управлением",
+        "object": "4 717 635 000 ₽",
+        "qualifiers": [
+          {
+            "relation": "год",
+            "object": "2024"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "активы под управлением",
+        "object": "892 665 000 ₽",
+        "qualifiers": [
+          {
+            "relation": "год",
+            "object": "2024"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "наличные средства",
+        "object": "74 947 000 ₽",
+        "qualifiers": [
+          {
+            "relation": "год",
+            "object": "2024"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "операционные расходы",
+        "object": "552 662 602 ₽",
+        "qualifiers": [
+          {
+            "relation": "год",
+            "object": "2024"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "максимальный размер или ёмкость",
+        "object": "1 297 810 000 ₽",
+        "qualifiers": [
+          {
+            "relation": "год",
+            "object": "2024"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "статус ограничения доступа",
+        "object": "нет действующих решений",
+        "qualifiers": [
+          {
+            "relation": "момент времени",
+            "object": "20.12.2025"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "sgt@sgtdv.ru",
+        "relation": "получатель",
+        "object": "ЮЛ Южная Газовая Станция",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "онлайн-сервис",
+        "object": "https://sgtdv.ru",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "представитель",
+        "object": "ЮЛ Южная Газовая Станция",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "брат/сестра",
+        "object": "Орехина Елена Викторовна",
+        "qualifiers": [
+          {
+            "relation": "дата рождения",
+            "object": "31.11.1988"
+          },
+          {
+            "relation": "должность",
+            "object": "член правления «Южной Газовой Станции»"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "место регистрации",
+        "object": "1177757900290",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "область деятельности",
+        "object": "Торговля оптовая бумагой и картоном",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "креативный директор",
+        "object": "Баранов Егор Владимирович",
+        "qualifiers": [
+          {
+            "relation": "ИНН",
+            "object": "7720357487662"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "Малые предприятия",
+        "relation": "организационно-правовая форма",
+        "object": "ЮЛ - СК БУМ",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "число объектов",
+        "object": "17 чел.",
+        "qualifiers": [
+          {
+            "relation": "момент времени",
+            "object": "31.12.2025"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "(оплаченный) уставный капитал",
+        "object": "35 000 руб.",
+        "qualifiers": [
+          {
+            "relation": "момент времени",
+            "object": "08.2016"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "оклад",
+        "object": "545 418 000 руб.",
+        "qualifiers": [
+          {
+            "relation": "момент времени",
+            "object": "2025"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "операционные расходы",
+        "object": "470 087 000 руб.",
+        "qualifiers": [
+          {
+            "relation": "момент времени",
+            "object": "2025"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "ставка налога на доходы физических лиц",
+        "object": "1 695 453 руб.",
+        "qualifiers": [
+          {
+            "relation": "момент времени",
+            "object": "2025"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "максимальный размер или ёмкость",
+        "object": "3 340 000 руб.",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "продано единиц",
+        "object": "450 455 000 руб.",
+        "qualifiers": [
+          {
+            "relation": "момент времени",
+            "object": "2025"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "ключевой показатель эффективности",
+        "object": "6 889 000 руб.",
+        "qualifiers": [
+          {
+            "relation": "момент времени",
+            "object": "2025"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "активы под управлением",
+        "object": "32 789 000 руб.",
+        "qualifiers": [
+          {
+            "relation": "момент времени",
+            "object": "2025"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "стоимость",
+        "object": "15 189 000 руб.",
+        "qualifiers": [
+          {
+            "relation": "момент времени",
+            "object": "2025"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "наличные средства",
+        "object": "-1 152 000 руб.",
+        "qualifiers": [
+          {
+            "relation": "момент времени",
+            "object": "2024"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "bumsk@yandex.ru",
+        "relation": "получатель",
+        "object": "ЮЛ - СК БУМ",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "онлайн-сервис",
+        "object": "https://www.bumsk.ru/",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "Баранов Егор Владимирович",
+        "relation": "дата рождения",
+        "object": "28.04.1970",
+        "qualifiers": [],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Баранов Егор Владимирович",
+        "relation": "получатель передачи",
+        "object": "bumsk@yandex.ru",
+        "qualifiers": [],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Баранов Егор Владимирович",
+        "relation": "место регистрации",
+        "object": "г. Москва, ул. Речная, д. 5",
+        "qualifiers": [],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Баранов Егор Владимирович",
+        "relation": "место жительства",
+        "object": "г. Москва, ул. Островная, д. 78",
+        "qualifiers": [],
+        "source_text_id": 1
+      },
+      {
+        "subject": "владелец",
+        "relation": "должность занимает",
+        "object": "Баранов Егор Владимирович",
+        "qualifiers": [
+          {
+            "relation": "организация",
+            "object": "ООО \"ЭКОЛАЙТ\""
+          },
+          {
+            "relation": "момент начала",
+            "object": "11.2009"
+          },
+          {
+            "relation": "момент окончания",
+            "object": "01.2016"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Баранов Егор Владимирович",
+        "relation": "владелец",
+        "object": "ОГРНИП Баранов Е.В.(Сбор неопасных отходов)",
+        "qualifiers": [
+          {
+            "relation": "момент начала",
+            "object": "05.2024"
+          },
+          {
+            "relation": "момент окончания",
+            "object": "н.в."
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Баранов Егор Владимирович",
+        "relation": "место регистрации",
+        "object": "г. Красногорск, ул. Озерная, д. 56",
+        "qualifiers": [],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Баранов Егор Владимирович",
+        "relation": "учебное заведение",
+        "object": "Московский авиационный институт (МАИ)",
+        "qualifiers": [
+          {
+            "relation": "год окончания",
+            "object": "1998"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "дата рождения",
+        "object": "05.12.1977",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "список номеров",
+        "object": "79865693564",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "список номеров",
+        "object": "79157944631",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "родственник",
+        "object": "Ветров Виктор",
+        "qualifiers": [
+          {
+            "relation": "причина смерти",
+            "object": "убит в 2002 году"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "место рождения",
+        "object": "гор. Кизел, Пермского края",
+        "qualifiers": [],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "место жительства",
+        "object": "г. Москва, Литовский Бульвар, д. 28",
+        "qualifiers": [],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "место регистрации",
+        "object": "г. Москва, Дохтуровский, д. 8",
+        "qualifiers": [],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "место регистрации",
+        "object": "Приморский край, г. Находка, ул. Находский проспект, д. 96",
+        "qualifiers": [],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "учётная запись в социальных медиа",
+        "object": "https://vk.com/id87877856325",
+        "qualifiers": [],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "занял место в",
+        "object": "ТОП 100 Богатейших людей Приморья",
+        "qualifiers": [
+          {
+            "relation": "позиция",
+            "object": "54"
+          },
+          {
+            "relation": "год",
+            "object": "2021"
+          },
+          {
+            "relation": "сумма активов",
+            "object": "2 705 545 600 ₽"
+          },
+          {
+            "relation": "выручка",
+            "object": "543 100 000 ₽"
+          },
+          {
+            "relation": "чистая прибыль",
+            "object": "98 054 400 ₽"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "должность",
+        "object": "Фрахтовальщик",
+        "qualifiers": [
+          {
+            "relation": "организация",
+            "object": "Компания Дитра"
+          },
+          {
+            "relation": "начало",
+            "object": "2000"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "должность",
+        "object": "Старший специалист",
+        "qualifiers": [
+          {
+            "relation": "организация",
+            "object": "ОАО «Сельфлот»"
+          },
+          {
+            "relation": "начало",
+            "object": "2000"
+          },
+          {
+            "relation": "конец",
+            "object": "2002"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "должность",
+        "object": "Заместитель начальника портово‑фрахтового отдела",
+        "qualifiers": [
+          {
+            "relation": "организация",
+            "object": "ЗАО «Южникель»"
+          },
+          {
+            "relation": "начало",
+            "object": "2002"
+          },
+          {
+            "relation": "конец",
+            "object": "2005"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "должность",
+        "object": "Директор по корпоративной политике и финансам",
+        "qualifiers": [
+          {
+            "relation": "организация",
+            "object": "ООО «Трансхим»"
+          },
+          {
+            "relation": "начало",
+            "object": "2005"
+          },
+          {
+            "relation": "конец",
+            "object": "2006"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "должность",
+        "object": "Генеральный директор",
+        "qualifiers": [
+          {
+            "relation": "организация",
+            "object": "ООО «Наливгруз порт»"
+          },
+          {
+            "relation": "начало",
+            "object": "2007"
+          },
+          {
+            "relation": "конец",
+            "object": "2012"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "должность",
+        "object": "Председатель Совета директоров",
+        "qualifiers": [
+          {
+            "relation": "организация",
+            "object": "ООО «Южная Газовая Станция»"
+          },
+          {
+            "relation": "начало",
+            "object": "2012"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "должность",
+        "object": "Главный советник",
+        "qualifiers": [
+          {
+            "relation": "организация",
+            "object": "ЗАО «Южникель»"
+          },
+          {
+            "relation": "начало",
+            "object": "2015"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "владелец",
+        "object": "ООО «Южная Газовая Станция»",
+        "qualifiers": [
+          {
+            "relation": "начало владения",
+            "object": "11.2012"
+          },
+          {
+            "relation": "владелец с",
+            "object": "02.2020"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "отец",
+        "object": "Ветров Виктор",
+        "qualifiers": [
+          {
+            "relation": "дата рождения",
+            "object": "23.02.1947"
+          },
+          {
+            "relation": "должность",
+            "object": "Генеральный директор ОАО «Южный терминал»"
+          },
+          {
+            "relation": "начало",
+            "object": "1998"
+          },
+          {
+            "relation": "конец",
+            "object": "2001"
+          },
+          {
+            "relation": "смерть",
+            "object": "2002"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "мать",
+        "object": "Ветрова Лариса Ивановна",
+        "qualifiers": [
+          {
+            "relation": "дата рождения",
+            "object": "17.10.1948"
+          },
+          {
+            "relation": "совладелец",
+            "object": "ООО «ВОСТОК‑ТРАНС»"
+          },
+          {
+            "relation": "конец совместного владения",
+            "object": "2006"
+          }
+        ],
+        "source_text_id": 1
+      }
+    ],
+    "highlighted_entities": [
+      "STEEL RIVER Inc. (США)",
+      "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+      "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+      "STEEL RIVER Inc. (США)",
+      "Орехин Владимир Васильевич"
+    ],
+    "answer": "Управляющим (генеральным директором) материнской компании Steel River Inc. является Орехин Владимир Васильевич."
+  },
+  "Кто владеет организацией, соседствующей с СК БУМ?": {
+    "neighbour_triplets": [
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "материнская организация (компания, учреждение)",
+        "object": "STEEL RIVER Inc. (США)",
+        "qualifiers": [],
+        "source_text_id": 2
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "место регистрации",
+        "object": "г. Москва, ул. Молотовская, д. 8, стр. 3, помещ. 10БА",
+        "qualifiers": [],
+        "source_text_id": 2
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "место регистрации",
+        "object": "1077766764213",
+        "qualifiers": [],
+        "source_text_id": 2
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "область деятельности",
+        "object": "Деятельность библиотек и архивов",
+        "qualifiers": [],
+        "source_text_id": 2
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "генеральный директор",
+        "object": "Орехин Владимир Васильевич",
+        "qualifiers": [],
+        "source_text_id": 2
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "владелец",
+        "object": "OSG CENTER MANAGEMENT EUROPE (Кипр)",
+        "qualifiers": [
+          {
+            "relation": "дата начала владения",
+            "object": "08.2009 г."
+          }
+        ],
+        "source_text_id": 2
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "находится в пользовании у",
+        "object": "v.orehin@mcmgmt.ru",
+        "qualifiers": [],
+        "source_text_id": 2
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "онлайн-сервис",
+        "object": "www.musmgmt.com",
+        "qualifiers": [],
+        "source_text_id": 2
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "список номеров",
+        "object": "749556261514",
+        "qualifiers": [],
+        "source_text_id": 2
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "число сотрудников",
+        "object": "8",
+        "qualifiers": [],
+        "source_text_id": 2
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "общая выручка",
+        "object": "2 389 145",
+        "qualifiers": [
+          {
+            "relation": "валюта",
+            "object": "USD"
+          }
+        ],
+        "source_text_id": 2
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "число членов",
+        "object": "156",
+        "qualifiers": [],
+        "source_text_id": 2
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "уровень выше",
+        "object": "5",
+        "qualifiers": [],
+        "source_text_id": 2
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "лига на уровень выше",
+        "object": "Штаб-квартира или материнская компания",
+        "qualifiers": [],
+        "source_text_id": 2
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "сотрудник организации",
+        "object": "Орехин Владимир Васильевич",
+        "qualifiers": [
+          {
+            "relation": "должность",
+            "object": "генеральный директор"
+          },
+          {
+            "relation": "момент времени начала",
+            "object": "май 2020"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "ООО \"ОСГ МЬЮЗИК МЕНЕДЖМЕНТ ЦЕНТР\"",
+        "relation": "генеральный директор",
+        "object": "Орехин Владимир Васильевич",
+        "qualifiers": [
+          {
+            "relation": "момент времени начала",
+            "object": "май 2020"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "число объектов",
+        "object": "8",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "место регистрации",
+        "object": "г. Москва, ул. Молотовская, д. 8, стр. 3, помещ. 10БА",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "OSG CENTER MANAGEMENT EUROPE (Кипр)",
+        "relation": "место регистрации",
+        "object": "Кипр, г. Пафос, ул. Агиоу Антониу, д. 17",
+        "qualifiers": [],
+        "source_text_id": 2
+      },
+      {
+        "subject": "OSG CENTER MANAGEMENT EUROPE (Кипр)",
+        "relation": "менеджер/директор",
+        "object": "Nikos Antoniou",
+        "qualifiers": [
+          {
+            "relation": "иная трудовая деятельность",
+            "object": "STEEL RIVER HOLDINGS"
+          }
+        ],
+        "source_text_id": 2
+      },
+      {
+        "subject": "OSG CENTER MANAGEMENT EUROPE (Кипр)",
+        "relation": "список номеров",
+        "object": "3572298756",
+        "qualifiers": [],
+        "source_text_id": 2
+      },
+      {
+        "subject": "генеральный директор",
+        "relation": "должность занимает",
+        "object": "Баранов Егор Владимирович",
+        "qualifiers": [
+          {
+            "relation": "организация",
+            "object": "ООО \"БУМ 2000\""
+          },
+          {
+            "relation": "момент начала",
+            "object": "03.2001"
+          },
+          {
+            "relation": "момент окончания",
+            "object": "12.2010"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Орехин Владимир Васильевич",
+        "relation": "дата рождения",
+        "object": "11 сентября 1974 года",
+        "qualifiers": [],
+        "source_text_id": 3
+      },
+      {
+        "subject": "Орехин Владимир Васильевич",
+        "relation": "место рождения",
+        "object": "Кизел, Пермский край",
+        "qualifiers": [],
+        "source_text_id": 3
+      },
+      {
+        "subject": "Орехин Владимир Васильевич",
+        "relation": "получатель передачи",
+        "object": "v.orehin@mcmgmt.ru",
+        "qualifiers": [],
+        "source_text_id": 3
+      },
+      {
+        "subject": "Орехин Владимир Васильевич",
+        "relation": "место регистрации",
+        "object": "Московская область, г. Красногорск, ул. Озерная, д. 56",
+        "qualifiers": [],
+        "source_text_id": 3
+      },
+      {
+        "subject": "Орехин Владимир Васильевич",
+        "relation": "список номеров",
+        "object": "+7 505 776 50233",
+        "qualifiers": [],
+        "source_text_id": 3
+      },
+      {
+        "subject": "Орехин Владимир Васильевич",
+        "relation": "учебное заведение",
+        "object": "Московский авиационный институт (МАИ)",
+        "qualifiers": [
+          {
+            "relation": "год окончания",
+            "object": "1998"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "Орехин Владимир Васильевич",
+        "relation": "учебное заведение",
+        "object": "London Metropolitan Institute",
+        "qualifiers": [
+          {
+            "relation": "степень",
+            "object": "MBA в области управления"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "Nokia",
+        "relation": "сотрудник организации",
+        "object": "Орехин Владимир Васильевич",
+        "qualifiers": [
+          {
+            "relation": "должность",
+            "object": "менеджер поддержки продаж"
+          },
+          {
+            "relation": "момент времени начала",
+            "object": "1998"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "Орехин Владимир Васильевич",
+        "relation": "работодатель",
+        "object": "Nokia",
+        "qualifiers": [
+          {
+            "relation": "должность",
+            "object": "развитие бизнеса в Северной Америке"
+          },
+          {
+            "relation": "место работы",
+            "object": "Хельсинки"
+          },
+          {
+            "relation": "момент времени начала",
+            "object": "1999"
+          },
+          {
+            "relation": "момент времени окончания",
+            "object": "2002"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "SouthLine",
+        "relation": "сотрудник организации",
+        "object": "Орехин Владимир Васильевич",
+        "qualifiers": [
+          {
+            "relation": "должность",
+            "object": "ответственный за развитие бизнеса беспроводной связи в России и СНГ"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "North Networks",
+        "relation": "сотрудник организации",
+        "object": "Орехин Владимир Васильевич",
+        "qualifiers": [
+          {
+            "relation": "должность",
+            "object": "руководящая должность"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "Siemens",
+        "relation": "сотрудник организации",
+        "object": "Орехин Владимир Васильевич",
+        "qualifiers": [
+          {
+            "relation": "должность",
+            "object": "руководящая должность"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "Орехин Владимир Васильевич",
+        "relation": "работодатель",
+        "object": "Division Business solutions",
+        "qualifiers": [
+          {
+            "relation": "должность",
+            "object": "генеральный директор"
+          },
+          {
+            "relation": "момент времени начала",
+            "object": "2013"
+          },
+          {
+            "relation": "момент времени окончания",
+            "object": "2015"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "IBM",
+        "relation": "сотрудник организации",
+        "object": "Орехин Владимир Васильевич",
+        "qualifiers": [
+          {
+            "relation": "должность",
+            "object": "руководитель области в России и странах СНГ"
+          },
+          {
+            "relation": "момент времени начала",
+            "object": "январь 2017"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "Reg.ru Cloud",
+        "relation": "сотрудник организации",
+        "object": "Орехин Владимир Васильевич",
+        "qualifiers": [
+          {
+            "relation": "должность",
+            "object": "управляющий директор"
+          },
+          {
+            "relation": "момент времени начала",
+            "object": "2018"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "ООО \"ОСГ МЬЮЗИК МЕНЕДЖМЕНТ\"",
+        "relation": "генеральный директор",
+        "object": "Орехин Владимир Васильевич",
+        "qualifiers": [
+          {
+            "relation": "момент времени начала",
+            "object": "май 2020"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "ООО \"ОСГ МЬЮЗИК МЕНЕДЖМЕНТ КРИПТО\"",
+        "relation": "генеральный директор",
+        "object": "Орехин Владимир Васильевич",
+        "qualifiers": [
+          {
+            "relation": "момент времени начала",
+            "object": "май 2020"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "Орехин Владимир Васильевич",
+        "relation": "супруг(а)",
+        "object": "Орехина Елена Викторовна",
+        "qualifiers": [
+          {
+            "relation": "дата рождения",
+            "object": "31 ноября 1988 года"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "место регистрации",
+        "object": "Приморский край, г. Находка, ул. Находский проспект, д. 96",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "область деятельности",
+        "object": "транспорт грузов",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "руководящий орган",
+        "object": "Локтев Юрий Сергеевич",
+        "qualifiers": [
+          {
+            "relation": "должность",
+            "object": "генеральный директор"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "владелец",
+        "object": "Ветров Евгений Викторович",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "(оплаченный) уставный капитал",
+        "object": "14 700 000 ₽",
+        "qualifiers": [
+          {
+            "relation": "момент времени",
+            "object": "08.09.2005"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "размер команды на момент старта",
+        "object": "75 чел.",
+        "qualifiers": [
+          {
+            "relation": "момент времени",
+            "object": "31.12.2025"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "доход на душу населения",
+        "object": "2 983 790 000 ₽",
+        "qualifiers": [
+          {
+            "relation": "год",
+            "object": "2024"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "операционные расходы",
+        "object": "1 380 567 000 ₽",
+        "qualifiers": [
+          {
+            "relation": "год",
+            "object": "2024"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "операционные расходы",
+        "object": "2 390 162 000 ₽",
+        "qualifiers": [
+          {
+            "relation": "год",
+            "object": "2024"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "ключевой показатель эффективности",
+        "object": "1 986 195 000 ₽",
+        "qualifiers": [
+          {
+            "relation": "год",
+            "object": "2024"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "активы под управлением",
+        "object": "4 717 635 000 ₽",
+        "qualifiers": [
+          {
+            "relation": "год",
+            "object": "2024"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "активы под управлением",
+        "object": "892 665 000 ₽",
+        "qualifiers": [
+          {
+            "relation": "год",
+            "object": "2024"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "наличные средства",
+        "object": "74 947 000 ₽",
+        "qualifiers": [
+          {
+            "relation": "год",
+            "object": "2024"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "операционные расходы",
+        "object": "552 662 602 ₽",
+        "qualifiers": [
+          {
+            "relation": "год",
+            "object": "2024"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "максимальный размер или ёмкость",
+        "object": "1 297 810 000 ₽",
+        "qualifiers": [
+          {
+            "relation": "год",
+            "object": "2024"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "статус ограничения доступа",
+        "object": "нет действующих решений",
+        "qualifiers": [
+          {
+            "relation": "момент времени",
+            "object": "20.12.2025"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "sgt@sgtdv.ru",
+        "relation": "получатель",
+        "object": "ЮЛ Южная Газовая Станция",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "онлайн-сервис",
+        "object": "https://sgtdv.ru",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "представитель",
+        "object": "ЮЛ Южная Газовая Станция",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "брат/сестра",
+        "object": "Орехина Елена Викторовна",
+        "qualifiers": [
+          {
+            "relation": "дата рождения",
+            "object": "31.11.1988"
+          },
+          {
+            "relation": "должность",
+            "object": "член правления «Южной Газовой Станции»"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "место регистрации",
+        "object": "1177757900290",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "область деятельности",
+        "object": "Торговля оптовая бумагой и картоном",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "креативный директор",
+        "object": "Баранов Егор Владимирович",
+        "qualifiers": [
+          {
+            "relation": "ИНН",
+            "object": "7720357487662"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "Малые предприятия",
+        "relation": "организационно-правовая форма",
+        "object": "ЮЛ - СК БУМ",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "число объектов",
+        "object": "17 чел.",
+        "qualifiers": [
+          {
+            "relation": "момент времени",
+            "object": "31.12.2025"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "(оплаченный) уставный капитал",
+        "object": "35 000 руб.",
+        "qualifiers": [
+          {
+            "relation": "момент времени",
+            "object": "08.2016"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "оклад",
+        "object": "545 418 000 руб.",
+        "qualifiers": [
+          {
+            "relation": "момент времени",
+            "object": "2025"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "операционные расходы",
+        "object": "470 087 000 руб.",
+        "qualifiers": [
+          {
+            "relation": "момент времени",
+            "object": "2025"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "ставка налога на доходы физических лиц",
+        "object": "1 695 453 руб.",
+        "qualifiers": [
+          {
+            "relation": "момент времени",
+            "object": "2025"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "максимальный размер или ёмкость",
+        "object": "3 340 000 руб.",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "продано единиц",
+        "object": "450 455 000 руб.",
+        "qualifiers": [
+          {
+            "relation": "момент времени",
+            "object": "2025"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "ключевой показатель эффективности",
+        "object": "6 889 000 руб.",
+        "qualifiers": [
+          {
+            "relation": "момент времени",
+            "object": "2025"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "активы под управлением",
+        "object": "32 789 000 руб.",
+        "qualifiers": [
+          {
+            "relation": "момент времени",
+            "object": "2025"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "стоимость",
+        "object": "15 189 000 руб.",
+        "qualifiers": [
+          {
+            "relation": "момент времени",
+            "object": "2025"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "наличные средства",
+        "object": "-1 152 000 руб.",
+        "qualifiers": [
+          {
+            "relation": "момент времени",
+            "object": "2024"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "bumsk@yandex.ru",
+        "relation": "получатель",
+        "object": "ЮЛ - СК БУМ",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "онлайн-сервис",
+        "object": "https://www.bumsk.ru/",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "Баранов Егор Владимирович",
+        "relation": "дата рождения",
+        "object": "28.04.1970",
+        "qualifiers": [],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Баранов Егор Владимирович",
+        "relation": "получатель передачи",
+        "object": "bumsk@yandex.ru",
+        "qualifiers": [],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Баранов Егор Владимирович",
+        "relation": "место регистрации",
+        "object": "г. Москва, ул. Речная, д. 5",
+        "qualifiers": [],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Баранов Егор Владимирович",
+        "relation": "место жительства",
+        "object": "г. Москва, ул. Островная, д. 78",
+        "qualifiers": [],
+        "source_text_id": 1
+      },
+      {
+        "subject": "владелец",
+        "relation": "должность занимает",
+        "object": "Баранов Егор Владимирович",
+        "qualifiers": [
+          {
+            "relation": "организация",
+            "object": "ООО \"ЭКОЛАЙТ\""
+          },
+          {
+            "relation": "момент начала",
+            "object": "11.2009"
+          },
+          {
+            "relation": "момент окончания",
+            "object": "01.2016"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Баранов Егор Владимирович",
+        "relation": "владелец",
+        "object": "ОГРНИП Баранов Е.В.(Сбор неопасных отходов)",
+        "qualifiers": [
+          {
+            "relation": "момент начала",
+            "object": "05.2024"
+          },
+          {
+            "relation": "момент окончания",
+            "object": "н.в."
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Баранов Егор Владимирович",
+        "relation": "место регистрации",
+        "object": "г. Красногорск, ул. Озерная, д. 56",
+        "qualifiers": [],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Баранов Егор Владимирович",
+        "relation": "учебное заведение",
+        "object": "Московский авиационный институт (МАИ)",
+        "qualifiers": [
+          {
+            "relation": "год окончания",
+            "object": "1998"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "дата рождения",
+        "object": "05.12.1977",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "список номеров",
+        "object": "79865693564",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "список номеров",
+        "object": "79157944631",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "родственник",
+        "object": "Ветров Виктор",
+        "qualifiers": [
+          {
+            "relation": "причина смерти",
+            "object": "убит в 2002 году"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "место рождения",
+        "object": "гор. Кизел, Пермского края",
+        "qualifiers": [],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "место жительства",
+        "object": "г. Москва, Литовский Бульвар, д. 28",
+        "qualifiers": [],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "место регистрации",
+        "object": "г. Москва, Дохтуровский, д. 8",
+        "qualifiers": [],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "место регистрации",
+        "object": "Приморский край, г. Находка, ул. Находский проспект, д. 96",
+        "qualifiers": [],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "учётная запись в социальных медиа",
+        "object": "https://vk.com/id87877856325",
+        "qualifiers": [],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "занял место в",
+        "object": "ТОП 100 Богатейших людей Приморья",
+        "qualifiers": [
+          {
+            "relation": "позиция",
+            "object": "54"
+          },
+          {
+            "relation": "год",
+            "object": "2021"
+          },
+          {
+            "relation": "сумма активов",
+            "object": "2 705 545 600 ₽"
+          },
+          {
+            "relation": "выручка",
+            "object": "543 100 000 ₽"
+          },
+          {
+            "relation": "чистая прибыль",
+            "object": "98 054 400 ₽"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "должность",
+        "object": "Фрахтовальщик",
+        "qualifiers": [
+          {
+            "relation": "организация",
+            "object": "Компания Дитра"
+          },
+          {
+            "relation": "начало",
+            "object": "2000"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "должность",
+        "object": "Старший специалист",
+        "qualifiers": [
+          {
+            "relation": "организация",
+            "object": "ОАО «Сельфлот»"
+          },
+          {
+            "relation": "начало",
+            "object": "2000"
+          },
+          {
+            "relation": "конец",
+            "object": "2002"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "должность",
+        "object": "Заместитель начальника портово‑фрахтового отдела",
+        "qualifiers": [
+          {
+            "relation": "организация",
+            "object": "ЗАО «Южникель»"
+          },
+          {
+            "relation": "начало",
+            "object": "2002"
+          },
+          {
+            "relation": "конец",
+            "object": "2005"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "должность",
+        "object": "Директор по корпоративной политике и финансам",
+        "qualifiers": [
+          {
+            "relation": "организация",
+            "object": "ООО «Трансхим»"
+          },
+          {
+            "relation": "начало",
+            "object": "2005"
+          },
+          {
+            "relation": "конец",
+            "object": "2006"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "должность",
+        "object": "Генеральный директор",
+        "qualifiers": [
+          {
+            "relation": "организация",
+            "object": "ООО «Наливгруз порт»"
+          },
+          {
+            "relation": "начало",
+            "object": "2007"
+          },
+          {
+            "relation": "конец",
+            "object": "2012"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "должность",
+        "object": "Председатель Совета директоров",
+        "qualifiers": [
+          {
+            "relation": "организация",
+            "object": "ООО «Южная Газовая Станция»"
+          },
+          {
+            "relation": "начало",
+            "object": "2012"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "должность",
+        "object": "Главный советник",
+        "qualifiers": [
+          {
+            "relation": "организация",
+            "object": "ЗАО «Южникель»"
+          },
+          {
+            "relation": "начало",
+            "object": "2015"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "владелец",
+        "object": "ООО «Южная Газовая Станция»",
+        "qualifiers": [
+          {
+            "relation": "начало владения",
+            "object": "11.2012"
+          },
+          {
+            "relation": "владелец с",
+            "object": "02.2020"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "отец",
+        "object": "Ветров Виктор",
+        "qualifiers": [
+          {
+            "relation": "дата рождения",
+            "object": "23.02.1947"
+          },
+          {
+            "relation": "должность",
+            "object": "Генеральный директор ОАО «Южный терминал»"
+          },
+          {
+            "relation": "начало",
+            "object": "1998"
+          },
+          {
+            "relation": "конец",
+            "object": "2001"
+          },
+          {
+            "relation": "смерть",
+            "object": "2002"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "мать",
+        "object": "Ветрова Лариса Ивановна",
+        "qualifiers": [
+          {
+            "relation": "дата рождения",
+            "object": "17.10.1948"
+          },
+          {
+            "relation": "совладелец",
+            "object": "ООО «ВОСТОК‑ТРАНС»"
+          },
+          {
+            "relation": "конец совместного владения",
+            "object": "2006"
+          }
+        ],
+        "source_text_id": 1
+      }
+    ],
+    "highlighted_entities": [
+      "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+      "ООО \"ОСГ МЬЮЗИК МЕНЕДЖМЕНТ ЦЕНТР\"",
+      "ЮЛ - СК БУМ",
+      "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+      "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+      "г. Москва, ул. Молотовская, д. 8, стр. 3, помещ. 10БА",
+      "г. Москва, ул. Молотовская, д. 8, стр. 3, помещ. 10БА",
+      "OSG CENTER MANAGEMENT EUROPE (Кипр)"
+    ],
+    "answer": "OSG CENTER MANAGEMENT EUROPE (Кипр)"
+  },
+  "Связана ли дейтельность Орехина с иностранными организациями?": {
+    "neighbour_triplets": [
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "генеральный директор",
+        "object": "Орехин Владимир Васильевич",
+        "qualifiers": [],
+        "source_text_id": 2
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "владелец",
+        "object": "OSG CENTER MANAGEMENT EUROPE (Кипр)",
+        "qualifiers": [
+          {
+            "relation": "дата начала владения",
+            "object": "08.2009 г."
+          }
+        ],
+        "source_text_id": 2
+      },
+      {
+        "subject": "OSG CENTER MANAGEMENT EUROPE (Кипр)",
+        "relation": "место регистрации",
+        "object": "Кипр, г. Пафос, ул. Агиоу Антониу, д. 17",
+        "qualifiers": [],
+        "source_text_id": 2
+      },
+      {
+        "subject": "OSG CENTER MANAGEMENT EUROPE (Кипр)",
+        "relation": "менеджер/директор",
+        "object": "Nikos Antoniou",
+        "qualifiers": [
+          {
+            "relation": "иная трудовая деятельность",
+            "object": "STEEL RIVER HOLDINGS"
+          }
+        ],
+        "source_text_id": 2
+      },
+      {
+        "subject": "OSG CENTER MANAGEMENT EUROPE (Кипр)",
+        "relation": "список номеров",
+        "object": "3572298756",
+        "qualifiers": [],
+        "source_text_id": 2
+      },
+      {
+        "subject": "Орехин Владимир Васильевич",
+        "relation": "дата рождения",
+        "object": "11 сентября 1974 года",
+        "qualifiers": [],
+        "source_text_id": 3
+      },
+      {
+        "subject": "Орехин Владимир Васильевич",
+        "relation": "место рождения",
+        "object": "Кизел, Пермский край",
+        "qualifiers": [],
+        "source_text_id": 3
+      },
+      {
+        "subject": "Орехин Владимир Васильевич",
+        "relation": "получатель передачи",
+        "object": "v.orehin@mcmgmt.ru",
+        "qualifiers": [],
+        "source_text_id": 3
+      },
+      {
+        "subject": "Орехин Владимир Васильевич",
+        "relation": "место регистрации",
+        "object": "Московская область, г. Красногорск, ул. Озерная, д. 56",
+        "qualifiers": [],
+        "source_text_id": 3
+      },
+      {
+        "subject": "Орехин Владимир Васильевич",
+        "relation": "список номеров",
+        "object": "+7 505 776 50233",
+        "qualifiers": [],
+        "source_text_id": 3
+      },
+      {
+        "subject": "Орехин Владимир Васильевич",
+        "relation": "учебное заведение",
+        "object": "Московский авиационный институт (МАИ)",
+        "qualifiers": [
+          {
+            "relation": "год окончания",
+            "object": "1998"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "Орехин Владимир Васильевич",
+        "relation": "учебное заведение",
+        "object": "London Metropolitan Institute",
+        "qualifiers": [
+          {
+            "relation": "степень",
+            "object": "MBA в области управления"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "Nokia",
+        "relation": "сотрудник организации",
+        "object": "Орехин Владимир Васильевич",
+        "qualifiers": [
+          {
+            "relation": "должность",
+            "object": "менеджер поддержки продаж"
+          },
+          {
+            "relation": "момент времени начала",
+            "object": "1998"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "Орехин Владимир Васильевич",
+        "relation": "работодатель",
+        "object": "Nokia",
+        "qualifiers": [
+          {
+            "relation": "должность",
+            "object": "развитие бизнеса в Северной Америке"
+          },
+          {
+            "relation": "место работы",
+            "object": "Хельсинки"
+          },
+          {
+            "relation": "момент времени начала",
+            "object": "1999"
+          },
+          {
+            "relation": "момент времени окончания",
+            "object": "2002"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "SouthLine",
+        "relation": "сотрудник организации",
+        "object": "Орехин Владимир Васильевич",
+        "qualifiers": [
+          {
+            "relation": "должность",
+            "object": "ответственный за развитие бизнеса беспроводной связи в России и СНГ"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "North Networks",
+        "relation": "сотрудник организации",
+        "object": "Орехин Владимир Васильевич",
+        "qualifiers": [
+          {
+            "relation": "должность",
+            "object": "руководящая должность"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "Siemens",
+        "relation": "сотрудник организации",
+        "object": "Орехин Владимир Васильевич",
+        "qualifiers": [
+          {
+            "relation": "должность",
+            "object": "руководящая должность"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "Орехин Владимир Васильевич",
+        "relation": "работодатель",
+        "object": "Division Business solutions",
+        "qualifiers": [
+          {
+            "relation": "должность",
+            "object": "генеральный директор"
+          },
+          {
+            "relation": "момент времени начала",
+            "object": "2013"
+          },
+          {
+            "relation": "момент времени окончания",
+            "object": "2015"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "IBM",
+        "relation": "сотрудник организации",
+        "object": "Орехин Владимир Васильевич",
+        "qualifiers": [
+          {
+            "relation": "должность",
+            "object": "руководитель области в России и странах СНГ"
+          },
+          {
+            "relation": "момент времени начала",
+            "object": "январь 2017"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "Reg.ru Cloud",
+        "relation": "сотрудник организации",
+        "object": "Орехин Владимир Васильевич",
+        "qualifiers": [
+          {
+            "relation": "должность",
+            "object": "управляющий директор"
+          },
+          {
+            "relation": "момент времени начала",
+            "object": "2018"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "сотрудник организации",
+        "object": "Орехин Владимир Васильевич",
+        "qualifiers": [
+          {
+            "relation": "должность",
+            "object": "генеральный директор"
+          },
+          {
+            "relation": "момент времени начала",
+            "object": "май 2020"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "ООО \"ОСГ МЬЮЗИК МЕНЕДЖМЕНТ\"",
+        "relation": "генеральный директор",
+        "object": "Орехин Владимир Васильевич",
+        "qualifiers": [
+          {
+            "relation": "момент времени начала",
+            "object": "май 2020"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "ООО \"ОСГ МЬЮЗИК МЕНЕДЖМЕНТ ЦЕНТР\"",
+        "relation": "генеральный директор",
+        "object": "Орехин Владимир Васильевич",
+        "qualifiers": [
+          {
+            "relation": "момент времени начала",
+            "object": "май 2020"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "ООО \"ОСГ МЬЮЗИК МЕНЕДЖМЕНТ КРИПТО\"",
+        "relation": "генеральный директор",
+        "object": "Орехин Владимир Васильевич",
+        "qualifiers": [
+          {
+            "relation": "момент времени начала",
+            "object": "май 2020"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "Орехин Владимир Васильевич",
+        "relation": "супруг(а)",
+        "object": "Орехина Елена Викторовна",
+        "qualifiers": [
+          {
+            "relation": "дата рождения",
+            "object": "31 ноября 1988 года"
+          }
+        ],
+        "source_text_id": 3
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "брат/сестра",
+        "object": "Орехина Елена Викторовна",
+        "qualifiers": [
+          {
+            "relation": "дата рождения",
+            "object": "31.11.1988"
+          },
+          {
+            "relation": "должность",
+            "object": "член правления «Южной Газовой Станции»"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "материнская организация (компания, учреждение)",
+        "object": "STEEL RIVER Inc. (США)",
+        "qualifiers": [],
+        "source_text_id": 2
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "место регистрации",
+        "object": "г. Москва, ул. Молотовская, д. 8, стр. 3, помещ. 10БА",
+        "qualifiers": [],
+        "source_text_id": 2
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "место регистрации",
+        "object": "1077766764213",
+        "qualifiers": [],
+        "source_text_id": 2
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "область деятельности",
+        "object": "Деятельность библиотек и архивов",
+        "qualifiers": [],
+        "source_text_id": 2
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "находится в пользовании у",
+        "object": "v.orehin@mcmgmt.ru",
+        "qualifiers": [],
+        "source_text_id": 2
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "онлайн-сервис",
+        "object": "www.musmgmt.com",
+        "qualifiers": [],
+        "source_text_id": 2
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "список номеров",
+        "object": "749556261514",
+        "qualifiers": [],
+        "source_text_id": 2
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "число сотрудников",
+        "object": "8",
+        "qualifiers": [],
+        "source_text_id": 2
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "общая выручка",
+        "object": "2 389 145",
+        "qualifiers": [
+          {
+            "relation": "валюта",
+            "object": "USD"
+          }
+        ],
+        "source_text_id": 2
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "число членов",
+        "object": "156",
+        "qualifiers": [],
+        "source_text_id": 2
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "уровень выше",
+        "object": "5",
+        "qualifiers": [],
+        "source_text_id": 2
+      },
+      {
+        "subject": "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+        "relation": "лига на уровень выше",
+        "object": "Штаб-квартира или материнская компания",
+        "qualifiers": [],
+        "source_text_id": 2
+      },
+      {
+        "subject": "генеральный директор",
+        "relation": "должность занимает",
+        "object": "Баранов Егор Владимирович",
+        "qualifiers": [
+          {
+            "relation": "организация",
+            "object": "ООО \"БУМ 2000\""
+          },
+          {
+            "relation": "момент начала",
+            "object": "03.2001"
+          },
+          {
+            "relation": "момент окончания",
+            "object": "12.2010"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Баранов Егор Владимирович",
+        "relation": "учебное заведение",
+        "object": "Московский авиационный институт (МАИ)",
+        "qualifiers": [
+          {
+            "relation": "год окончания",
+            "object": "1998"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "владелец",
+        "object": "Ветров Евгений Викторович",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "число объектов",
+        "object": "8",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "представитель",
+        "object": "ЮЛ Южная Газовая Станция",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "дата рождения",
+        "object": "05.12.1977",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "список номеров",
+        "object": "79865693564",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "список номеров",
+        "object": "79157944631",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "родственник",
+        "object": "Ветров Виктор",
+        "qualifiers": [
+          {
+            "relation": "причина смерти",
+            "object": "убит в 2002 году"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "место рождения",
+        "object": "гор. Кизел, Пермского края",
+        "qualifiers": [],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "место жительства",
+        "object": "г. Москва, Литовский Бульвар, д. 28",
+        "qualifiers": [],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "место регистрации",
+        "object": "г. Москва, Дохтуровский, д. 8",
+        "qualifiers": [],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "место регистрации",
+        "object": "Приморский край, г. Находка, ул. Находский проспект, д. 96",
+        "qualifiers": [],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "учётная запись в социальных медиа",
+        "object": "https://vk.com/id87877856325",
+        "qualifiers": [],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "занял место в",
+        "object": "ТОП 100 Богатейших людей Приморья",
+        "qualifiers": [
+          {
+            "relation": "позиция",
+            "object": "54"
+          },
+          {
+            "relation": "год",
+            "object": "2021"
+          },
+          {
+            "relation": "сумма активов",
+            "object": "2 705 545 600 ₽"
+          },
+          {
+            "relation": "выручка",
+            "object": "543 100 000 ₽"
+          },
+          {
+            "relation": "чистая прибыль",
+            "object": "98 054 400 ₽"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "должность",
+        "object": "Фрахтовальщик",
+        "qualifiers": [
+          {
+            "relation": "организация",
+            "object": "Компания Дитра"
+          },
+          {
+            "relation": "начало",
+            "object": "2000"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "должность",
+        "object": "Старший специалист",
+        "qualifiers": [
+          {
+            "relation": "организация",
+            "object": "ОАО «Сельфлот»"
+          },
+          {
+            "relation": "начало",
+            "object": "2000"
+          },
+          {
+            "relation": "конец",
+            "object": "2002"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "должность",
+        "object": "Заместитель начальника портово‑фрахтового отдела",
+        "qualifiers": [
+          {
+            "relation": "организация",
+            "object": "ЗАО «Южникель»"
+          },
+          {
+            "relation": "начало",
+            "object": "2002"
+          },
+          {
+            "relation": "конец",
+            "object": "2005"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "должность",
+        "object": "Директор по корпоративной политике и финансам",
+        "qualifiers": [
+          {
+            "relation": "организация",
+            "object": "ООО «Трансхим»"
+          },
+          {
+            "relation": "начало",
+            "object": "2005"
+          },
+          {
+            "relation": "конец",
+            "object": "2006"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "должность",
+        "object": "Генеральный директор",
+        "qualifiers": [
+          {
+            "relation": "организация",
+            "object": "ООО «Наливгруз порт»"
+          },
+          {
+            "relation": "начало",
+            "object": "2007"
+          },
+          {
+            "relation": "конец",
+            "object": "2012"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "должность",
+        "object": "Председатель Совета директоров",
+        "qualifiers": [
+          {
+            "relation": "организация",
+            "object": "ООО «Южная Газовая Станция»"
+          },
+          {
+            "relation": "начало",
+            "object": "2012"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "должность",
+        "object": "Главный советник",
+        "qualifiers": [
+          {
+            "relation": "организация",
+            "object": "ЗАО «Южникель»"
+          },
+          {
+            "relation": "начало",
+            "object": "2015"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "владелец",
+        "object": "ООО «Южная Газовая Станция»",
+        "qualifiers": [
+          {
+            "relation": "начало владения",
+            "object": "11.2012"
+          },
+          {
+            "relation": "владелец с",
+            "object": "02.2020"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "отец",
+        "object": "Ветров Виктор",
+        "qualifiers": [
+          {
+            "relation": "дата рождения",
+            "object": "23.02.1947"
+          },
+          {
+            "relation": "должность",
+            "object": "Генеральный директор ОАО «Южный терминал»"
+          },
+          {
+            "relation": "начало",
+            "object": "1998"
+          },
+          {
+            "relation": "конец",
+            "object": "2001"
+          },
+          {
+            "relation": "смерть",
+            "object": "2002"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Ветров Евгений Викторович",
+        "relation": "мать",
+        "object": "Ветрова Лариса Ивановна",
+        "qualifiers": [
+          {
+            "relation": "дата рождения",
+            "object": "17.10.1948"
+          },
+          {
+            "relation": "совладелец",
+            "object": "ООО «ВОСТОК‑ТРАНС»"
+          },
+          {
+            "relation": "конец совместного владения",
+            "object": "2006"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "место регистрации",
+        "object": "г. Москва, ул. Молотовская, д. 8, стр. 3, помещ. 10БА",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "креативный директор",
+        "object": "Баранов Егор Владимирович",
+        "qualifiers": [
+          {
+            "relation": "ИНН",
+            "object": "7720357487662"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "Баранов Егор Владимирович",
+        "relation": "дата рождения",
+        "object": "28.04.1970",
+        "qualifiers": [],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Баранов Егор Владимирович",
+        "relation": "получатель передачи",
+        "object": "bumsk@yandex.ru",
+        "qualifiers": [],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Баранов Егор Владимирович",
+        "relation": "место регистрации",
+        "object": "г. Москва, ул. Речная, д. 5",
+        "qualifiers": [],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Баранов Егор Владимирович",
+        "relation": "место жительства",
+        "object": "г. Москва, ул. Островная, д. 78",
+        "qualifiers": [],
+        "source_text_id": 1
+      },
+      {
+        "subject": "владелец",
+        "relation": "должность занимает",
+        "object": "Баранов Егор Владимирович",
+        "qualifiers": [
+          {
+            "relation": "организация",
+            "object": "ООО \"ЭКОЛАЙТ\""
+          },
+          {
+            "relation": "момент начала",
+            "object": "11.2009"
+          },
+          {
+            "relation": "момент окончания",
+            "object": "01.2016"
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Баранов Егор Владимирович",
+        "relation": "владелец",
+        "object": "ОГРНИП Баранов Е.В.(Сбор неопасных отходов)",
+        "qualifiers": [
+          {
+            "relation": "момент начала",
+            "object": "05.2024"
+          },
+          {
+            "relation": "момент окончания",
+            "object": "н.в."
+          }
+        ],
+        "source_text_id": 1
+      },
+      {
+        "subject": "Баранов Егор Владимирович",
+        "relation": "место регистрации",
+        "object": "г. Красногорск, ул. Озерная, д. 56",
+        "qualifiers": [],
+        "source_text_id": 1
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "место регистрации",
+        "object": "Приморский край, г. Находка, ул. Находский проспект, д. 96",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "область деятельности",
+        "object": "транспорт грузов",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "руководящий орган",
+        "object": "Локтев Юрий Сергеевич",
+        "qualifiers": [
+          {
+            "relation": "должность",
+            "object": "генеральный директор"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "(оплаченный) уставный капитал",
+        "object": "14 700 000 ₽",
+        "qualifiers": [
+          {
+            "relation": "момент времени",
+            "object": "08.09.2005"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "размер команды на момент старта",
+        "object": "75 чел.",
+        "qualifiers": [
+          {
+            "relation": "момент времени",
+            "object": "31.12.2025"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "доход на душу населения",
+        "object": "2 983 790 000 ₽",
+        "qualifiers": [
+          {
+            "relation": "год",
+            "object": "2024"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "операционные расходы",
+        "object": "1 380 567 000 ₽",
+        "qualifiers": [
+          {
+            "relation": "год",
+            "object": "2024"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "операционные расходы",
+        "object": "2 390 162 000 ₽",
+        "qualifiers": [
+          {
+            "relation": "год",
+            "object": "2024"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "ключевой показатель эффективности",
+        "object": "1 986 195 000 ₽",
+        "qualifiers": [
+          {
+            "relation": "год",
+            "object": "2024"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "активы под управлением",
+        "object": "4 717 635 000 ₽",
+        "qualifiers": [
+          {
+            "relation": "год",
+            "object": "2024"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "активы под управлением",
+        "object": "892 665 000 ₽",
+        "qualifiers": [
+          {
+            "relation": "год",
+            "object": "2024"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "наличные средства",
+        "object": "74 947 000 ₽",
+        "qualifiers": [
+          {
+            "relation": "год",
+            "object": "2024"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "операционные расходы",
+        "object": "552 662 602 ₽",
+        "qualifiers": [
+          {
+            "relation": "год",
+            "object": "2024"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "максимальный размер или ёмкость",
+        "object": "1 297 810 000 ₽",
+        "qualifiers": [
+          {
+            "relation": "год",
+            "object": "2024"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "статус ограничения доступа",
+        "object": "нет действующих решений",
+        "qualifiers": [
+          {
+            "relation": "момент времени",
+            "object": "20.12.2025"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "sgt@sgtdv.ru",
+        "relation": "получатель",
+        "object": "ЮЛ Южная Газовая Станция",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ Южная Газовая Станция",
+        "relation": "онлайн-сервис",
+        "object": "https://sgtdv.ru",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "место регистрации",
+        "object": "1177757900290",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "область деятельности",
+        "object": "Торговля оптовая бумагой и картоном",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "Малые предприятия",
+        "relation": "организационно-правовая форма",
+        "object": "ЮЛ - СК БУМ",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "число объектов",
+        "object": "17 чел.",
+        "qualifiers": [
+          {
+            "relation": "момент времени",
+            "object": "31.12.2025"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "(оплаченный) уставный капитал",
+        "object": "35 000 руб.",
+        "qualifiers": [
+          {
+            "relation": "момент времени",
+            "object": "08.2016"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "оклад",
+        "object": "545 418 000 руб.",
+        "qualifiers": [
+          {
+            "relation": "момент времени",
+            "object": "2025"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "операционные расходы",
+        "object": "470 087 000 руб.",
+        "qualifiers": [
+          {
+            "relation": "момент времени",
+            "object": "2025"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "ставка налога на доходы физических лиц",
+        "object": "1 695 453 руб.",
+        "qualifiers": [
+          {
+            "relation": "момент времени",
+            "object": "2025"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "максимальный размер или ёмкость",
+        "object": "3 340 000 руб.",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "продано единиц",
+        "object": "450 455 000 руб.",
+        "qualifiers": [
+          {
+            "relation": "момент времени",
+            "object": "2025"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "ключевой показатель эффективности",
+        "object": "6 889 000 руб.",
+        "qualifiers": [
+          {
+            "relation": "момент времени",
+            "object": "2025"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "активы под управлением",
+        "object": "32 789 000 руб.",
+        "qualifiers": [
+          {
+            "relation": "момент времени",
+            "object": "2025"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "стоимость",
+        "object": "15 189 000 руб.",
+        "qualifiers": [
+          {
+            "relation": "момент времени",
+            "object": "2025"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "наличные средства",
+        "object": "-1 152 000 руб.",
+        "qualifiers": [
+          {
+            "relation": "момент времени",
+            "object": "2024"
+          }
+        ],
+        "source_text_id": 0
+      },
+      {
+        "subject": "bumsk@yandex.ru",
+        "relation": "получатель",
+        "object": "ЮЛ - СК БУМ",
+        "qualifiers": [],
+        "source_text_id": 0
+      },
+      {
+        "subject": "ЮЛ - СК БУМ",
+        "relation": "онлайн-сервис",
+        "object": "https://www.bumsk.ru/",
+        "qualifiers": [],
+        "source_text_id": 0
+      }
+    ],
+    "highlighted_entities": [
+      "Орехин Владимир Васильевич",
+      "OSG CENTER MANAGEMENT EUROPE (Кипр)",
+      "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+      "ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ»",
+      "Орехин Владимир Васильевич",
+      "Nokia",
+      "Siemens",
+      "IBM",
+      "OSG CENTER MANAGEMENT EUROPE (Кипр)",
+      "STEEL RIVER Inc. (США)",
+      "London Metropolitan Institute",
+      "Орехин Владимир Васильевич",
+      "Орехин Владимир Васильевич",
+      "Орехин Владимир Васильевич"
+    ],
+    "answer": "Да, деятельность Орехина связана с иностранными организациями. Он является генеральным директором ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ», владельцем которой является кипрская компания OSG CENTER MANAGEMENT EUROPE. Кроме того, материнской организацией ООО «ОСГ МЬЮЗИК ЦЕНТР МЕНЕДЖМЕНТ» является американская компания STEEL RIVER Inc. Также Орехин имеет образование в британском учебном заведении London Metropolitan Institute и работал в международных компаниях Nokia, Siemens и IBM."
+  }
+}
