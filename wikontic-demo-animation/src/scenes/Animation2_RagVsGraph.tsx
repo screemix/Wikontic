@@ -16,8 +16,8 @@ const clamp = (value: number) => Math.max(0, Math.min(1, value));
 const progress = (frame: number, from: number, to: number) =>
   interpolate(frame, [from, to], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
 
-// Sequential phases. Each phase fades IN from white and OUT to white quickly,
-// with a long hold so it reads on the first watch. Phases never overlap.
+// Sequential phases fade through white; the final phase holds its last frame.
+// Phases never overlap.
 const FADE = 11; // ~0.37s — fast decay/appear to/from white
 const PHASES = {
   rag: 616, // links → concept highlight → select → flag missed (cross + caption, dwell) → settle → takeaway
@@ -31,11 +31,11 @@ export const RAG_VS_WIKONTIC_FRAMES = WIKONTIC_FROM + PHASES.wikontic;
 
 // Wraps phase content, handling the fast fade from/to white via opacity over
 // the white composition background.
-const Phase: React.FC<{duration: number; children: React.ReactNode}> = ({duration, children}) => {
+const Phase: React.FC<{duration: number; fadeOut?: boolean; children: React.ReactNode}> = ({duration, fadeOut = true, children}) => {
   const frame = useCurrentFrame();
   const opacity = Math.min(
     interpolate(frame, [0, FADE], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'}),
-    interpolate(frame, [duration - FADE, duration], [1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'}),
+    fadeOut ? interpolate(frame, [duration - FADE, duration], [1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'}) : 1,
   );
   return (
     <AbsoluteFill
@@ -519,7 +519,7 @@ const WikonticPhase: React.FC<{content: Animation2Content}> = ({content}) => {
   // fades in over clean white and the dot never bleeds through it.
   const docsGone = progress(frame, 192, 204);
   return (
-    <Phase duration={PHASES.wikontic}>
+    <Phase duration={PHASES.wikontic} fadeOut={false}>
       {/* Header: Wikontic title + the question, mirroring the RAG slide. */}
       <div style={{display: 'flex', alignItems: 'center', gap: 36, width: GRAPH_W, marginBottom: 26}}>
         <div style={{display: 'flex', alignItems: 'center', gap: 22, flexShrink: 0}}>

@@ -87,7 +87,7 @@ const localizedSlides: Record<Locale, LocalizedPresentationSlide[]> = {
         {label: 'Ответ', frame: 140},
         {label: 'Пути', frame: 400},
         {label: 'QA-карточки', frame: 588},
-        {label: 'Датасет', frame: 680},
+        {label: 'Датасет', frame: 760},
       ],
     },
     {
@@ -136,7 +136,7 @@ const localizedSlides: Record<Locale, LocalizedPresentationSlide[]> = {
         {label: 'Answer', frame: 140},
         {label: 'Paths', frame: 400},
         {label: 'QA cards', frame: 588},
-        {label: 'Dataset', frame: 680},
+        {label: 'Dataset', frame: 760},
       ],
     },
     {

@@ -95,11 +95,11 @@ const labelLines = (label: string) => {
   return [words.slice(0, midpoint).join(' '), words.slice(midpoint).join(' ')];
 };
 
-const Phase: React.FC<{duration: number; children: React.ReactNode}> = ({duration, children}) => {
+const Phase: React.FC<{duration: number; fadeOut?: boolean; children: React.ReactNode}> = ({duration, fadeOut = true, children}) => {
   const frame = useCurrentFrame();
   const opacity = Math.min(
     interpolate(frame, [0, FADE], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'}),
-    interpolate(frame, [duration - FADE, duration], [1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'}),
+    fadeOut ? interpolate(frame, [duration - FADE, duration], [1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'}) : 1,
   );
   return (
     <AbsoluteFill
@@ -707,7 +707,7 @@ const MetricsPhase: React.FC<{content: Animation3Content}> = ({content}) => {
   const colLabels = [content.labels.metricsShOnly, content.labels.metricsMhSC, content.labels.metricsMhMC];
 
   return (
-    <Phase duration={PHASES.metrics}>
+    <Phase duration={PHASES.metrics} fadeOut={false}>
       <Header
         eyebrow={content.labels.metricsEyebrow}
         title={content.labels.metricsTitle}
