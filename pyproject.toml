@@ -49,8 +49,8 @@ packages = ["wikontic", "wikontic.utils", "wikontic.db"]
 
 [tool.setuptools.package-data]
 wikontic = [
-    "utils/ontology_mappings/*.json",
-    "utils/prompts/**/*.txt",
+    "utils/ontology_mappings*/*.json",
+    "utils/prompts*/**/*.txt",
 ]
 
 [tool.pytest.ini_options]
